@@ -18,15 +18,9 @@ public class XPathEntityCriteria implements XPathCriteria {
 	private String subtype;
 	
 	public XPathEntityCriteria(String contains, String type, String subtype) {
-		if (type.equals("")) {
-			type = null;
-		}
-		if (subtype.equals("")) {
-			subtype = null;
-		}
-		this.contains = contains;
-		this.type = type;
-		this.subtype = subtype;
+		this.contains = contains.equals("") ? null : contains;
+		this.type = type.equals("") ? null : type;
+		this.subtype = subtype.equals("") ? null : subtype;
 	}
 	
 	@Override
@@ -52,14 +46,20 @@ public class XPathEntityCriteria implements XPathCriteria {
 
 	@Override
 	public String getExpression() {
-		//return "entity[type='"+getType()+"' and subtype='" + getSubtype() + "']";
 		String constraints = "[";
 		if (type!=null) {
 			constraints += "type='" + type + "'";
 			if (subtype!=null) {
 				constraints += " and subtype='" + subtype + "'";
 			}
+			if (contains!=null) {
+				constraints += " and ";
+			}
 		}
+		if (contains!=null) {
+			constraints += "contains(text,'" + contains + "')";
+		}
+		
 		constraints += ']';
 		System.out.println(constraints);
 		return "/document/entities/entity" + constraints;

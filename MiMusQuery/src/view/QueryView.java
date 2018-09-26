@@ -136,7 +136,7 @@ public class QueryView extends ViewPart {
 		/* Search button listener that updates the TableViewer with new results */
 		searchBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				String contains = searchText.getMessage();
+				String contains = searchText.getText();
 				String type = typeCombo.getText();
 				String subtype = subtypeCombo.getText();
 				System.out.println(contains + " " + type + " " + subtype);
