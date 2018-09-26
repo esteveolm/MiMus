@@ -67,6 +67,7 @@ public class Editor extends EditorPart {
 	private boolean hasXML;
 	private String fullText;
 	private String[] words;
+	private String docID;
 	private StyledText text;
 	
 	public Editor() {
@@ -77,6 +78,8 @@ public class Editor extends EditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
+		docID = getEditorInput().getName().substring(0, getEditorInput().getName().indexOf('.'));
+		System.out.println("Doc ID: " + docID);
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
@@ -149,6 +152,7 @@ public class Editor extends EditorPart {
 				Document doc = dBuilder.parse(xmlFile);
 				doc.getDocumentElement().normalize();
 				
+				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
 				NodeList nl = doc.getElementsByTagName("entity");
 				for (int i=0; i<nl.getLength(); i++) {
 					Node nEnt = nl.item(i);
@@ -299,9 +303,13 @@ public class Editor extends EditorPart {
 					Element tagDocument = doc.createElement("document");
 					doc.appendChild(tagDocument);
 					
-					Element tag_full_text = doc.createElement("full_text");
-					tag_full_text.appendChild(doc.createTextNode(fullText));
-					tagDocument.appendChild(tag_full_text);
+					Element tagID = doc.createElement("doc_id");
+					tagID.appendChild(doc.createTextNode(docID));
+					tagDocument.appendChild(tagID);
+					
+					Element tagFullText = doc.createElement("full_text");
+					tagFullText.appendChild(doc.createTextNode(fullText));
+					tagDocument.appendChild(tagFullText);
 					
 					Element tagEntities = doc.createElement("entities");
 					tagDocument.appendChild(tagEntities);

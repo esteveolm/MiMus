@@ -25,6 +25,7 @@ public class XPathEntityCriteria implements XPathCriteria {
 	
 	@Override
 	public List<Result> evaluate(Document xml, XPathExpression expression) {
+		String doc = xml.getElementsByTagName("doc_id").item(0).getTextContent();
 		List<Result> results = new ArrayList<>();
 		try {
 			NodeList nodes = (NodeList) expression.evaluate(xml, XPathConstants.NODESET);
@@ -33,7 +34,6 @@ public class XPathEntityCriteria implements XPathCriteria {
 				String text = e.getElementsByTagName("text").item(0).getTextContent();
 				String type = e.getElementsByTagName("type").item(0).getTextContent();
 				String subtype = e.getElementsByTagName("subtype").item(0).getTextContent();
-				String doc = "001";
 				Result res = new Result(text, type, subtype, doc);
 				results.add(res);
 			}
