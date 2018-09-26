@@ -40,6 +40,7 @@ public class XPathSearcher {
 			for (File f: files) {
 				if (f.isFile() && f.getName().endsWith(".xml")) {
 					try {
+						System.out.println(f.toString());
 						Document doc = builder.parse(f);
 						results.addAll(criteria.evaluate(doc, expr));
 					} catch (IOException e) {

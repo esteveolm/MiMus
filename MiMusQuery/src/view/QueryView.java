@@ -1,17 +1,25 @@
 package view;
 
 import editor.Editor;
+import search.Result;
 import search.XPathEntityCriteria;
 import search.XPathSearcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -28,9 +36,11 @@ public class QueryView extends ViewPart {
 
 	private String[] columnNames = {"Text", "Type", "Subtype", "Document"};
 	private TableViewer tv;
-	private String[] types = {"S", "B"};
+	private List<Result> results;
+	
 	public QueryView() {
 		super();
+		results = new ArrayList<>();
 	}
 
 	@Override
@@ -61,7 +71,7 @@ public class QueryView extends ViewPart {
 		Label subtypeLabel = new Label(sectQuery.getParent(), SWT.VERTICAL);
 		subtypeLabel.setText("Subtype");
 		Combo subtypeCombo = new Combo(sectQuery.getParent(), SWT.SINGLE | SWT.WRAP | SWT.SEARCH | SWT.ICON_SEARCH);
-		subtypeCombo.setItems(types);
+		subtypeCombo.setItems(Editor.PERSON_TYPES);
 		subtypeCombo.select(0);	// This way subtype combo knows what to load at start
 
 		/* Change subtype Combo options when type is modified */
@@ -70,13 +80,13 @@ public class QueryView extends ViewPart {
 				subtypeCombo.select(0);
 				switch(typeCombo.getSelectionIndex()) {
 				case 0:
-					subtypeCombo.setItems(types);
+					subtypeCombo.setItems(Editor.PERSON_TYPES);
 					break;
 				case 1:
 					subtypeCombo.setItems(new String[0]);
 					break;
 				case 2:
-					subtypeCombo.setItems(types);
+					subtypeCombo.setItems(Editor.PLACE_TYPES);
 					break;
 				default:
 					break;
@@ -87,25 +97,6 @@ public class QueryView extends ViewPart {
 		/* Search button */
 		Button searchBtn = new Button(sectQuery.getParent(), SWT.PUSH | SWT.CENTER);
 		searchBtn.setText("Search");
-		searchBtn.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				String contains = searchText.getMessage();
-				String type = typeCombo.getText();
-				String subtype = typeCombo.getText();
-				XPathEntityCriteria criteria = new XPathEntityCriteria(contains, type, subtype);
-				
-				String xmlPath = ResourcesPlugin.getWorkspace().getRoot()
-						.getProject("MiMus").getFolder("xml")
-						.getLocation().toString();
-				try {
-					XPathSearcher searcher = new XPathSearcher(criteria, new File(xmlPath));
-					searcher.search();
-				} catch (IOException ioe) {
-					System.out.println("Could not retrieve search results due to IO Exception");
-				}
-				
-			}
-		});
 		
 		/* Clear button */
 		Button clearBtn = new Button(sectQuery.getParent(), SWT.PUSH | SWT.CENTER);
@@ -114,9 +105,10 @@ public class QueryView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				searchText.setText("");
 				typeCombo.select(0);
-				subtypeCombo.setItems(types);
+				subtypeCombo.setItems(Editor.PERSON_TYPES);
 				subtypeCombo.select(0);
-				// TODO: clear results table
+				results = new ArrayList<>();
+				tv.refresh();
 			}
 		});
 		
@@ -130,17 +122,74 @@ public class QueryView extends ViewPart {
 			col.setText(h);
 		}
 		tv.setUseHashlookup(true);
+		tv.setContentProvider(new QueryViewContentProvider());
+		tv.setLabelProvider(new QueryViewLabelProvider());
 		tv.getTable().setLinesVisible(true);
 		tv.getTable().setHeaderVisible(true);
+		tv.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		tv.setInput(results);
 		
 		for (int i = 0; i < columnNames.length; i++) {
 			tv.getTable().getColumn(i).pack();
 		}
+		
+		/* Search button listener that updates the TableViewer with new results */
+		searchBtn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				String contains = searchText.getMessage();
+				String type = typeCombo.getText();
+				String subtype = subtypeCombo.getText();
+				System.out.println(contains + " " + type + " " + subtype);
+				XPathEntityCriteria criteria = new XPathEntityCriteria(contains, type, subtype);
+				
+				String xmlPath = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject("MiMus").getFolder("xml")
+						.getLocation().toString();
+				try {
+					XPathSearcher searcher = new XPathSearcher(criteria, new File(xmlPath));
+					results = searcher.search();
+					tv.refresh();	// Otherwise TableViewer does not update its look
+				} catch (IOException ioe) {
+					System.out.println("Could not retrieve search results due to IO Exception");
+				}
+			}
+		});
 	}
 
 	@Override
 	public void setFocus() {
 		
+	}
+	
+	public class QueryViewContentProvider implements IStructuredContentProvider {
+		@Override
+		public Object[] getElements(Object inputElement) {
+			return results.toArray();
+		}
+	}
+	
+	public class QueryViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+			return null;
+		}
+
+		@Override
+		public String getColumnText(Object element, int columnIndex) {
+			Result res = (Result) element;
+			switch(columnIndex) {
+			case 0:
+				return res.getText();
+			case 1:
+				return res.getType();
+			case 2:
+				return res.getSubtype();
+			case 3:
+				return res.getDocument();
+			default:
+				return "";
+			}
+		}
 	}
 
 }
