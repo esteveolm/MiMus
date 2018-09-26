@@ -143,45 +143,6 @@ public class Editor extends EditorPart {
 		TableViewer entityTV = entityHelper.createTableViewer();
 		EntitiesList entities = entityHelper.getEntities();
 		
-		/* Load entities that were declared in the XML */
-		if (hasXML) {
-			try {
-				File xmlFile = new File(xmlPath);
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				Document doc = dBuilder.parse(xmlFile);
-				doc.getDocumentElement().normalize();
-				
-				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
-				NodeList nl = doc.getElementsByTagName("entity");
-				for (int i=0; i<nl.getLength(); i++) {
-					Node nEnt = nl.item(i);
-					if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
-						Element eEnt = (Element) nEnt;
-						int from = Integer.parseInt(eEnt.getElementsByTagName("from").item(0).getTextContent());
-						int to = Integer.parseInt(eEnt.getElementsByTagName("to").item(0).getTextContent());
-						String type = eEnt.getElementsByTagName("type").item(0).getTextContent();
-						String subtype = eEnt.getElementsByTagName("subtype").item(0).getTextContent();
-						Entity ent = new Entity(words, from, to, type, subtype);
-						entities.addUnit(ent);
-						
-						System.out.println("Words from " + from + " to " + to);
-						Point charCoord = fromWordToCharCoordinates(new Point(from, to));
-						System.out.println("Painting from " + charCoord.x + " to " + charCoord.y);
-						styler.add(charCoord.x, charCoord.y);
-					}
-				}
-				styler.update();
-				entityHelper.packColumns();
-			} catch (ParserConfigurationException pce) {
-				System.out.println("Error with DOM parser.");
-				pce.printStackTrace();
-			} catch (IOException | SAXException ioe) {
-				System.out.println("Error parsing document " + xmlPath);
-				ioe.printStackTrace();
-			}
-		}
-		
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
 		gridData.widthHint = 300;
@@ -226,7 +187,7 @@ public class Editor extends EditorPart {
 							charCoords));	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords);
 					entities.addUnit(new Entity(words, wordCoords.x, wordCoords.y));
-					entityHelper.packColumns();
+					//entityHelper.packColumns();
 					System.out.println("Adding Selected Entity - " + entities.countUnits());
 					printAddedInfo(info);
 					styler.addUpdate(charCoords.x, charCoords.y);
@@ -349,6 +310,45 @@ public class Editor extends EditorPart {
 			}
 		});
 		toolkit.dispose();
+		
+		/* Load entities that were declared in the XML */
+		if (hasXML) {
+			try {
+				File xmlFile = new File(xmlPath);
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(xmlFile);
+				doc.getDocumentElement().normalize();
+				
+				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
+				NodeList nl = doc.getElementsByTagName("entity");
+				for (int i=0; i<nl.getLength(); i++) {
+					Node nEnt = nl.item(i);
+					if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
+						Element eEnt = (Element) nEnt;
+						int from = Integer.parseInt(eEnt.getElementsByTagName("from").item(0).getTextContent());
+						int to = Integer.parseInt(eEnt.getElementsByTagName("to").item(0).getTextContent());
+						String type = eEnt.getElementsByTagName("type").item(0).getTextContent();
+						String subtype = eEnt.getElementsByTagName("subtype").item(0).getTextContent();
+						Entity ent = new Entity(words, from, to, type, subtype);
+						entities.addUnit(ent);
+						
+						System.out.println("Words from " + from + " to " + to);
+						Point charCoord = fromWordToCharCoordinates(new Point(from, to));
+						System.out.println("Painting from " + charCoord.x + " to " + charCoord.y);
+						styler.add(charCoord.x, charCoord.y);
+					}
+				}
+				styler.update();
+				entityHelper.packColumns();
+			} catch (ParserConfigurationException pce) {
+				System.out.println("Error with DOM parser.");
+				pce.printStackTrace();
+			} catch (IOException | SAXException ioe) {
+				System.out.println("Error parsing document " + xmlPath);
+				ioe.printStackTrace();
+			}
+		}
 	}
 
 	private Point fromCharToWordCoordinates(Point old) {

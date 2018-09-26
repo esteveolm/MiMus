@@ -157,7 +157,6 @@ public class RelationTableViewer extends MiMusTableViewer {
 				return "";
 			}
 		}
-		
 	}
 	
 	class RelationContentProvider implements MiMusContentProvider {
@@ -215,6 +214,7 @@ public class RelationTableViewer extends MiMusTableViewer {
 				res[i] = "FATAL ERROR. THIS SHOULD NOT HAPPEN";
 			}
 		}
+		System.out.println("ENTITIES: " + res.length);
 		return res;
 	}
 

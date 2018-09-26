@@ -24,7 +24,7 @@ public class EntitiesList extends UnitsList<Entity> {
 		while (it.hasNext()) {
 			((MiMusContentProvider) it.next()).addUnit(unit);	// Unnecessary cast?
 		}
-		//relations.reflectEntitiesChanged();
+		relations.reflectEntitiesChanged();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class EntitiesList extends UnitsList<Entity> {
 		while (it.hasNext()) {
 			((MiMusContentProvider) it.next()).removeUnit(unit);	// Unnecessary cast?
 		}
-		//relations.reflectEntitiesChanged();
+		relations.reflectEntitiesChanged();
 	}
 	
 	@Override

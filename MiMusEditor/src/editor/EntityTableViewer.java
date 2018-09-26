@@ -55,8 +55,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 		tvEnt.setContentProvider(new EntityContentProvider());
 		tvEnt.setLabelProvider(new EntityLabelProvider());
 		tvEnt.setInput(entities);
-		tvEnt.getTable().setLinesVisible(true);
 		tvEnt.getTable().setHeaderVisible(true);
+		tvEnt.getTable().setLinesVisible(true);
 		tvEnt.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		packColumns();
 		
