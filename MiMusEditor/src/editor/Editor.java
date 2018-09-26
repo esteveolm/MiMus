@@ -58,7 +58,7 @@ import ui.TextStyler;
 public class Editor extends EditorPart {
 
 	public static final String[] ENTITY_TYPES = {"Person", "Payment", "Place"};
-	public static final String[] PERSON_TYPES = {"Trobador", "Rey"};
+	public static final String[] PERSON_TYPES = {"Trobadour", "King"};
 	public static final String[] PLACE_TYPES = {"Town", "Country"};
 	public static final String[] RELATION_TYPES = {"Same as", "Pays", "Goes"};
 	
