@@ -2,9 +2,6 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +48,9 @@ import org.xml.sax.SAXException;
 
 import model.EntitiesList;
 import model.Entity;
+import model.MiMusEntry;
+import model.MiMusEntryReader;
+import model.MiMusFormatException;
 import model.Relation;
 import model.RelationsList;
 import ui.TextStyler;
@@ -65,8 +65,8 @@ public class Editor extends EditorPart {
 	protected String txtPath;
 	protected String xmlPath;
 	private boolean hasXML;
-	private String fullText;
-	private String[] words;
+	private MiMusEntry docEntry;
+	private String[] regestWords;
 	private String docID;
 	private StyledText text;
 	
@@ -108,9 +108,9 @@ public class Editor extends EditorPart {
 		
 		/* Txt must always be present so the text can be loaded */
 		try {
-			fullText = new String(Files.readAllBytes(Paths.get(txtPath)), StandardCharsets.UTF_8);
-			words = fullText.split(" ");
-		} catch (IOException e) {
+			docEntry = new MiMusEntryReader().read(txtPath);
+			regestWords = docEntry.getRegest().split(" ");
+		} catch (MiMusFormatException e) {
 			e.printStackTrace();
 		}
 	}
@@ -129,7 +129,7 @@ public class Editor extends EditorPart {
 		
 		/* Raw text */
 		text = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		text.setText(fullText);
+		text.setText(docEntry.getRegest());
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
 		text.setEditable(false);
 		TextStyler styler = new TextStyler(text);
@@ -139,7 +139,7 @@ public class Editor extends EditorPart {
 		sectEnt.setText("Entities");
 		
 		/* Table of entities */
-		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, words);
+		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regestWords);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		EntitiesList entities = entityHelper.getEntities();
 		
@@ -184,9 +184,9 @@ public class Editor extends EditorPart {
 				if (charCoords.x!=charCoords.y) {
 					charCoords = fromWordToCharCoordinates(
 							fromCharToWordCoordinates(
-							charCoords));	// Trick to ensure selection of whole words
-					Point wordCoords = fromCharToWordCoordinates(charCoords);
-					entities.addUnit(new Entity(words, wordCoords.x, wordCoords.y));
+							charCoords, docEntry.getRegest()));	// Trick to ensure selection of whole words
+					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
+					entities.addUnit(new Entity(regestWords, wordCoords.x, wordCoords.y));
 					//entityHelper.packColumns();
 					System.out.println("Adding Selected Entity - " + entities.countUnits());
 					printAddedInfo(info);
@@ -268,9 +268,13 @@ public class Editor extends EditorPart {
 					tagID.appendChild(doc.createTextNode(docID));
 					tagDocument.appendChild(tagID);
 					
-					Element tagFullText = doc.createElement("full_text");
-					tagFullText.appendChild(doc.createTextNode(fullText));
-					tagDocument.appendChild(tagFullText);
+					Element tagRegest = doc.createElement("regest");
+					tagRegest.appendChild(doc.createTextNode(docEntry.getRegest()));
+					tagDocument.appendChild(tagRegest);
+					
+					Element tagBody = doc.createElement("transcripcio");
+					tagBody.appendChild(doc.createTextNode(docEntry.getBody()));
+					tagDocument.appendChild(tagBody);
 					
 					Element tagEntities = doc.createElement("entities");
 					tagDocument.appendChild(tagEntities);
@@ -330,7 +334,7 @@ public class Editor extends EditorPart {
 						int to = Integer.parseInt(eEnt.getElementsByTagName("to").item(0).getTextContent());
 						String type = eEnt.getElementsByTagName("type").item(0).getTextContent();
 						String subtype = eEnt.getElementsByTagName("subtype").item(0).getTextContent();
-						Entity ent = new Entity(words, from, to, type, subtype);
+						Entity ent = new Entity(regestWords, from, to, type, subtype);
 						entities.addUnit(ent);
 						
 						System.out.println("Words from " + from + " to " + to);
@@ -351,8 +355,8 @@ public class Editor extends EditorPart {
 		}
 	}
 
-	private Point fromCharToWordCoordinates(Point old) {
-		List<Integer> spaces = getSpacesInText();
+	private Point fromCharToWordCoordinates(Point old, String text) {
+		List<Integer> spaces = getSpacesInText(text);
 		
 		/*
 		 * Looks for between which spaces our selection indexes fall,
@@ -379,35 +383,35 @@ public class Editor extends EditorPart {
 		int charIdx=0;
 		int wordIdx=0;
 		while (wordIdx++<old.x) {	// Advance charIdx until start of first word
-			charIdx += words[wordIdx-1].length() + 1;	// +1 for the space
+			charIdx += regestWords[wordIdx-1].length() + 1;	// +1 for the space
 		}
 		int newX = new Integer(charIdx);	// Fix start of first word
-		charIdx += words[wordIdx-1].length() + 1;	// Advance first word
+		charIdx += regestWords[wordIdx-1].length() + 1;	// Advance first word
 		while (wordIdx++<old.y) {	// Advance charIdx until start of last word
-			charIdx += words[wordIdx-1].length() + 1;
+			charIdx += regestWords[wordIdx-1].length() + 1;
 		}
 		
 		if (old.y-old.x>0) {
-			int newY = charIdx + words[wordIdx-1].length();	// Advance charIdx until end of last word
+			int newY = charIdx + regestWords[wordIdx-1].length();	// Advance charIdx until end of last word
 			return new Point(newX, newY);
 		} else {
 			return new Point(newX, charIdx-1);	// In this case we already advanced before
 		}	
 	}
 	
-	private List<Integer> getSpacesInText() {
+	private List<Integer> getSpacesInText(String text) {
 		/* 
 		 * Spaces contains the index of every space, besides the start
 		 * and ending index of the full text, in ascending order.
 		 */
 		List<Integer> spaces = new ArrayList<>();
 		spaces.add(0);
-		for (int idxSpace = fullText.indexOf(' '); 
+		for (int idxSpace = text.indexOf(' '); 
 				idxSpace>=0;
-				idxSpace = fullText.indexOf(' ', idxSpace+1)) {
+				idxSpace = text.indexOf(' ', idxSpace+1)) {
 			spaces.add(idxSpace);
 		}
-		spaces.add(fullText.length());
+		spaces.add(text.length());
 		return spaces;
 	}
 	
