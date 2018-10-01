@@ -68,7 +68,8 @@ public class Editor extends EditorPart {
 	private MiMusEntry docEntry;
 	private String[] regestWords;
 	private String docID;
-	private StyledText text;
+	private StyledText regestText;
+	private StyledText transcriptionText;
 	
 	public Editor() {
 		super();
@@ -127,12 +128,12 @@ public class Editor extends EditorPart {
 		form.setText("Annotation");
 		form.getBody().setLayout(new GridLayout());
 		
-		/* Raw text */
-		text = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		text.setText(docEntry.getRegest());
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
-		text.setEditable(false);
-		TextStyler styler = new TextStyler(text);
+		/* Regest text */
+		regestText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		regestText.setText(docEntry.getRegest());
+		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
+		regestText.setEditable(false);
+		TextStyler styler = new TextStyler(regestText);
 		
 		/* List of entities */
 		Section sectEnt = toolkit.createSection(form.getBody(), PROP_TITLE);
@@ -180,7 +181,7 @@ public class Editor extends EditorPart {
 		
 		setEnt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Point charCoords = text.getSelection();
+				Point charCoords = regestText.getSelection();
 				if (charCoords.x!=charCoords.y) {
 					charCoords = fromWordToCharCoordinates(
 							fromCharToWordCoordinates(
@@ -246,7 +247,20 @@ public class Editor extends EditorPart {
 				}
 			}
 		});
-
+		
+		/* Transcription part of the form */
+		Section sectTrans = new Section(form.getBody(), PROP_TITLE);
+		sectTrans.setText("Transcription of the document");
+		
+		// TODO: add TableViewer and functionality (rethink MiMusTableViewer)
+		
+		/* Transcription text */
+		transcriptionText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		transcriptionText.setText(docEntry.getBody());
+		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
+		transcriptionText.setEditable(false);
+		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
+		
 		/* XML Button */
 		Section sectXML = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectXML.setText("Create XML");
