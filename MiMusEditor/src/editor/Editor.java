@@ -376,6 +376,20 @@ public class Editor extends EditorPart {
 						tagEntities.appendChild(tagEntity);
 					}
 					
+					Element tagLemmatizations = doc.createElement("lemmatizations");
+					tagDocument.appendChild(tagLemmatizations);
+					for (Relation r: lemmas.getUnits()) {
+						Lemma lem = (Lemma) r;
+						Element tagTranscriptedForm = doc.createElement("transcripted_form");
+						tagTranscriptedForm.appendChild(doc.createTextNode(lem.getTranscriptionEntityText()));
+						Element tagLemmatizedForm = doc.createElement("lemmatized_form");
+						tagLemmatizedForm.appendChild(doc.createTextNode(lem.getRegestEntityText()));
+						Element tagLemmatization = doc.createElement("lemmatization");
+						tagLemmatization.appendChild(tagTranscriptedForm);
+						tagLemmatization.appendChild(tagLemmatizedForm);
+						tagLemmatizations.appendChild(tagLemmatization);
+					}
+					
 					/* Converts Java XML Document to file-system XML */
 					Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
@@ -423,6 +437,17 @@ public class Editor extends EditorPart {
 				}
 				styler.update();
 				entityHelper.packColumns();
+				
+//				// TODO: think how to store transcription entities and then we can retrieve them
+//				nl = doc.getElementsByTagName("lemmatization");
+//				for (int i=0; i<nl.getLength(); i++) {
+//					Node nLem = nl.item(i);
+//					if (nLem.getNodeType() == Node.ELEMENT_NODE) {
+//						Element eLem = (Element) nLem;
+//						// XXX: need to save transcriptionEntities stuff or I can't retrieve it
+//						transcriptionEntities.addUnit(transEnt);
+//					}
+//				}
 			} catch (ParserConfigurationException pce) {
 				System.out.println("Error with DOM parser.");
 				pce.printStackTrace();
