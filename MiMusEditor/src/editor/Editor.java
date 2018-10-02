@@ -48,6 +48,8 @@ import org.xml.sax.SAXException;
 
 import model.EntitiesList;
 import model.Entity;
+import model.Lemma;
+import model.LemmasList;
 import model.MiMusEntry;
 import model.MiMusEntryReader;
 import model.MiMusFormatException;
@@ -67,6 +69,7 @@ public class Editor extends EditorPart {
 	private boolean hasXML;
 	private MiMusEntry docEntry;
 	private String[] regestWords;
+	private String[] transcriptionWords;
 	private String docID;
 	private StyledText regestText;
 	private StyledText transcriptionText;
@@ -111,6 +114,7 @@ public class Editor extends EditorPart {
 		try {
 			docEntry = new MiMusEntryReader().read(txtPath);
 			regestWords = docEntry.getRegest().split(" ");
+			transcriptionWords = docEntry.getBody().split(" ");
 		} catch (MiMusFormatException e) {
 			e.printStackTrace();
 		}
@@ -252,14 +256,60 @@ public class Editor extends EditorPart {
 		Section sectTrans = new Section(form.getBody(), PROP_TITLE);
 		sectTrans.setText("Transcription of the document");
 		
-		// TODO: add TableViewer and functionality (rethink MiMusTableViewer)
-		
 		/* Transcription text */
-		transcriptionText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		transcriptionText = new StyledText(sectTrans.getParent(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		transcriptionText.setText(docEntry.getBody());
 		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
 		transcriptionText.setEditable(false);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
+		EntitiesList transcriptionEntities = new EntitiesList(transcriptionWords);
+
+		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, entities, transcriptionEntities);
+		TableViewer lemmaTV = lemmaHelper.createTableViewer();
+		LemmasList lemmas = lemmaHelper.getLemmas();
+		
+		/* Buttons to add/remove lemma associations */
+		GridData gridLemma = new GridData();
+		gridLemma.widthHint = 300;
+		Button addLemma = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
+		addLemma.setLayoutData(gridLemma);
+		addLemma.setText("Add");
+		
+		Button removeLemma = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
+		removeLemma.setLayoutData(gridLemma);
+		removeLemma.setText("Delete");
+		
+		addLemma.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Point charCoords = transcriptionText.getSelection();
+				if (charCoords.x!=charCoords.y) {
+					charCoords = fromWordToCharCoordinates(
+							fromCharToWordCoordinates(
+							charCoords, docEntry.getBody()));	// Trick to ensure selection of whole words
+					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getBody());
+					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y);
+					transcriptionEntities.addUnit(transEnt);
+					lemmas.addUnit(new Lemma(entities, transcriptionEntities));
+				} else {
+					System.out.println("Could not add Selected Entity because no text was selected");
+				}
+			}
+		});
+		removeLemma.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Lemma lemma = (Lemma) ((IStructuredSelection) lemmaTV.getSelection())
+							.getFirstElement();
+				if (lemma==null) {
+					System.out.println("Could not remove Lemma because none was selected.");
+				} else {
+					System.out.println(lemma);
+					lemmas.removeUnit(lemma);
+					System.out.println("Removing lemma - " + lemmas.countUnits());
+				}
+			}
+		});
 		
 		/* XML Button */
 		Section sectXML = toolkit.createSection(form.getBody(), PROP_TITLE);

@@ -26,47 +26,41 @@ import ui.TextStyler;
 public class RelationTableViewer extends MiMusTableViewer {
 
 	private RelationsList relations;
-
+	
 	public RelationTableViewer(Composite parent, TextStyler styler, EntitiesList entities) {
 		super(parent, styler);
-		String[] aux = {"Entity A", "Entity B", "Type"};
-		columnNames = aux;
+		String[] cols = {"Entity A", "Entity B", "Type"};
+		columnNames = cols;
 		relations = new RelationsList(entities);
 		entities.setRelations(this);
 	}
 
 	@Override
 	public TableViewer createTableViewer() {
-		tvRel = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		
 		for (String h: columnNames) {
-			TableColumn col = new TableColumn(tvRel.getTable(), SWT.LEFT);
+			TableColumn col = new TableColumn(tv.getTable(), SWT.LEFT);
 			col.setText(h);
 		}
-		tvRel.setUseHashlookup(true);
-		tvRel.setColumnProperties(columnNames);
+		tv.setUseHashlookup(true);
+		tv.setColumnProperties(columnNames);
 		
 		/* Create cell editors for each column */
 		ComboBoxCellEditor[] editors = new ComboBoxCellEditor[columnNames.length];
-		editors[0] = new ComboBoxCellEditor(tvRel.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[1] = new ComboBoxCellEditor(tvRel.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[2] = new ComboBoxCellEditor(tvRel.getTable(), relationTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		tvRel.setCellEditors(editors);
-		tvRel.setCellModifier(new RelationCellModifier());
-		tvRel.setContentProvider(new RelationContentProvider());
-		tvRel.setLabelProvider(new RelationLabelProvider());
-		tvRel.setInput(relations);
-		tvRel.getTable().setHeaderVisible(true);
-		tvRel.getTable().setLinesVisible(true);
-		tvRel.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		editors[0] = new ComboBoxCellEditor(tv.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[1] = new ComboBoxCellEditor(tv.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), relationTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		tv.setCellEditors(editors);
+		tv.setCellModifier(new RelationCellModifier());
+		tv.setContentProvider(new RelationContentProvider());
+		tv.setLabelProvider(new RelationLabelProvider());
+		tv.setInput(relations);
+		tv.getTable().setHeaderVisible(true);
+		tv.getTable().setLinesVisible(true);
+		tv.getTable().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		packColumns();
-		return tvRel;
-	}
-	
-	public void packColumns() {
-		for (int i = 0; i < columnNames.length; i++) {
-			tvRel.getTable().getColumn(i).pack();
-		}
+		return tv;
 	}
 	
 	private static String[] relationTypesAsStrings() {
@@ -78,10 +72,10 @@ public class RelationTableViewer extends MiMusTableViewer {
 	}
 	
 	public void reflectEntitiesChanged() {
-		CellEditor[] editors = tvRel.getCellEditors();
+		CellEditor[] editors = tv.getCellEditors();
 		((ComboBoxCellEditor) editors[0]).setItems(getEntitiesText());
 		((ComboBoxCellEditor) editors[1]).setItems(getEntitiesText());
-		tvRel.refresh();
+		tv.refresh();
 	}
 	
 	class RelationCellModifier implements ICellModifier {
@@ -183,17 +177,17 @@ public class RelationTableViewer extends MiMusTableViewer {
 
 		@Override
 		public void addUnit(Unit u) {
-			tvRel.add(u);
+			tv.add(u);
 		}
 
 		@Override
 		public void removeUnit(Unit u) {
-			tvRel.remove(u);
+			tv.remove(u);
 		}
 
 		@Override
 		public void updateUnit(Unit u) {
-			tvRel.update(u, null);
+			tv.update(u, null);
 		}
 	}
 	

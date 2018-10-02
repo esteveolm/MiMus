@@ -36,28 +36,28 @@ public class EntityTableViewer extends MiMusTableViewer {
 
 	@Override
 	public TableViewer createTableViewer() {
-		tvEnt = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		
 		for (String h: columnNames) {
-			TableColumn col = new TableColumn(tvEnt.getTable(), SWT.LEFT);
+			TableColumn col = new TableColumn(tv.getTable(), SWT.LEFT);
 			col.setText(h);
 		}
-		tvEnt.setUseHashlookup(true);
-		tvEnt.setColumnProperties(columnNames);
+		tv.setUseHashlookup(true);
+		tv.setColumnProperties(columnNames);
 		
 		/* Create cell editors for each column */
 		CellEditor[] editors = new CellEditor[columnNames.length];
-		editors[0] = new TextCellEditor(tvEnt.getTable(), SWT.READ_ONLY);
-		editors[1] = new ComboBoxCellEditor(tvEnt.getTable(), entityTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[2] = new ComboBoxCellEditor(tvEnt.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		tvEnt.setCellEditors(editors);
-		tvEnt.setCellModifier(new EntityCellModifier());
-		tvEnt.setContentProvider(new EntityContentProvider());
-		tvEnt.setLabelProvider(new EntityLabelProvider());
-		tvEnt.setInput(entities);
-		tvEnt.getTable().setHeaderVisible(true);
-		tvEnt.getTable().setLinesVisible(true);
-		tvEnt.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		editors[0] = new TextCellEditor(tv.getTable(), SWT.READ_ONLY);
+		editors[1] = new ComboBoxCellEditor(tv.getTable(), entityTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		tv.setCellEditors(editors);
+		tv.setCellModifier(new EntityCellModifier());
+		tv.setContentProvider(new EntityContentProvider());
+		tv.setLabelProvider(new EntityLabelProvider());
+		tv.setInput(entities);
+		tv.getTable().setHeaderVisible(true);
+		tv.getTable().setLinesVisible(true);
+		tv.getTable().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		packColumns();
 		
 //		tvEnt.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -67,13 +67,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 //				styler.select(ent.getFrom(), ent.getTo());
 //			}
 //		});
-		return tvEnt;
-	}
-	
-	public void packColumns() {
-		for (int i = 0; i < columnNames.length; i++) {
-			tvEnt.getTable().getColumn(i).pack();
-		}
+		return tv;
 	}
 	
 	public List<String> getColumnNames() {
@@ -139,11 +133,11 @@ public class EntityTableViewer extends MiMusTableViewer {
 			case 1:	// Type
 				ent.setType(valueIdx);
 				if (valueIdx==0) {
-					tvEnt.getCellEditors()[2] = new ComboBoxCellEditor(tvEnt.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
 				} else if (valueIdx==2) {
-					tvEnt.getCellEditors()[2] = new ComboBoxCellEditor(tvEnt.getTable(), placeTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), placeTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
 				}
-				tvEnt.refresh();
+				tv.refresh();
 				break;
 			case 2:	// Subtype
 				ent.setSubtype(valueIdx);
@@ -204,15 +198,15 @@ public class EntityTableViewer extends MiMusTableViewer {
 		}
 		
 		public void addUnit(Unit u) {
-			tvEnt.add(u);
+			tv.add(u);
 		}
 		
 		public void removeUnit(Unit u) {
-			tvEnt.remove(u);
+			tv.remove(u);
 		}
 		
 		public void updateUnit(Unit u) {
-			tvEnt.update(u, null);
+			tv.update(u, null);
 		}
 		
 	}
