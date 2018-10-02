@@ -65,4 +65,8 @@ public class Lemma extends Relation {
 	public Entity getTranscriptionEntityObject() {
 		return getTranscriptionEntities().getUnits().get(getTranscriptionEntity());
 	}
+	
+	public String toString() {
+		return "(" + getTranscriptionEntityText() + "<- HAS LEMMA ->" + getRegestEntityText() + ")";
+	}
 }
