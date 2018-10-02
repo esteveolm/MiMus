@@ -189,7 +189,7 @@ public class Editor extends EditorPart {
 				if (charCoords.x!=charCoords.y) {
 					charCoords = fromWordToCharCoordinates(
 							fromCharToWordCoordinates(
-							charCoords, docEntry.getRegest()));	// Trick to ensure selection of whole words
+							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
 					entities.addUnit(new Entity(regestWords, wordCoords.x, wordCoords.y));
 					//entityHelper.packColumns();
@@ -214,7 +214,8 @@ public class Editor extends EditorPart {
 					printNotDeletedBecauseUsedInfo(info);
 				} else {
 					System.out.println(ent);
-					Point charCoords = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()));
+					Point charCoords = fromWordToCharCoordinates(
+							new Point(ent.getFrom(), ent.getTo()), regestWords);
 					entities.removeUnit(ent);
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " + entities.countUnits());
@@ -290,12 +291,13 @@ public class Editor extends EditorPart {
 				if (charCoords.x!=charCoords.y) {
 					charCoords = fromWordToCharCoordinates(
 							fromCharToWordCoordinates(
-							charCoords, docEntry.getBody()));	// Trick to ensure selection of whole words
+							charCoords, docEntry.getBody()), transcriptionWords);	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getBody());
 					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y);
 					transcriptionEntities.addUnit(transEnt);
 					lemmas.addUnit(new Lemma(entities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
 					printLemmaAddedInfo(infoTrans);
+					transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
 				} else {
 					System.out.println("Could not add Selected Entity because no text was selected");
 					printLemmaNotAddedInfo(infoTrans);
@@ -315,6 +317,10 @@ public class Editor extends EditorPart {
 					lemmas.removeUnit(lemma);
 					System.out.println("Removing lemma - " + lemmas.countUnits());
 					printLemmaDeletedInfo(infoTrans);
+					Point charCoords = fromWordToCharCoordinates(new Point(
+							lemma.getTranscriptionEntityObject().getFrom(), 
+							lemma.getTranscriptionEntityObject().getTo()), transcriptionWords);
+					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
 				}
 			}
 		});
@@ -410,7 +416,7 @@ public class Editor extends EditorPart {
 						entities.addUnit(ent);
 						
 						System.out.println("Words from " + from + " to " + to);
-						Point charCoord = fromWordToCharCoordinates(new Point(from, to));
+						Point charCoord = fromWordToCharCoordinates(new Point(from, to), regestWords);
 						System.out.println("Painting from " + charCoord.x + " to " + charCoord.y);
 						styler.add(charCoord.x, charCoord.y);
 					}
@@ -427,9 +433,10 @@ public class Editor extends EditorPart {
 		}
 	}
 
+	// TODO: Rethink these methods so they are inherent of a textual object
+	
 	private Point fromCharToWordCoordinates(Point old, String text) {
 		List<Integer> spaces = getSpacesInText(text);
-		
 		/*
 		 * Looks for between which spaces our selection indexes fall,
 		 * which corresponds with a certain word whose index is returned.
@@ -451,20 +458,20 @@ public class Editor extends EditorPart {
 		return new Point(from, to);
 	}
 	
-	private Point fromWordToCharCoordinates(Point old) {
+	private Point fromWordToCharCoordinates(Point old, String[] words) {
 		int charIdx=0;
 		int wordIdx=0;
 		while (wordIdx++<old.x) {	// Advance charIdx until start of first word
-			charIdx += regestWords[wordIdx-1].length() + 1;	// +1 for the space
+			charIdx += words[wordIdx-1].length() + 1;	// +1 for the space
 		}
 		int newX = new Integer(charIdx);	// Fix start of first word
-		charIdx += regestWords[wordIdx-1].length() + 1;	// Advance first word
+		charIdx += words[wordIdx-1].length() + 1;	// Advance first word
 		while (wordIdx++<old.y) {	// Advance charIdx until start of last word
-			charIdx += regestWords[wordIdx-1].length() + 1;
+			charIdx += words[wordIdx-1].length() + 1;
 		}
 		
 		if (old.y-old.x>0) {
-			int newY = charIdx + regestWords[wordIdx-1].length();	// Advance charIdx until end of last word
+			int newY = charIdx + words[wordIdx-1].length();	// Advance charIdx until end of last word
 			return new Point(newX, newY);
 		} else {
 			return new Point(newX, charIdx-1);	// In this case we already advanced before
