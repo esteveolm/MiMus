@@ -279,6 +279,10 @@ public class Editor extends EditorPart {
 		removeLemma.setLayoutData(gridLemma);
 		removeLemma.setText("Delete");
 		
+		Label infoTrans = toolkit.createLabel(sectTrans.getParent(), "");
+		infoTrans.setForeground(new Color(Display.getCurrent(), 255,0,0));
+		infoTrans.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		addLemma.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -291,8 +295,10 @@ public class Editor extends EditorPart {
 					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y);
 					transcriptionEntities.addUnit(transEnt);
 					lemmas.addUnit(new Lemma(entities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
+					printLemmaAddedInfo(infoTrans);
 				} else {
 					System.out.println("Could not add Selected Entity because no text was selected");
+					printLemmaNotAddedInfo(infoTrans);
 				}
 			}
 		});
@@ -303,10 +309,12 @@ public class Editor extends EditorPart {
 							.getFirstElement();
 				if (lemma==null) {
 					System.out.println("Could not remove Lemma because none was selected.");
+					printLemmaNotDeletedInfo(infoTrans);
 				} else {
 					System.out.println(lemma);
 					lemmas.removeUnit(lemma);
 					System.out.println("Removing lemma - " + lemmas.countUnits());
+					printLemmaDeletedInfo(infoTrans);
 				}
 			}
 		});
@@ -527,6 +535,26 @@ public class Editor extends EditorPart {
 	private void printRelationNotDeletedInfo(Label label) {
 		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 		label.setText("You must select a relation to delete it.");
+	}
+	
+	private void printLemmaAddedInfo(Label label) {
+		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+		label.setText("Lemma added successfully.");
+	}
+	
+	private void printLemmaNotAddedInfo(Label label) {
+		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		label.setText("You must select a part of the text.");
+	}
+	
+	private void printLemmaDeletedInfo(Label label) {
+		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+		label.setText("Lemma deleted successfully.");
+	}
+	
+	private void printLemmaNotDeletedInfo(Label label) {
+		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		label.setText("You must select a lemma to delete it.");
 	}
 	
 	/* Following methods shouldn't be touched */
