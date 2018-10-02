@@ -290,7 +290,7 @@ public class Editor extends EditorPart {
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getBody());
 					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y);
 					transcriptionEntities.addUnit(transEnt);
-					lemmas.addUnit(new Lemma(entities, transcriptionEntities));
+					lemmas.addUnit(new Lemma(entities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
 				} else {
 					System.out.println("Could not add Selected Entity because no text was selected");
 				}
