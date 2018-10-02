@@ -55,7 +55,9 @@ public class LemmaTableViewer extends RelationTableViewer {
 		tv.setInput(lemmas);
 		tv.getTable().setHeaderVisible(true);
 		tv.getTable().setLinesVisible(true);
-		tv.getTable().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gd.heightHint = 150;
+		tv.getTable().setLayoutData(gd);
 		packColumns();
 		return tv;
 	}
