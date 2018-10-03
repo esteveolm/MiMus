@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -58,6 +59,7 @@ public class LemmaTableViewer extends RelationTableViewer {
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gd.heightHint = 150;
 		tv.getTable().setLayoutData(gd);
+		tv.setComparator(new LemmaComparator());
 		packColumns();
 		return tv;
 	}
@@ -158,6 +160,21 @@ public class LemmaTableViewer extends RelationTableViewer {
 		@Override
 		public void updateUnit(Unit u) {
 			tv.update(u, null);
+			tv.refresh();
+		}
+	}
+	
+	public class LemmaComparator extends ViewerComparator {
+		public int compare(Viewer viewer, Object e1, Object e2) {
+			Lemma l1 = (Lemma) e1;
+			Lemma l2 = (Lemma) e2;
+			if (l1.getRegestEntityObject().equals(l2.getRegestEntityObject())) {
+				/* Same Regest, order by Transcription position (from-based) */
+				return l1.getTranscriptionEntityObject().getFrom()-l2.getTranscriptionEntityObject().getFrom();
+			} else {
+				/* Different Regest, order by Regest position (from-based) */
+				return l1.getRegestEntityObject().getFrom()-l2.getRegestEntityObject().getFrom();
+			}
 		}
 	}
 	

@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -61,6 +62,7 @@ public class RelationTableViewer extends MiMusTableViewer {
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gd.heightHint = 150;
 		tv.getTable().setLayoutData(gd);
+		tv.setComparator(new RelationComparator());
 		packColumns();
 		return tv;
 	}
@@ -190,6 +192,21 @@ public class RelationTableViewer extends MiMusTableViewer {
 		@Override
 		public void updateUnit(Unit u) {
 			tv.update(u, null);
+			tv.refresh();
+		}
+	}
+	
+	public class RelationComparator extends ViewerComparator {
+		public int compare(Viewer viewer, Object e1, Object e2) {
+			Relation rel1 = (Relation) e1;
+			Relation rel2 = (Relation) e2;
+			if (rel1.getEntityAObject().equals(rel2.getEntityAObject())) {
+				/* Same EntityA, order by EntityB position (from-based) */
+				return rel1.getEntityBObject().getFrom()-rel2.getEntityBObject().getFrom();
+			} else {
+				/* Different EntityA, order by EntityA position (from-based) */
+				return rel1.getEntityAObject().getFrom()-rel2.getEntityAObject().getFrom();
+			}
 		}
 	}
 	

@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.EntitiesList;
+import model.Entity;
 import model.TypedEntity;
 import model.Unit;
 import ui.TextStyler;
@@ -60,15 +62,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gd.heightHint = 150;
 		tv.getTable().setLayoutData(gd);
+		tv.setComparator(new EntityComparator());
 		packColumns();
-		
-//		tvEnt.addSelectionChangedListener(new ISelectionChangedListener() {
-//			@Override
-//			public void selectionChanged(SelectionChangedEvent event) {
-//				Entity ent = (Entity) tvEnt.getStructuredSelection().getFirstElement();
-//				styler.select(ent.getFrom(), ent.getTo());
-//			}
-//		});
 		return tv;
 	}
 	
@@ -209,8 +204,16 @@ public class EntityTableViewer extends MiMusTableViewer {
 		
 		public void updateUnit(Unit u) {
 			tv.update(u, null);
+			tv.refresh();
 		}
-		
+	}
+	
+	public class EntityComparator extends ViewerComparator {
+		public int compare(Viewer viewer, Object e1, Object e2) {
+			Entity ent1 = (Entity) e1;
+			Entity ent2 = (Entity) e2;
+			return ent1.getFrom()-ent2.getFrom();
+		}
 	}
 	
 	public EntitiesList getEntities() {
