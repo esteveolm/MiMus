@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 import model.EntitiesList;
 import model.Relation;
 import model.RelationsList;
+import model.TypedEntity;
 import model.Unit;
 import ui.TextStyler;
 
@@ -51,7 +52,7 @@ public class RelationTableViewer extends MiMusTableViewer {
 		ComboBoxCellEditor[] editors = new ComboBoxCellEditor[columnNames.length];
 		editors[0] = new ComboBoxCellEditor(tv.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
 		editors[1] = new ComboBoxCellEditor(tv.getTable(), getEntitiesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[2] = new ComboBoxCellEditor(tv.getTable(), relationTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.RELATION_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new RelationCellModifier());
 		tv.setContentProvider(new RelationContentProvider());
@@ -67,13 +68,13 @@ public class RelationTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 	
-	private static String[] relationTypesAsStrings() {
-		String[] res = new String[Editor.RELATION_TYPES.length];
-		for (int i=0; i<res.length; i++) {
-			res[i] = Editor.RELATION_TYPES[i];
-		}
-		return res;
-	}
+//	private static String[] relationTypesAsStrings() {
+//		String[] res = new String[TypedEntity.RELATION_TYPES.length];
+//		for (int i=0; i<res.length; i++) {
+//			res[i] = TypedEntity.RELATION_TYPES[i];
+//		}
+//		return res;
+//	}
 	
 	public void reflectEntitiesChanged() {
 		CellEditor[] editors = tv.getCellEditors();

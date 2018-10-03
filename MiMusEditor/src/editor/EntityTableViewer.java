@@ -50,8 +50,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 		/* Create cell editors for each column */
 		CellEditor[] editors = new CellEditor[columnNames.length];
 		editors[0] = new TextCellEditor(tv.getTable(), SWT.READ_ONLY);
-		editors[1] = new ComboBoxCellEditor(tv.getTable(), entityTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[2] = new ComboBoxCellEditor(tv.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[1] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.ENTITY_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.PERSON_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new EntityCellModifier());
 		tv.setContentProvider(new EntityContentProvider());
@@ -75,29 +75,29 @@ public class EntityTableViewer extends MiMusTableViewer {
 		this.columnNames = columnNames;
 	}
 	
-	private static String[] entityTypesAsStrings() {
-		String[] res = new String[Editor.ENTITY_TYPES.length];
-		for (int i=0; i<res.length; i++) {
-			res[i] = Editor.ENTITY_TYPES[i];
-		}
-		return res;
-	}
-	
-	private static String[] personTypesAsStrings() {
-		String[] res = new String[Editor.PERSON_TYPES.length];
-		for (int i=0; i<res.length; i++) {
-			res[i] = Editor.PERSON_TYPES[i];
-		}
-		return res;
-	}
-	
-	private static String[] placeTypesAsStrings() {
-		String[] res = new String[Editor.PLACE_TYPES.length];
-		for (int i=0; i<res.length; i++) {
-			res[i] = Editor.PLACE_TYPES[i];
-		}
-		return res;
-	}
+//	private static String[] entityTypesAsStrings() {
+//		String[] res = new String[Editor.ENTITY_TYPES.length];
+//		for (int i=0; i<res.length; i++) {
+//			res[i] = Editor.ENTITY_TYPES[i];
+//		}
+//		return res;
+//	}
+//	
+//	private static String[] personTypesAsStrings() {
+//		String[] res = new String[Editor.PERSON_TYPES.length];
+//		for (int i=0; i<res.length; i++) {
+//			res[i] = Editor.PERSON_TYPES[i];
+//		}
+//		return res;
+//	}
+//	
+//	private static String[] placeTypesAsStrings() {
+//		String[] res = new String[Editor.PLACE_TYPES.length];
+//		for (int i=0; i<res.length; i++) {
+//			res[i] = Editor.PLACE_TYPES[i];
+//		}
+//		return res;
+//	}
 	
 	class EntityCellModifier implements ICellModifier {	
 		@Override
@@ -130,9 +130,9 @@ public class EntityTableViewer extends MiMusTableViewer {
 			case 1:	// Type
 				ent.setType(valueIdx);
 				if (valueIdx==0) {
-					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), personTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.PERSON_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
 				} else if (valueIdx==2) {
-					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), placeTypesAsStrings(), SWT.READ_ONLY | SWT.DROP_DOWN);
+					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.PLACE_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
 				}
 				tv.refresh();
 				break;

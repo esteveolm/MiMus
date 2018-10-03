@@ -2,9 +2,12 @@ package model;
 
 import java.util.Arrays;
 
-import editor.Editor;
-
 public class TypedEntity extends Entity {
+
+	public static final String[] ENTITY_TYPES = {"Person", "Payment", "Place"};
+	public static final String[] PERSON_TYPES = {"Trobadour", "King"};
+	public static final String[] PLACE_TYPES = {"Town", "Country"};
+	public static final String[] RELATION_TYPES = {"Same as", "Pays", "Goes"};
 
 	private int type;
 	private int subtype;
@@ -25,11 +28,11 @@ public class TypedEntity extends Entity {
 	
 	public TypedEntity(String[] words, int from, int to, String type, String subtype, int id) {
 		super(words, from, to, id);
-		this.type = Arrays.asList(Editor.ENTITY_TYPES).indexOf(type);
+		this.type = Arrays.asList(ENTITY_TYPES).indexOf(type);
 		if (this.type==0) {
-			this.subtype = Arrays.asList(Editor.PERSON_TYPES).indexOf(subtype);
+			this.subtype = Arrays.asList(PERSON_TYPES).indexOf(subtype);
 		} else if (this.type==2) {
-			this.subtype = Arrays.asList(Editor.PLACE_TYPES).indexOf(subtype);
+			this.subtype = Arrays.asList(PLACE_TYPES).indexOf(subtype);
 		} else {
 			this.subtype = 0;
 		}
@@ -40,16 +43,16 @@ public class TypedEntity extends Entity {
 		return type;
 	}
 	public String getTypeWord() {
-		return Editor.ENTITY_TYPES[type];
+		return ENTITY_TYPES[type];
 	}
 	public int getSubtype() {
 		return subtype;
 	}
 	public String getSubtypeWord() {
 		if (type==0) {
-			return Editor.PERSON_TYPES[subtype];
+			return PERSON_TYPES[subtype];
 		} else if (type==2) {
-			return Editor.PLACE_TYPES[subtype];
+			return PLACE_TYPES[subtype];
 		} else {
 			return "";
 		}

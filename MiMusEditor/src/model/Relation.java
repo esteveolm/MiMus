@@ -1,6 +1,5 @@
 package model;
 
-import editor.Editor;
 import editor.IllegalTextRangeException;
 
 public class Relation extends Unit {
@@ -24,18 +23,25 @@ public class Relation extends Unit {
 		this.type = 0;
 	}
 	
+	private Entity getById(int id) {
+		for (Entity e: entities.getUnits()) {
+			if (e.getId()==id) return e;
+		}
+		return null;
+	}
+	
 	public int getEntityA() {
 		return entityA;
 	}
 	public String getEntityAText() {
 		try {
-			return entities.getUnits().get(entityA).getText();
+			return getEntityAObject().getText();
 		} catch (IllegalTextRangeException e) {
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getEntityAObject() {
-		return entities.getUnits().get(entityA);
+		return getById(getEntityA());
 	}
 	public void setEntityA(int entityA) {
 		this.entityA = entityA;
@@ -45,13 +51,13 @@ public class Relation extends Unit {
 	}
 	public String getEntityBText() {
 		try {
-			return entities.getUnits().get(entityB).getText();
+			return getEntityBObject().getText();
 		} catch (IllegalTextRangeException e) {
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getEntityBObject() {
-		return entities.getUnits().get(entityB);
+		return getById(getEntityB());
 	}
 	public void setEntityB(int entityB) {
 		this.entityB = entityB;
@@ -60,7 +66,7 @@ public class Relation extends Unit {
 		return type;
 	}
 	public String getTypeWord() {
-		return Editor.RELATION_TYPES[type];
+		return TypedEntity.RELATION_TYPES[type];
 	}
 	public void setType(int type) {
 		this.type = type;
@@ -73,6 +79,6 @@ public class Relation extends Unit {
 	}
 	
 	public String toString() {
-		return "(" + getEntityAText() + " <- " + getTypeWord() + " -> " +entities.getUnits().get(entityB).toString() + ")";
+		return "(" + getEntityAText() + " <- " + getTypeWord() + " -> " + getEntityBText() + ")";
 	}
 }
