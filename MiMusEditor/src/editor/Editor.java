@@ -55,6 +55,8 @@ import model.MiMusEntryReader;
 import model.MiMusFormatException;
 import model.Relation;
 import model.RelationsList;
+import model.TypedEntity;
+import model.UntypedEntity;
 import ui.TextStyler;
 
 public class Editor extends EditorPart {
@@ -193,7 +195,7 @@ public class Editor extends EditorPart {
 							fromCharToWordCoordinates(
 							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
-					regestEntities.addUnit(new Entity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
+					regestEntities.addUnit(new TypedEntity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
 					//entityHelper.packColumns();
 					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
 					printAddedInfo(info);
@@ -295,7 +297,7 @@ public class Editor extends EditorPart {
 							fromCharToWordCoordinates(
 							charCoords, docEntry.getTranscription()), transcriptionWords);	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getTranscription());
-					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
+					Entity transEnt = new UntypedEntity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
 					transcriptionEntities.addUnit(transEnt);
 					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
 					printLemmaAddedInfo(infoTrans);
@@ -360,18 +362,19 @@ public class Editor extends EditorPart {
 					Element tagRegestEntities = doc.createElement("regest_entities");
 					tagDocument.appendChild(tagRegestEntities);
 					for (Entity ent: regestEntities.getUnits()) {
+						TypedEntity typedEnt = (TypedEntity) ent;
 						Element tagIDEnt = doc.createElement("entity_id");
-						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(ent.getId())));
+						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getId())));
 						Element tagFromEnt = doc.createElement("from");
-						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(ent.getFrom())));
+						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getFrom())));
 						Element tagToEnt = doc.createElement("to");
-						tagToEnt.appendChild(doc.createTextNode(String.valueOf(ent.getTo())));
+						tagToEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getTo())));
 						Element tagTextEnt = doc.createElement("text");
-						tagTextEnt.appendChild(doc.createTextNode(ent.getText()));
+						tagTextEnt.appendChild(doc.createTextNode(typedEnt.getText()));
 						Element tagTypeEnt = doc.createElement("type");
-						tagTypeEnt.appendChild(doc.createTextNode(ent.getTypeWord()));
+						tagTypeEnt.appendChild(doc.createTextNode(typedEnt.getTypeWord()));
 						Element tagSubtypeEnt = doc.createElement("subtype");
-						tagSubtypeEnt.appendChild(doc.createTextNode(ent.getSubtypeWord()));
+						tagSubtypeEnt.appendChild(doc.createTextNode(typedEnt.getSubtypeWord()));
 						Element tagEntity = doc.createElement("entity");
 						tagEntity.appendChild(tagIDEnt);
 						tagEntity.appendChild(tagFromEnt);
@@ -386,25 +389,20 @@ public class Editor extends EditorPart {
 					Element tagTranscriptionEntities = doc.createElement("transcription_entities");
 					tagDocument.appendChild(tagTranscriptionEntities);
 					for (Entity ent: transcriptionEntities.getUnits()) {
+						UntypedEntity untypedEnt = (UntypedEntity) ent;
 						Element tagIDEnt = doc.createElement("entity_id");
-						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(ent.getId())));
+						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getId())));
 						Element tagFromEnt = doc.createElement("from");
-						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(ent.getFrom())));
+						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getFrom())));
 						Element tagToEnt = doc.createElement("to");
-						tagToEnt.appendChild(doc.createTextNode(String.valueOf(ent.getTo())));
+						tagToEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getTo())));
 						Element tagTextEnt = doc.createElement("text");
-						tagTextEnt.appendChild(doc.createTextNode(ent.getText()));
-						Element tagTypeEnt = doc.createElement("type");
-						tagTypeEnt.appendChild(doc.createTextNode(ent.getTypeWord()));
-						Element tagSubtypeEnt = doc.createElement("subtype");
-						tagSubtypeEnt.appendChild(doc.createTextNode(ent.getSubtypeWord()));
+						tagTextEnt.appendChild(doc.createTextNode(untypedEnt.getText()));
 						Element tagEntity = doc.createElement("entity");
 						tagEntity.appendChild(tagIDEnt);
 						tagEntity.appendChild(tagFromEnt);
 						tagEntity.appendChild(tagToEnt);
 						tagEntity.appendChild(tagTextEnt);
-						tagEntity.appendChild(tagTypeEnt);
-						tagEntity.appendChild(tagSubtypeEnt);
 						tagTranscriptionEntities.appendChild(tagEntity);
 					}
 					
@@ -460,13 +458,13 @@ public class Editor extends EditorPart {
 						
 						/* Discern if <entity> under <regest_entities> or <transcription_entities> */
 						if (nEnt.getParentNode().getNodeName().equals("regest_entities")) {
-							Entity ent = xmlElementToEntity(eEnt, regestWords);
+							Entity ent = xmlElementToEntity(eEnt, regestWords, true);
 							entityCurrentID++;
 							regestEntities.addUnit(ent);
 							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), regestWords);
 							styler.add(charCoord.x, charCoord.y);
 						} else if (nEnt.getParentNode().getNodeName().equals("transcription_entities")) {
-							Entity ent = xmlElementToEntity(eEnt, transcriptionWords);
+							Entity ent = xmlElementToEntity(eEnt, transcriptionWords, false);
 							entityCurrentID++;
 							transcriptionEntities.addUnit(ent);
 							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), transcriptionWords);
@@ -500,10 +498,10 @@ public class Editor extends EditorPart {
 								/* Discern if <entity> entries retrieved are under <transcription_entities> or <regest_entities> */
 								if (nEnt.getParentNode().getNodeName().equals("transcription_entities")
 										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strTranscriptionID)) {
-									foundTranscriptionEntity = xmlElementToEntity(eEnt, transcriptionWords);
+									foundTranscriptionEntity = xmlElementToEntity(eEnt, transcriptionWords, false);
 								} else if (nEnt.getParentNode().getNodeName().equals("regest_entities")
 										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strRegestID)) {
-									foundRegestEntity = xmlElementToEntity(eEnt, regestWords);
+									foundRegestEntity = xmlElementToEntity(eEnt, regestWords, true);
 								}
 							}
 						}
@@ -526,13 +524,16 @@ public class Editor extends EditorPart {
 
 	// TODO: Rethink these methods so they are inherent of a textual object
 	
-	private Entity xmlElementToEntity(Element elem, String[] words) {
+	private Entity xmlElementToEntity(Element elem, String[] words, boolean typed) {
 		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
 		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
-		String type = elem.getElementsByTagName("type").item(0).getTextContent();
-		String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
 		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
-		return new Entity(words, from, to, type, subtype, id);
+		if (typed) {
+			String type = elem.getElementsByTagName("type").item(0).getTextContent();
+			String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
+			return new TypedEntity(words, from, to, type, subtype, id);
+		}
+		return new UntypedEntity(words, from, to, id);
 	}
 	
 	private Point fromCharToWordCoordinates(Point old, String text) {

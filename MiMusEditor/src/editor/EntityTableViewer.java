@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.EntitiesList;
-import model.Entity;
+import model.TypedEntity;
 import model.Unit;
 import ui.TextStyler;
 
@@ -114,7 +114,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 		@Override
 		public Object getValue(Object element, String property) {
 			int colIdx = getColumnNames().indexOf(property);
-			Entity ent = (Entity) element;
+			TypedEntity ent = (TypedEntity) element;
 			System.out.println(ent.toString());
 			switch(colIdx) {
 			case 1:	// Type
@@ -129,7 +129,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 		@Override
 		public void modify(Object element, String property, Object value) {
 			int colIdx = getColumnNames().indexOf(property);
-			Entity ent = (Entity) ((TableItem) element).getData();
+			TypedEntity ent = (TypedEntity) ((TableItem) element).getData();
 			int valueIdx = (int) value;
 			switch(colIdx) {
 			case 1:	// Type
@@ -160,7 +160,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			Entity ent = (Entity) element;
+			TypedEntity ent = (TypedEntity) element;
 			switch (columnIndex) {
 			case 0:	// Text
 				try {
