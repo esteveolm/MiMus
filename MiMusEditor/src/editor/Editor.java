@@ -268,7 +268,7 @@ public class Editor extends EditorPart {
 					LabelPrinter.printError(relationsLabel, "Cannot create a relation if fewer than 2 entities are created.");
 					System.out.println("Cannot create relation with fewer than 2 entities.");
 				} else {
-					relations.addUnit(new Relation(regestEntities, 0, 1));
+					relations.addUnit(new Relation(regestEntities));
 					LabelPrinter.printInfo(relationsLabel, "Relation created successfully.");
 					System.out.println("Adding relation - " + relations.countUnits());
 				}
@@ -301,7 +301,7 @@ public class Editor extends EditorPart {
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getTranscription());
 					Entity transEnt = new UntypedEntity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
 					transcriptionEntities.addUnit(transEnt);
-					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
+					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, regestEntities.getIdAt(0), transEnt.getId()));
 					LabelPrinter.printInfo(transcriptionLabel, "Lemma added successfully.");
 					transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
 				} else {
@@ -511,9 +511,7 @@ public class Editor extends EditorPart {
 						}
 						
 						/* Find index of the entities retrieved in their corresponding EntitiesList */
-						int idxRegestEnt = regestEntities.getUnits().indexOf(foundRegestEntity);
-						int idxTranscriptionEnt = transcriptionEntities.getUnits().indexOf(foundTranscriptionEntity);
-						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, idxRegestEnt, idxTranscriptionEnt));
+						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, foundRegestEntity.getId(), foundTranscriptionEntity.getId()));
 					}
 				}
 			} catch (ParserConfigurationException pce) {

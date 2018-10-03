@@ -39,14 +39,14 @@ public class Lemma extends Relation {
 	}
 	public String getRegestEntityText() {
 		try {
-			return getRegestEntities().getUnits().get(getRegestEntity()).getText();
+			return getRegestEntityObject().getText();
 		} catch (IllegalTextRangeException e) {
 			e.printStackTrace();
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getRegestEntityObject() {
-		return getRegestEntities().getUnits().get(getRegestEntity());
+		return getById(getRegestEntity(), getRegestEntities());
 	}
 	public int getTranscriptionEntity() {
 		return getEntityB();
@@ -56,14 +56,14 @@ public class Lemma extends Relation {
 	}
 	public String getTranscriptionEntityText() {
 		try {
-			return getTranscriptionEntities().getUnits().get(getTranscriptionEntity()).getText();
+			return getTranscriptionEntityObject().getText();
 		} catch (IllegalTextRangeException e) {
 			e.printStackTrace();
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getTranscriptionEntityObject() {
-		return getTranscriptionEntities().getUnits().get(getTranscriptionEntity());
+		return getById(getTranscriptionEntity(), getTranscriptionEntities());
 	}
 	
 	public String toString() {

@@ -11,8 +11,8 @@ public class Relation extends Unit {
 	
 	public Relation(EntitiesList entities) {
 		this.entities = entities;
-		this.entityA = 0;
-		this.entityB = 0;
+		this.entityA = entities.getIdAt(0);
+		this.entityB = entities.getIdAt(1);
 		this.type = 0;
 	}
 	
@@ -23,10 +23,18 @@ public class Relation extends Unit {
 		this.type = 0;
 	}
 	
-	private Entity getById(int id) {
-		for (Entity e: entities.getUnits()) {
-			if (e.getId()==id) return e;
+	protected Entity getById(int id) {
+		return getById(id, entities);
+	}
+	
+	protected Entity getById(int id, EntitiesList list) {
+		for (Entity e: list.getUnits()) {
+			if (e.getId()==id) {
+				System.out.println("Found Entity " + e.toString());
+				return e;
+			}
 		}
+		System.out.println("Could not find Entity with id " + id);
 		return null;
 	}
 	

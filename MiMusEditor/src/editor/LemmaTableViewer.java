@@ -97,7 +97,8 @@ public class LemmaTableViewer extends RelationTableViewer {
 			int valueIdx = (int) value;
 			switch (colIdx) {
 			case 1:	// Regest entity
-				lemma.setRegestEntity(valueIdx);
+				/* Pass from the idx in the checkbox to the ID in the EntityList */
+				lemma.setRegestEntity(lemma.getRegestEntities().getIdAt(valueIdx));
 				break;
 			default:	// Includes Transcription entity (non-editable by table)
 				break;
@@ -160,7 +161,7 @@ public class LemmaTableViewer extends RelationTableViewer {
 		@Override
 		public void updateUnit(Unit u) {
 			tv.update(u, null);
-			tv.refresh();
+			//tv.refresh();
 		}
 	}
 	
