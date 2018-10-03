@@ -70,9 +70,10 @@ public class Editor extends EditorPart {
 	private MiMusEntry docEntry;
 	private String[] regestWords;
 	private String[] transcriptionWords;
-	private String docID;
 	private StyledText regestText;
 	private StyledText transcriptionText;
+	private String docID;
+	private int entityCurrentID;
 	
 	public Editor() {
 		super();
@@ -84,6 +85,7 @@ public class Editor extends EditorPart {
 		setInput(input);
 		docID = getEditorInput().getName().substring(0, getEditorInput().getName().indexOf('.'));
 		System.out.println("Doc ID: " + docID);
+		entityCurrentID = 0;
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
@@ -114,7 +116,7 @@ public class Editor extends EditorPart {
 		try {
 			docEntry = new MiMusEntryReader().read(txtPath);
 			regestWords = docEntry.getRegest().split(" ");
-			transcriptionWords = docEntry.getBody().split(" ");
+			transcriptionWords = docEntry.getTranscription().split(" ");
 		} catch (MiMusFormatException e) {
 			e.printStackTrace();
 		}
@@ -146,7 +148,7 @@ public class Editor extends EditorPart {
 		/* Table of entities */
 		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regestWords);
 		TableViewer entityTV = entityHelper.createTableViewer();
-		EntitiesList entities = entityHelper.getEntities();
+		EntitiesList regestEntities = entityHelper.getEntities();
 		
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
@@ -164,7 +166,7 @@ public class Editor extends EditorPart {
 		sectRel.setText("Relations");
 		
 		/* Table of relations */
-		RelationTableViewer relationHelper = new RelationTableViewer(sectRel.getParent(), styler, entities);
+		RelationTableViewer relationHelper = new RelationTableViewer(sectRel.getParent(), styler, regestEntities);
 		TableViewer relationTV = relationHelper.createTableViewer();
 		RelationsList relations = relationHelper.getRelations();
 		
@@ -191,9 +193,9 @@ public class Editor extends EditorPart {
 							fromCharToWordCoordinates(
 							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
 					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
-					entities.addUnit(new Entity(regestWords, wordCoords.x, wordCoords.y));
+					regestEntities.addUnit(new Entity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
 					//entityHelper.packColumns();
-					System.out.println("Adding Selected Entity - " + entities.countUnits());
+					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
 					printAddedInfo(info);
 					styler.addUpdate(charCoords.x, charCoords.y);
 				} else {
@@ -216,9 +218,9 @@ public class Editor extends EditorPart {
 					System.out.println(ent);
 					Point charCoords = fromWordToCharCoordinates(
 							new Point(ent.getFrom(), ent.getTo()), regestWords);
-					entities.removeUnit(ent);
+					regestEntities.removeUnit(ent);
 					entityHelper.packColumns();
-					System.out.println("Removing entity - " + entities.countUnits());
+					System.out.println("Removing entity - " + regestEntities.countUnits());
 					printDeletedInfo(info);
 					styler.deleteUpdate(charCoords.x, charCoords.y);
 				}
@@ -226,11 +228,11 @@ public class Editor extends EditorPart {
 		});
 		addRel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				if (entities.countUnits()<2) {
+				if (regestEntities.countUnits()<2) {
 					printRelationNotAddedInfo(info);
 					System.out.println("Cannot create relation with fewer than 2 entities.");
 				} else {
-					relations.addUnit(new Relation(entities, 0, 1));
+					relations.addUnit(new Relation(regestEntities, 0, 1));
 					printRelationAddedInfo(info);
 					System.out.println("Adding relation - " + relations.countUnits());
 				}
@@ -259,13 +261,13 @@ public class Editor extends EditorPart {
 		
 		/* Transcription text */
 		transcriptionText = new StyledText(sectTrans.getParent(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		transcriptionText.setText(docEntry.getBody());
+		transcriptionText.setText(docEntry.getTranscription());
 		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
 		transcriptionText.setEditable(false);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		EntitiesList transcriptionEntities = new EntitiesList(transcriptionWords);
 
-		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, entities, transcriptionEntities);
+		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
 		TableViewer lemmaTV = lemmaHelper.createTableViewer();
 		LemmasList lemmas = lemmaHelper.getLemmas();
 		
@@ -291,11 +293,11 @@ public class Editor extends EditorPart {
 				if (charCoords.x!=charCoords.y) {
 					charCoords = fromWordToCharCoordinates(
 							fromCharToWordCoordinates(
-							charCoords, docEntry.getBody()), transcriptionWords);	// Trick to ensure selection of whole words
-					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getBody());
-					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y);
+							charCoords, docEntry.getTranscription()), transcriptionWords);	// Trick to ensure selection of whole words
+					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getTranscription());
+					Entity transEnt = new Entity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
 					transcriptionEntities.addUnit(transEnt);
-					lemmas.addUnit(new Lemma(entities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
+					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
 					printLemmaAddedInfo(infoTrans);
 					transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
 				} else {
@@ -350,13 +352,16 @@ public class Editor extends EditorPart {
 					tagRegest.appendChild(doc.createTextNode(docEntry.getRegest()));
 					tagDocument.appendChild(tagRegest);
 					
-					Element tagBody = doc.createElement("transcripcio");
-					tagBody.appendChild(doc.createTextNode(docEntry.getBody()));
-					tagDocument.appendChild(tagBody);
+					Element tagTranscription = doc.createElement("transcription");
+					tagTranscription.appendChild(doc.createTextNode(docEntry.getTranscription()));
+					tagDocument.appendChild(tagTranscription);
 					
-					Element tagEntities = doc.createElement("entities");
-					tagDocument.appendChild(tagEntities);
-					for (Entity ent: entities.getUnits()) {
+					/* Regest entities */
+					Element tagRegestEntities = doc.createElement("regest_entities");
+					tagDocument.appendChild(tagRegestEntities);
+					for (Entity ent: regestEntities.getUnits()) {
+						Element tagIDEnt = doc.createElement("entity_id");
+						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(ent.getId())));
 						Element tagFromEnt = doc.createElement("from");
 						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(ent.getFrom())));
 						Element tagToEnt = doc.createElement("to");
@@ -368,25 +373,53 @@ public class Editor extends EditorPart {
 						Element tagSubtypeEnt = doc.createElement("subtype");
 						tagSubtypeEnt.appendChild(doc.createTextNode(ent.getSubtypeWord()));
 						Element tagEntity = doc.createElement("entity");
+						tagEntity.appendChild(tagIDEnt);
 						tagEntity.appendChild(tagFromEnt);
 						tagEntity.appendChild(tagToEnt);
 						tagEntity.appendChild(tagTextEnt);
 						tagEntity.appendChild(tagTypeEnt);
 						tagEntity.appendChild(tagSubtypeEnt);
-						tagEntities.appendChild(tagEntity);
+						tagRegestEntities.appendChild(tagEntity);
 					}
 					
+					/* Transcription entities */
+					Element tagTranscriptionEntities = doc.createElement("transcription_entities");
+					tagDocument.appendChild(tagTranscriptionEntities);
+					for (Entity ent: transcriptionEntities.getUnits()) {
+						Element tagIDEnt = doc.createElement("entity_id");
+						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(ent.getId())));
+						Element tagFromEnt = doc.createElement("from");
+						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(ent.getFrom())));
+						Element tagToEnt = doc.createElement("to");
+						tagToEnt.appendChild(doc.createTextNode(String.valueOf(ent.getTo())));
+						Element tagTextEnt = doc.createElement("text");
+						tagTextEnt.appendChild(doc.createTextNode(ent.getText()));
+						Element tagTypeEnt = doc.createElement("type");
+						tagTypeEnt.appendChild(doc.createTextNode(ent.getTypeWord()));
+						Element tagSubtypeEnt = doc.createElement("subtype");
+						tagSubtypeEnt.appendChild(doc.createTextNode(ent.getSubtypeWord()));
+						Element tagEntity = doc.createElement("entity");
+						tagEntity.appendChild(tagIDEnt);
+						tagEntity.appendChild(tagFromEnt);
+						tagEntity.appendChild(tagToEnt);
+						tagEntity.appendChild(tagTextEnt);
+						tagEntity.appendChild(tagTypeEnt);
+						tagEntity.appendChild(tagSubtypeEnt);
+						tagTranscriptionEntities.appendChild(tagEntity);
+					}
+					
+					/* Lemmatizations */
 					Element tagLemmatizations = doc.createElement("lemmatizations");
 					tagDocument.appendChild(tagLemmatizations);
 					for (Relation r: lemmas.getUnits()) {
 						Lemma lem = (Lemma) r;
-						Element tagTranscriptedForm = doc.createElement("transcripted_form");
-						tagTranscriptedForm.appendChild(doc.createTextNode(lem.getTranscriptionEntityText()));
-						Element tagLemmatizedForm = doc.createElement("lemmatized_form");
-						tagLemmatizedForm.appendChild(doc.createTextNode(lem.getRegestEntityText()));
+						Element tagTranscriptionId = doc.createElement("transcription_id");
+						tagTranscriptionId.appendChild(doc.createTextNode(String.valueOf(lem.getTranscriptionEntityObject().getId())));
+						Element tagRegestId = doc.createElement("regest_id");
+						tagRegestId.appendChild(doc.createTextNode(String.valueOf(lem.getRegestEntityObject().getId())));
 						Element tagLemmatization = doc.createElement("lemmatization");
-						tagLemmatization.appendChild(tagTranscriptedForm);
-						tagLemmatization.appendChild(tagLemmatizedForm);
+						tagLemmatization.appendChild(tagTranscriptionId);
+						tagLemmatization.appendChild(tagRegestId);
 						tagLemmatizations.appendChild(tagLemmatization);
 					}
 					
@@ -416,38 +449,71 @@ public class Editor extends EditorPart {
 				Document doc = dBuilder.parse(xmlFile);
 				doc.getDocumentElement().normalize();
 				
+				/* Load entities */
 				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
 				NodeList nl = doc.getElementsByTagName("entity");
 				for (int i=0; i<nl.getLength(); i++) {
 					Node nEnt = nl.item(i);
 					if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
+						/* Read fields from XML entry <entity> */
 						Element eEnt = (Element) nEnt;
-						int from = Integer.parseInt(eEnt.getElementsByTagName("from").item(0).getTextContent());
-						int to = Integer.parseInt(eEnt.getElementsByTagName("to").item(0).getTextContent());
-						String type = eEnt.getElementsByTagName("type").item(0).getTextContent();
-						String subtype = eEnt.getElementsByTagName("subtype").item(0).getTextContent();
-						Entity ent = new Entity(regestWords, from, to, type, subtype);
-						entities.addUnit(ent);
 						
-						System.out.println("Words from " + from + " to " + to);
-						Point charCoord = fromWordToCharCoordinates(new Point(from, to), regestWords);
-						System.out.println("Painting from " + charCoord.x + " to " + charCoord.y);
-						styler.add(charCoord.x, charCoord.y);
+						/* Discern if <entity> under <regest_entities> or <transcription_entities> */
+						if (nEnt.getParentNode().getNodeName().equals("regest_entities")) {
+							Entity ent = xmlElementToEntity(eEnt, regestWords);
+							entityCurrentID++;
+							regestEntities.addUnit(ent);
+							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), regestWords);
+							styler.add(charCoord.x, charCoord.y);
+						} else if (nEnt.getParentNode().getNodeName().equals("transcription_entities")) {
+							Entity ent = xmlElementToEntity(eEnt, transcriptionWords);
+							entityCurrentID++;
+							transcriptionEntities.addUnit(ent);
+							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), transcriptionWords);
+							transcriptionStyler.add(charCoord.x, charCoord.y);
+						}					
 					}
 				}
 				styler.update();
+				transcriptionStyler.update();
 				entityHelper.packColumns();
 				
-//				// TODO: think how to store transcription entities and then we can retrieve them
-//				nl = doc.getElementsByTagName("lemmatization");
-//				for (int i=0; i<nl.getLength(); i++) {
-//					Node nLem = nl.item(i);
-//					if (nLem.getNodeType() == Node.ELEMENT_NODE) {
-//						Element eLem = (Element) nLem;
-//						// XXX: need to save transcriptionEntities stuff or I can't retrieve it
-//						transcriptionEntities.addUnit(transEnt);
-//					}
-//				}
+				/* Load lemmatizations */
+				nl = doc.getElementsByTagName("lemmatization");
+				for (int i=0; i<nl.getLength(); i++) {
+					Node nLem = nl.item(i);
+					if (nLem.getNodeType() == Node.ELEMENT_NODE) {
+						Element eLem = (Element) nLem;
+						String strTranscriptionID = eLem.getElementsByTagName("transcription_id").item(0).getTextContent();
+						String strRegestID = eLem.getElementsByTagName("regest_id").item(0).getTextContent();
+						Entity foundTranscriptionEntity = null;
+						Entity foundRegestEntity = null;
+						
+						/* Find entities whose IDs coincide with the IDs stored in the <lemmatization> entry */
+						NodeList entNL = doc.getElementsByTagName("entity");
+						for (int j=0; (foundTranscriptionEntity==null || foundRegestEntity==null) 
+								&& j<entNL.getLength(); j++) {
+							Node nEnt = entNL.item(j);
+							if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
+								Element eEnt = (Element) nEnt;
+								
+								/* Discern if <entity> entries retrieved are under <transcription_entities> or <regest_entities> */
+								if (nEnt.getParentNode().getNodeName().equals("transcription_entities")
+										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strTranscriptionID)) {
+									foundTranscriptionEntity = xmlElementToEntity(eEnt, transcriptionWords);
+								} else if (nEnt.getParentNode().getNodeName().equals("regest_entities")
+										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strRegestID)) {
+									foundRegestEntity = xmlElementToEntity(eEnt, regestWords);
+								}
+							}
+						}
+						
+						/* Find index of the entities retrieved in their corresponding EntitiesList */
+						int idxRegestEnt = regestEntities.getUnits().indexOf(foundRegestEntity);
+						int idxTranscriptionEnt = transcriptionEntities.getUnits().indexOf(foundTranscriptionEntity);
+						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, idxRegestEnt, idxTranscriptionEnt));
+					}
+				}
 			} catch (ParserConfigurationException pce) {
 				System.out.println("Error with DOM parser.");
 				pce.printStackTrace();
@@ -459,6 +525,15 @@ public class Editor extends EditorPart {
 	}
 
 	// TODO: Rethink these methods so they are inherent of a textual object
+	
+	private Entity xmlElementToEntity(Element elem, String[] words) {
+		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
+		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
+		String type = elem.getElementsByTagName("type").item(0).getTextContent();
+		String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
+		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
+		return new Entity(words, from, to, type, subtype, id);
+	}
 	
 	private Point fromCharToWordCoordinates(Point old, String text) {
 		List<Integer> spaces = getSpacesInText(text);

@@ -3,20 +3,20 @@ package model;
 public class MiMusEntry {
 	
 	private String regest;
-	private String body;
+	private String transcription;
 	
 	public MiMusEntry() {
 		this.regest = null;
-		this.body = null;
+		this.transcription = null;
 	}
 	
 	public MiMusEntry(String regest, String body) {
 		this.regest = regest;
-		this.body = body;
+		this.transcription = body;
 	}
 	
 	public String toString() {
-		return "Regest: " + regest + "\n\nBody: " + body;
+		return "Regest: " + regest + "\n\nTranscription: " + transcription;
 	}
 	
 	public String getRegest() {
@@ -25,10 +25,10 @@ public class MiMusEntry {
 	public void setRegest(String regest) {
 		this.regest = regest;
 	}
-	public String getBody() {
-		return body;
+	public String getTranscription() {
+		return transcription;
 	}
-	public void setBody(String body) {
-		this.body = body;
+	public void setTranscription(String transcription) {
+		this.transcription = transcription;
 	}
 }

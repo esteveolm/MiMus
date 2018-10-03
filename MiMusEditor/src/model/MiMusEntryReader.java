@@ -41,15 +41,15 @@ public class MiMusEntryReader {
 		}
 		entry.setRegest(regest);
 		
-		/* B: body */
+		/* B: transcription */
 		if (!lines.get(i).startsWith("B:")) {
 			throw new MiMusFormatException("Entry <B:> not found in their place.");
 		}
-		String body = lines.get(i++).substring(2);
+		String transcription = lines.get(i++).substring(2);
 		while(i<lines.size() && !lines.get(i).startsWith("C:")) {
-			body += lines.get(i++) + "\n";
+			transcription += lines.get(i++) + "\n";
 		}
-		entry.setBody(body);
+		entry.setTranscription(transcription);
 		return entry;
 	}
 	
