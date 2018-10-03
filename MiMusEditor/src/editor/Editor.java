@@ -144,7 +144,7 @@ public class Editor extends EditorPart {
 		
 		/* List of entities */
 		Section sectEnt = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectEnt.setText("Entities");
+		sectEnt.setText("Entities at Regest");
 		
 		/* Table of entities */
 		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regestWords);
@@ -157,10 +157,10 @@ public class Editor extends EditorPart {
 		
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
-		gridData.widthHint = 300;
+		gridData.widthHint = 100;
 		Button setEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		setEnt.setLayoutData(gridData);
-		setEnt.setText("Add Entity from Text Selection");
+		setEnt.setText("Add");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -168,7 +168,7 @@ public class Editor extends EditorPart {
 		
 		/* List of relations */
 		Section sectRel = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectRel.setText("Relations");
+		sectRel.setText("Relations at Regest");
 		
 		/* Table of relations */
 		RelationTableViewer relationHelper = new RelationTableViewer(sectRel.getParent(), styler, regestEntities);
@@ -181,7 +181,7 @@ public class Editor extends EditorPart {
 		
 		/* Buttons to add/remove relations */
 		GridData gridRel = new GridData();
-		gridRel.widthHint = 300;
+		gridRel.widthHint = 100;
 		Button addRel = new Button(sectRel.getParent(), SWT.PUSH | SWT.CENTER);
 		addRel.setLayoutData(gridRel);
 		addRel.setText("Add");
@@ -191,8 +191,8 @@ public class Editor extends EditorPart {
 		removeRel.setText("Delete");
 		
 		/* Transcription part of the form */
-		Section sectTrans = new Section(form.getBody(), PROP_TITLE);
-		sectTrans.setText("Transcription of the document");
+		Section sectTrans = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectTrans.setText("Entities at Transcription");
 		
 		/* Transcription text */
 		transcriptionText = new StyledText(sectTrans.getParent(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
@@ -213,7 +213,7 @@ public class Editor extends EditorPart {
 		
 		/* Buttons to add/remove lemma associations */
 		GridData gridLemma = new GridData();
-		gridLemma.widthHint = 300;
+		gridLemma.widthHint = 100;
 		Button addLemma = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
 		addLemma.setLayoutData(gridLemma);
 		addLemma.setText("Add");
