@@ -12,32 +12,36 @@ public class Entity extends Unit {
 	private int to;
 	private int type;
 	private int subtype;
+	private int id;
 	
-	public Entity(String[] words) {
+	public Entity(String[] words, int id) {
 		this.words = words;
 		from = 0;
 		to = 0;
 		type = 0;
 		subtype = 0;
+		this.setId(id);
 	}
 	
-	public Entity(String[] words, int from, int to) {
+	public Entity(String[] words, int from, int to, int id) {
 		this.words = words;
 		this.from = from;
 		this.to = to;
 		type = 0;
 		subtype = 0;
+		this.setId(id);
 	}
 	
-	public Entity(String[] words, int from, int to, int type, int subtype) {
+	public Entity(String[] words, int from, int to, int type, int subtype, int id) {
 		this.words = words;
 		this.from = from;
 		this.to = to;
 		this.type = type;
 		this.subtype = subtype;
+		this.setId(id);
 	}
 	
-	public Entity(String[] words, int from, int to, String type, String subtype) {
+	public Entity(String[] words, int from, int to, String type, String subtype, int id) {
 		this.words = words;
 		this.from = from;
 		this.to = to;
@@ -49,6 +53,7 @@ public class Entity extends Unit {
 		} else {
 			this.subtype = 0;
 		}
+		this.setId(id);
 	}
 	
 	public int getFrom() {
@@ -102,8 +107,47 @@ public class Entity extends Unit {
 	public void setSubtype(int subtype) {
 		this.subtype = subtype;
 	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String toString() {
-		return "From: " + getFromWord() + ", To: " + getToWord() + ", Type: " + getTypeWord().toString() + ", Subtype: " + getSubtypeWord().toString();
+		return "From: " + getFromWord() 
+				+ ", To: " + getToWord() 
+				+ ", Type: " + getTypeWord().toString() 
+				+ ", Subtype: " + getSubtypeWord().toString() 
+				+ ", ID: " + String.valueOf(getId());
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + from;
+		result = prime * result + id;
+		result = prime * result + subtype;
+		result = prime * result + to;
+		result = prime * result + type;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entity ent = (Entity) obj;
+		return getFrom()==ent.getFrom()
+				&& getTo()==ent.getTo()
+				&& getType()==ent.getType()
+				&& getSubtype()==ent.getSubtype()
+				&& getId()==ent.getId();
+	}
+	
 }
