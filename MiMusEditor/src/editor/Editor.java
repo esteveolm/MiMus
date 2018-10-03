@@ -25,13 +25,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -57,6 +55,7 @@ import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
 import model.UntypedEntity;
+import ui.LabelPrinter;
 import ui.TextStyler;
 
 public class Editor extends EditorPart {
@@ -152,6 +151,10 @@ public class Editor extends EditorPart {
 		TableViewer entityTV = entityHelper.createTableViewer();
 		EntitiesList regestEntities = entityHelper.getEntities();
 		
+		/* Label of Regest entities */
+		Label regestLabel = toolkit.createLabel(form.getBody(), "");
+		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
 		gridData.widthHint = 300;
@@ -172,6 +175,10 @@ public class Editor extends EditorPart {
 		TableViewer relationTV = relationHelper.createTableViewer();
 		RelationsList relations = relationHelper.getRelations();
 		
+		/* Label of relations */
+		Label relationsLabel = toolkit.createLabel(form.getBody(), "");
+		relationsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		/* Buttons to add/remove relations */
 		GridData gridRel = new GridData();
 		gridRel.widthHint = 300;
@@ -182,80 +189,6 @@ public class Editor extends EditorPart {
 		Button removeRel = new Button(sectRel.getParent(), SWT.PUSH | SWT.CENTER);
 		removeRel.setLayoutData(gridRel);
 		removeRel.setText("Delete");
-		
-		Label info = toolkit.createLabel(form.getBody(), "");
-		info.setForeground(new Color(Display.getCurrent(), 255,0,0));
-		info.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		setEnt.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Point charCoords = regestText.getSelection();
-				if (charCoords.x!=charCoords.y) {
-					charCoords = fromWordToCharCoordinates(
-							fromCharToWordCoordinates(
-							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
-					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
-					regestEntities.addUnit(new TypedEntity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
-					//entityHelper.packColumns();
-					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
-					printAddedInfo(info);
-					styler.addUpdate(charCoords.x, charCoords.y);
-				} else {
-					System.out.println("Could not add Selected Entity because no text was selected");
-					printNotAddedInfo(info);
-				}
-			}
-		});
-		removeEnt.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
-						.getFirstElement();
-				if (ent==null) {
-					System.out.println("Could not remove Entity because none was selected.");
-					printNotDeletedBecauseNullInfo(info);
-				} else if (relations.using(ent)) {
-					System.out.println("Could not remove Entity because it is used in an existing Relation.");
-					printNotDeletedBecauseUsedInfo(info);
-				} else {
-					System.out.println(ent);
-					Point charCoords = fromWordToCharCoordinates(
-							new Point(ent.getFrom(), ent.getTo()), regestWords);
-					regestEntities.removeUnit(ent);
-					entityHelper.packColumns();
-					System.out.println("Removing entity - " + regestEntities.countUnits());
-					printDeletedInfo(info);
-					styler.deleteUpdate(charCoords.x, charCoords.y);
-				}
-			}
-		});
-		addRel.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				if (regestEntities.countUnits()<2) {
-					printRelationNotAddedInfo(info);
-					System.out.println("Cannot create relation with fewer than 2 entities.");
-				} else {
-					relations.addUnit(new Relation(regestEntities, 0, 1));
-					printRelationAddedInfo(info);
-					System.out.println("Adding relation - " + relations.countUnits());
-				}
-				
-			}
-		});
-		removeRel.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Relation rel = (Relation) ((IStructuredSelection) relationTV.getSelection())
-						.getFirstElement();
-				if (rel==null) {
-					System.out.println("Could not remove Relation because none was selected.");
-					printRelationNotDeletedInfo(info);
-				} else {
-					System.out.println(rel);
-					relations.removeUnit(rel);
-					printRelationDeletedInfo(info);
-					System.out.println("Removing relation - " + relations.countUnits());
-				}
-			}
-		});
 		
 		/* Transcription part of the form */
 		Section sectTrans = new Section(form.getBody(), PROP_TITLE);
@@ -269,9 +202,14 @@ public class Editor extends EditorPart {
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		EntitiesList transcriptionEntities = new EntitiesList(transcriptionWords);
 
+		/* Transcription entities & Lemmatizations table */
 		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
 		TableViewer lemmaTV = lemmaHelper.createTableViewer();
 		LemmasList lemmas = lemmaHelper.getLemmas();
+		
+		/* Label of transcriptions */
+		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
+		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Buttons to add/remove lemma associations */
 		GridData gridLemma = new GridData();
@@ -284,10 +222,79 @@ public class Editor extends EditorPart {
 		removeLemma.setLayoutData(gridLemma);
 		removeLemma.setText("Delete");
 		
-		Label infoTrans = toolkit.createLabel(sectTrans.getParent(), "");
-		infoTrans.setForeground(new Color(Display.getCurrent(), 255,0,0));
-		infoTrans.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		/* Button listeners */
 		
+		setEnt.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Point charCoords = regestText.getSelection();
+				if (charCoords.x!=charCoords.y) {
+					charCoords = fromWordToCharCoordinates(
+							fromCharToWordCoordinates(
+							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
+					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
+					regestEntities.addUnit(new TypedEntity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
+					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
+					LabelPrinter.printInfo(regestLabel, "Entity added successfully.");
+					styler.addUpdate(charCoords.x, charCoords.y);
+				} else {
+					System.out.println("Could not add Selected Entity because no text was selected");
+					LabelPrinter.printError(regestLabel, "You must select a part of text.");
+				}
+			}
+		});
+		removeEnt.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
+						.getFirstElement();
+				if (ent==null) {
+					System.out.println("Could not remove Entity because none was selected.");
+					LabelPrinter.printInfo(regestLabel, "You must select an entity to delete it.");
+				} else if (relations.using(ent)) {
+					System.out.println("Could not remove Entity because it is used in an existing Relation.");
+					LabelPrinter.printError(regestLabel, "You must remove all relations where this entity is used before you can remove it.");
+				} else if (lemmas.using(ent)) {
+					System.out.println("Could not remove Entity because it is used in an existing Lemmatization.");
+					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
+				} else {
+					System.out.println(ent);
+					Point charCoords = fromWordToCharCoordinates(
+							new Point(ent.getFrom(), ent.getTo()), regestWords);
+					regestEntities.removeUnit(ent);
+					entityHelper.packColumns();
+					System.out.println("Removing entity - " + regestEntities.countUnits());
+					LabelPrinter.printInfo(regestLabel, "Entity deleted successfully.");
+					styler.deleteUpdate(charCoords.x, charCoords.y);
+				}
+			}
+		});
+		addRel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				if (regestEntities.countUnits()<2) {
+					LabelPrinter.printError(relationsLabel, "Cannot create a relation if fewer than 2 entities are created.");
+					System.out.println("Cannot create relation with fewer than 2 entities.");
+				} else {
+					relations.addUnit(new Relation(regestEntities, 0, 1));
+					LabelPrinter.printInfo(relationsLabel, "Relation created successfully.");
+					System.out.println("Adding relation - " + relations.countUnits());
+				}
+				
+			}
+		});
+		removeRel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Relation rel = (Relation) ((IStructuredSelection) relationTV.getSelection())
+						.getFirstElement();
+				if (rel==null) {
+					System.out.println("Could not remove Relation because none was selected.");
+					LabelPrinter.printError(relationsLabel, "You must select a relation to delete it.");
+				} else {
+					System.out.println(rel);
+					relations.removeUnit(rel);
+					LabelPrinter.printInfo(relationsLabel, "Relation deleted successfully.");
+					System.out.println("Removing relation - " + relations.countUnits());
+				}
+			}
+		});
 		addLemma.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -300,11 +307,11 @@ public class Editor extends EditorPart {
 					Entity transEnt = new UntypedEntity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
 					transcriptionEntities.addUnit(transEnt);
 					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, 0, transcriptionEntities.countUnits()-1));
-					printLemmaAddedInfo(infoTrans);
+					LabelPrinter.printInfo(transcriptionLabel, "Lemma added successfully.");
 					transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
 				} else {
 					System.out.println("Could not add Selected Entity because no text was selected");
-					printLemmaNotAddedInfo(infoTrans);
+					LabelPrinter.printError(transcriptionLabel, "You must select a part of the text.");
 				}
 			}
 		});
@@ -315,12 +322,12 @@ public class Editor extends EditorPart {
 							.getFirstElement();
 				if (lemma==null) {
 					System.out.println("Could not remove Lemma because none was selected.");
-					printLemmaNotDeletedInfo(infoTrans);
+					LabelPrinter.printError(transcriptionLabel, "You must select a lemma to delete it.");
 				} else {
 					System.out.println(lemma);
 					lemmas.removeUnit(lemma);
 					System.out.println("Removing lemma - " + lemmas.countUnits());
-					printLemmaDeletedInfo(infoTrans);
+					LabelPrinter.printInfo(transcriptionLabel, "Lemma deleted successfully.");
 					Point charCoords = fromWordToCharCoordinates(new Point(
 							lemma.getTranscriptionEntityObject().getFrom(), 
 							lemma.getTranscriptionEntityObject().getTo()), transcriptionWords);
@@ -332,6 +339,9 @@ public class Editor extends EditorPart {
 		/* XML Button */
 		Section sectXML = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectXML.setText("Create XML");
+		Label xmlLabel = toolkit.createLabel(sectXML.getParent(), "");
+		xmlLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		Button btn = new Button(sectXML.getParent(), SWT.PUSH);
 		btn.setText("Press to save as XML");
 		btn.addSelectionListener(new SelectionAdapter() {
@@ -429,8 +439,7 @@ public class Editor extends EditorPart {
 			        File f = new File(xmlPath);
 			        StreamResult console = new StreamResult(f);
 			        transformer.transform(source, console);
-			        
-			        printSavedInfo(info);
+			        LabelPrinter.printInfo(xmlLabel, "Saved to XML file successfully.");
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -593,76 +602,6 @@ public class Editor extends EditorPart {
 		}
 		spaces.add(text.length());
 		return spaces;
-	}
-	
-	private void printAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Entity added successfully.");
-	}
-	
-	private void printNotAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must select a part of text.");
-	}
-	
-	private void printDeletedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Entity deleted successfully.");
-	}
-	
-	private void printNotDeletedBecauseNullInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must select an entity to delete it.");
-	}
-	
-	private void printNotDeletedBecauseUsedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must remove all relations where this entity is used before you can remove it.");
-	}
-	
-	private void printSavedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Saved to XML file successfully.");
-	}
-	
-	private void printRelationAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Relation created successfully.");
-	}
-	
-	private void printRelationNotAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("Cannot create a relation if fewer than 2 entities are created.");
-	}
-	
-	private void printRelationDeletedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Relation deleted successfully.");
-	}
-	
-	private void printRelationNotDeletedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must select a relation to delete it.");
-	}
-	
-	private void printLemmaAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Lemma added successfully.");
-	}
-	
-	private void printLemmaNotAddedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must select a part of the text.");
-	}
-	
-	private void printLemmaDeletedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-		label.setText("Lemma deleted successfully.");
-	}
-	
-	private void printLemmaNotDeletedInfo(Label label) {
-		label.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-		label.setText("You must select a lemma to delete it.");
 	}
 	
 	/* Following methods shouldn't be touched */
