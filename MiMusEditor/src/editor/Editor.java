@@ -319,14 +319,19 @@ public class Editor extends EditorPart {
 					System.out.println("Could not remove Lemma because none was selected.");
 					LabelPrinter.printError(transcriptionLabel, "You must select a lemma to delete it.");
 				} else {
-					System.out.println(lemma);
-					lemmas.removeUnit(lemma);
-					System.out.println("Removing lemma - " + lemmas.countUnits());
+					/* First, undo colour using objects */
 					LabelPrinter.printInfo(transcriptionLabel, "Lemma deleted successfully.");
 					Point charCoords = fromWordToCharCoordinates(new Point(
 							lemma.getTranscriptionEntityObject().getFrom(), 
 							lemma.getTranscriptionEntityObject().getTo()), transcriptionWords);
 					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
+					
+					/* Then, remove objects from lists */
+					System.out.println(lemma);
+					lemmas.removeUnit(lemma);
+					System.out.println("Removing lemma - " + lemmas.countUnits());
+					transcriptionEntities.removeUnit(lemma.getTranscriptionEntityObject());
+					System.out.println("Removing transcription entity - " + transcriptionEntities.countUnits());
 				}
 			}
 		});
