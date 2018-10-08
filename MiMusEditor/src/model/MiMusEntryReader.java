@@ -39,7 +39,7 @@ public class MiMusEntryReader {
 			}
 			regest += "\n";
 		}
-		entry.setRegest(regest);
+		entry.setRegestText(regest);
 		
 		/* B: transcription */
 		if (!lines.get(i).startsWith("B:")) {
@@ -49,7 +49,7 @@ public class MiMusEntryReader {
 		while(i<lines.size() && !lines.get(i).startsWith("C:")) {
 			transcription += lines.get(i++) + "\n";
 		}
-		entry.setTranscription(transcription);
+		entry.setTranscriptionText(transcription);
 		return entry;
 	}
 	

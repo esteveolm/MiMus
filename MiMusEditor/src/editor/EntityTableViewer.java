@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import model.EntitiesList;
 import model.Entity;
+import model.MiMusText;
 import model.TypedEntity;
 import model.Unit;
 import ui.TextStyler;
@@ -29,11 +30,11 @@ public class EntityTableViewer extends MiMusTableViewer {
 
 	private EntitiesList entities;
 
-	public EntityTableViewer(Composite parent, TextStyler styler, String[] words) {
+	public EntityTableViewer(Composite parent, TextStyler styler, MiMusText text) {
 		super(parent, styler);
 		String[] aux = {"Text", "Type", "Subtype"};
 		columnNames = aux;
-		entities = new EntitiesList(words);
+		entities = new EntitiesList(text.getWords());
 	}
 
 	@Override

@@ -2,8 +2,6 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,6 +49,7 @@ import model.LemmasList;
 import model.MiMusEntry;
 import model.MiMusEntryReader;
 import model.MiMusFormatException;
+import model.MiMusText;
 import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
@@ -64,8 +63,8 @@ public class Editor extends EditorPart {
 	protected String xmlPath;
 	private boolean hasXML;
 	private MiMusEntry docEntry;
-	private String[] regestWords;
-	private String[] transcriptionWords;
+	private MiMusText regest;
+	private MiMusText transcription;
 	private StyledText regestText;
 	private StyledText transcriptionText;
 	private String docID;
@@ -111,8 +110,8 @@ public class Editor extends EditorPart {
 		/* Txt must always be present so the text can be loaded */
 		try {
 			docEntry = new MiMusEntryReader().read(txtPath);
-			regestWords = docEntry.getRegest().split(" ");
-			transcriptionWords = docEntry.getTranscription().split(" ");
+			regest = docEntry.getRegest();
+			transcription = docEntry.getTranscription();
 		} catch (MiMusFormatException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +131,7 @@ public class Editor extends EditorPart {
 		
 		/* Regest text */
 		regestText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		regestText.setText(docEntry.getRegest());
+		regestText.setText(docEntry.getRegestText());
 		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
 		regestText.setEditable(false);
 		TextStyler styler = new TextStyler(regestText);
@@ -142,7 +141,7 @@ public class Editor extends EditorPart {
 		sectEnt.setText("Entities at Regest");
 		
 		/* Table of entities */
-		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regestWords);
+		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		EntitiesList regestEntities = entityHelper.getEntities();
 		
@@ -191,11 +190,11 @@ public class Editor extends EditorPart {
 		
 		/* Transcription text */
 		transcriptionText = new StyledText(sectTrans.getParent(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		transcriptionText.setText(docEntry.getTranscription());
+		transcriptionText.setText(docEntry.getTranscriptionText());
 		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
 		transcriptionText.setEditable(false);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-		EntitiesList transcriptionEntities = new EntitiesList(transcriptionWords);
+		EntitiesList transcriptionEntities = new EntitiesList(transcription.getWords());
 
 		/* Transcription entities & Lemmatizations table */
 		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
@@ -223,11 +222,10 @@ public class Editor extends EditorPart {
 			public void widgetSelected(SelectionEvent e) {
 				Point charCoords = regestText.getSelection();
 				if (charCoords.x!=charCoords.y) {
-					charCoords = fromWordToCharCoordinates(
-							fromCharToWordCoordinates(
-							charCoords, docEntry.getRegest()), regestWords);	// Trick to ensure selection of whole words
-					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getRegest());
-					regestEntities.addUnit(new TypedEntity(regestWords, wordCoords.x, wordCoords.y, entityCurrentID++));
+					charCoords = regest.fromWordToCharCoordinates(
+							regest.fromCharToWordCoordinates(charCoords));	// Trick to ensure selection of whole words
+					Point wordCoords = regest.fromCharToWordCoordinates(charCoords);
+					regestEntities.addUnit(new TypedEntity(regest.getWords(), wordCoords.x, wordCoords.y, entityCurrentID++));
 					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
 					LabelPrinter.printInfo(regestLabel, "Entity added successfully.");
 					styler.addUpdate(charCoords.x, charCoords.y);
@@ -252,8 +250,8 @@ public class Editor extends EditorPart {
 					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
 				} else {
 					System.out.println(ent);
-					Point charCoords = fromWordToCharCoordinates(
-							new Point(ent.getFrom(), ent.getTo()), regestWords);
+					Point charCoords = regest.fromWordToCharCoordinates(
+							new Point(ent.getFrom(), ent.getTo()));
 					regestEntities.removeUnit(ent);
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " + regestEntities.countUnits());
@@ -295,11 +293,11 @@ public class Editor extends EditorPart {
 			public void widgetSelected(SelectionEvent e) {
 				Point charCoords = transcriptionText.getSelection();
 				if (charCoords.x!=charCoords.y) {
-					charCoords = fromWordToCharCoordinates(
-							fromCharToWordCoordinates(
-							charCoords, docEntry.getTranscription()), transcriptionWords);	// Trick to ensure selection of whole words
-					Point wordCoords = fromCharToWordCoordinates(charCoords, docEntry.getTranscription());
-					Entity transEnt = new UntypedEntity(transcriptionWords, wordCoords.x, wordCoords.y, entityCurrentID++);
+					charCoords = transcription.fromWordToCharCoordinates(
+							transcription.fromCharToWordCoordinates(
+							charCoords));	// Trick to ensure selection of whole words
+					Point wordCoords = transcription.fromCharToWordCoordinates(charCoords);
+					Entity transEnt = new UntypedEntity(transcription.getWords(), wordCoords.x, wordCoords.y, entityCurrentID++);
 					transcriptionEntities.addUnit(transEnt);
 					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, regestEntities.getIdAt(0), transEnt.getId()));
 					LabelPrinter.printInfo(transcriptionLabel, "Lemma added successfully.");
@@ -321,9 +319,9 @@ public class Editor extends EditorPart {
 				} else {
 					/* First, undo colour using objects */
 					LabelPrinter.printInfo(transcriptionLabel, "Lemma deleted successfully.");
-					Point charCoords = fromWordToCharCoordinates(new Point(
+					Point charCoords = transcription.fromWordToCharCoordinates(new Point(
 							lemma.getTranscriptionEntityObject().getFrom(), 
-							lemma.getTranscriptionEntityObject().getTo()), transcriptionWords);
+							lemma.getTranscriptionEntityObject().getTo()));
 					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
 					
 					/* Then, remove objects from lists */
@@ -361,11 +359,11 @@ public class Editor extends EditorPart {
 					tagDocument.appendChild(tagID);
 					
 					Element tagRegest = doc.createElement("regest");
-					tagRegest.appendChild(doc.createTextNode(docEntry.getRegest()));
+					tagRegest.appendChild(doc.createTextNode(docEntry.getRegestText()));
 					tagDocument.appendChild(tagRegest);
 					
 					Element tagTranscription = doc.createElement("transcription");
-					tagTranscription.appendChild(doc.createTextNode(docEntry.getTranscription()));
+					tagTranscription.appendChild(doc.createTextNode(docEntry.getTranscriptionText()));
 					tagDocument.appendChild(tagTranscription);
 					
 					/* Regest entities */
@@ -467,16 +465,16 @@ public class Editor extends EditorPart {
 						
 						/* Discern if <entity> under <regest_entities> or <transcription_entities> */
 						if (nEnt.getParentNode().getNodeName().equals("regest_entities")) {
-							Entity ent = xmlElementToEntity(eEnt, regestWords, true);
+							Entity ent = regest.xmlElementToEntity(eEnt, true);
 							entityCurrentID++;
 							regestEntities.addUnit(ent);
-							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), regestWords);
+							Point charCoord = regest.fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()));
 							styler.add(charCoord.x, charCoord.y);
 						} else if (nEnt.getParentNode().getNodeName().equals("transcription_entities")) {
-							Entity ent = xmlElementToEntity(eEnt, transcriptionWords, false);
+							Entity ent = transcription.xmlElementToEntity(eEnt, false);
 							entityCurrentID++;
 							transcriptionEntities.addUnit(ent);
-							Point charCoord = fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()), transcriptionWords);
+							Point charCoord = transcription.fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()));
 							transcriptionStyler.add(charCoord.x, charCoord.y);
 						}					
 					}
@@ -507,10 +505,10 @@ public class Editor extends EditorPart {
 								/* Discern if <entity> entries retrieved are under <transcription_entities> or <regest_entities> */
 								if (nEnt.getParentNode().getNodeName().equals("transcription_entities")
 										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strTranscriptionID)) {
-									foundTranscriptionEntity = xmlElementToEntity(eEnt, transcriptionWords, false);
+									foundTranscriptionEntity = transcription.xmlElementToEntity(eEnt, false);
 								} else if (nEnt.getParentNode().getNodeName().equals("regest_entities")
 										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strRegestID)) {
-									foundRegestEntity = xmlElementToEntity(eEnt, regestWords, true);
+									foundRegestEntity = regest.xmlElementToEntity(eEnt, true);
 								}
 							}
 						}
@@ -527,79 +525,6 @@ public class Editor extends EditorPart {
 				ioe.printStackTrace();
 			}
 		}
-	}
-
-	// TODO: Rethink these methods so they are inherent of a textual object
-	
-	private Entity xmlElementToEntity(Element elem, String[] words, boolean typed) {
-		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
-		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
-		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
-		if (typed) {
-			String type = elem.getElementsByTagName("type").item(0).getTextContent();
-			String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
-			return new TypedEntity(words, from, to, type, subtype, id);
-		}
-		return new UntypedEntity(words, from, to, id);
-	}
-	
-	private Point fromCharToWordCoordinates(Point old, String text) {
-		List<Integer> spaces = getSpacesInText(text);
-		/*
-		 * Looks for between which spaces our selection indexes fall,
-		 * which corresponds with a certain word whose index is returned.
-		 */
-		int from = 0;
-		int to = 0;
-		for (int i=0; i<spaces.size()-1; i++) {
-			if (old.x>=spaces.get(i) && old.x<spaces.get(i+1)) {
-				from = i;
-				break;
-			}
-		}
-		for (int i=0; i<spaces.size()-1; i++) {
-			if (old.y-1>=spaces.get(i) && old.y-1<=spaces.get(i+1)) {
-				to = i;
-				break;
-			}
-		}
-		return new Point(from, to);
-	}
-	
-	private Point fromWordToCharCoordinates(Point old, String[] words) {
-		int charIdx=0;
-		int wordIdx=0;
-		while (wordIdx++<old.x) {	// Advance charIdx until start of first word
-			charIdx += words[wordIdx-1].length() + 1;	// +1 for the space
-		}
-		int newX = new Integer(charIdx);	// Fix start of first word
-		charIdx += words[wordIdx-1].length() + 1;	// Advance first word
-		while (wordIdx++<old.y) {	// Advance charIdx until start of last word
-			charIdx += words[wordIdx-1].length() + 1;
-		}
-		
-		if (old.y-old.x>0) {
-			int newY = charIdx + words[wordIdx-1].length();	// Advance charIdx until end of last word
-			return new Point(newX, newY);
-		} else {
-			return new Point(newX, charIdx-1);	// In this case we already advanced before
-		}	
-	}
-	
-	private List<Integer> getSpacesInText(String text) {
-		/* 
-		 * Spaces contains the index of every space, besides the start
-		 * and ending index of the full text, in ascending order.
-		 */
-		List<Integer> spaces = new ArrayList<>();
-		spaces.add(0);
-		for (int idxSpace = text.indexOf(' '); 
-				idxSpace>=0;
-				idxSpace = text.indexOf(' ', idxSpace+1)) {
-			spaces.add(idxSpace);
-		}
-		spaces.add(text.length());
-		return spaces;
 	}
 	
 	/* Following methods shouldn't be touched */

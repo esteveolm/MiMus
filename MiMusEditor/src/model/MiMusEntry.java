@@ -19,16 +19,22 @@ public class MiMusEntry {
 		return "Regest: " + regest + "\n\nTranscription: " + transcription;
 	}
 	
-	public String getRegest() {
+	public MiMusText getRegest() {
+		return new MiMusText(regest);
+	}
+	public String getRegestText() {
 		return regest;
 	}
-	public void setRegest(String regest) {
+	public void setRegestText(String regest) {
 		this.regest = regest;
 	}
-	public String getTranscription() {
+	public MiMusText getTranscription() {
+		return new MiMusText(transcription);
+	}
+	public String getTranscriptionText() {
 		return transcription;
 	}
-	public void setTranscription(String transcription) {
+	public void setTranscriptionText(String transcription) {
 		this.transcription = transcription;
 	}
 }
