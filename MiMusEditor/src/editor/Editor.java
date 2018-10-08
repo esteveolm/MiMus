@@ -6,11 +6,6 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -345,101 +340,12 @@ public class Editor extends EditorPart {
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					// TODO: move construction of Document out of here
-					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-					DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-					org.w3c.dom.Document doc = docBuilder.newDocument();
-					
-					Element tagDocument = doc.createElement("document");
-					doc.appendChild(tagDocument);
-					
-					Element tagID = doc.createElement("doc_id");
-					tagID.appendChild(doc.createTextNode(docID));
-					tagDocument.appendChild(tagID);
-					
-					Element tagRegest = doc.createElement("regest");
-					tagRegest.appendChild(doc.createTextNode(docEntry.getRegestText()));
-					tagDocument.appendChild(tagRegest);
-					
-					Element tagTranscription = doc.createElement("transcription");
-					tagTranscription.appendChild(doc.createTextNode(docEntry.getTranscriptionText()));
-					tagDocument.appendChild(tagTranscription);
-					
-					/* Regest entities */
-					Element tagRegestEntities = doc.createElement("regest_entities");
-					tagDocument.appendChild(tagRegestEntities);
-					for (Entity ent: regestEntities.getUnits()) {
-						TypedEntity typedEnt = (TypedEntity) ent;
-						Element tagIDEnt = doc.createElement("entity_id");
-						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getId())));
-						Element tagFromEnt = doc.createElement("from");
-						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getFrom())));
-						Element tagToEnt = doc.createElement("to");
-						tagToEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getTo())));
-						Element tagTextEnt = doc.createElement("text");
-						tagTextEnt.appendChild(doc.createTextNode(typedEnt.getText()));
-						Element tagTypeEnt = doc.createElement("type");
-						tagTypeEnt.appendChild(doc.createTextNode(typedEnt.getTypeWord()));
-						Element tagSubtypeEnt = doc.createElement("subtype");
-						tagSubtypeEnt.appendChild(doc.createTextNode(typedEnt.getSubtypeWord()));
-						Element tagEntity = doc.createElement("entity");
-						tagEntity.appendChild(tagIDEnt);
-						tagEntity.appendChild(tagFromEnt);
-						tagEntity.appendChild(tagToEnt);
-						tagEntity.appendChild(tagTextEnt);
-						tagEntity.appendChild(tagTypeEnt);
-						tagEntity.appendChild(tagSubtypeEnt);
-						tagRegestEntities.appendChild(tagEntity);
-					}
-					
-					/* Transcription entities */
-					Element tagTranscriptionEntities = doc.createElement("transcription_entities");
-					tagDocument.appendChild(tagTranscriptionEntities);
-					for (Entity ent: transcriptionEntities.getUnits()) {
-						UntypedEntity untypedEnt = (UntypedEntity) ent;
-						Element tagIDEnt = doc.createElement("entity_id");
-						tagIDEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getId())));
-						Element tagFromEnt = doc.createElement("from");
-						tagFromEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getFrom())));
-						Element tagToEnt = doc.createElement("to");
-						tagToEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getTo())));
-						Element tagTextEnt = doc.createElement("text");
-						tagTextEnt.appendChild(doc.createTextNode(untypedEnt.getText()));
-						Element tagEntity = doc.createElement("entity");
-						tagEntity.appendChild(tagIDEnt);
-						tagEntity.appendChild(tagFromEnt);
-						tagEntity.appendChild(tagToEnt);
-						tagEntity.appendChild(tagTextEnt);
-						tagTranscriptionEntities.appendChild(tagEntity);
-					}
-					
-					/* Lemmatizations */
-					Element tagLemmatizations = doc.createElement("lemmatizations");
-					tagDocument.appendChild(tagLemmatizations);
-					for (Relation r: lemmas.getUnits()) {
-						Lemma lem = (Lemma) r;
-						Element tagTranscriptionId = doc.createElement("transcription_id");
-						tagTranscriptionId.appendChild(doc.createTextNode(String.valueOf(lem.getTranscriptionEntityObject().getId())));
-						Element tagRegestId = doc.createElement("regest_id");
-						tagRegestId.appendChild(doc.createTextNode(String.valueOf(lem.getRegestEntityObject().getId())));
-						Element tagLemmatization = doc.createElement("lemmatization");
-						tagLemmatization.appendChild(tagTranscriptionId);
-						tagLemmatization.appendChild(tagRegestId);
-						tagLemmatizations.appendChild(tagLemmatization);
-					}
-					
-					/* Converts Java XML Document to file-system XML */
-					Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
-			        DOMSource source = new DOMSource(doc);
-			        
-			        File f = new File(xmlPath);
-			        StreamResult console = new StreamResult(f);
-			        transformer.transform(source, console);
-			        LabelPrinter.printInfo(xmlLabel, "Saved to XML file successfully.");
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				MiMusXMLWriter xmlWriter = new MiMusXMLWriter(regest, transcription,
+						regestEntities, transcriptionEntities, lemmas, docID);
+				if (xmlWriter.create() && xmlWriter.write(xmlPath)) {
+					LabelPrinter.printInfo(xmlLabel, "Saved to XML file successfully.");
+				} else {
+					LabelPrinter.printError(xmlLabel, "Could not save to XML.");
 				}
 			}
 		});
