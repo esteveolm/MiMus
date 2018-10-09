@@ -62,7 +62,7 @@ public class XPathEntityCriteria implements XPathCriteria {
 		
 		constraints += ']';
 		System.out.println(constraints);
-		return "/document/entities/entity" + constraints;
+		return "/document/regest_entities/entity" + constraints;
 	}
 
 	/* Getters and setters */

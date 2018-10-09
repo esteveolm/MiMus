@@ -9,18 +9,40 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * 
+ * @author Javier Beltrán Jorba
+ * 
+ * A TextStyler helps managing the styles of the Text elements in the
+ * user interface of MiMus Editor. Specifically, it handles the yellow
+ * highlighting of every part of the text associated with an entity,
+ * ensuring a style that is robust to the changes happening when
+ * the user modifies the lists of entities.
+ * 
+ * This robustness is achieved by a two-stage functionality: first, a
+ * list of current styles is modified with the adition or removal of
+ * a highlight; then, the whole StyledText SWT element is refreshed
+ * and the current highlights are re-painted. That's why the methods
+ * distinguish between add and addUpdate, or delete and deleteUpdate.
+ * 
+ * This allows for a correct presentation when entities overlap with
+ * each other, where the removal of an entity would otherwise remove
+ * the style of an entity inscribed in its range.
+ *
+ */
 public class TextStyler {
 	
 	private StyledText text;
 	private List<StyleRange> styles;
-	//private int lastSelection;
 	
 	public TextStyler(StyledText text) {
 		this.text = text;
 		this.styles = new ArrayList<>();
-		//this.lastSelection = -1;
 	}
 	
+	/**
+	 * Refresh SWT StyledText element with current styles.
+	 */
 	public void update() {
 		text.setStyleRange(new StyleRange(0, text.getText().length(), null, null));
 		for (StyleRange style: styles) {
@@ -43,11 +65,14 @@ public class TextStyler {
 	
 	public void delete(int from, int to) {
 		int toDelete = -1;
-		for (int i=0; i<styles.size(); i++) {
+		/* First, only find element to delete */
+		for (int i=0; toDelete==-1 && i<styles.size(); i++) {
 			if (styles.get(i).start==from && styles.get(i).length==to-from) {
 				toDelete = i;
 			}
 		}
+		
+		/* Then, delete such element after loop */
 		if (toDelete>=0) {
 			styles.remove(toDelete);
 		}
@@ -86,25 +111,13 @@ public class TextStyler {
 	public StyledText getText() {
 		return text;
 	}
-
 	public void setText(StyledText text) {
 		this.text = text;
 	}
-
 	public List<StyleRange> getStyles() {
 		return styles;
 	}
-
 	public void setStyles(List<StyleRange> styles) {
 		this.styles = styles;
 	}
-
-//	public int getLastSelection() {
-//		return lastSelection;
-//	}
-//
-//	public void setLastSelection(int lastSelection) {
-//		this.lastSelection = lastSelection;
-//	}
-
 }

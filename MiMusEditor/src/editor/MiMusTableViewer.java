@@ -9,7 +9,7 @@ import ui.TextStyler;
 public abstract class MiMusTableViewer {
 
 	protected Composite parent;
-	protected TableViewer tvEnt, tvRel;
+	protected TableViewer tv;
 	protected TextStyler styler;
 	protected String[] columnNames;
 	
@@ -20,5 +20,9 @@ public abstract class MiMusTableViewer {
 		
 	public abstract TableViewer createTableViewer();
 
-	public abstract void packColumns();
+	public void packColumns() {
+		for (int i = 0; i < columnNames.length; i++) {
+			tv.getTable().getColumn(i).pack();
+		}
+	}
 }

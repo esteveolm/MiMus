@@ -1,6 +1,5 @@
 package model;
 
-import editor.Editor;
 import editor.IllegalTextRangeException;
 
 public class Relation extends Unit {
@@ -12,8 +11,8 @@ public class Relation extends Unit {
 	
 	public Relation(EntitiesList entities) {
 		this.entities = entities;
-		this.entityA = 0;
-		this.entityB = 0;
+		this.entityA = entities.getIdAt(0);
+		this.entityB = entities.getIdAt(1);
 		this.type = 0;
 	}
 	
@@ -24,18 +23,33 @@ public class Relation extends Unit {
 		this.type = 0;
 	}
 	
+	protected Entity getById(int id) {
+		return getById(id, entities);
+	}
+	
+	protected Entity getById(int id, EntitiesList list) {
+		for (Entity e: list.getUnits()) {
+			if (e.getId()==id) {
+				System.out.println("Found Entity " + e.toString());
+				return e;
+			}
+		}
+		System.out.println("Could not find Entity with id " + id);
+		return null;
+	}
+	
 	public int getEntityA() {
 		return entityA;
 	}
 	public String getEntityAText() {
 		try {
-			return entities.getUnits().get(entityA).getText();
+			return getEntityAObject().getText();
 		} catch (IllegalTextRangeException e) {
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getEntityAObject() {
-		return entities.getUnits().get(entityA);
+		return getById(getEntityA());
 	}
 	public void setEntityA(int entityA) {
 		this.entityA = entityA;
@@ -45,13 +59,13 @@ public class Relation extends Unit {
 	}
 	public String getEntityBText() {
 		try {
-			return entities.getUnits().get(entityB).getText();
+			return getEntityBObject().getText();
 		} catch (IllegalTextRangeException e) {
 			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
 		}
 	}
 	public Entity getEntityBObject() {
-		return entities.getUnits().get(entityB);
+		return getById(getEntityB());
 	}
 	public void setEntityB(int entityB) {
 		this.entityB = entityB;
@@ -60,7 +74,7 @@ public class Relation extends Unit {
 		return type;
 	}
 	public String getTypeWord() {
-		return Editor.RELATION_TYPES[type];
+		return TypedEntity.RELATION_TYPES[type];
 	}
 	public void setType(int type) {
 		this.type = type;
@@ -73,6 +87,6 @@ public class Relation extends Unit {
 	}
 	
 	public String toString() {
-		return "(" + getEntityAText() + " <- " + getTypeWord() + " -> " +entities.getUnits().get(entityB).toString() + ")";
+		return "(" + getEntityAText() + " <- " + getTypeWord() + " -> " + getEntityBText() + ")";
 	}
 }

@@ -17,6 +17,10 @@ public class EntitiesList extends UnitsList<Entity> {
 		initList();
 	}
 	
+	public int getIdAt(int i) {
+		return getUnits().get(i).getId();
+	}
+	
 	@Override
 	public void addUnit(Entity unit) {
 		getUnits().add(unit);
