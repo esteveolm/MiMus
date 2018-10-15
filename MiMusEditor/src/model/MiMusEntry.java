@@ -87,6 +87,13 @@ public class MiMusEntry {
 		this.numbering = numbering;
 	}
 	
+	public MiMusDate getDate() {
+		return date;
+	}
+	public void setDate(MiMusDate date) {
+		this.date = date;
+	}
+	
 	public MiMusText getRegest() {
 		return new MiMusText(regest);
 	}
