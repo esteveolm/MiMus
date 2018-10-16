@@ -104,6 +104,61 @@ public class MiMusEntry {
 		this.regest = regest;
 	}
 	
+	public MiMusLibraryIdentifier getLibrary() {
+		return library;
+	}
+	public void setLibrary(MiMusLibraryIdentifier library) {
+		this.library = library;
+	}
+	public MiMusLibraryIdentifier getLibrary2() {
+		return library2;
+	}
+	public void setLibrary2(MiMusLibraryIdentifier library2) {
+		this.library2 = library2;
+	}
+	public String getFullLibraryIdentifier() {
+		return library.toString() + "; " + library2.toString();
+	}
+	
+	public List<MiMusReference> getEditions() {
+		return editions;
+	}
+	public void setEditions(List<MiMusReference> editions) {
+		this.editions = editions;
+	}
+	public void addEdition(MiMusReference edition) {
+		editions.add(edition);
+	}
+	public void removeEdition(MiMusReference edition) {
+		editions.remove(edition);
+	}
+	
+	public List<MiMusReference> getRegisters() {
+		return registers;
+	}
+	public void setRegisters(List<MiMusReference> registers) {
+		this.registers = registers;
+	}
+	public void addRegister(MiMusReference register) {
+		registers.add(register);
+	}
+	public void removeRegister(MiMusReference register) {
+		registers.remove(register);
+	}
+	
+	public List<MiMusReference> getCitations() {
+		return citations;
+	}
+	public void setCitations(List<MiMusReference> citations) {
+		this.citations = citations;
+	}
+	public void addCitation(MiMusReference citation) {
+		citations.add(citation);
+	}
+	public void removeCitation(MiMusReference citation) {
+		citations.remove(citation);
+	}
+	
 	public MiMusText getTranscription() {
 		return new MiMusText(transcription);
 	}
