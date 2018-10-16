@@ -20,6 +20,10 @@ public class MiMusLibraryIdentifier {
 		this.page = page;
 	}
 
+	public MiMusLibraryIdentifier() {
+		
+	}
+
 	@Override
 	public String toString() {
 		return archive + ", " + series + ", " + subseries1
