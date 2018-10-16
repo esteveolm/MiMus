@@ -39,6 +39,13 @@ public class MiMusEntryReader {
 		MiMusDate date = new MiMusDate();
 		MiMusLibraryIdentifier ident1 = new MiMusLibraryIdentifier();
 		MiMusLibraryIdentifier ident2 = new MiMusLibraryIdentifier();
+		int regestIdx = -1;
+		int editionsIdx = -1;
+		int registersIdx = -1;
+		int citationsIdx = -1;
+		int transcriptionIdx = -1;
+		int notesIdx = -1;
+		int subjectsIdx = -1;
 		for (int i=0; i<lines.size(); i++) {
 			String content = lines.get(i).substring(2);
 			String start = lines.get(i).substring(0, 2);
@@ -73,6 +80,8 @@ public class MiMusEntryReader {
 						case 8:
 							entry.setPlace2(content);
 							break;
+						case 9:
+							regestIdx = i;
 						case 10:
 							ident1.setArchive(content);
 							break;
@@ -95,7 +104,7 @@ public class MiMusEntryReader {
 							ident2.setArchive(content);
 							break;
 						case 17:
-							ident2.setSeries(lines.get(i).substring(2));
+							ident2.setSeries(content);
 							break;
 						case 18:
 							ident2.setSubseries1(content);
@@ -109,155 +118,88 @@ public class MiMusEntryReader {
 						case 21:
 							ident2.setPage(content);
 							break;
+						case 22:
+							editionsIdx = i;
+							break;
+						case 23:
+							registersIdx = i;
+							break;
+						case 24:
+							citationsIdx = i;
+							break;
+						case 25:
+							transcriptionIdx = i;
+							break;
+						case 26:
+							notesIdx = i;
+							break;
+						case 27:
+							entry.setLanguage(content);
+							break;
+						case 28:
+							subjectsIdx = i;
+							break;
 						}
-						// TODO: remaining fields
 					} catch (NumberFormatException e) {
-						// TODO: handle errors as below
+						System.out.println("Could not read field " + FIELD_NAMES[j] + " properly, this field will be empty.");
 					}
 				}
 			}
 		}
-		entry.setDate(date);
-		//TODO: set other objects
-		
-		// TODO: remove old code
-		/* a: numbering */
-		
-		if (!lines.get(0).startsWith("a:")) {
-			throw new MiMusFormatException("First line does not contain <a:> entry.");
-		}
-		try {
-			entry.setNumbering(Integer.parseInt(lines.get(0).substring(2)));
-		} catch(NumberFormatException e) {
-			/* Random number between -2^32 and -1  is assigned when numbering is wrong */ 
-			int assigned = - Math.max(new Random().nextInt(), 1);
-			entry.setNumbering(assigned);
-			System.out.println("Could not read numbering, assigned " + assigned);
-		}
-		
-		/* b,c,d,e,b2,c2,d2,e2: dates and places */
-		int i=1;
-		for (; i<9; i++) {
-			if (lines.get(i).startsWith(STARTERS[i])) {
-				try {
-					switch(i) {
-					case 1:
-						date.setYear1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 2:
-						date.setYear2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 3:
-						date.setMonth1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 4:
-						date.setMonth2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 5:
-						date.setDay1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 6:
-						date.setDay2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 7:
-						entry.setPlace1(lines.get(i).substring(2));
-						break;
-					case 8:
-						entry.setPlace2(lines.get(i).substring(2));
-						break;
-					case 10:
-						date.setYear1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 11:
-						date.setYear2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 12:
-						date.setMonth1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 13:
-						date.setMonth2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 14:
-						date.setDay1(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 15:
-						date.setDay2(Integer.parseInt(lines.get(i).substring(2)));
-						break;
-					case 16:
-						entry.setPlace1(lines.get(i).substring(2));
-						break;
-					case 17:
-						entry.setPlace2(lines.get(i).substring(2));
-						break;
-					}
-					
-				} catch(NumberFormatException e) {
-					System.out.println("Could not read field " + FIELD_NAMES[i] + " , this field will be empty.");
-				}
-			}
-		}
-		entry.setDate(date);
-		
-		/* f: regest */
 		String regest = "";
-		for (int j=i+1; j<lines.size() && !lines.get(j).startsWith("g:"); j++) {
-			if (j==i+1) {
-				regest += lines.get(j).substring(2);
+		for (int i=regestIdx; i<lines.size(); i++) {
+			if (lines.get(i).startsWith(STARTERS[9])) {
+				regest += lines.get(i).substring(2);
+			} else if (lines.get(i).startsWith(STARTERS[10])) {
+				break;
 			} else {
-				regest += lines.get(j);
+				regest +=lines.get(i);
 			}
-			regest += "\n";
 		}
 		entry.setRegestText(regest);
 		
-		/* g,h,i,j,k,l,g2,h2,i2,j2,k2,l2: library identifiers */
-		for (i=10; i<22; i++) {
-			if (!lines.get(i).startsWith(STARTERS[i])) {
-				throw new MiMusFormatException("Line " + i + " does not contain " + STARTERS[i] + " entry.");
+		String transcription = "";
+		for (int i=transcriptionIdx; i<lines.size(); i++) {
+			if (lines.get(i).startsWith(STARTERS[25])) {
+				transcription += lines.get(i).substring(2);
+			} else if (lines.get(i).startsWith(STARTERS[26])) {
+				break;
+			} else {
+				transcription +=lines.get(i);
 			}
-			try {
-				switch(i) {
-				case 10:
-					date.setYear1(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 11:
-					date.setYear2(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 12:
-					date.setMonth1(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 13:
-					date.setMonth2(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 14:
-					date.setDay1(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 15:
-					date.setDay2(Integer.parseInt(lines.get(i).substring(2)));
-					break;
-				case 16:
-					entry.setPlace1(lines.get(i).substring(2));
-					break;
-				case 17:
-					entry.setPlace2(lines.get(i).substring(2));
-					break;
-				}
-				
-			} catch(NumberFormatException e) {
-				System.out.println("Could not read field " + FIELD_NAMES[i] + " , this field will be empty.");
-			}
-		}
-		entry.setDate(date);
-		
-		/* p: transcription */
-		if (!lines.get(i).startsWith("p:")) {
-			throw new MiMusFormatException("Entry <p:> not found in their place.");
-		}
-		String transcription = lines.get(i++).substring(2);
-		while(i<lines.size() && !lines.get(i).startsWith("q:")) {
-			transcription += lines.get(i++) + "\n";
 		}
 		entry.setTranscriptionText(transcription);
+		
+		// TODO: read multiline fields
+		entry.setDate(date);
+		entry.setLibrary(ident1);
+		entry.setLibrary2(ident2);
+		
+		// TODO: empty fields. what to do
+		
+//		/* f: regest */
+//		String regest = "";
+//		for (int j=i+1; j<lines.size() && !lines.get(j).startsWith("g:"); j++) {
+//			if (j==i+1) {
+//				regest += lines.get(j).substring(2);
+//			} else {
+//				regest += lines.get(j);
+//			}
+//			regest += "\n";
+//		}
+//		entry.setRegestText(regest);
+//		
+//		
+//		/* p: transcription */
+//		if (!lines.get(i).startsWith("p:")) {
+//			throw new MiMusFormatException("Entry <p:> not found in their place.");
+//		}
+//		String transcription = lines.get(i++).substring(2);
+//		while(i<lines.size() && !lines.get(i).startsWith("q:")) {
+//			transcription += lines.get(i++) + "\n";
+//		}
+//		entry.setTranscriptionText(transcription);
+		
 		return entry;
 	}
 	
