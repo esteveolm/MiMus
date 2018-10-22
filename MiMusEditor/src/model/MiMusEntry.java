@@ -9,13 +9,19 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 public class MiMusEntry {
 	private final static String LANGS_PATH = "strings/languages.txt";
 	private final static String SUBJECTS_PATH = "strings/subjects.txt";
 	private final static String[] LANGS;
 	private final static String[] SUBJECTS;
 
-	private int numbering;
+	private String numbering;
 	private MiMusDate date;
 	private String place1;
 	private String place2;
@@ -33,8 +39,14 @@ public class MiMusEntry {
 	/* Load languages array from file only once for all entries */
 	static {
 		/* Stream all lines and convert to array */
+		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = workspace.getProject("MiMus");
+		IFolder stringsFolder = project.getFolder("strings");
+		IFile langsFile = stringsFolder.getFile("languages");
+		
 		List<String> langLines = new ArrayList<>();
-		try (Stream<String> stream = Files.lines(Paths.get(LANGS_PATH))) {
+		String langsPath = langsFile.getLocation().toString() + ".txt";
+		try (Stream<String> stream = Files.lines(Paths.get(langsPath))) {
 			langLines = stream.collect(Collectors.toList());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -42,8 +54,10 @@ public class MiMusEntry {
 		}
 		LANGS = langLines.stream().toArray(String[]::new);
 		
+		IFile subjectsFile = stringsFolder.getFile("subjects");
+		String subjectsPath = subjectsFile.getLocation().toString() + ".txt";
 		List<String> subjectLines = new ArrayList<>();
-		try (Stream<String> stream = Files.lines(Paths.get(SUBJECTS_PATH))) {
+		try (Stream<String> stream = Files.lines(Paths.get(subjectsPath))) {
 			subjectLines = stream.collect(Collectors.toList());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -53,7 +67,7 @@ public class MiMusEntry {
 	}
 	
 	public MiMusEntry() {
-		this.numbering = -1;
+		this.numbering = null;
 		this.date = null;
 		this.setPlace1(null);
 		this.setPlace2(null);
@@ -84,10 +98,10 @@ public class MiMusEntry {
 	 * Some methods encapsulate access to complex objects like the Language 
 	 */
 	
-	public int getNumbering() {
+	public String getNumbering() {
 		return numbering;
 	}
-	public void setNumbering(int numbering) {
+	public void setNumbering(String numbering) {
 		this.numbering = numbering;
 	}
 	
