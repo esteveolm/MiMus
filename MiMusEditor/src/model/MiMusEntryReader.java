@@ -254,7 +254,6 @@ public class MiMusEntryReader {
 		String[] subjects = lines.get(subjectsIdx).substring(2).split(";");
 		for (String sub: subjects) {
 			entry.addSubject(sub.trim());
-			System.out.println(sub.trim());
 		}
 		
 		/* Read ID from path */
