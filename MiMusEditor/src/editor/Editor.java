@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -123,6 +124,13 @@ public class Editor extends EditorPart {
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
 		form.getBody().setLayout(new GridLayout());
+		
+		/* Read-only data */
+		Text readOnlyText = new Text(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		String readOnlyStr = docEntry.getReadOnlyText();
+		readOnlyText.setText(readOnlyStr);
+		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		readOnlyText.setEditable(false);
 		
 		/* Regest text */
 		regestText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);

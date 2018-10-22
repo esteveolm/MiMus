@@ -254,7 +254,13 @@ public class MiMusEntryReader {
 		String[] subjects = lines.get(subjectsIdx).substring(2).split(";");
 		for (String sub: subjects) {
 			entry.addSubject(sub.trim());
+			System.out.println(sub.trim());
 		}
+		
+		/* Read ID from path */
+		String[] parts = path.split("/");
+		String idStr = parts[parts.length-1].split("\\.")[0];	// This is regex, need to escape point
+		entry.setId(Integer.parseInt(idStr));
 		
 		// TODO: empty fields. what to do
 		return entry;

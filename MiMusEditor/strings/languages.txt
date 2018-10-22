@@ -1,4 +1,4 @@
-Aragonès
-Català
-Espanyol
-Llatí
+aragonès
+català
+espanyol
+llatí

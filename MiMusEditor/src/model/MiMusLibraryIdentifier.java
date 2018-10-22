@@ -26,8 +26,25 @@ public class MiMusLibraryIdentifier {
 
 	@Override
 	public String toString() {
-		return archive + ", " + series + ", " + subseries1
-				+ ", " + subseries2 + ", " + number + ", " + page;
+		// TODO: ask for actual presentation style of signature
+		String str = "";
+		if (archive != null)
+			str += archive + ", ";
+		if (series != null)
+			str += series + ", ";
+		if (subseries1 != null)
+			str += subseries1 + ", ";
+		if (subseries2 != null)
+			str += subseries2 + ", ";
+		if (number != null)
+			str += number + ", ";
+		if (page != null)
+			str += page + ", ";
+		/* 
+		 * Remove last ", " ignoring 2 last characters (length-3).
+		 * If everything is null, return empty sequence.
+		 */
+		return str.substring(0, Math.max(0,str.length()-3));
 	}
 
 	public String getArchive() {

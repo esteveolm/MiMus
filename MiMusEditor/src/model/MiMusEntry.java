@@ -21,6 +21,7 @@ public class MiMusEntry {
 	private final static String[] LANGS;
 	private final static String[] SUBJECTS;
 
+	private int id;
 	private String numbering;
 	private MiMusDate date;
 	private String place1;
@@ -67,6 +68,7 @@ public class MiMusEntry {
 	}
 	
 	public MiMusEntry() {
+		this.id = -1;
 		this.numbering = null;
 		this.date = null;
 		this.setPlace1(null);
@@ -97,6 +99,24 @@ public class MiMusEntry {
 	 * Some naming variations refer to the fact that String!=MiMusText
 	 * Some methods encapsulate access to complex objects like the Language 
 	 */
+	
+	public int getId() {
+		return id;
+	}
+	public String getIdStr() {
+		/* As IDs in 001..999, 3-len(id) gives the number of leading zeros */
+		String str = String.valueOf(id);
+		int len0 = Math.max(3-str.length(), 0);
+		String zeros = "";
+		if (len0>0) {
+			/* Creates array with null characters and replaces them by 0s */
+			zeros = new String(new char[len0]).replace('\0', '0');
+		}
+		return zeros + str;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getNumbering() {
 		return numbering;
@@ -254,5 +274,24 @@ public class MiMusEntry {
 				.orElse(-1);
 		if (subjectIdx>-1) 
 			removeSubject(subjectIdx);
+	}
+	
+	public String getReadOnlyText() {
+		String str = "Doc ID: " + getIdStr() + 
+				"\nNumeració antiga: " + getNumbering() +
+				"\nData: " + getDate().toString() + "\n";
+		if (getPlace2() != null) {
+			str += "Lloc: de " + getPlace1() + 
+					" a " + getPlace2() + "\n";
+		} else {
+			str += "Lloc: " + getPlace1() + "\n";
+		}
+		str += "Signatura A: " + getLibrary() + "\n";
+		if (getLibrary2().toString().length()>0) {
+			str += "Signatura B: " + getLibrary2() + "\n";
+		}
+		str += "Llengua: " + getLanguage() +
+				"\nMatèries: " + String.join(", ", getSubjects());
+		return str;
 	}
 }
