@@ -250,11 +250,12 @@ public class MiMusEntryReader {
 		}
 		entry.setNotes(notes);
 
-		/* Subjects (assume 1 per line) */
-		for (int i=subjectsIdx; i<lines.size(); i++) {
-			entry.addSubject(lines.get(i).trim());
+		/* Subjects separated by ; */
+		String[] subjects = lines.get(subjectsIdx).substring(2).split(";");
+		for (String sub: subjects) {
+			entry.addSubject(sub.trim());
 		}
-
+		
 		// TODO: empty fields. what to do
 		return entry;
 	}
