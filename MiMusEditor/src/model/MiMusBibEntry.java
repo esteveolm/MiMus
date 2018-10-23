@@ -18,10 +18,11 @@ package model;
  * A MiMusBibEntry has up to 4 main authors (see field <authors>), and
  * up to 6 main secondary authors (see field <secondaryAuthors>). Each
  * occupies a slot accessed through its index (starting by 0). It is
- * not necessary that the slots are ordered so all authors are in the
- * first positions and the empty positions are at the end. Instead, the
- * user must be prepared to receive a null value from any position when
- * they are empty.
+ * not necessary that the slots are sorted such that all authors are in the
+ * first positions and the empty positions are at the end, but highly
+ * recommended for the String representations to work properly.
+ * 
+ * TODO: guarantee sequentiality of authors.
  * 
  */
 public class MiMusBibEntry {
@@ -102,6 +103,52 @@ public class MiMusBibEntry {
 		this.place = place;
 		this.editorial = editorial;
 		this.series = series;
+	}
+	
+	/**
+	 * Returns a String representation of the entry, which coincides
+	 * with its short reference.
+	 */
+	public String toString() {
+		return getShortReference();
+	}
+	
+	/**
+	 * Returns an abbreviated textual reference of the bibliography entry,
+	 * consisting of:
+	 * 
+	 * <authorShort0> - <authorShort1> <year><distinction>
+	 * 
+	 * Where <authorShort1> only appears if it exists,
+	 * and <distinction> only appears if specified.
+	 * 
+	 * Note that the specification says that no separation should appear
+	 * between year and distinction.
+	 */
+	public String getShortReference() {
+		String str = getAuthorShort(0) + " - ";
+		str += (getAuthorShort(1) == null) ? "" : getAuthorShort(1);
+		str += " " + getYear() + getDistinction();
+		return str;
+	}
+	
+	/**
+	 * Returns a complete textual reference of the bibliography entry, 
+	 * with all fields that aren't empty.
+	 */
+	public String getFullReference() {
+		String str = "";
+		for (int i=0; i<NUM_AUTHORS; i++) {
+			str += activeAuthors[i] ? getAuthor(i) + "; " : "";
+		}
+		str += (year>-1) ? getYear() : "";
+		str += ". \"" + getTitle() + "\", " + getMainTitle() + ", " +
+				getVolume() + ", ";
+		for (int i=0; i<NUM_SECONDARY; i++) {
+			str += activeSecondaryAuthors[i] ? getSecondaryAuthor(i) + ", " : "";
+		}
+		str += getPlace() + ": " + getEditorial() + " (" + getSeries() + ")";
+		return str;
 	}
 	
 	/* Special Getters and Setters for accessing authors */
