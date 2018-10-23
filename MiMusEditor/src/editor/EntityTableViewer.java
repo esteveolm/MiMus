@@ -1,8 +1,5 @@
 package editor;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -66,14 +63,6 @@ public class EntityTableViewer extends MiMusTableViewer {
 		tv.setComparator(new EntityComparator());
 		packColumns();
 		return tv;
-	}
-	
-	public List<String> getColumnNames() {
-		return Arrays.asList(columnNames);
-	}
-
-	public void setColumnNames(String[] columnNames) {
-		this.columnNames = columnNames;
 	}
 	
 //	private static String[] entityTypesAsStrings() {

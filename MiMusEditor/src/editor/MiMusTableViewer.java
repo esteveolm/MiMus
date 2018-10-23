@@ -1,5 +1,8 @@
 package editor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 
@@ -13,6 +16,11 @@ public abstract class MiMusTableViewer {
 	protected TextStyler styler;
 	protected String[] columnNames;
 	
+	public MiMusTableViewer(Composite parent) {
+		this.parent = parent;
+		this.styler = null;
+	}
+	
 	public MiMusTableViewer(Composite parent, TextStyler styler) {
 		this.parent = parent;
 		this.styler = styler;
@@ -24,5 +32,12 @@ public abstract class MiMusTableViewer {
 		for (int i = 0; i < columnNames.length; i++) {
 			tv.getTable().getColumn(i).pack();
 		}
+	}
+	
+	public List<String> getColumnNames() {
+		return Arrays.asList(columnNames);
+	}
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
 	}
 }

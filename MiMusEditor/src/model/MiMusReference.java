@@ -22,20 +22,31 @@ package model;
  * just by attaching the pages field at the end of it.
  * 
  */
-public class MiMusReference {
+public class MiMusReference extends Unit {
 	
 	private MiMusBibEntry bibEntry;
 	private String page;
+	private ReferencesList references;
+	private int id;
 	
-	public MiMusReference(MiMusBibEntry bibEntry, String page) {
+	public MiMusReference(ReferencesList references, int id) {
+		this.setReferences(references);
+		this.bibEntry = references.getUnits().get(0).getBibEntry();
+		this.page = "";
+		this.setId(id);
+	}
+	
+	public MiMusReference(ReferencesList references, MiMusBibEntry bibEntry, String page, int id) {
+		this.setReferences(references);
 		this.bibEntry = bibEntry;
 		this.page = page;
+		this.setId(id);
 	}
 	
 	public String toString() {
 		return bibEntry.toString() + ", p. " + page + ".";
 	}
-
+	
 	/* Getters and setters */
 	
 	public MiMusBibEntry getBibEntry() {
@@ -49,5 +60,17 @@ public class MiMusReference {
 	}
 	public void setPage(String page) {
 		this.page = page;
+	}
+	public ReferencesList getReferences() {
+		return references;
+	}
+	public void setReferences(ReferencesList references) {
+		this.references = references;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

@@ -179,44 +179,45 @@ public class MiMusEntryReader {
 		}
 		entry.setTranscriptionText(transcription);
 		
+		//TODO: remake reading of bibentries (NOT REFERENCES)
 		/* Read references (m, n, o) */
-		if (editionsIdx!=-1) {
-			for (int i=editionsIdx; i<lines.size(); i++) {
-				if (lines.get(i).startsWith(STARTERS[22])) {
-					editions.add(new MiMusReference(null, lines.get(i).substring(2)));
-				} else if (lines.get(i).startsWith(STARTERS[23])) {
-					break;
-				} else {
-					editions.add(new MiMusReference(null, lines.get(i)));
-				}
-			}
-		}
+//		if (editionsIdx!=-1) {
+//			for (int i=editionsIdx; i<lines.size(); i++) {
+//				if (lines.get(i).startsWith(STARTERS[22])) {
+//					editions.add(new MiMusReference(null, lines.get(i).substring(2)));
+//				} else if (lines.get(i).startsWith(STARTERS[23])) {
+//					break;
+//				} else {
+//					editions.add(new MiMusReference(null, lines.get(i)));
+//				}
+//			}
+//		}
 		entry.setEditions(editions);
 		
-		if (registersIdx!=-1) {
-			for (int i=registersIdx; i<lines.size(); i++) {
-				if (lines.get(i).startsWith(STARTERS[23])) {
-					registers.add(new MiMusReference(null, lines.get(i).substring(2)));
-				} else if (lines.get(i).startsWith(STARTERS[24])) {
-					break;
-				} else {
-					registers.add(new MiMusReference(null, lines.get(i)));
-				}
-			}
-		}
+//		if (registersIdx!=-1) {
+//			for (int i=registersIdx; i<lines.size(); i++) {
+//				if (lines.get(i).startsWith(STARTERS[23])) {
+//					registers.add(new MiMusReference(null, lines.get(i).substring(2)));
+//				} else if (lines.get(i).startsWith(STARTERS[24])) {
+//					break;
+//				} else {
+//					registers.add(new MiMusReference(null, lines.get(i)));
+//				}
+//			}
+//		}
 		entry.setRegisters(registers);
 		
-		if (citationsIdx!=-1) {
-			for (int i=citationsIdx; i<lines.size(); i++) {
-				if (lines.get(i).startsWith(STARTERS[24])) {
-					citations.add(new MiMusReference(null, lines.get(i).substring(2)));
-				} else if (lines.get(i).startsWith(STARTERS[25])) {
-					break;
-				} else {
-					citations.add(new MiMusReference(null, lines.get(i)));
-				}
-			}
-		}
+//		if (citationsIdx!=-1) {
+//			for (int i=citationsIdx; i<lines.size(); i++) {
+//				if (lines.get(i).startsWith(STARTERS[24])) {
+//					citations.add(new MiMusReference(null, lines.get(i).substring(2)));
+//				} else if (lines.get(i).startsWith(STARTERS[25])) {
+//					break;
+//				} else {
+//					citations.add(new MiMusReference(null, lines.get(i)));
+//				}
+//			}
+//		}
 		entry.setCitations(citations);
 		
 		/* Notes (q) just as a single note containing all text */

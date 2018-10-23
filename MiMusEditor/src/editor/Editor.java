@@ -45,7 +45,9 @@ import model.LemmasList;
 import model.MiMusEntry;
 import model.MiMusEntryReader;
 import model.MiMusFormatException;
+import model.MiMusReference;
 import model.MiMusText;
+import model.ReferencesList;
 import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
@@ -65,6 +67,7 @@ public class Editor extends EditorPart {
 	private StyledText transcriptionText;
 	private String docID;
 	private int entityCurrentID;
+	private int referenceCurrentID;
 	
 	public Editor() {
 		super();
@@ -77,6 +80,7 @@ public class Editor extends EditorPart {
 		docID = getEditorInput().getName().substring(0, getEditorInput().getName().indexOf('.'));
 		System.out.println("Doc ID: " + docID);
 		entityCurrentID = 0;
+		referenceCurrentID = 0;
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
@@ -219,6 +223,27 @@ public class Editor extends EditorPart {
 		removeLemma.setLayoutData(gridLemma);
 		removeLemma.setText("Delete");
 		
+		/* References part of the form */
+		Section sectRef = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectRef.setText("References in bibliography");
+		
+		/* Table of references, necessary to initialize it with Unknown with initList() */
+		ReferencesList references = new ReferencesList();
+		references.initList();
+		entityCurrentID++;
+		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
+		TableViewer referenceTV = referenceHelper.createTableViewer();
+		
+		/* Buttons to add/remove references */
+		GridData gridRef = new GridData();
+		gridRef.widthHint = 100;
+		Button addRef = new Button(sectRef.getParent(), SWT.PUSH | SWT.CENTER);
+		addRef.setLayoutData(gridRef);
+		addRef.setText("Add");
+		Button removeRef = new Button(sectRef.getParent(), SWT.PUSH | SWT.CENTER);
+		removeRef.setLayoutData(gridRef);
+		removeRef.setText("Delete");
+		
 		/* Button listeners */
 		
 		setEnt.addSelectionListener(new SelectionAdapter() {
@@ -334,6 +359,20 @@ public class Editor extends EditorPart {
 					transcriptionEntities.removeUnit(lemma.getTranscriptionEntityObject());
 					System.out.println("Removing transcription entity - " + transcriptionEntities.countUnits());
 				}
+			}
+		});
+		addRef.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				references.addUnit(new MiMusReference(references, referenceCurrentID++));
+			}
+		});
+		removeRef.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MiMusReference ref = (MiMusReference) ((IStructuredSelection) referenceTV.getSelection())
+						.getFirstElement();
+				references.removeUnit(ref);
 			}
 		});
 		

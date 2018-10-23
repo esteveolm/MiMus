@@ -1,8 +1,5 @@
 package editor;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -127,14 +124,6 @@ public class RelationTableViewer extends MiMusTableViewer {
 		}
 	}
 	
-	public List<String> getColumnNames() {
-		return Arrays.asList(columnNames);
-	}
-
-	public void setColumnNames(String[] columnNames) {
-		this.columnNames = columnNames;
-	}
-	
 	class RelationLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
@@ -228,7 +217,6 @@ public class RelationTableViewer extends MiMusTableViewer {
 				res[i] = "FATAL ERROR. THIS SHOULD NOT HAPPEN";
 			}
 		}
-		System.out.println("ENTITIES: " + res.length);
 		return res;
 	}
 

@@ -46,11 +46,12 @@ public class MiMusBibEntry {
 	private String place;
 	private String editorial;
 	private String series;
+	private int id;
 	
 	/**
 	 * Initializes a Bibliography Entry with no values filled.
 	 */
-	public MiMusBibEntry() {
+	public MiMusBibEntry(int id) {
 		/* Authors are set to null and their flags to false */
 		authors = new String[NUM_AUTHORS];
 		activeAuthors = new boolean[NUM_AUTHORS];
@@ -73,6 +74,7 @@ public class MiMusBibEntry {
 		place = "";
 		editorial = "";
 		series = "";
+		this.setId(id);
 	}
 	
 	/**
@@ -84,12 +86,14 @@ public class MiMusBibEntry {
 	 */
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			int year, String distinction, String title, String mainTitle,
-			int volume, String place, String editorial, String series) {
+			int volume, String place, String editorial, String series, int id) {
 		/* Infers activeAuthors values from nulls in <authors> */
+		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			activeAuthors[i] = (authors[i] != null);
 		}
+		activeSecondaryAuthors = new boolean[NUM_SECONDARY];
 		this.secondaryAuthors = secondaryAuthors;
 		for (int i=0; i<NUM_SECONDARY; i++) {
 			activeSecondaryAuthors[i] = (secondaryAuthors[i] != null);
@@ -103,6 +107,7 @@ public class MiMusBibEntry {
 		this.place = place;
 		this.editorial = editorial;
 		this.series = series;
+		this.setId(id);
 	}
 	
 	/**
@@ -127,7 +132,7 @@ public class MiMusBibEntry {
 	 */
 	public String getShortReference() {
 		String str = getAuthorShort(0) + " - ";
-		str += (getAuthorShort(1) == null) ? "" : getAuthorShort(1);
+		str += (getAuthor(1) == null) ? "" : getAuthorShort(1);
 		str += " " + getYear() + getDistinction();
 		return str;
 	}
@@ -165,7 +170,10 @@ public class MiMusBibEntry {
 	 * Main authors require retrieval of surname as short.
 	 */
 	public String getAuthorShort(int i) {
-		return authors[i].replaceAll(",", "").split(" ")[0];
+		String author = getAuthor(i);
+		if (author == null)
+			return "";
+		return author.replaceAll(",", "").split(" ")[0];
 	}
 	
 	/**
@@ -255,5 +263,34 @@ public class MiMusBibEntry {
 	}
 	public void setSeries(String series) {
 		this.series = series;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * Creates an entity of this class that works as placeholder
+	 * when there are no bibliography entries created yet. It
+	 * contains a main author called "unknown reference" so one
+	 * can see this value and understand what this entry means
+	 * in the bibliography.
+	 */
+	public static MiMusBibEntry createUnknownEntry() {
+		String[] unknownAut = new String[NUM_AUTHORS];
+		String[] second = new String[NUM_SECONDARY];
+		for (int i=0; i<NUM_AUTHORS; i++) {
+			if (i==0) {
+				unknownAut[i] = "unknown reference";
+				second[i] = null;
+			} else {
+				unknownAut[i] = null;
+				second[i] = null;
+			}
+		}
+		return new MiMusBibEntry(unknownAut, second, -1, "", "", "",
+				-1, "", "", "", 0);
 	}
 }
