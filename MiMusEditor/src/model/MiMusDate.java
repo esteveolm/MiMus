@@ -1,5 +1,19 @@
 package model;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -19,10 +33,33 @@ package model;
  * TODO: improve code by reusing part of day1 for day2.
  * TODO: control for impossible values in dates with a calendar.
  * TODO: control for date1<date2.
- * TODO: translate month number to month name.
  * 
  */
 public class MiMusDate {
+	
+	private static final Map<String, Integer> MONTH_TO_NUMBER;
+	
+	/* Utility for month-to-number assignment that only loads once */
+	static {
+		/* Stream all lines and convert to array */
+		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = workspace.getProject("MiMus");
+		IFolder stringsFolder = project.getFolder("strings");
+		IFile monthsFile = stringsFolder.getFile("months");
+		String monthsPath = monthsFile.getLocation().toString() + ".txt";
+		
+		Map<String, Integer> auxMap = new HashMap<>();
+		try (Stream<String> stream = Files.lines(Paths.get(monthsPath))) {
+			Iterator<String> it = stream.iterator();
+			for (int i=0; it.hasNext(); i++) {
+				auxMap.put(it.next(), i+1);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Could not load months from file.");
+		}
+		MONTH_TO_NUMBER = new HashMap<>(auxMap);
+	}
 	
 	/**
 	 *  If interval is true, date1 is the actual date and date2 is not used 
@@ -213,12 +250,29 @@ public class MiMusDate {
 		this.day1 = day1;
 		setuDay1(false);
 	}
+	public void setDay1(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethDay1(true);
+		}
+		setDay1(Integer.parseInt(text.replace("[", "").replace("]","")));
+	}
 	public int getMonth1() {
 		return month1;
 	}
 	public void setMonth1(int month1) {
 		this.month1 = month1;
 		setuMonth1(false);
+	}
+	public void setMonth1(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethMonth1(true);
+			text = text.replace("[", "").replaceAll("]", "");
+		}
+		if (MONTH_TO_NUMBER.containsKey(text)) {
+			setMonth1(MONTH_TO_NUMBER.get(text));
+		} else {
+			setMonth1(0);
+		}
 	}
 	public int getYear1() {
 		return year1;
@@ -227,12 +281,24 @@ public class MiMusDate {
 		this.year1 = year1;
 		setuYear1(false);
 	}
+	public void setYear1(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethYear1(true);
+		}
+		setYear1(Integer.parseInt(text.replace("[", "").replace("]","")));
+	}
 	public int getDay2() {
 		return day2;
 	}
 	public void setDay2(int day2) {
 		this.day2 = day2;
 		setuDay2(false);
+	}
+	public void setDay2(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethDay2(true);
+		}
+		setDay2(Integer.parseInt(text.replace("[", "").replace("]","")));
 	}
 	public int getMonth2() {
 		return month2;
@@ -241,12 +307,29 @@ public class MiMusDate {
 		this.month2 = month2;
 		setuMonth2(false);
 	}
+	public void setMonth2(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethMonth2(true);
+			text = text.replace("[", "").replaceAll("]", "");
+		}
+		if (MONTH_TO_NUMBER.containsKey(text)) {
+			setMonth2(MONTH_TO_NUMBER.get(text));
+		} else {
+			setMonth2(0);
+		}
+	}
 	public int getYear2() {
 		return year2;
 	}
 	public void setYear2(int year2) {
 		this.year2 = year2;
 		setuYear2(false);
+	}
+	public void setYear2(String text) {
+		if (text.startsWith("[") && text.startsWith("]")) {
+			sethYear2(true);
+		}
+		setYear2(Integer.parseInt(text.replace("[", "").replace("]","")));
 	}
 	public boolean ishDay1() {
 		return hDay1;

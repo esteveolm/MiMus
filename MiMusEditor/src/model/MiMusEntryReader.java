@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,21 +19,12 @@ public class MiMusEntryReader {
 			"Archive2","Series2","Subseries12","Subseries22","Number12","Page12",
 			"Edition","Register","Citation","Transcription","Notes","Language",
 			"Subjects"};
-	private static final String[] MONTHS = {"gener", "febrer", "març", "abril",
-			"maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre",
-			"desembre"};
 	
 	public MiMusEntryReader() {
 		
 	}
 	
 	public MiMusEntry read(String path) throws MiMusFormatException {
-		/* Utility for month-to-number assignment */
-		Map<String, Integer> monthToNumber = new HashMap<>();
-		for (int i=0; i<MONTHS.length; i++) {
-			monthToNumber.put(MONTHS[i], i+1);
-		}
-		
 		/* Read lines of text file with Java 8 Streams */
 		List<String> lines = new ArrayList<>();
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
@@ -72,26 +61,22 @@ public class MiMusEntryReader {
 								entry.setNumbering(content);
 								break;
 							case 1:
-								date.setYear1(Integer.parseInt(content));
+								date.setYear1(content);
 								break;
 							case 2:
-								date.setYear2(Integer.parseInt(content));
+								date.setYear2(content);
 								break;
 							case 3:
-								if (monthToNumber.containsKey(content)) {
-									date.setMonth1(monthToNumber.get(content));
-								}
+								date.setMonth1(content);
 								break;
 							case 4:
-								if (monthToNumber.containsKey(content)) {
-									date.setMonth2(monthToNumber.get(content));
-								}
+								date.setMonth2(content);
 								break;
 							case 5:
-								date.setDay1(Integer.parseInt(content));
+								date.setDay1(content);
 								break;
 							case 6:
-								date.setDay2(Integer.parseInt(content));
+								date.setDay2(content);
 								break;
 							case 7:
 								entry.setPlace1(content);
