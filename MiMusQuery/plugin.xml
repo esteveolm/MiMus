@@ -14,6 +14,13 @@
             id="MiMusQuery.category"
             name="MiMus">
       </category>
+      <view
+            category="MiMusQuery.category"
+            class="view.BiblioView"
+            id="MiMusQuery.biblioView"
+            name="Bibliography Entries"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
