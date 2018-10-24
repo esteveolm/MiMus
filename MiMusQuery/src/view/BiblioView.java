@@ -140,6 +140,7 @@ public class BiblioView extends ViewPart {
 						0);	// TODO: how-to IDs
 				entries.add(newEntry);
 				lv.refresh();
+				MiMusBiblioReader.append(biblioPath, newEntry);
 			}
 		});
 		Button btnClear = new Button(sectAdd.getParent(), BUTTON_FLAGS);
