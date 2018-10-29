@@ -8,8 +8,7 @@ public class ReferencesList extends UnitsList<MiMusReference> {
 
 	@Override
 	public void initList() {
-		MiMusBibEntry bibEntry = MiMusBibEntry.createUnknownEntry();
-		addUnit(new MiMusReference(this, bibEntry, "", 0));
+		
 	}
 
 	@Override

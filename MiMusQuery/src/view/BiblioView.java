@@ -37,6 +37,7 @@ public class BiblioView extends ViewPart {
 	private ListViewer lv;
 	private List<MiMusBibEntry> entries;
 	private String biblioPath;
+	private int currentBiblioID;
 	
 	public BiblioView() {
 		super();
@@ -49,6 +50,14 @@ public class BiblioView extends ViewPart {
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
 		biblioPath = biblioFile.getLocation().toString();
 		entries = MiMusBiblioReader.read(biblioPath);
+		
+		/* Next ID is max ID of other bibliography entries +1 */
+		currentBiblioID = -1;
+		for (MiMusBibEntry entry: entries) {
+			currentBiblioID = Math.max(currentBiblioID, entry.getId());
+		}
+		currentBiblioID++;
+		System.out.println("Current Biblio ID set at " + currentBiblioID);
 	}
 	
 	@Override
@@ -137,7 +146,7 @@ public class BiblioView extends ViewPart {
 						textPlace.getText(), 
 						textEditorial.getText(), 
 						textSeries.getText(), 
-						0);	// TODO: how-to IDs
+						currentBiblioID++);
 				entries.add(newEntry);
 				lv.refresh();
 				MiMusBiblioReader.append(biblioPath, newEntry);
@@ -200,6 +209,7 @@ public class BiblioView extends ViewPart {
 				entries.remove(selectedEntry);
 				lv.refresh();
 				fullReference.setText(""); /* Clear full reference */
+				MiMusBiblioReader.remove(biblioPath, selectedEntry);
 			}
 		});
 	}

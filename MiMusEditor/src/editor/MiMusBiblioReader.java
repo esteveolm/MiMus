@@ -173,7 +173,31 @@ public class MiMusBiblioReader {
 		}
 	}
 	
+	public static void remove(String path, MiMusBibEntry entry) {
+		Document doc = documentFromPath(path);
+		if (doc != null) {
+			/* Find id to remove */
+			NodeList listIDs = doc.getElementsByTagName("id");
+			int removeID = -1;
+			for (int i=0; i<listIDs.getLength(); i++) {
+				Node nodeID = listIDs.item(i);
+				if (Integer.parseInt(nodeID.getTextContent()) == entry.getId()) {
+					removeID = i;
+					break;
+				}
+			}
+			
+			/* Delete node with id to remove by removing it from its parent */
+			if (removeID > -1) {
+				Element toRemove = (Element) listIDs.item(removeID).getParentNode();
+				listIDs.item(removeID).getParentNode().getParentNode().removeChild(toRemove);
+				write(path, doc);
+			}
+		}
+	}
+	
 	public static void write(String path, Document doc) {
+		doc.getDocumentElement().normalize();
 		try {
 			/* Converts Java XML Document to file-system XML */
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();

@@ -229,8 +229,6 @@ public class Editor extends EditorPart {
 		
 		/* Table of references, necessary to initialize it with Unknown with initList() */
 		ReferencesList references = new ReferencesList();
-		references.initList();
-		entityCurrentID++;
 		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
