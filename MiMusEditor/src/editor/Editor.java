@@ -60,6 +60,7 @@ public class Editor extends EditorPart {
 	protected String txtPath;
 	protected String xmlPath;
 	private boolean hasXML;
+	private SharedResources resources;
 	private MiMusEntry docEntry;
 	private MiMusText regest;
 	private MiMusText transcription;
@@ -81,6 +82,7 @@ public class Editor extends EditorPart {
 		System.out.println("Doc ID: " + docID);
 		entityCurrentID = 0;
 		referenceCurrentID = 0;
+		resources = SharedResources.getInstance();
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
@@ -228,7 +230,7 @@ public class Editor extends EditorPart {
 		sectRef.setText("References in bibliography");
 		
 		/* Table of references, necessary to initialize it with Unknown with initList() */
-		ReferencesList references = new ReferencesList();
+		ReferencesList references = new ReferencesList(resources.getBibEntries());
 		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		

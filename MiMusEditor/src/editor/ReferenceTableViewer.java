@@ -62,11 +62,17 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	}
 
 	private String[] getBibEntriesText() {
-		String[] res = new String[references.getUnits().size()];
-		for (int i=0; i<references.getUnits().size(); i++) {
-			res[i] = references.getUnits().get(i).getBibEntry().getShortReference();
+		String[] res = new String[references.getBibEntries().size()];
+		for (int i=0; i<references.getBibEntries().size(); i++) {
+			res[i] = references.getBibEntries().get(i).getShortReference();
 		}
 		return res;
+	}
+	
+	public void reflectEntitiesChanged() {
+		CellEditor[] editors = tv.getCellEditors();
+		((ComboBoxCellEditor) editors[0]).setItems(getBibEntriesText());
+		tv.refresh();
 	}
 	
 	class ReferenceCellModifier implements ICellModifier {
@@ -97,8 +103,13 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			switch (colIdx) {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
-				// TODO: how to access a list with all BibEntries so we can retrieve one by ID
-				//ref.setBibEntry(bibEntries.get(valueIdx));
+				MiMusBibEntry newEntry = null;
+				for (MiMusBibEntry ent: references.getBibEntries()) {
+					if (ent.getId() == valueIdx)
+						newEntry = ent;
+				}
+				if (newEntry != null)
+					ref.setBibEntry(newEntry);
 				break;
 			case 1:	// Page
 				/* Pass from the idx in the checkbox to the ID in the EntityList */

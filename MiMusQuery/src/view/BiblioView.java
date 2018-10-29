@@ -1,8 +1,5 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -28,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import editor.MiMusBiblioReader;
+import editor.SharedResources;
 import model.MiMusBibEntry;
 
 public class BiblioView extends ViewPart {
@@ -35,13 +33,13 @@ public class BiblioView extends ViewPart {
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
 	private ListViewer lv;
-	private List<MiMusBibEntry> entries;
+	private SharedResources resources;
 	private String biblioPath;
 	private int currentBiblioID;
 	
 	public BiblioView() {
 		super();
-		entries = new ArrayList<>();
+		resources = SharedResources.getInstance();
 		
 		/* Load stored entries from path */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
@@ -49,11 +47,10 @@ public class BiblioView extends ViewPart {
 		IFolder stringsFolder = project.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
 		biblioPath = biblioFile.getLocation().toString();
-		entries = MiMusBiblioReader.read(biblioPath);
 		
 		/* Next ID is max ID of other bibliography entries +1 */
 		currentBiblioID = -1;
-		for (MiMusBibEntry entry: entries) {
+		for (MiMusBibEntry entry: resources.getBibEntries()) {
 			currentBiblioID = Math.max(currentBiblioID, entry.getId());
 		}
 		currentBiblioID++;
@@ -147,7 +144,7 @@ public class BiblioView extends ViewPart {
 						textEditorial.getText(), 
 						textSeries.getText(), 
 						currentBiblioID++);
-				entries.add(newEntry);
+				resources.getBibEntries().add(newEntry);
 				lv.refresh();
 				MiMusBiblioReader.append(biblioPath, newEntry);
 			}
@@ -180,7 +177,7 @@ public class BiblioView extends ViewPart {
 		lv.setUseHashlookup(true);
 		lv.setContentProvider(new BiblioContentProvider());
 		lv.setLabelProvider(new BiblioLabelProvider());
-		lv.setInput(entries);
+		lv.setInput(resources.getBibEntries());
 		lv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Text of selected entity and listener that prints selection */
@@ -206,7 +203,7 @@ public class BiblioView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				MiMusBibEntry selectedEntry = (MiMusBibEntry) 
 						lv.getStructuredSelection().getFirstElement();
-				entries.remove(selectedEntry);
+				resources.getBibEntries().remove(selectedEntry);
 				lv.refresh();
 				fullReference.setText(""); /* Clear full reference */
 				MiMusBiblioReader.remove(biblioPath, selectedEntry);
@@ -217,7 +214,7 @@ public class BiblioView extends ViewPart {
 	class BiblioContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(Object inputElement) {
-			return entries.toArray();
+			return resources.getBibEntries().toArray();
 		}
 	}
 	

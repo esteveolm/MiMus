@@ -31,7 +31,7 @@ public class MiMusReference extends Unit {
 	
 	public MiMusReference(ReferencesList references, int id) {
 		this.setReferences(references);
-		this.bibEntry = references.getUnits().get(0).getBibEntry();
+		this.bibEntry = references.getBibEntries().get(0);
 		this.page = "";
 		this.setId(id);
 	}
