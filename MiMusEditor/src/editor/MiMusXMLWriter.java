@@ -21,7 +21,9 @@ import model.EntitiesList;
 import model.Entity;
 import model.Lemma;
 import model.LemmasList;
+import model.MiMusReference;
 import model.MiMusText;
+import model.ReferencesList;
 import model.Relation;
 import model.TypedEntity;
 import model.UntypedEntity;
@@ -33,17 +35,19 @@ public class MiMusXMLWriter {
 	private EntitiesList regestEntities;
 	private EntitiesList transcriptionEntities;
 	private LemmasList lemmas;
+	private ReferencesList references;
 	private String docID;
 	private org.w3c.dom.Document doc;
 	private boolean created;
 
 	public MiMusXMLWriter(MiMusText regest, MiMusText transcription, EntitiesList regestEntities,
-			EntitiesList transcriptionEntities, LemmasList lemmas, String docID) {
+			EntitiesList transcriptionEntities, LemmasList lemmas, ReferencesList references, String docID) {
 		this.regest = regest;
 		this.transcription = transcription;
 		this.regestEntities = regestEntities;
 		this.transcriptionEntities = transcriptionEntities;
 		this.lemmas = lemmas;
+		this.references = references;
 		this.docID = docID;
 		this.doc = null;
 		this.created = false;
@@ -133,6 +137,25 @@ public class MiMusXMLWriter {
 				tagLemmatization.appendChild(tagRegestId);
 				tagLemmatizations.appendChild(tagLemmatization);
 			}
+			
+			/* References */
+			Element tagReferences = doc.createElement("references");
+			tagDocument.appendChild(tagReferences);
+			for (MiMusReference ref: references.getUnits()) {
+				System.out.println(ref.toString() + " " + ref.getId());
+				Element tagReferenceId = doc.createElement("ref_id");
+				tagReferenceId.appendChild(doc.createTextNode(String.valueOf(ref.getId())));
+				Element tagBiblioId = doc.createElement("biblio_id");
+				tagBiblioId.appendChild(doc.createTextNode(String.valueOf(ref.getBibEntry().getId())));
+				Element tagPages = doc.createElement("pages");
+				tagPages.appendChild(doc.createTextNode(ref.getPage()));
+				Element tagReference = doc.createElement("reference");
+				tagReference.appendChild(tagReferenceId);
+				tagReference.appendChild(tagBiblioId);
+				tagReference.appendChild(tagPages);
+				tagReferences.appendChild(tagReference);
+			}
+			
 			this.doc = doc;
 			this.created = true;
 		} catch (ParserConfigurationException e) {

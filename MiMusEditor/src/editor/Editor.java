@@ -42,6 +42,7 @@ import model.EntitiesList;
 import model.Entity;
 import model.Lemma;
 import model.LemmasList;
+import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusEntryReader;
 import model.MiMusFormatException;
@@ -388,7 +389,7 @@ public class Editor extends EditorPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MiMusXMLWriter xmlWriter = new MiMusXMLWriter(regest, transcription,
-						regestEntities, transcriptionEntities, lemmas, docID);
+						regestEntities, transcriptionEntities, lemmas, references, docID);
 				if (xmlWriter.create() && xmlWriter.write(xmlPath)) {
 					LabelPrinter.printInfo(xmlLabel, "Saved to XML file successfully.");
 				} else {
@@ -468,6 +469,34 @@ public class Editor extends EditorPart {
 						
 						/* Find index of the entities retrieved in their corresponding EntitiesList */
 						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, foundRegestEntity.getId(), foundTranscriptionEntity.getId()));
+					}
+				}
+				
+				/* Load references */
+				nl = doc.getElementsByTagName("reference");
+				for (int i=0; i<nl.getLength(); i++) {
+					Node nRef = nl.item(i);
+					if (nRef.getNodeType() == Node.ELEMENT_NODE) {
+						Element eRef = (Element) nRef;
+						
+						/* Finds bibEntry looking by id in references */
+						MiMusBibEntry foundBibEntry = null;
+						int refId = Integer.parseInt(eRef.getElementsByTagName("ref_id").item(0).getTextContent());
+						int bibId = Integer.parseInt(eRef.getElementsByTagName("biblio_id").item(0).getTextContent());
+						for (int j=0; j<resources.getBibEntries().size(); j++) {
+							if (resources.getBibEntries().get(j).getId()==bibId) {
+								foundBibEntry = resources.getBibEntries().get(j);
+								break;
+							}
+						}
+						/* Checks actually found corresponding bibEntry by id */
+						if (foundBibEntry != null) {
+							MiMusReference foundRef = new MiMusReference(references,
+									foundBibEntry, 
+									eRef.getElementsByTagName("pages").item(0).getTextContent(),
+									refId);
+							references.addUnit(foundRef);
+						}
 					}
 				}
 			} catch (ParserConfigurationException pce) {
