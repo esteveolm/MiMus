@@ -134,6 +134,22 @@ public class BiblioView extends ViewPart {
 		Text textSeries = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSeries.setLayoutData(grid);
 		
+		Label labelShort = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelShort.setText("Referència abreujada:");
+		Text textShort = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textShort.setLayoutData(grid);
+		Button btnGen = new Button(sectAdd.getParent(), BUTTON_FLAGS);
+		btnGen.setText("Generate automatically");
+		btnGen.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				String generated = MiMusBibEntry.generateShortReference(
+						textAuthors[0].getText().replaceAll(",", "").split(" ")[0],
+						textAuthors[1].getText().replaceAll(",", "").split(" ")[0],
+						textYear.getText(), textDistinction.getText());
+				textShort.setText(generated);
+			}
+		});
+		
 		/* Label of form */
 		Label labelForm = toolkit.createLabel(sectAdd.getParent(), "");
 		labelForm.setLayoutData(grid);
@@ -160,7 +176,8 @@ public class BiblioView extends ViewPart {
 						textVolume.getText(), 
 						textPlace.getText(), 
 						textEditorial.getText(), 
-						textSeries.getText(), 
+						textSeries.getText(),
+						textShort.getText(),
 						currentBiblioID++);
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
@@ -186,6 +203,7 @@ public class BiblioView extends ViewPart {
 				textPlace.setText("");
 				textEditorial.setText("");
 				textSeries.setText("");
+				textShort.setText("");
 			}
 		});
 		

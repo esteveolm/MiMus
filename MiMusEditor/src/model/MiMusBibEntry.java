@@ -46,6 +46,7 @@ public class MiMusBibEntry {
 	private String place;
 	private String editorial;
 	private String series;
+	private String shortReference;
 	private int id;
 	
 	/**
@@ -74,6 +75,7 @@ public class MiMusBibEntry {
 		place = "";
 		editorial = "";
 		series = "";
+		shortReference = "";
 		this.setId(id);
 	}
 	
@@ -86,7 +88,8 @@ public class MiMusBibEntry {
 	 */
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
-			String volume, String place, String editorial, String series, int id) {
+			String volume, String place, String editorial, String series, 
+			String shortReference, int id) {
 		/* Infers activeAuthors values from nulls in <authors> */
 		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
@@ -107,7 +110,18 @@ public class MiMusBibEntry {
 		this.place = place;
 		this.editorial = editorial;
 		this.series = series;
+		this.shortReference = shortReference;
 		this.setId(id);
+	}
+	
+	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
+			String year, String distinction, String title, String mainTitle,
+			String volume, String place, String editorial, String series, 
+			int id) {
+		this(authors, secondaryAuthors, year, distinction,
+				title, mainTitle, volume, place, editorial, series, "",
+				id);
+		setShortReference(generateShortReference());
 	}
 	
 	/**
@@ -116,6 +130,13 @@ public class MiMusBibEntry {
 	 */
 	public String toString() {
 		return getShortReference();
+	}
+	
+	public String getShortReference() {
+		return shortReference;
+	}
+	public void setShortReference(String shortReference) {
+		this.shortReference = shortReference;
 	}
 	
 	/**
@@ -130,7 +151,7 @@ public class MiMusBibEntry {
 	 * Note that the specification says that no separation should appear
 	 * between year and distinction.
 	 */
-	public String getShortReference() {
+	public String generateShortReference() {
 		String str = getAuthorShort(0) + " - ";
 		str += (getAuthor(1) == null) ? "" : getAuthorShort(1);
 		str += " " + getYear() + getDistinction();
@@ -291,5 +312,12 @@ public class MiMusBibEntry {
 		}
 		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
 				"", "", "", "", 0);
+	}
+	
+	public static String generateShortReference(String author0,
+			String author1, String year, String distinction) {
+		String str = author0 + " - " + author1;
+		str += " " + year + distinction;
+		return str;
 	}
 }
