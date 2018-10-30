@@ -21,10 +21,10 @@ import model.MiMusBibEntry;
  * SharedResources.getInstance(), which provides lazy initialization.
  * 
  * At the moment, SharedResources only contains the bibliography, which
- * is common to the Editor and the BiblioView. If SharedResources ends up
- * containing more objects, a separate Singleton should be available for
- * every object, assuring that only the components explicitly demanded by
- * the application are loaded into memory.
+ * is common to the Editor and the BiblioView, and an array of Strings.
+ * If SharedResources ends up containing more complex objects, a separate 
+ * Singleton should be available for every object, assuring that only the 
+ * components explicitly demanded by the application are loaded into memory.
  * 
  * @author Javier Beltrán Jorba
  *
@@ -32,6 +32,7 @@ import model.MiMusBibEntry;
 public final class SharedResources {
 	
 	private List<MiMusBibEntry> bibEntries;
+	private String[] referenceTypes = {"Edition", "Register", "Citation"};
 
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
@@ -76,5 +77,11 @@ public final class SharedResources {
 	}
 	public void setBibEntries(List<MiMusBibEntry> bibEntries) {
 		this.bibEntries = bibEntries;
+	}
+	public String[] getReferenceTypes() {
+		return referenceTypes;
+	}
+	public void setReferenceTypes(String[] referenceTypes) {
+		this.referenceTypes = referenceTypes;
 	}
 }

@@ -149,10 +149,13 @@ public class MiMusXMLWriter {
 				tagBiblioId.appendChild(doc.createTextNode(String.valueOf(ref.getBibEntry().getId())));
 				Element tagPages = doc.createElement("pages");
 				tagPages.appendChild(doc.createTextNode(ref.getPage()));
+				Element tagRefType = doc.createElement("ref_type");
+				tagRefType.appendChild(doc.createTextNode(String.valueOf(ref.getType())));
 				Element tagReference = doc.createElement("reference");
 				tagReference.appendChild(tagReferenceId);
 				tagReference.appendChild(tagBiblioId);
 				tagReference.appendChild(tagPages);
+				tagReference.appendChild(tagRefType);
 				tagReferences.appendChild(tagReference);
 			}
 			

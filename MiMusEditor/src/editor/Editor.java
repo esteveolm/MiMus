@@ -375,7 +375,7 @@ public class Editor extends EditorPart {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				references.addUnit(new MiMusReference(references, referenceCurrentID++));
+				references.addUnit(new MiMusReference(references, 0, referenceCurrentID++));
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -511,6 +511,8 @@ public class Editor extends EditorPart {
 							MiMusReference foundRef = new MiMusReference(references,
 									foundBibEntry, 
 									eRef.getElementsByTagName("pages").item(0).getTextContent(),
+									Integer.parseInt(
+											eRef.getElementsByTagName("ref_type").item(0).getTextContent()),
 									refId);
 							references.addUnit(foundRef);
 						}

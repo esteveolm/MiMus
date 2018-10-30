@@ -27,19 +27,23 @@ public class MiMusReference extends Unit {
 	private MiMusBibEntry bibEntry;
 	private String page;
 	private ReferencesList references;
+	private int type;
 	private int id;
 	
-	public MiMusReference(ReferencesList references, int id) {
+	public MiMusReference(ReferencesList references, int type, int id) {
 		this.setReferences(references);
 		this.bibEntry = references.getBibEntries().get(0);
 		this.page = "";
+		this.setType(type);
 		this.setId(id);
 	}
 	
-	public MiMusReference(ReferencesList references, MiMusBibEntry bibEntry, String page, int id) {
+	public MiMusReference(ReferencesList references, MiMusBibEntry bibEntry, 
+			String page, int type, int id) {
 		this.setReferences(references);
 		this.bibEntry = bibEntry;
 		this.page = page;
+		this.setType(type);
 		this.setId(id);
 	}
 	
@@ -72,5 +76,11 @@ public class MiMusReference extends Unit {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 }

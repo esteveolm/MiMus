@@ -28,7 +28,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	public ReferenceTableViewer(Composite parent, ReferencesList references) {
 		super(parent);
 		this.references = references;
-		String[] aux = {"Bibliography Entry", "Page info"};
+		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
 
@@ -44,8 +44,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		
 		/* Cell editors */
 		CellEditor[] editors = new CellEditor[columnNames.length];
-		editors[0] = new ComboBoxCellEditor(tv.getTable(), getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[0] = new ComboBoxCellEditor(tv.getTable(), 
+				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), 
+				SharedResources.getInstance().getReferenceTypes(), 
+				SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new ReferenceCellModifier());
 		tv.setContentProvider(new ReferenceContentProvider());
@@ -91,6 +95,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				return ref.getBibEntry().getId();
 			case 1: // Page
 				return ref.getPage();
+			case 2:	// Reference Type
+				return ref.getType();
 			default:	// Should never reach here
 				return 0;
 			}
@@ -116,6 +122,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				String page = (String) value;
 				ref.setPage(page);
 				break;
+			case 2:	// Reference Type
+				ref.setType((int) value);
 			default:	// Should never reach here
 				break;
 			}
@@ -137,6 +145,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				return ref.getBibEntry().getShortReference();
 			case 1: // Page
 				return ref.getPage();
+			case 2:	// Reference TYpe
+				return SharedResources.getInstance().getReferenceTypes()[ref.getType()];
 			default:
 				return "";
 			}
