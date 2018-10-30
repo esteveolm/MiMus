@@ -235,6 +235,10 @@ public class Editor extends EditorPart {
 		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
+		/* Label of references */
+		Label referenceLabel = toolkit.createLabel(sectRef.getParent(), "");
+		referenceLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		/* Buttons to add/remove references */
 		GridData gridRef = new GridData();
 		gridRef.widthHint = 100;
@@ -373,7 +377,14 @@ public class Editor extends EditorPart {
 			public void widgetSelected(SelectionEvent e) {
 				MiMusReference ref = (MiMusReference) ((IStructuredSelection) referenceTV.getSelection())
 						.getFirstElement();
-				references.removeUnit(ref);
+				if (ref==null) {
+					System.out.println("Could not remove Reference because none was selected.");
+					LabelPrinter.printError(referenceLabel, "You must select a reference to delete it.");
+				} else {
+					references.removeUnit(ref);
+					LabelPrinter.printInfo(referenceLabel, "Reference deleted successfully.");
+					System.out.println("Removing Reference " + ref.toString());
+				}
 			}
 		});
 		
