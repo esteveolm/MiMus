@@ -38,14 +38,11 @@ public class MiMusEntryReader {
 		MiMusDate date = new MiMusDate();
 		MiMusLibraryIdentifier ident1 = new MiMusLibraryIdentifier();
 		MiMusLibraryIdentifier ident2 = new MiMusLibraryIdentifier();
-		List<MiMusReference> editions = new ArrayList<>();
-		List<MiMusReference> registers = new ArrayList<>();
-		List<MiMusReference> citations = new ArrayList<>();
+		String editions = "";
+		String registers = "";
+		String citations = "";
 		List<String> notes = new ArrayList<>();
 		int regestIdx = -1;
-		int editionsIdx = -1;
-		int registersIdx = -1;
-		int citationsIdx = -1;
 		int transcriptionIdx = -1;
 		int notesIdx = -1;
 		int subjectsIdx = -1;
@@ -123,13 +120,13 @@ public class MiMusEntryReader {
 								ident2.setPage(content);
 								break;
 							case 22:
-								editionsIdx = i;
+								editions = content;
 								break;
 							case 23:
-								registersIdx = i;
+								registers = content;
 								break;
 							case 24:
-								citationsIdx = i;
+								citations = content;
 								break;
 							case 25:
 								transcriptionIdx = i;
@@ -154,6 +151,9 @@ public class MiMusEntryReader {
 		entry.setDate(date);
 		entry.setLibrary(ident1);
 		entry.setLibrary2(ident2);
+		entry.setEditions(editions);
+		entry.setRegisters(registers);
+		entry.setCitations(citations);
 		
 		String regest = "";
 		for (int i=regestIdx; i<lines.size(); i++) {
@@ -178,47 +178,6 @@ public class MiMusEntryReader {
 			}
 		}
 		entry.setTranscriptionText(transcription);
-		
-		//TODO: remake reading of bibentries (NOT REFERENCES)
-		/* Read references (m, n, o) */
-//		if (editionsIdx!=-1) {
-//			for (int i=editionsIdx; i<lines.size(); i++) {
-//				if (lines.get(i).startsWith(STARTERS[22])) {
-//					editions.add(new MiMusReference(null, lines.get(i).substring(2)));
-//				} else if (lines.get(i).startsWith(STARTERS[23])) {
-//					break;
-//				} else {
-//					editions.add(new MiMusReference(null, lines.get(i)));
-//				}
-//			}
-//		}
-		entry.setEditions(editions);
-		
-//		if (registersIdx!=-1) {
-//			for (int i=registersIdx; i<lines.size(); i++) {
-//				if (lines.get(i).startsWith(STARTERS[23])) {
-//					registers.add(new MiMusReference(null, lines.get(i).substring(2)));
-//				} else if (lines.get(i).startsWith(STARTERS[24])) {
-//					break;
-//				} else {
-//					registers.add(new MiMusReference(null, lines.get(i)));
-//				}
-//			}
-//		}
-		entry.setRegisters(registers);
-		
-//		if (citationsIdx!=-1) {
-//			for (int i=citationsIdx; i<lines.size(); i++) {
-//				if (lines.get(i).startsWith(STARTERS[24])) {
-//					citations.add(new MiMusReference(null, lines.get(i).substring(2)));
-//				} else if (lines.get(i).startsWith(STARTERS[25])) {
-//					break;
-//				} else {
-//					citations.add(new MiMusReference(null, lines.get(i)));
-//				}
-//			}
-//		}
-		entry.setCitations(citations);
 		
 		/* Notes (q) just as a single note containing all text */
 		if (notesIdx!=-1) {

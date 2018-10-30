@@ -230,6 +230,12 @@ public class Editor extends EditorPart {
 		Section sectRef = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectRef.setText("References in bibliography");
 		
+		String rawRefs = "Editions: " + docEntry.getEditions() +
+				"\nRegisters: " + docEntry.getRegisters() +
+				"\nCitations: " + docEntry.getCitations();
+		Label rawRefsLabel = toolkit.createLabel(sectRef.getParent(), rawRefs);
+		rawRefsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		/* Table of references, necessary to initialize it with Unknown with initList() */
 		ReferencesList references = new ReferencesList(resources.getBibEntries());
 		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);

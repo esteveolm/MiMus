@@ -29,9 +29,9 @@ public class MiMusEntry {
 	private String regest;
 	private MiMusLibraryIdentifier library;
 	private MiMusLibraryIdentifier library2;
-	private List<MiMusReference> editions;
-	private List<MiMusReference> registers;
-	private List<MiMusReference> citations;
+	private String editions;
+	private String registers;
+	private String citations;
 	private String transcription;
 	private List<String> notes;		// TODO: change to real Notes structure when we define it
 	private int langIdx;
@@ -76,9 +76,9 @@ public class MiMusEntry {
 		this.regest = null;
 		this.library = null;
 		this.library2 = null;
-		this.editions = new ArrayList<>();
-		this.registers = new ArrayList<>();
-		this.citations = new ArrayList<>();
+		this.editions = null;
+		this.registers = null;
+		this.citations = null;
 		this.transcription = null;
 		this.notes = new ArrayList<>();
 		this.langIdx = -1;
@@ -171,43 +171,25 @@ public class MiMusEntry {
 		return library.toString() + "; " + library2.toString();
 	}
 	
-	public List<MiMusReference> getEditions() {
+	public String getEditions() {
 		return editions;
 	}
-	public void setEditions(List<MiMusReference> editions) {
+	public void setEditions(String editions) {
 		this.editions = editions;
 	}
-	public void addEdition(MiMusReference edition) {
-		editions.add(edition);
-	}
-	public void removeEdition(MiMusReference edition) {
-		editions.remove(edition);
-	}
 	
-	public List<MiMusReference> getRegisters() {
+	public String getRegisters() {
 		return registers;
 	}
-	public void setRegisters(List<MiMusReference> registers) {
+	public void setRegisters(String registers) {
 		this.registers = registers;
 	}
-	public void addRegister(MiMusReference register) {
-		registers.add(register);
-	}
-	public void removeRegister(MiMusReference register) {
-		registers.remove(register);
-	}
 	
-	public List<MiMusReference> getCitations() {
+	public String getCitations() {
 		return citations;
 	}
-	public void setCitations(List<MiMusReference> citations) {
+	public void setCitations(String citations) {
 		this.citations = citations;
-	}
-	public void addCitation(MiMusReference citation) {
-		citations.add(citation);
-	}
-	public void removeCitation(MiMusReference citation) {
-		citations.remove(citation);
 	}
 	
 	public MiMusText getTranscription() {
