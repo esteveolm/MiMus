@@ -142,40 +142,30 @@ public class BiblioView extends ViewPart {
 		Button btnAdd = new Button(sectAdd.getParent(), BUTTON_FLAGS);
 		btnAdd.setText("Add entry");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					/* Checks year and volume have right format */
-					int yearInt = Integer.parseInt(textYear.getText());
-					int volumeInt = Integer.parseInt(textVolume.getText());
-					
-					String[] authors = new String[NUM_AUTHORS];
-					for (int i=0; i<NUM_AUTHORS; i++) {
-						authors[i] = textAuthors[i].getText();
-					}
-					String[] secondaries = new String[NUM_SECONDARY];
-					for (int i=0; i<NUM_SECONDARY; i++) {
-						secondaries[i] = textSecondaries[i].getText();
-					}
-					MiMusBibEntry newEntry = new MiMusBibEntry(
-							authors, secondaries, 
-							yearInt, 
-							textDistinction.getText(), 
-							textTitle.getText(),
-							textMainTitle.getText(), 
-							volumeInt, 
-							textPlace.getText(), 
-							textEditorial.getText(), 
-							textSeries.getText(), 
-							currentBiblioID++);
-					resources.getBibEntries().add(newEntry);
-					lv.refresh();
-					MiMusBiblioReader.append(biblioPath, newEntry);
-					LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
-				} catch (NumberFormatException ex) {
-					/* If wrong format, don't add entry */
-					System.out.println("Could not add bibEntry due to erroneous format.");
-					LabelPrinter.printError(labelForm, "Format error in fields introduced.");
+			public void widgetSelected(SelectionEvent e) {		
+				String[] authors = new String[NUM_AUTHORS];
+				for (int i=0; i<NUM_AUTHORS; i++) {
+					authors[i] = textAuthors[i].getText();
 				}
+				String[] secondaries = new String[NUM_SECONDARY];
+				for (int i=0; i<NUM_SECONDARY; i++) {
+					secondaries[i] = textSecondaries[i].getText();
+				}
+				MiMusBibEntry newEntry = new MiMusBibEntry(
+						authors, secondaries, 
+						textYear.getText(), 
+						textDistinction.getText(), 
+						textTitle.getText(),
+						textMainTitle.getText(), 
+						textVolume.getText(), 
+						textPlace.getText(), 
+						textEditorial.getText(), 
+						textSeries.getText(), 
+						currentBiblioID++);
+				resources.getBibEntries().add(newEntry);
+				lv.refresh();
+				MiMusBiblioReader.append(biblioPath, newEntry);
+				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
 			}
 		});
 		Button btnClear = new Button(sectAdd.getParent(), BUTTON_FLAGS);

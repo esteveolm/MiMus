@@ -82,16 +82,16 @@ public class MiMusBiblioReader {
 			secondaries[i] = elem.getElementsByTagName("autor_secundari"+(i+1))
 					.item(0).getTextContent();
 		}
-		int year = Integer.parseInt(elem.getElementsByTagName("any")
-				.item(0).getTextContent());
+		String year = elem.getElementsByTagName("any")
+				.item(0).getTextContent();
 		String distinction = elem.getElementsByTagName("distincio")
 				.item(0).getTextContent();
 		String title = elem.getElementsByTagName("titol")
 				.item(0).getTextContent();
 		String mainTitle = elem.getElementsByTagName("titol_principal")
 				.item(0).getTextContent();
-		int volume = Integer.parseInt(elem.getElementsByTagName("volum")
-				.item(0).getTextContent());
+		String volume = elem.getElementsByTagName("volum")
+				.item(0).getTextContent();
 		String place = elem.getElementsByTagName("lloc")
 				.item(0).getTextContent();
 		String editorial = elem.getElementsByTagName("editorial")
@@ -131,7 +131,7 @@ public class MiMusBiblioReader {
 			Element s6 = doc.createElement("autor_secundari6");
 			s1.appendChild(doc.createTextNode(entry.getSecondaryAuthor(5)));
 			Element year = doc.createElement("any");
-			year.appendChild(doc.createTextNode(String.valueOf(entry.getYear())));
+			year.appendChild(doc.createTextNode(entry.getYear()));
 			Element distinction = doc.createElement("distincio");
 			distinction.appendChild(doc.createTextNode(entry.getDistinction()));
 			Element title = doc.createElement("titol");
@@ -139,7 +139,7 @@ public class MiMusBiblioReader {
 			Element mainTitle = doc.createElement("titol_principal");
 			mainTitle.appendChild(doc.createTextNode(entry.getMainTitle()));
 			Element volume = doc.createElement("volum");
-			volume.appendChild(doc.createTextNode(String.valueOf(entry.getVolume())));
+			volume.appendChild(doc.createTextNode(entry.getVolume()));
 			Element place = doc.createElement("lloc");
 			place.appendChild(doc.createTextNode(entry.getPlace()));
 			Element editorial = doc.createElement("editorial");

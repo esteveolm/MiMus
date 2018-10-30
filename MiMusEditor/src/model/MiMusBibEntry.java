@@ -38,11 +38,11 @@ public class MiMusBibEntry {
 	private boolean[] activeAuthors;
 	private String[] secondaryAuthors;
 	private boolean[] activeSecondaryAuthors;
-	private int year;
+	private String year;
 	private String distinction;
 	private String title;
 	private String mainTitle;
-	private int volume;
+	private String volume;
 	private String place;
 	private String editorial;
 	private String series;
@@ -66,11 +66,11 @@ public class MiMusBibEntry {
 			activeSecondaryAuthors[i] = false;
 		}
 		
-		year = -1;
+		year = "";
 		distinction = "";
 		title = "";
 		mainTitle = "";
-		volume = -1;
+		volume = "";
 		place = "";
 		editorial = "";
 		series = "";
@@ -85,8 +85,8 @@ public class MiMusBibEntry {
 	 * left blank, use the incremental approach.
 	 */
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
-			int year, String distinction, String title, String mainTitle,
-			int volume, String place, String editorial, String series, int id) {
+			String year, String distinction, String title, String mainTitle,
+			String volume, String place, String editorial, String series, int id) {
 		/* Infers activeAuthors values from nulls in <authors> */
 		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
@@ -146,8 +146,7 @@ public class MiMusBibEntry {
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			str += activeAuthors[i] ? getAuthor(i) + "; " : "";
 		}
-		str += (year>-1) ? getYear() : "";
-		str += ". \"" + getTitle() + "\", " + getMainTitle() + ", " +
+		str += year + ". \"" + getTitle() + "\", " + getMainTitle() + ", " +
 				getVolume() + ", ";
 		for (int i=0; i<NUM_SECONDARY; i++) {
 			str += activeSecondaryAuthors[i] ? getSecondaryAuthor(i) + ", " : "";
@@ -216,10 +215,10 @@ public class MiMusBibEntry {
 	public String[] getSecondaryAuthors() {
 		return secondaryAuthors;
 	}
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 	public String getDistinction() {
@@ -240,10 +239,10 @@ public class MiMusBibEntry {
 	public void setMainTitle(String mainTitle) {
 		this.mainTitle = mainTitle;
 	}
-	public int getVolume() {
+	public String getVolume() {
 		return volume;
 	}
-	public void setVolume(int volume) {
+	public void setVolume(String volume) {
 		this.volume = volume;
 	}
 	public String getPlace() {
@@ -290,7 +289,7 @@ public class MiMusBibEntry {
 				second[i] = null;
 			}
 		}
-		return new MiMusBibEntry(unknownAut, second, -1, "", "", "",
-				-1, "", "", "", 0);
+		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
+				"", "", "", "", 0);
 	}
 }

@@ -185,7 +185,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			MiMusReference ref1 = (MiMusReference) e1;
 			MiMusReference ref2 = (MiMusReference) e2;
-			return ref1.getBibEntry().getYear() - ref2.getBibEntry().getYear();
+			return ref1.getBibEntry().getYear().compareTo(ref2.getBibEntry().getYear());
 		}
 	}
 	
