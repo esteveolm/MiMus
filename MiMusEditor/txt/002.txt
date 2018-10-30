@@ -1,0 +1,20 @@
+a: VII.3
+b: 1387
+c: gener
+d: 29
+e: Barcelona
+f: El rei Joan I prega al rei de França [Carles VI] i al duc de Turena [Lluís d’Orleans] que li deixin Colinet, ministrer del rei de França.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1751
+l: 9v
+m: Gómez Muntané 1979, doc. 90 (ed. parcial); Trenchs-Baiges 2000-2002, doc. 5
+p:
+Molt car cosí, per tal com desijam oir sovén de vostre stament bones novelles, pregam-vos affectuosament que·ns en vullats certificar per tots vinents a les parts de çà, e serà cosa de la qual haurem gran plaser e consolació. Del nostre, vos notificam, molt car cosí, que ab la gràcia de nostre senyor Déus, som restituïts a nostra sanitat corporal e quitis de l’accident que havem haüd en nostra persona. Molt car cosí, per tal com de la suficièntia e abtesa de Culinet, ministrer vostre, som informats e·l volríem oyr, pregam-vos que, per amor nostra, lo licenciets que·ns venga servir algun temps, car, axí com vós volrets, li darem licència que se’n torn devers vós. E si algunes coses vos són agradables que façam per honor vostra, escrivits-nos-en e complir-ho-em volenterosament e de cor. Molt car cosí, lo Sant Spirit sia vostra guarda tots temps.
+Dada en Barchelona sots nostre segell secret acustumat a XXIX dies de jener de l’any MCCCLXXXºVII. Rex Iohannes.
+Ffuit missa regi Ffrancie.
+
+Litera similis fuit missa regi Ffrancie duci Torene.
+r: català
+s: petició; enviament d’artistes

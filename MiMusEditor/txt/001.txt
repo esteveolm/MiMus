@@ -1,0 +1,20 @@
+a: VII.1
+b: 1387
+c: gener
+d: 15
+e: Granollers
+f: El rei Joan I mana a Ramon de Soler, tresorer reial, que pagui a mestre Pere Palau 100 florins d’or per la compra de dues arpes.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1953
+l: 18r
+m: Trenchs-Baiges 2000-2002, doc. 2.
+p:
+[Al marge:] Nichil mandato domini regi quia tesaurarium.
+Iohannes, Dei gratia et cetera, ffideli consiliario et tesaurario nostro Raymundo de Solerio, salutem et gratiam. Dicimus et mandamus vobis quatenus de peccunia curie nostre que est vel erit penes vos tribuatis et exsolvatis magistro Petro Palau centum florenos auri de Aragonia pro precio duorum instrumentorum vocatorum arpes, quas arpas pro servicio nostro fieri fecimus. Et facta solucione, recuperetis ab eo presentem loco apoche et mandati. Mandantes magistro racionali curie nostre, vel alii cuicumque a vobis compotum audituro, quod dictos centum florenos auri in vestro recipiat compoto et admittat, vobis eidem tradentem presentem ut prefertur.
+Data in villa Granullariorum sub nostro sigillo assueto XVº die ianuari anno a Nativitate Domini millesimo trecentesimo LXXX septimo. Rex Iohannes.
+Dominus rex mandavit michi Bernardo de Ionquerio.
+q: {nota1} Vg. VI.3, doc. 1016.
+r: llatí
+s: ordre de pagament; compra; instruments
