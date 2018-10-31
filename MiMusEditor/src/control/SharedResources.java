@@ -1,4 +1,4 @@
-package editor;
+package control;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import editor.MiMusBiblioReader;
 import model.MiMusBibEntry;
 
 /**
@@ -63,7 +64,14 @@ public final class SharedResources {
 	}
 	
 	/**
-	 * Method overriden to always throw CloneNotSupportedException,
+	 * Constructs a new SharedResources in the same Singleton reference.
+	 */
+	public void refresh() {
+		instance = new SharedResources();
+	}
+	
+	/**
+	 * Method overridden to always throw CloneNotSupportedException,
 	 * avoiding that a copy of SharedResources object is made and the
 	 * system ends up with several instances of it.
 	 */

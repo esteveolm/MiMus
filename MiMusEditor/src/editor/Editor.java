@@ -38,6 +38,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import control.EventObserver;
+import control.SharedControl;
+import control.SharedResources;
 import model.EntitiesList;
 import model.Entity;
 import model.Lemma;
@@ -56,12 +59,13 @@ import model.UntypedEntity;
 import ui.LabelPrinter;
 import ui.TextStyler;
 
-public class Editor extends EditorPart {
+public class Editor extends EditorPart implements EventObserver {
 	
 	protected String txtPath;
 	protected String xmlPath;
 	private boolean hasXML;
 	private SharedResources resources;
+	private SharedControl control;
 	private MiMusEntry docEntry;
 	private MiMusText regest;
 	private MiMusText transcription;
@@ -70,6 +74,10 @@ public class Editor extends EditorPart {
 	private String docID;
 	private int entityCurrentID;
 	private int referenceCurrentID;
+	private EntityTableViewer entityHelper;
+	private RelationTableViewer relationHelper;
+	private LemmaTableViewer lemmaHelper;
+	private ReferenceTableViewer referenceHelper;
 	
 	public Editor() {
 		super();
@@ -84,6 +92,8 @@ public class Editor extends EditorPart {
 		entityCurrentID = 0;
 		referenceCurrentID = 0;
 		resources = SharedResources.getInstance();
+		control = SharedControl.getInstance();
+		control.addEditor(this);
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
@@ -119,10 +129,14 @@ public class Editor extends EditorPart {
 			e.printStackTrace();
 		}
 	}
-		
+	
+	/**
+	 * When Editor is closed, it is unregistered from SharedControl.
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();
+		control.removeEditor(this);
 	}
 	
 	@Override
@@ -151,7 +165,7 @@ public class Editor extends EditorPart {
 		sectEnt.setText("Entities at Regest");
 		
 		/* Table of entities */
-		EntityTableViewer entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
+		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		EntitiesList regestEntities = entityHelper.getEntities();
 		
@@ -175,7 +189,7 @@ public class Editor extends EditorPart {
 		sectRel.setText("Relations at Regest");
 		
 		/* Table of relations */
-		RelationTableViewer relationHelper = new RelationTableViewer(sectRel.getParent(), styler, regestEntities);
+		relationHelper = new RelationTableViewer(sectRel.getParent(), styler, regestEntities);
 		TableViewer relationTV = relationHelper.createTableViewer();
 		RelationsList relations = relationHelper.getRelations();
 		
@@ -207,7 +221,7 @@ public class Editor extends EditorPart {
 		EntitiesList transcriptionEntities = new EntitiesList(transcription.getWords());
 
 		/* Transcription entities & Lemmatizations table */
-		LemmaTableViewer lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
+		lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
 		TableViewer lemmaTV = lemmaHelper.createTableViewer();
 		LemmasList lemmas = lemmaHelper.getLemmas();
 		
@@ -238,7 +252,7 @@ public class Editor extends EditorPart {
 		
 		/* Table of references, necessary to initialize it with Unknown with initList() */
 		ReferencesList references = new ReferencesList(resources.getBibEntries());
-		ReferenceTableViewer referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
+		referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
 		/* Label of references */
@@ -553,6 +567,18 @@ public class Editor extends EditorPart {
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	@Override
+	public void update() {
+		/* Re-creates SharedResources in the same reference */
+		resources.refresh();
+		
+		/* Refresh all table viewers */
+		entityHelper.refresh();
+		relationHelper.refresh();
+		lemmaHelper.refresh();
+		referenceHelper.refresh();
 	}
 
 }

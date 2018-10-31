@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import control.SharedResources;
 import model.MiMusBibEntry;
 import model.MiMusReference;
 import model.ReferencesList;
@@ -73,7 +74,15 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		return res;
 	}
 	
-	public void reflectEntitiesChanged() {
+	/**
+	 * When ReferenceTableViewer is refreshed, ComboBox options in the
+	 * column for bibliography entries must be reloaded, because the
+	 * list of entries could have changed.
+	 */
+	@Override
+	public void refresh() {
+		super.refresh();
+		System.out.println("Refreshing reference tv.");
 		CellEditor[] editors = tv.getCellEditors();
 		((ComboBoxCellEditor) editors[0]).setItems(getBibEntriesText());
 		tv.refresh();

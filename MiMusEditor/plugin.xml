@@ -12,5 +12,28 @@
             name="MiMus Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="MiMusEditor.mimus"
+            name="MiMus">
+      </category>
+      <view
+            category="MiMusEditor.mimus"
+            class="editor.BiblioView"
+            icon="icons/sample.png"
+            id="MiMusEditor.biblioView"
+            name="Biblio View"
+            restorable="true">
+      </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="editor.QueryView"
+            icon="icons/sample.png"
+            id="MiMusEditor.queryView"
+            name="Query View"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>

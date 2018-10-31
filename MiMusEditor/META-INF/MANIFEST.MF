@@ -6,10 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: MiMusEditor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.14.0",
- org.eclipse.core.resources;bundle-version="3.13.0",
+ org.eclipse.core.resources,
  org.eclipse.ui;bundle-version="3.109.100",
- org.eclipse.ui.forms;bundle-version="3.7.200",
+ org.eclipse.ui.forms,
  org.eclipse.ui.ide;bundle-version="3.14.0"
-Export-Package: editor,
+Export-Package: control,
+ editor,
  model,
  ui

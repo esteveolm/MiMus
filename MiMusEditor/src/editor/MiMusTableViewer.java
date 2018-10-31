@@ -34,6 +34,10 @@ public abstract class MiMusTableViewer {
 		}
 	}
 	
+	public void refresh() {
+		tv.refresh();
+	}
+	
 	public List<String> getColumnNames() {
 		return Arrays.asList(columnNames);
 	}

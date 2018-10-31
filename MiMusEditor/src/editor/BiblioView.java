@@ -1,4 +1,7 @@
-package view;
+package editor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -26,23 +29,31 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
+import control.EventObserver;
+import control.EventSubject;
+import control.SharedControl;
+import control.SharedResources;
 import editor.MiMusBiblioReader;
-import editor.SharedResources;
 import model.MiMusBibEntry;
 import ui.LabelPrinter;
 
-public class BiblioView extends ViewPart {
+public class BiblioView extends ViewPart implements EventSubject {
 
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
 	private ListViewer lv;
 	private SharedResources resources;
+	private SharedControl control;
 	private String biblioPath;
 	private int currentBiblioID;
+	private List<EventObserver> observers;
 	
 	public BiblioView() {
 		super();
+		observers = new ArrayList<>();
 		resources = SharedResources.getInstance();
+		control = SharedControl.getInstance();
+		control.setBiblioView(this);
 		
 		/* Load stored entries from path */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
@@ -183,6 +194,7 @@ public class BiblioView extends ViewPart {
 				lv.refresh();
 				MiMusBiblioReader.append(biblioPath, newEntry);
 				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
+				notifyObservers();
 			}
 		});
 		Button btnClear = new Button(sectAdd.getParent(), BUTTON_FLAGS);
@@ -271,6 +283,7 @@ public class BiblioView extends ViewPart {
 					MiMusBiblioReader.remove(biblioPath, selectedEntry);
 					System.out.println("BibEntry removed successfully.");
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
+					notifyObservers();
 				}
 			}
 		});
@@ -290,8 +303,32 @@ public class BiblioView extends ViewPart {
 		}
 	}
 	
+	/**
+	 * When BiblioView is closed, it is unregistered from SharedControl.
+	 */
 	@Override
-	public void setFocus() {
-		
+	public void dispose() {
+		super.dispose();
+		control.unsetBiblioView();
+	}
+	
+	@Override
+	public void setFocus() {}
+	
+	/* Observer pattern for updates in state changes to Editors */
+	
+	@Override
+	public void attach(EventObserver o) {
+		observers.add(o);
+	}
+	
+	@Override
+	public void detach(EventObserver o) {
+		observers.remove(o);
+	}
+	
+	@Override
+	public List<EventObserver> getObservers() {
+		return observers;
 	}
 }
