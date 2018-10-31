@@ -47,8 +47,6 @@ import model.Lemma;
 import model.LemmasList;
 import model.MiMusBibEntry;
 import model.MiMusEntry;
-import model.MiMusEntryReader;
-import model.MiMusFormatException;
 import model.MiMusReference;
 import model.MiMusText;
 import model.ReferencesList;
@@ -61,6 +59,7 @@ import ui.table.LemmaTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
 import util.LabelPrinter;
+import util.MiMusEntryReader;
 import util.MiMusXMLWriter;
 import util.TextStyler;
 
@@ -126,13 +125,9 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		
 		/* Txt must always be present so the text can be loaded */
-		try {
-			docEntry = new MiMusEntryReader().read(txtPath);
-			regest = docEntry.getRegest();
-			transcription = docEntry.getTranscription();
-		} catch (MiMusFormatException e) {
-			e.printStackTrace();
-		}
+		docEntry = new MiMusEntryReader().read(txtPath);
+		regest = docEntry.getRegest();
+		transcription = docEntry.getTranscription();
 	}
 	
 	/**

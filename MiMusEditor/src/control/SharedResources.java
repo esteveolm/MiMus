@@ -9,7 +9,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import model.MiMusBibEntry;
-import ui.MiMusBiblioReader;
+import util.MiMusBiblioReader;
 
 /**
  * 

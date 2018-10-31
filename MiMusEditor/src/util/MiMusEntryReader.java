@@ -1,4 +1,4 @@
-package model;
+package util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import model.MiMusDate;
+import model.MiMusEntry;
+import model.MiMusLibraryIdentifier;
 
 public class MiMusEntryReader {
 	
@@ -24,7 +28,7 @@ public class MiMusEntryReader {
 		
 	}
 	
-	public MiMusEntry read(String path) throws MiMusFormatException {
+	public MiMusEntry read(String path) {
 		/* Read lines of text file with Java 8 Streams */
 		List<String> lines = new ArrayList<>();
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
