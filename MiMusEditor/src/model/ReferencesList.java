@@ -3,7 +3,7 @@ package model;
 import java.util.Iterator;
 import java.util.List;
 
-import ui.MiMusContentProvider;
+import ui.table.MiMusContentProvider;
 
 public class ReferencesList extends UnitsList<MiMusReference> {
 

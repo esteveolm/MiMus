@@ -1,4 +1,4 @@
-package ui;
+package ui.table;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -20,6 +20,7 @@ import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
 import model.Unit;
+import ui.IllegalTextRangeException;
 import util.TextStyler;
 
 public class RelationTableViewer extends MiMusTableViewer {

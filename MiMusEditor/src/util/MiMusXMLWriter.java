@@ -1,4 +1,4 @@
-package ui;
+package util;
 
 import java.io.File;
 
@@ -27,6 +27,7 @@ import model.ReferencesList;
 import model.Relation;
 import model.TypedEntity;
 import model.UntypedEntity;
+import ui.IllegalTextRangeException;
 
 public class MiMusXMLWriter {
 	

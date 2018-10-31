@@ -1,4 +1,4 @@
-package ui;
+package ui.table;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 

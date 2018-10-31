@@ -1,4 +1,4 @@
-package ui;
+package ui.table;
 
 import java.util.Arrays;
 import java.util.List;

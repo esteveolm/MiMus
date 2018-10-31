@@ -56,7 +56,12 @@ import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
 import model.UntypedEntity;
+import ui.table.EntityTableViewer;
+import ui.table.LemmaTableViewer;
+import ui.table.ReferenceTableViewer;
+import ui.table.RelationTableViewer;
 import util.LabelPrinter;
+import util.MiMusXMLWriter;
 import util.TextStyler;
 
 public class Editor extends EditorPart implements EventObserver {
