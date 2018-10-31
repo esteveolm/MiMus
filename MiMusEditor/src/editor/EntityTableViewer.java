@@ -21,7 +21,7 @@ import model.Entity;
 import model.MiMusText;
 import model.TypedEntity;
 import model.Unit;
-import ui.TextStyler;
+import util.TextStyler;
 
 public class EntityTableViewer extends MiMusTableViewer {
 

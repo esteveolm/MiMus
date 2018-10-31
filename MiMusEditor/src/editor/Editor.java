@@ -56,8 +56,8 @@ import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
 import model.UntypedEntity;
-import ui.LabelPrinter;
-import ui.TextStyler;
+import util.LabelPrinter;
+import util.TextStyler;
 
 public class Editor extends EditorPart implements EventObserver {
 	

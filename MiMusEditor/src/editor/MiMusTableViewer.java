@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 
-import ui.TextStyler;
+import util.TextStyler;
 
 
 public abstract class MiMusTableViewer {

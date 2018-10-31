@@ -20,7 +20,7 @@ import model.Relation;
 import model.RelationsList;
 import model.TypedEntity;
 import model.Unit;
-import ui.TextStyler;
+import util.TextStyler;
 
 public class RelationTableViewer extends MiMusTableViewer {
 

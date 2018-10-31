@@ -20,7 +20,7 @@ import model.EntitiesList;
 import model.Lemma;
 import model.LemmasList;
 import model.Unit;
-import ui.TextStyler;
+import util.TextStyler;
 
 public class LemmaTableViewer extends RelationTableViewer {
 	

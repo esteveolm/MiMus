@@ -35,7 +35,7 @@ import control.SharedControl;
 import control.SharedResources;
 import editor.MiMusBiblioReader;
 import model.MiMusBibEntry;
-import ui.LabelPrinter;
+import util.LabelPrinter;
 
 public class BiblioView extends ViewPart implements EventSubject {
 
