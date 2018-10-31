@@ -3,8 +3,8 @@ package control;
 import java.util.ArrayList;
 import java.util.List;
 
-import editor.Editor;
-import editor.BiblioView;
+import ui.BiblioView;
+import ui.Editor;
 
 /**
  * 

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import editor.MiMusContentProvider;
+import ui.MiMusContentProvider;
 
 public abstract class UnitsList<U> {
 	

@@ -1,6 +1,6 @@
 package model;
 
-import editor.IllegalTextRangeException;
+import ui.IllegalTextRangeException;
 
 public class Relation extends Unit {
 

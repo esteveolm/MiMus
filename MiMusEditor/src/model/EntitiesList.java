@@ -2,8 +2,8 @@ package model;
 
 import java.util.Iterator;
 
-import editor.MiMusContentProvider;
-import editor.RelationTableViewer;
+import ui.MiMusContentProvider;
+import ui.RelationTableViewer;
 
 public class EntitiesList extends UnitsList<Entity> {
 	

@@ -1,4 +1,4 @@
-package editor;
+package ui;
 
 public class IllegalTextRangeException extends Exception {
 

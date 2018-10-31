@@ -1,4 +1,4 @@
-package editor;
+package ui;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 

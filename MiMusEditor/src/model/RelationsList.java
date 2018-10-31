@@ -2,7 +2,7 @@ package model;
 
 import java.util.Iterator;
 
-import editor.MiMusContentProvider;
+import ui.MiMusContentProvider;
 
 public class RelationsList extends UnitsList<Relation> {
 	

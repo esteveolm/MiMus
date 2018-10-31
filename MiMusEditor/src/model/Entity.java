@@ -2,7 +2,7 @@ package model;
 
 import java.util.Arrays;
 
-import editor.IllegalTextRangeException;
+import ui.IllegalTextRangeException;
 
 public abstract class Entity extends Unit {
 	

@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="editor.Editor"
+            class="ui.Editor"
             default="false"
             extensions="txt, xml"
             icon="icons/sample.png"
@@ -20,7 +20,7 @@
       </category>
       <view
             category="MiMusEditor.mimus"
-            class="editor.BiblioView"
+            class="ui.BiblioView"
             icon="icons/sample.png"
             id="MiMusEditor.biblioView"
             name="Biblio View"
@@ -28,7 +28,7 @@
       </view>
       <view
             category="MiMusEditor.mimus"
-            class="editor.QueryView"
+            class="ui.QueryView"
             icon="icons/sample.png"
             id="MiMusEditor.queryView"
             name="Query View"

@@ -8,8 +8,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import editor.MiMusBiblioReader;
 import model.MiMusBibEntry;
+import ui.MiMusBiblioReader;
 
 /**
  * 

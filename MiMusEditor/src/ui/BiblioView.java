@@ -1,4 +1,4 @@
-package editor;
+package ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,8 @@ import control.EventObserver;
 import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
-import editor.MiMusBiblioReader;
 import model.MiMusBibEntry;
+import ui.MiMusBiblioReader;
 import util.LabelPrinter;
 
 public class BiblioView extends ViewPart implements EventSubject {

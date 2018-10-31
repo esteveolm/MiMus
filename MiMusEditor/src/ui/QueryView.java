@@ -1,4 +1,4 @@
-package editor;
+package ui;
 
 import search.Result;
 import search.XPathEntityCriteria;
