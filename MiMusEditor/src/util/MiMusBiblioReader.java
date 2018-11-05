@@ -100,9 +100,14 @@ public class MiMusBiblioReader {
 				.item(0).getTextContent();
 		int id = Integer.parseInt(elem.getElementsByTagName("id")
 				.item(0).getTextContent());
-		
+		ArrayList<Integer> users = new ArrayList<>();
+		NodeList nodesDoc = elem.getElementsByTagName("user_id");
+		for (int i=0; i<nodesDoc.getLength(); i++) {
+			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
+		}
 		return new MiMusBibEntry(authors, secondaries, year, distinction, 
-				title, mainTitle, volume, place, editorial, series, id);
+				title, mainTitle, volume, place, editorial, series, id,
+				users);
 	}
 	
 	public static void append(String path, MiMusBibEntry entry) {
@@ -149,6 +154,13 @@ public class MiMusBiblioReader {
 			Element id = doc.createElement("id");
 			id.appendChild(doc.createTextNode(String.valueOf(entry.getId())));
 			
+			Element users = doc.createElement("users");
+			for (int user: entry.getUsers()) {
+				Element userId = doc.createElement("user_id");
+				userId.appendChild(doc.createTextNode(String.valueOf(user)));
+				users.appendChild(userId);
+			}
+			
 			elem.appendChild(id);
 			elem.appendChild(a1);
 			elem.appendChild(a2);
@@ -168,6 +180,7 @@ public class MiMusBiblioReader {
 			elem.appendChild(place);
 			elem.appendChild(editorial);
 			elem.appendChild(series);
+			elem.appendChild(users);
 			node.appendChild(elem);
 			write(path, doc);
 		}

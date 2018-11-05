@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -48,6 +51,7 @@ public class MiMusBibEntry {
 	private String series;
 	private String shortReference;
 	private int id;
+	private List<Integer> users;
 	
 	/**
 	 * Initializes a Bibliography Entry with no values filled.
@@ -77,6 +81,7 @@ public class MiMusBibEntry {
 		series = "";
 		shortReference = "";
 		this.setId(id);
+		users = new ArrayList<>();
 	}
 	
 	/**
@@ -89,7 +94,7 @@ public class MiMusBibEntry {
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			String shortReference, int id) {
+			String shortReference, int id, List<Integer> users) {
 		/* Infers activeAuthors values from nulls in <authors> */
 		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
@@ -112,15 +117,25 @@ public class MiMusBibEntry {
 		this.series = series;
 		this.shortReference = shortReference;
 		this.setId(id);
+		this.users = users;
 	}
 	
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			int id) {
+			String shortReference, int id) {
+		this(authors, secondaryAuthors, year, distinction, title, mainTitle,
+				volume, place, editorial, series, shortReference, id,
+				new ArrayList<>());
+	}
+	
+	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
+			String year, String distinction, String title, String mainTitle,
+			String volume, String place, String editorial, String series, 
+			int id, List<Integer> users) {
 		this(authors, secondaryAuthors, year, distinction,
 				title, mainTitle, volume, place, editorial, series, "",
-				id);
+				id, users);
 		setShortReference(generateShortReference());
 	}
 	
@@ -290,7 +305,13 @@ public class MiMusBibEntry {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	public List<Integer> getUsers() {
+		return users;
+	}
+	public void setUsers(List<Integer> users) {
+		this.users = users;
+	}
+
 	/**
 	 * Creates an entity of this class that works as placeholder
 	 * when there are no bibliography entries created yet. It
@@ -311,7 +332,7 @@ public class MiMusBibEntry {
 			}
 		}
 		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
-				"", "", "", "", 0);
+				"", "", "", "", 0, new ArrayList<>());
 	}
 	
 	public static String generateShortReference(String author0,

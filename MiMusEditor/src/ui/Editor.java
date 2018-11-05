@@ -252,7 +252,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Table of references, necessary to initialize it with Unknown with initList() */
 		ReferencesList references = new ReferencesList(resources.getBibEntries());
-		referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references);
+		referenceHelper = new ReferenceTableViewer(sectTrans.getParent(), references, Integer.parseInt(docID));
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
 		/* Label of references */
@@ -390,6 +390,9 @@ public class Editor extends EditorPart implements EventObserver {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				references.addUnit(new MiMusReference(references, 0, referenceCurrentID++));
+				
+				/* Reflect that the entry is being used by a document */
+				references.getBibEntries().get(0).getUsers().add(Integer.parseInt(docID));	
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -402,6 +405,13 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printError(referenceLabel, "You must select a reference to delete it.");
 				} else {
 					references.removeUnit(ref);
+					
+					/* Remove Editor using this biblio entry */
+					int oldId = ref.getBibEntry().getId();
+					references.getBibEntries()
+							.get(references.getBibEntryIdx(oldId)).getUsers()
+							.remove(new Integer(Integer.parseInt(docID)));
+					
 					LabelPrinter.printInfo(referenceLabel, "Reference deleted successfully.");
 					System.out.println("Removing Reference " + ref.toString());
 				}
@@ -540,6 +550,10 @@ public class Editor extends EditorPart implements EventObserver {
 				ioe.printStackTrace();
 			}
 		}
+	}
+	
+	public ReferencesList getReferences() {
+		return referenceHelper.getReferences();
 	}
 	
 	/* Following methods shouldn't be touched */

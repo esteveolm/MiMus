@@ -43,7 +43,16 @@ public class ReferencesList extends UnitsList<MiMusReference> {
 			((MiMusContentProvider) it.next()).updateUnit(unit);
 		}
 	}
-
+	
+	public int getBibEntryIdx(int id) {
+		for (int i=0; i<bibEntries.size(); i++) {
+			if (bibEntries.get(i).getId()==id) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public List<MiMusBibEntry> getBibEntries() {
 		return bibEntries;
 	}

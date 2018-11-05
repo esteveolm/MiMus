@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
-import model.MiMusBibEntry;
 import model.MiMusReference;
 import model.ReferencesList;
 import model.Unit;
@@ -25,10 +24,12 @@ import model.Unit;
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private ReferencesList references;
+	private int docID;
 	
-	public ReferenceTableViewer(Composite parent, ReferencesList references) {
+	public ReferenceTableViewer(Composite parent, ReferencesList references, int doc) {
 		super(parent);
 		this.references = references;
+		this.docID = doc;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
@@ -119,8 +120,13 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			switch (colIdx) {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
+				/* This document is no longer using the old bibEntry */
+				ref.getBibEntry().getUsers().remove(new Integer(docID));
+				/* Change bibEntry to the reference */
 				ref.setBibEntry(
 						ref.getReferences().getBibEntries().get(valueIdx));
+				/* This document is now using the new bibEntry */
+				ref.getBibEntry().getUsers().add(new Integer(docID));
 				break;
 			case 1:	// Page
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
