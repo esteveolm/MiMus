@@ -115,16 +115,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		public void modify(Object element, String property, Object value) {
 			int colIdx = getColumnNames().indexOf(property);
 			MiMusReference ref = (MiMusReference) ((TableItem) element).getData();
+			System.out.println("Modify " + ref.toString());
 			switch (colIdx) {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
-				MiMusBibEntry newEntry = null;
-				for (MiMusBibEntry ent: references.getBibEntries()) {
-					if (ent.getId() == valueIdx)
-						newEntry = ent;
-				}
-				if (newEntry != null)
-					ref.setBibEntry(newEntry);
+				ref.setBibEntry(
+						ref.getReferences().getBibEntries().get(valueIdx));
 				break;
 			case 1:	// Page
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
