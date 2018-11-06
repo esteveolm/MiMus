@@ -34,6 +34,7 @@ public final class SharedResources {
 	
 	private List<MiMusBibEntry> bibEntries;
 	private String[] referenceTypes = {"Edition", "Register", "Citation"};
+	private String biblioPath;
 
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
@@ -45,7 +46,7 @@ public final class SharedResources {
 		IProject project = workspace.getProject("MiMus");
 		IFolder stringsFolder = project.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
-		String biblioPath = biblioFile.getLocation().toString();
+		biblioPath = biblioFile.getLocation().toString();
 		
 		bibEntries = MiMusBiblioReader.read(biblioPath);
 	}
@@ -91,5 +92,11 @@ public final class SharedResources {
 	}
 	public void setReferenceTypes(String[] referenceTypes) {
 		this.referenceTypes = referenceTypes;
+	}
+	public String getBiblioPath() {
+		return biblioPath;
+	}
+	public void setBiblioPath(String biblioPath) {
+		this.biblioPath = biblioPath;
 	}
 }

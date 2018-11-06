@@ -3,11 +3,6 @@ package ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -44,7 +39,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 	private ListViewer lv;
 	private SharedResources resources;
 	private SharedControl control;
-	private String biblioPath;
 	private int currentBiblioID;
 	private List<EventObserver> observers;
 	
@@ -54,13 +48,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
 		control.setBiblioView(this);
-		
-		/* Load stored entries from path */
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = workspace.getProject("MiMus");
-		IFolder stringsFolder = project.getFolder("strings");
-		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
-		biblioPath = biblioFile.getLocation().toString();
 		
 		/* Next ID is max ID of other bibliography entries +1 */
 		currentBiblioID = -1;
@@ -192,7 +179,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 						currentBiblioID++);
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
-				MiMusBiblioReader.append(biblioPath, newEntry);
+				MiMusBiblioReader.appendEntry(resources.getBiblioPath(), newEntry);
 				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
 				notifyObservers();
 			}
@@ -279,11 +266,14 @@ public class BiblioView extends ViewPart implements EventSubject {
 				} else if (!selectedEntry.getUsers().isEmpty()) {
 					System.out.println("Could not remove bibEntry because because it is in use by some documents.");
 					LabelPrinter.printError(labelList, inUseMessage(selectedEntry.getUsers()));
+				} else if (selectedEntry.getId()==0) {
+					System.out.println("Could not remove bibEntry because it is the default entry (id=0).");
+					LabelPrinter.printError(labelList, "You cannot delete the default bibliography entry.");
 				} else {
 					resources.getBibEntries().remove(selectedEntry);
 					lv.refresh();
 					fullReference.setText(""); /* Clear full reference */
-					MiMusBiblioReader.remove(biblioPath, selectedEntry);
+					MiMusBiblioReader.removeEntry(resources.getBiblioPath(), selectedEntry);
 					System.out.println("BibEntry removed successfully.");
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
 					notifyObservers();

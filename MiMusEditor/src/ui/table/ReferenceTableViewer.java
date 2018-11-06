@@ -17,19 +17,24 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
+import model.MiMusBibEntry;
 import model.MiMusReference;
 import model.ReferencesList;
 import model.Unit;
+import util.MiMusBiblioReader;
 
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private ReferencesList references;
-	private int docID;
+	private String docID;
+	private SharedResources resources;
 	
-	public ReferenceTableViewer(Composite parent, ReferencesList references, int doc) {
+	public ReferenceTableViewer(Composite parent, ReferencesList references, 
+			String doc, SharedResources resources) {
 		super(parent);
 		this.references = references;
 		this.docID = doc;
+		this.resources = resources;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
@@ -121,12 +126,20 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
 				/* This document is no longer using the old bibEntry */
+				MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
+						ref.getBibEntry(), docID);
 				ref.getBibEntry().getUsers().remove(new Integer(docID));
-				/* Change bibEntry to the reference */
-				ref.setBibEntry(
-						ref.getReferences().getBibEntries().get(valueIdx));
-				/* This document is now using the new bibEntry */
-				ref.getBibEntry().getUsers().add(new Integer(docID));
+				
+				/* Checks user is actually modifying to a new entry */
+				MiMusBibEntry newEntry = ref.getReferences().getBibEntries().get(valueIdx);
+				if (newEntry.getId() != ref.getBibEntry().getId()) {
+					ref.setBibEntry(newEntry);
+					
+					/* This document is now using the new bibEntry */
+					ref.getBibEntry().getUsers().add(new Integer(docID));
+					MiMusBiblioReader.appendUser(resources.getBiblioPath(),
+							ref.getBibEntry(), docID);
+				}
 				break;
 			case 1:	// Page
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
@@ -156,7 +169,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				return ref.getBibEntry().getShortReference();
 			case 1: // Page
 				return ref.getPage();
-			case 2:	// Reference TYpe
+			case 2:	// Reference Type
 				return SharedResources.getInstance().getReferenceTypes()[ref.getType()];
 			default:
 				return "";

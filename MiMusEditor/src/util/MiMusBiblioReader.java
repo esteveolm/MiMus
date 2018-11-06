@@ -49,7 +49,7 @@ public class MiMusBiblioReader {
 		return entries;
 	}
 	
-	public static Document documentFromPath(String path) {
+	private static Document documentFromPath(String path) {
 		try {
 			File xmlFile = new File(path);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -71,7 +71,7 @@ public class MiMusBiblioReader {
 		return null;
 	}
 	
-	public static MiMusBibEntry entryFromXMLElement(Element elem) {
+	private static MiMusBibEntry entryFromXMLElement(Element elem) {
 		String[] authors = new String[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			authors[i] = elem.getElementsByTagName("autor"+(i+1))
@@ -101,7 +101,7 @@ public class MiMusBiblioReader {
 		int id = Integer.parseInt(elem.getElementsByTagName("id")
 				.item(0).getTextContent());
 		ArrayList<Integer> users = new ArrayList<>();
-		NodeList nodesDoc = elem.getElementsByTagName("user_id");
+		NodeList nodesDoc = elem.getElementsByTagName("usuari_id");
 		for (int i=0; i<nodesDoc.getLength(); i++) {
 			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
 		}
@@ -110,7 +110,7 @@ public class MiMusBiblioReader {
 				users);
 	}
 	
-	public static void append(String path, MiMusBibEntry entry) {
+	public static void appendEntry(String path, MiMusBibEntry entry) {
 		Document doc = documentFromPath(path);
 		if (doc != null) {
 			Node node = doc.getElementsByTagName("bibliography").item(0);
@@ -154,12 +154,15 @@ public class MiMusBiblioReader {
 			Element id = doc.createElement("id");
 			id.appendChild(doc.createTextNode(String.valueOf(entry.getId())));
 			
-			Element users = doc.createElement("users");
+			System.out.println("appending users...");
+			Element users = doc.createElement("usuaris");
 			for (int user: entry.getUsers()) {
-				Element userId = doc.createElement("user_id");
+				System.out.println(user);
+				Element userId = doc.createElement("usuari_id");
 				userId.appendChild(doc.createTextNode(String.valueOf(user)));
 				users.appendChild(userId);
 			}
+			System.out.println("users appended.");
 			
 			elem.appendChild(id);
 			elem.appendChild(a1);
@@ -186,7 +189,7 @@ public class MiMusBiblioReader {
 		}
 	}
 	
-	public static void remove(String path, MiMusBibEntry entry) {
+	public static void removeEntry(String path, MiMusBibEntry entry) {
 		Document doc = documentFromPath(path);
 		if (doc != null) {
 			/* Find id to remove */
@@ -205,6 +208,74 @@ public class MiMusBiblioReader {
 				Element toRemove = (Element) listIDs.item(removeID).getParentNode();
 				listIDs.item(removeID).getParentNode().getParentNode().removeChild(toRemove);
 				write(path, doc);
+			}
+		}
+	}
+	
+	public static void appendUser(String path, MiMusBibEntry entry, String user) {
+		Document doc = documentFromPath(path);
+		if (doc != null) {
+			/* Find entry to append user, looking at entry id */
+			NodeList listIDs = doc.getElementsByTagName("id");
+			int updateIdx = -1;
+			for (int i=0; i<listIDs.getLength(); i++) {
+				Node nodeID = listIDs.item(i);
+				if (Integer.parseInt(nodeID.getTextContent()) == entry.getId()) {
+					updateIdx = i;
+					System.out.println("Found at " + i);
+				}
+			}
+			if (updateIdx > -1) {
+				/* Reach <users> field inside entry found */
+				Node usersUpdating = 
+						((Element) listIDs.item(updateIdx).getParentNode())
+						.getElementsByTagName("usuaris").item(0);
+				
+				/* Append new <user_id> to <users> */
+				Element newUser = doc.createElement("usuari_id");
+				newUser.appendChild(doc.createTextNode(user));
+				usersUpdating.appendChild(newUser);
+				write(path, doc);
+			}
+		}
+	}
+	
+	public static void removeUser(String path, MiMusBibEntry entry, String user) {
+		Document doc = documentFromPath(path);
+		if (doc != null) {
+			/* Find entry to remove user, looking at entry id */
+			NodeList listIDs = doc.getElementsByTagName("id");
+			int updateIdx = -1;
+			for (int i=0; i<listIDs.getLength(); i++) {
+				Node nodeID = listIDs.item(i);
+				if (Integer.parseInt(nodeID.getTextContent()) == entry.getId()) {
+					updateIdx = i;
+					System.out.println("Found entry at " + i);
+				}
+			}
+			if (updateIdx > -1) {
+				/* Reach <users> field inside entry found */
+				Node usersUpdating = 
+						((Element) listIDs.item(updateIdx).getParentNode())
+						.getElementsByTagName("usuaris").item(0);
+				System.out.println(usersUpdating.getNodeName());
+				/* Find our <user_id> child of <users> */
+				int removeIdx = -1;
+				NodeList userIDs = ((Element) usersUpdating).getChildNodes();
+				for (int i=0; i<userIDs.getLength(); i++) {
+					Node userID = userIDs.item(i);
+					if (userID.getTextContent().equals(user)) {
+						removeIdx = i;
+						System.out.println("found user at " + i);
+					}
+				}
+				/* If found <user_id> that we needed, remove from <users> */
+				if (removeIdx > -1 && 
+						userIDs.item(removeIdx).getNodeName().equals("usuari_id")) {
+					System.out.println("removing");
+					usersUpdating.removeChild(userIDs.item(removeIdx));
+					write(path, doc);
+				}
 			}
 		}
 	}
