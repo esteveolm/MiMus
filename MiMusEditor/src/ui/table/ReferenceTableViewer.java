@@ -131,14 +131,16 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				ref.getBibEntry().getUsers().remove(new Integer(docID));
 				
 				/* Checks user is actually modifying to a new entry */
-				MiMusBibEntry newEntry = ref.getReferences().getBibEntries().get(valueIdx);
-				if (newEntry.getId() != ref.getBibEntry().getId()) {
-					ref.setBibEntry(newEntry);
-					
-					/* This document is now using the new bibEntry */
-					ref.getBibEntry().getUsers().add(new Integer(docID));
-					MiMusBiblioReader.appendUser(resources.getBiblioPath(),
-							ref.getBibEntry(), docID);
+				if (valueIdx>-1) {
+					MiMusBibEntry newEntry = ref.getReferences().getBibEntries().get(valueIdx);
+					if (newEntry.getId() != ref.getBibEntry().getId()) {
+						ref.setBibEntry(newEntry);
+						
+						/* This document is now using the new bibEntry */
+						ref.getBibEntry().getUsers().add(new Integer(docID));
+						MiMusBiblioReader.appendUser(resources.getBiblioPath(),
+								ref.getBibEntry(), docID);
+					}
 				}
 				break;
 			case 1:	// Page
