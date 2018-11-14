@@ -7,12 +7,10 @@ import ui.table.RelationTableViewer;
 
 public class EntitiesList extends UnitsList<Entity> {
 	
-	private String[] words;
 	private RelationTableViewer relations;
 
 	public EntitiesList(String[] words) {
 		super();
-		this.setWords(words);
 		relations = null;
 		initList();
 	}
@@ -52,14 +50,6 @@ public class EntitiesList extends UnitsList<Entity> {
 	@Override
 	public void initList() {
 		//addUnit();
-	}
-
-	public String[] getWords() {
-		return words;
-	}
-
-	public void setWords(String[] words) {
-		this.words = words;
 	}
 	
 	public RelationTableViewer getRelations() {
