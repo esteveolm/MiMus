@@ -34,6 +34,14 @@
             name="Query View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.ArtistaView"
+            icon="icons/sample.png"
+            id="MiMusEditor.artistaView"
+            name="Artista View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
