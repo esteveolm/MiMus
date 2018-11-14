@@ -9,7 +9,7 @@ public class EntitiesList extends UnitsList<Entity> {
 	
 //	private RelationTableViewer relations;
 
-	public EntitiesList(String[] words) {
+	public EntitiesList() {
 		super();
 //		relations = null;
 		initList();

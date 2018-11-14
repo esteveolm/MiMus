@@ -37,7 +37,6 @@ public class Artista extends Entity {
 
 	@Override
 	public String getLemma() {
-		// TODO Auto-generated method stub
-		return "";
+		return getName();
 	}
 }

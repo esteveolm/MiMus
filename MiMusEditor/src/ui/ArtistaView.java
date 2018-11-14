@@ -1,5 +1,6 @@
 package ui;
 
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,16 +18,21 @@ import org.eclipse.ui.part.ViewPart;
 
 import control.SharedControl;
 import control.SharedResources;
+import model.EntitiesList;
+import ui.table.ArtistaTableViewer;
 
 public class ArtistaView extends ViewPart {
 	
 	private SharedResources resources;
 	private SharedControl control;
+	private TableViewer tv;
+	private EntitiesList artists;
 	
 	public ArtistaView() {
 		super();
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
+		artists = new EntitiesList();
 	}
 	
 	@Override
@@ -72,7 +78,10 @@ public class ArtistaView extends ViewPart {
 			}
 		});
 		
-		// TODO: TableViewer with added entities
+		// TODO: load previously created artists
+		ArtistaTableViewer artistaHelper = new ArtistaTableViewer(parent, artists);
+		tv = artistaHelper.createTableViewer();
+		
 		// TODO: save Button?
 		
 		btnAdd.addSelectionListener(new SelectionAdapter() {
