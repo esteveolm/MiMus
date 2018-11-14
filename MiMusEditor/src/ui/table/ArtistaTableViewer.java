@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 import model.Artista;
 import model.EntitiesList;
@@ -21,6 +22,7 @@ import model.Unit;
 
 public class ArtistaTableViewer extends MiMusTableViewer {
 
+	private static final String[] GENDERS = {"Male", "Female"};
 	private EntitiesList artists;
 	
 	public ArtistaTableViewer(Composite parent, EntitiesList artists) {
@@ -43,8 +45,8 @@ public class ArtistaTableViewer extends MiMusTableViewer {
 		
 		/* Create cell editors for each column */
 		CellEditor[] editors = new CellEditor[columnNames.length];
-		editors[0] = new TextCellEditor(tv.getTable(), SWT.READ_ONLY);
-		editors[1] = new ComboBoxCellEditor(tv.getTable(), new String[0], SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[1] = new ComboBoxCellEditor(tv.getTable(), GENDERS, SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new ArtistaCellModifier());
 		tv.setContentProvider(new ArtistaContentProvider());
@@ -82,7 +84,7 @@ public class ArtistaTableViewer extends MiMusTableViewer {
 
 		@Override
 		public void modify(Object element, String property, Object value) {
-			Artista art = (Artista) element;
+			Artista art = (Artista) ((TableItem) element).getData();
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
 			case 0:	// Name (Text)

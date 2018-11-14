@@ -1,5 +1,6 @@
 package ui;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -18,8 +19,10 @@ import org.eclipse.ui.part.ViewPart;
 
 import control.SharedControl;
 import control.SharedResources;
+import model.Artista;
 import model.EntitiesList;
 import ui.table.ArtistaTableViewer;
+import util.LabelPrinter;
 
 public class ArtistaView extends ViewPart {
 	
@@ -33,6 +36,7 @@ public class ArtistaView extends ViewPart {
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
 		artists = new EntitiesList();
+		// TODO: load previously created artists
 	}
 	
 	@Override
@@ -51,7 +55,6 @@ public class ArtistaView extends ViewPart {
 		final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
 		final int COMBO_FLAGS = SWT.DROP_DOWN | SWT.READ_ONLY;
 		final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
-		final int REFERENCE_FLAGS = SWT.MULTI | SWT.WRAP | SWT.VERTICAL;
 		
 		/* Name: text field */
 		Label labelName = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -78,18 +81,57 @@ public class ArtistaView extends ViewPart {
 			}
 		});
 		
-		// TODO: load previously created artists
-		ArtistaTableViewer artistaHelper = new ArtistaTableViewer(parent, artists);
-		tv = artistaHelper.createTableViewer();
+		/* Table for artists created */
+		Section sectTable = new Section(form.getBody(), 0);
+		sectTable.setText("Artists created");
+				
+		ArtistaTableViewer artistaHelper = 
+				new ArtistaTableViewer(sectTable.getParent(), artists);
+		tv = artistaHelper.createTableViewer();	
 		
-		// TODO: save Button?
+		/* Label for user feedback */
+		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		label.setLayoutData(grid);
+		
+		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
+		btnDel.setText("Delete artist");
+		
+		/* Button listeners */
 		
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO: add to TableViewer
+				if (comboSex.getSelectionIndex()==-1) {
+					System.out.println("Could not create Artist because no sex was selected.");
+					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
+				} else {
+					artists.addUnit(new Artista(0,
+							textName.getText(), 
+							comboSex.getText().equals("Female")));
+					System.out.println("Artist created successfully.");
+					LabelPrinter.printInfo(label, "Artist created successfully.");
+				}
 			}
 		});
+		
+		btnDel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Artista art = (Artista) 
+						((IStructuredSelection) tv.getSelection())
+						.getFirstElement();
+				if (art==null) {
+					System.out.println("Could not remove Artist because none was selected.");
+					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
+				} else {
+					artists.removeUnit(art);
+					System.out.println("Artist removed successfully.");
+					LabelPrinter.printInfo(label, "Artist removed successfully.");
+				}
+			}
+		});
+		
+		// TODO: save (with button or automatically?)
 	}
 
 	@Override
