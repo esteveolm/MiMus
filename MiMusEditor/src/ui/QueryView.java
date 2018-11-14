@@ -31,8 +31,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
-import model.TypedEntity;
-
 public class QueryView extends ViewPart {
 
 	private String[] columnNames = {"Text", "Type", "Subtype", "Document"};
@@ -65,14 +63,14 @@ public class QueryView extends ViewPart {
 		Label typeLabel = new Label(sectQuery.getParent(), SWT.VERTICAL);
 		typeLabel.setText("Type");
 		Combo typeCombo = new Combo(sectQuery.getParent(), SWT.SINGLE | SWT.WRAP | SWT.SEARCH | SWT.ICON_SEARCH);
-		typeCombo.setItems(TypedEntity.ENTITY_TYPES);
+		typeCombo.setItems("");
 		typeCombo.select(0);	// This way subtype combo knows what to load at start
 		
 		/* Subtype is */
 		Label subtypeLabel = new Label(sectQuery.getParent(), SWT.VERTICAL);
 		subtypeLabel.setText("Subtype");
 		Combo subtypeCombo = new Combo(sectQuery.getParent(), SWT.SINGLE | SWT.WRAP | SWT.SEARCH | SWT.ICON_SEARCH);
-		subtypeCombo.setItems(TypedEntity.PERSON_TYPES);
+		subtypeCombo.setItems("");
 		subtypeCombo.select(0);	// This way subtype combo knows what to load at start
 
 		/* Change subtype Combo options when type is modified */
@@ -81,13 +79,13 @@ public class QueryView extends ViewPart {
 				subtypeCombo.select(0);
 				switch(typeCombo.getSelectionIndex()) {
 				case 0:
-					subtypeCombo.setItems(TypedEntity.PERSON_TYPES);
+					subtypeCombo.setItems("");
 					break;
 				case 1:
 					subtypeCombo.setItems(new String[0]);
 					break;
 				case 2:
-					subtypeCombo.setItems(TypedEntity.PLACE_TYPES);
+					subtypeCombo.setItems("");
 					break;
 				default:
 					break;
@@ -106,7 +104,7 @@ public class QueryView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				searchText.setText("");
 				typeCombo.select(0);
-				subtypeCombo.setItems(TypedEntity.PERSON_TYPES);
+				subtypeCombo.setItems("");
 				subtypeCombo.select(0);
 				results = new ArrayList<>();
 				tv.refresh();

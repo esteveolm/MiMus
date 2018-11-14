@@ -16,17 +16,17 @@ public class MiMusText {
 		this.words = text.split(" ");
 	}
 	
-	public Entity xmlElementToEntity(Element elem, boolean typed) {
-		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
-		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
-		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
-		if (typed) {
-			String type = elem.getElementsByTagName("type").item(0).getTextContent();
-			String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
-			return new TypedEntity(words, from, to, type, subtype, id);
-		}
-		return new UntypedEntity(words, from, to, id);
-	}
+//	public Entity xmlElementToEntity(Element elem, boolean typed) {
+//		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
+//		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
+//		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
+//		if (typed) {
+//			String type = elem.getElementsByTagName("type").item(0).getTextContent();
+//			String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
+//			return new TypedEntity(words, from, to, type, subtype, id);
+//		}
+//		return new UntypedEntity(words, from, to, id);
+//	}
 	
 	public Point fromCharToWordCoordinates(Point old) {
 		List<Integer> spaces = getSpacesInText();

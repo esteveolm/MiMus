@@ -1,7 +1,5 @@
 package model;
 
-import ui.IllegalTextRangeException;
-
 public class Relation extends Unit {
 
 	private EntitiesList entities;
@@ -42,11 +40,7 @@ public class Relation extends Unit {
 		return entityA;
 	}
 	public String getEntityAText() {
-		try {
-			return getEntityAObject().getText();
-		} catch (IllegalTextRangeException e) {
-			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
-		}
+		return getEntityAObject().getLemma();
 	}
 	public Entity getEntityAObject() {
 		return getById(getEntityA());
@@ -58,11 +52,7 @@ public class Relation extends Unit {
 		return entityB;
 	}
 	public String getEntityBText() {
-		try {
-			return getEntityBObject().getText();
-		} catch (IllegalTextRangeException e) {
-			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
-		}
+		return getEntityBObject().getLemma();
 	}
 	public Entity getEntityBObject() {
 		return getById(getEntityB());
@@ -74,7 +64,7 @@ public class Relation extends Unit {
 		return type;
 	}
 	public String getTypeWord() {
-		return TypedEntity.RELATION_TYPES[type];
+		return "";
 	}
 	public void setType(int type) {
 		this.type = type;

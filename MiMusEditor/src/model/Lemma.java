@@ -1,6 +1,5 @@
 package model;
 
-import ui.IllegalTextRangeException;
 
 public class Lemma extends Relation {
 
@@ -38,12 +37,7 @@ public class Lemma extends Relation {
 		setEntityA(ent);
 	}
 	public String getRegestEntityText() {
-		try {
-			return getRegestEntityObject().getText();
-		} catch (IllegalTextRangeException e) {
-			e.printStackTrace();
-			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
-		}
+		return getRegestEntityObject().getLemma();
 	}
 	public Entity getRegestEntityObject() {
 		return getById(getRegestEntity(), getRegestEntities());
@@ -55,12 +49,7 @@ public class Lemma extends Relation {
 		setEntityB(ent);
 	}
 	public String getTranscriptionEntityText() {
-		try {
-			return getTranscriptionEntityObject().getText();
-		} catch (IllegalTextRangeException e) {
-			e.printStackTrace();
-			return "FATAL ERROR. THIS SHOULD NEVER HAPPEN";
-		}
+		return getTranscriptionEntityObject().getLemma();
 	}
 	public Entity getTranscriptionEntityObject() {
 		return getById(getTranscriptionEntity(), getTranscriptionEntities());

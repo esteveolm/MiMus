@@ -3,15 +3,15 @@ package model;
 import java.util.Iterator;
 
 import ui.table.MiMusContentProvider;
-import ui.table.RelationTableViewer;
+//import ui.table.RelationTableViewer;
 
 public class EntitiesList extends UnitsList<Entity> {
 	
-	private RelationTableViewer relations;
+//	private RelationTableViewer relations;
 
 	public EntitiesList(String[] words) {
 		super();
-		relations = null;
+//		relations = null;
 		initList();
 	}
 	
@@ -26,7 +26,7 @@ public class EntitiesList extends UnitsList<Entity> {
 		while (it.hasNext()) {
 			((MiMusContentProvider) it.next()).addUnit(unit);	// Unnecessary cast?
 		}
-		relations.reflectEntitiesChanged();
+//		relations.reflectEntitiesChanged();
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class EntitiesList extends UnitsList<Entity> {
 		while (it.hasNext()) {
 			((MiMusContentProvider) it.next()).removeUnit(unit);	// Unnecessary cast?
 		}
-		relations.reflectEntitiesChanged();
+//		relations.reflectEntitiesChanged();
 	}
 	
 	@Override
@@ -52,11 +52,11 @@ public class EntitiesList extends UnitsList<Entity> {
 		//addUnit();
 	}
 	
-	public RelationTableViewer getRelations() {
-		return relations;
-	}
-
-	public void setRelations(RelationTableViewer relations) {
-		this.relations = relations;
-	}
+//	public RelationTableViewer getRelations() {
+//		return relations;
+//	}
+//
+//	public void setRelations(RelationTableViewer relations) {
+//		this.relations = relations;
+//	}
 }

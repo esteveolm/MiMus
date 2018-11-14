@@ -52,12 +52,10 @@ import model.MiMusText;
 import model.ReferencesList;
 import model.Relation;
 import model.RelationsList;
-import model.TypedEntity;
-import model.UntypedEntity;
-import ui.table.EntityTableViewer;
-import ui.table.LemmaTableViewer;
+//import ui.table.EntityTableViewer;
+//import ui.table.LemmaTableViewer;
 import ui.table.ReferenceTableViewer;
-import ui.table.RelationTableViewer;
+//import ui.table.RelationTableViewer;
 import util.LabelPrinter;
 import util.MiMusBiblioReader;
 import util.MiMusEntryReader;
@@ -79,9 +77,9 @@ public class Editor extends EditorPart implements EventObserver {
 	private String docID;
 	private int entityCurrentID;
 	private int referenceCurrentID;
-	private EntityTableViewer entityHelper;
-	private RelationTableViewer relationHelper;
-	private LemmaTableViewer lemmaHelper;
+	//private EntityTableViewer entityHelper;
+	//private RelationTableViewer relationHelper;
+	//private LemmaTableViewer lemmaHelper;
 	private ReferenceTableViewer referenceHelper;
 	
 	public Editor() {
@@ -594,9 +592,9 @@ public class Editor extends EditorPart implements EventObserver {
 		resources.refresh();
 		
 		/* Refresh all table viewers */
-		entityHelper.refresh();
-		relationHelper.refresh();
-		lemmaHelper.refresh();
+		//entityHelper.refresh();
+		//relationHelper.refresh();
+		//lemmaHelper.refresh();
 		referenceHelper.refresh();
 	}
 

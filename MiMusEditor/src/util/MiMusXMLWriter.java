@@ -25,8 +25,6 @@ import model.MiMusReference;
 import model.MiMusText;
 import model.ReferencesList;
 import model.Relation;
-import model.TypedEntity;
-import model.UntypedEntity;
 import ui.IllegalTextRangeException;
 
 public class MiMusXMLWriter {
@@ -76,53 +74,53 @@ public class MiMusXMLWriter {
 			tagTranscription.appendChild(doc.createTextNode(transcription.getText()));
 			tagDocument.appendChild(tagTranscription);
 			
-			/* Regest entities */
-			Element tagRegestEntities = doc.createElement("regest_entities");
-			tagDocument.appendChild(tagRegestEntities);
-			for (Entity ent: regestEntities.getUnits()) {
-				TypedEntity typedEnt = (TypedEntity) ent;
-				Element tagIDEnt = doc.createElement("entity_id");
-				tagIDEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getId())));
-				Element tagFromEnt = doc.createElement("from");
-				tagFromEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getFrom())));
-				Element tagToEnt = doc.createElement("to");
-				tagToEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getTo())));
-				Element tagTextEnt = doc.createElement("text");
-				tagTextEnt.appendChild(doc.createTextNode(typedEnt.getText()));
-				Element tagTypeEnt = doc.createElement("type");
-				tagTypeEnt.appendChild(doc.createTextNode(typedEnt.getTypeWord()));
-				Element tagSubtypeEnt = doc.createElement("subtype");
-				tagSubtypeEnt.appendChild(doc.createTextNode(typedEnt.getSubtypeWord()));
-				Element tagEntity = doc.createElement("entity");
-				tagEntity.appendChild(tagIDEnt);
-				tagEntity.appendChild(tagFromEnt);
-				tagEntity.appendChild(tagToEnt);
-				tagEntity.appendChild(tagTextEnt);
-				tagEntity.appendChild(tagTypeEnt);
-				tagEntity.appendChild(tagSubtypeEnt);
-				tagRegestEntities.appendChild(tagEntity);
-			}
-			
-			/* Transcription entities */
-			Element tagTranscriptionEntities = doc.createElement("transcription_entities");
-			tagDocument.appendChild(tagTranscriptionEntities);
-			for (Entity ent: transcriptionEntities.getUnits()) {
-				UntypedEntity untypedEnt = (UntypedEntity) ent;
-				Element tagIDEnt = doc.createElement("entity_id");
-				tagIDEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getId())));
-				Element tagFromEnt = doc.createElement("from");
-				tagFromEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getFrom())));
-				Element tagToEnt = doc.createElement("to");
-				tagToEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getTo())));
-				Element tagTextEnt = doc.createElement("text");
-				tagTextEnt.appendChild(doc.createTextNode(untypedEnt.getText()));
-				Element tagEntity = doc.createElement("entity");
-				tagEntity.appendChild(tagIDEnt);
-				tagEntity.appendChild(tagFromEnt);
-				tagEntity.appendChild(tagToEnt);
-				tagEntity.appendChild(tagTextEnt);
-				tagTranscriptionEntities.appendChild(tagEntity);
-			}
+//			/* Regest entities */
+//			Element tagRegestEntities = doc.createElement("regest_entities");
+//			tagDocument.appendChild(tagRegestEntities);
+//			for (Entity ent: regestEntities.getUnits()) {
+//				TypedEntity typedEnt = (TypedEntity) ent;
+//				Element tagIDEnt = doc.createElement("entity_id");
+//				tagIDEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getId())));
+//				Element tagFromEnt = doc.createElement("from");
+//				tagFromEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getFrom())));
+//				Element tagToEnt = doc.createElement("to");
+//				tagToEnt.appendChild(doc.createTextNode(String.valueOf(typedEnt.getTo())));
+//				Element tagTextEnt = doc.createElement("text");
+//				tagTextEnt.appendChild(doc.createTextNode(typedEnt.getText()));
+//				Element tagTypeEnt = doc.createElement("type");
+//				tagTypeEnt.appendChild(doc.createTextNode(typedEnt.getTypeWord()));
+//				Element tagSubtypeEnt = doc.createElement("subtype");
+//				tagSubtypeEnt.appendChild(doc.createTextNode(typedEnt.getSubtypeWord()));
+//				Element tagEntity = doc.createElement("entity");
+//				tagEntity.appendChild(tagIDEnt);
+//				tagEntity.appendChild(tagFromEnt);
+//				tagEntity.appendChild(tagToEnt);
+//				tagEntity.appendChild(tagTextEnt);
+//				tagEntity.appendChild(tagTypeEnt);
+//				tagEntity.appendChild(tagSubtypeEnt);
+//				tagRegestEntities.appendChild(tagEntity);
+//			}
+//			
+//			/* Transcription entities */
+//			Element tagTranscriptionEntities = doc.createElement("transcription_entities");
+//			tagDocument.appendChild(tagTranscriptionEntities);
+//			for (Entity ent: transcriptionEntities.getUnits()) {
+//				UntypedEntity untypedEnt = (UntypedEntity) ent;
+//				Element tagIDEnt = doc.createElement("entity_id");
+//				tagIDEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getId())));
+//				Element tagFromEnt = doc.createElement("from");
+//				tagFromEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getFrom())));
+//				Element tagToEnt = doc.createElement("to");
+//				tagToEnt.appendChild(doc.createTextNode(String.valueOf(untypedEnt.getTo())));
+//				Element tagTextEnt = doc.createElement("text");
+//				tagTextEnt.appendChild(doc.createTextNode(untypedEnt.getText()));
+//				Element tagEntity = doc.createElement("entity");
+//				tagEntity.appendChild(tagIDEnt);
+//				tagEntity.appendChild(tagFromEnt);
+//				tagEntity.appendChild(tagToEnt);
+//				tagEntity.appendChild(tagTextEnt);
+//				tagTranscriptionEntities.appendChild(tagEntity);
+//			}
 			
 			/* Lemmatizations */
 			Element tagLemmatizations = doc.createElement("lemmatizations");
@@ -166,7 +164,7 @@ public class MiMusXMLWriter {
 			e.printStackTrace();
 			System.out.println("Could not create XML Document for Writing.");
 			this.created = false;
-		} catch (DOMException | IllegalTextRangeException e) {
+		} catch (DOMException e) {
 			e.printStackTrace();
 			System.out.println("Could not create XML Document for Writing.");
 			this.created = false;
