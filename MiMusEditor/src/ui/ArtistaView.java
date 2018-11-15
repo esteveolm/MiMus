@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +39,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 	
 	public ArtistaView() {
 		super();
+		observers = new ArrayList<>();
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
 		control.setArtistaView(this);

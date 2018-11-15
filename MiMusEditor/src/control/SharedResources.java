@@ -34,7 +34,9 @@ public final class SharedResources {
 	
 	private List<MiMusBibEntry> bibEntries;
 	private String[] referenceTypes = {"Edition", "Register", "Citation"};
+	private String repoPath;
 	private String biblioPath;
+	private String remote;
 	private int entityCurrentID;
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
@@ -46,8 +48,9 @@ public final class SharedResources {
 		IProject project = workspace.getProject("MiMus");
 		IFolder stringsFolder = project.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
+		repoPath = project.getLocation().toString();
 		biblioPath = biblioFile.getLocation().toString();
-		
+		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
 		bibEntries = MiMusBiblioReader.read(biblioPath);
 		setEntityCurrentID(0);
 	}
@@ -94,11 +97,23 @@ public final class SharedResources {
 	public void setReferenceTypes(String[] referenceTypes) {
 		this.referenceTypes = referenceTypes;
 	}
+	public String getRepoPath() {
+		return repoPath;
+	}
+	public void setRepoPath(String repoPath) {
+		this.repoPath = repoPath;
+	}
 	public String getBiblioPath() {
 		return biblioPath;
 	}
 	public void setBiblioPath(String biblioPath) {
 		this.biblioPath = biblioPath;
+	}
+	public String getRemote() {
+		return remote;
+	}
+	public void setRemote(String remote) {
+		this.remote = remote;
 	}
 	public int getEntityCurrentID() {
 		return entityCurrentID;

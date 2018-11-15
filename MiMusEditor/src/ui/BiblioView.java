@@ -1,5 +1,7 @@
 package ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,13 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -282,11 +290,41 @@ public class BiblioView extends ViewPart implements EventSubject {
 			}
 		});
 		
+		FileRepositoryBuilder repoBuilder = new FileRepositoryBuilder();
+		Git auxGit = null;
+		try {
+			Repository repo = repoBuilder.setGitDir(
+					new File(resources.getRepoPath()))
+					.readEnvironment().findGitDir().build();
+			auxGit = new Git(repo);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.out.println("Could not create Git adapter.");
+		}
+		final Git git = auxGit;
+		
 		Button btnPush = new Button(sectList.getParent(), BUTTON_FLAGS);
 		btnPush.setText("Remote");
 		btnPush.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Git git;
+				if (git != null) {
+					AddCommand gitAdd = git.add();
+					gitAdd.addFilepattern(resources.getBiblioPath());
+					try {
+						gitAdd.call();
+						CommitCommand gitCommit = git.commit();
+						gitCommit.setMessage("Updating BiblioView");
+						gitCommit.call();
+						PushCommand gitPush = git.push();
+						gitPush.setRemote(resources.getRemote());
+						gitPush.call();
+					} catch (GitAPIException e1) {
+						e1.printStackTrace();
+					}
+					
+				} else {
+					System.out.println("Git adapter not working");
+				}
 			}
 		});
 	}
