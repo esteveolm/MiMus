@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -278,6 +279,14 @@ public class BiblioView extends ViewPart implements EventSubject {
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
 					notifyObservers();
 				}
+			}
+		});
+		
+		Button btnPush = new Button(sectList.getParent(), BUTTON_FLAGS);
+		btnPush.setText("Remote");
+		btnPush.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Git git;
 			}
 		});
 	}

@@ -22,7 +22,7 @@ import util.MiMusBiblioReader;
  * SharedResources.getInstance(), which provides lazy initialization.
  * 
  * At the moment, SharedResources only contains the bibliography, which
- * is common to the Editor and the BiblioView, and an array of Strings.
+ * is common to the Editor and the BiblioView, counters and constants.
  * If SharedResources ends up containing more complex objects, a separate 
  * Singleton should be available for every object, assuring that only the 
  * components explicitly demanded by the application are loaded into memory.
@@ -35,7 +35,7 @@ public final class SharedResources {
 	private List<MiMusBibEntry> bibEntries;
 	private String[] referenceTypes = {"Edition", "Register", "Citation"};
 	private String biblioPath;
-
+	private int entityCurrentID;
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
 	
@@ -49,6 +49,7 @@ public final class SharedResources {
 		biblioPath = biblioFile.getLocation().toString();
 		
 		bibEntries = MiMusBiblioReader.read(biblioPath);
+		setEntityCurrentID(0);
 	}
 	
 	/**
@@ -98,5 +99,15 @@ public final class SharedResources {
 	}
 	public void setBiblioPath(String biblioPath) {
 		this.biblioPath = biblioPath;
+	}
+	public int getEntityCurrentID() {
+		return entityCurrentID;
+	}
+	public int getIncrementCurrentID() {
+		++entityCurrentID;
+		return entityCurrentID-1;
+	}
+	public void setEntityCurrentID(int entityCurrentID) {
+		this.entityCurrentID = entityCurrentID;
 	}
 }

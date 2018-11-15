@@ -3,6 +3,7 @@ package control;
 import java.util.ArrayList;
 import java.util.List;
 
+import ui.ArtistaView;
 import ui.BiblioView;
 import ui.Editor;
 
@@ -21,12 +22,15 @@ import ui.Editor;
  * changes of state that affect others. This is achieved with an 
  * observer pattern that is defined in <EventSubject> and <EventObserver>.
  * 
+ * TODO: factorize views into single array + indexes informing of each.
+ * 
  * @author Javier Beltrán Jorba
  *
  */
 public final class SharedControl {
 	
 	private BiblioView biblioView;
+	private ArtistaView artistaView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -76,7 +80,7 @@ public final class SharedControl {
 		/* Subscribe all Editors to BiblioView */
 		if (editors != null) {
 			for (Editor e: editors) {
-				biblioView.attach(e);
+				this.biblioView.attach(e);
 			}
 		}
 		System.out.println("prepared biblio for subscribers.");
@@ -84,6 +88,22 @@ public final class SharedControl {
 	
 	public void unsetBiblioView() {
 		this.biblioView = null;
+	}
+	
+	public void setArtistaView(ArtistaView artistaView) {
+		this.artistaView = artistaView;
+		
+		/* Subscribe all Editors to BiblioView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.artistaView.attach(e);
+			}
+		}
+		System.out.println("prepared artist view for subscribers.");
+	}
+	
+	public void unsetArtistaView() {
+		this.artistaView = null;
 	}
 
 	public List<Editor> getEditors() {
@@ -102,6 +122,9 @@ public final class SharedControl {
 		if (biblioView != null) {
 			biblioView.attach(editor);
 			System.out.println("Subscribed editor to biblio.");
+		} else if (artistaView != null) {
+			artistaView.attach(editor);
+			System.out.println("Subscribed editor to artist view");
 		}
 	}
 	
@@ -115,6 +138,9 @@ public final class SharedControl {
 		/* Unsubscribe removed Editor from BiblioView */
 		if (biblioView != null) {
 			biblioView.detach(editor);
+		}
+		if (artistaView != null) {
+			artistaView.detach(editor);
 		}
 	}
 }

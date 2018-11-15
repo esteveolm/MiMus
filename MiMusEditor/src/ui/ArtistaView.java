@@ -1,5 +1,7 @@
 package ui;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -17,6 +19,8 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
+import control.EventObserver;
+import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
 import model.Artista;
@@ -24,10 +28,11 @@ import model.EntitiesList;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 
-public class ArtistaView extends ViewPart {
+public class ArtistaView extends ViewPart implements EventSubject {
 	
 	private SharedResources resources;
 	private SharedControl control;
+	private List<EventObserver> observers;
 	private TableViewer tv;
 	private EntitiesList artists;
 	
@@ -35,6 +40,7 @@ public class ArtistaView extends ViewPart {
 		super();
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
+		control.setArtistaView(this);
 		artists = new EntitiesList();
 		// TODO: load previously created artists
 	}
@@ -105,7 +111,8 @@ public class ArtistaView extends ViewPart {
 					System.out.println("Could not create Artist because no sex was selected.");
 					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
 				} else {
-					artists.addUnit(new Artista(0,
+					artists.addUnit(new Artista(
+							resources.getIncrementCurrentID(),
 							textName.getText(), 
 							comboSex.getText().equals("Female")));
 					System.out.println("Artist created successfully.");
@@ -133,7 +140,31 @@ public class ArtistaView extends ViewPart {
 		
 		// TODO: save (with button or automatically?)
 	}
-
+	
+	/**
+	 * When ArtistaView is closed, it is unregistered from SharedControl.
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		control.unsetArtistaView();
+	}
+	
 	@Override
 	public void setFocus() {}
+
+	@Override
+	public void attach(EventObserver o) {
+		observers.add(o);
+	}
+
+	@Override
+	public void detach(EventObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public List<EventObserver> getObservers() {
+		return observers;
+	}
 }
