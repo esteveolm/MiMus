@@ -1,5 +1,7 @@
 package control;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -7,7 +9,11 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import model.MiMusBibEntry;
 import util.MiMusBiblioReader;
 
@@ -37,6 +43,7 @@ public final class SharedResources {
 	private String repoPath;
 	private String biblioPath;
 	private String remote;
+	private Git git;
 	private int entityCurrentID;
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
@@ -46,11 +53,40 @@ public final class SharedResources {
 		/* Load stored entries from path */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
+		
+		repoPath = project.getLocation().toString();
+		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
+		System.out.println(repoPath);
+		/* Set git adapter */
+		
+		
+		try {
+			FileRepositoryBuilder repoBuilder = new FileRepositoryBuilder();
+			Repository repo = repoBuilder.setGitDir(
+					new File(repoPath))
+					.readEnvironment().findGitDir().build();
+			
+			/* Check if directory is a git repo already */
+			IFolder gitFolder = project.getFolder(".git");
+			if (!gitFolder.exists()) {
+				System.out.println("not exists!");
+				/* If not, clone it from github */
+				Git git = Git.cloneRepository()
+						.setURI(remote)
+						.setDirectory(new File(repoPath+"/MiMusCorpus"))
+						.call();
+				System.out.println("Cloned repo from remote as could not be found in local.");
+			}
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/* Once repo is functional, we can keep loading resources */
 		IFolder stringsFolder = project.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
-		repoPath = project.getLocation().toString();
 		biblioPath = biblioFile.getLocation().toString();
-		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
 		bibEntries = MiMusBiblioReader.read(biblioPath);
 		setEntityCurrentID(0);
 	}
@@ -115,6 +151,14 @@ public final class SharedResources {
 	public void setRemote(String remote) {
 		this.remote = remote;
 	}
+	public Git getGit() {
+		return git;
+	}
+
+	public void setGit(Git git) {
+		this.git = git;
+	}
+
 	public int getEntityCurrentID() {
 		return entityCurrentID;
 	}
