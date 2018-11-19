@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CommitCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -140,7 +145,37 @@ public class ArtistaView extends ViewPart implements EventSubject {
 			}
 		});
 		
-		// TODO: save (with button or automatically?)
+		Button btnLocal = new Button(sectTable.getParent(), BUTTON_FLAGS);
+		btnLocal.setText("Save to local");
+		btnLocal.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO: save xml.
+			}
+		});
+		Button btnRemote = new Button(sectTable.getParent(), BUTTON_FLAGS);
+		btnRemote.setText("Save to remote");
+		btnRemote.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					/* Push artista.xml to github */
+					Git git = resources.getGit();
+					AddCommand add = git.add();
+					add.addFilepattern(resources.getRepoPath()+"/MiMusCorpus/artista.xml");
+					add.call();
+					CommitCommand commit = git.commit();
+					commit.setMessage("Saving artista.xml to remote.");
+					commit.call();
+					PushCommand push = git.push();
+					push.setRemote(resources.getRemote());
+					push.call();
+				} catch (GitAPIException e1) {
+					e1.printStackTrace();
+					System.out.println("Could not push artista.xml.");
+				}
+			}
+		});
 	}
 	
 	/**

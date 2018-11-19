@@ -75,7 +75,11 @@ public final class SharedResources {
 						.setURI(remote)
 						.setDirectory(new File(repoPath+"/MiMusCorpus/"))
 						.call();
+				this.git = git;
 				System.out.println("Cloned repo from remote as could not be found in local.");
+			} else {
+				this.git = Git.open(new File(repoPath+"/MiMusCorpus/"));
+				System.out.println("Opened existing repo.");
 			}
 		} catch (GitAPIException e) {
 			e.printStackTrace();
