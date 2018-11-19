@@ -40,7 +40,8 @@ public class MiMusEntry {
 		/* Stream all lines and convert to array */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
-		IFolder stringsFolder = project.getFolder("strings");
+		IFolder corpus = project.getFolder("MiMusCorpus");
+		IFolder stringsFolder = corpus.getFolder("strings");
 		IFile langsFile = stringsFolder.getFile("languages");
 		
 		List<String> langLines = new ArrayList<>();

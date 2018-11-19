@@ -9,7 +9,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -50,16 +49,16 @@ public final class SharedResources {
 	
 	/* Constructor made private so the object can only initialized by singleton */
 	private SharedResources() {
-		/* Load stored entries from path */
+		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
+		
+		/* Set repository directory in workspace */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
-		
+		IFolder corpus = project.getFolder("MiMusCorpus");
 		repoPath = project.getLocation().toString();
-		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
 		System.out.println(repoPath);
+		
 		/* Set git adapter */
-		
-		
 		try {
 			FileRepositoryBuilder repoBuilder = new FileRepositoryBuilder();
 			Repository repo = repoBuilder.setGitDir(
@@ -67,13 +66,14 @@ public final class SharedResources {
 					.readEnvironment().findGitDir().build();
 			
 			/* Check if directory is a git repo already */
-			IFolder gitFolder = project.getFolder(".git");
-			if (!gitFolder.exists()) {
+			System.out.println(corpus.getLocation().toString());
+			if (!corpus.exists()) {
 				System.out.println("not exists!");
+				System.out.println(repoPath+"/MiMusCorpus/");
 				/* If not, clone it from github */
 				Git git = Git.cloneRepository()
 						.setURI(remote)
-						.setDirectory(new File(repoPath+"/MiMusCorpus"))
+						.setDirectory(new File(repoPath+"/MiMusCorpus/"))
 						.call();
 				System.out.println("Cloned repo from remote as could not be found in local.");
 			}
@@ -82,9 +82,13 @@ public final class SharedResources {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		/* Re-read workspace paths with cloned repo */
+		workspace = ResourcesPlugin.getWorkspace().getRoot();
+		project = workspace.getProject("MiMus");
+		corpus = project.getFolder("MiMusCorpus");
 		
 		/* Once repo is functional, we can keep loading resources */
-		IFolder stringsFolder = project.getFolder("strings");
+		IFolder stringsFolder = corpus.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
 		biblioPath = biblioFile.getLocation().toString();
 		bibEntries = MiMusBiblioReader.read(biblioPath);

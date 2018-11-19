@@ -100,8 +100,9 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
-		IFolder txtFolder = project.getFolder("txt");
-		IFolder xmlFolder = project.getFolder("xml");
+		IFolder corpus = project.getFolder("MiMusCorpus");
+		IFolder txtFolder = corpus.getFolder("txt");
+		IFolder xmlFolder = corpus.getFolder("xml");
 		txtPath = txtFolder.getLocation().toString();
 		xmlPath = xmlFolder.getLocation().toString();
 		
