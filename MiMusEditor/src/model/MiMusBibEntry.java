@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import util.xml.MiMusWritable;
 
@@ -353,6 +354,45 @@ public class MiMusBibEntry implements MiMusWritable {
 		return str;
 	}
 	
+	public static MiMusBibEntry fromXMLElement(Element elem) {
+		String[] authors = new String[NUM_AUTHORS];
+		for (int i=0; i<NUM_AUTHORS; i++) {
+			authors[i] = elem.getElementsByTagName("autor"+(i+1))
+					.item(0).getTextContent();
+		}
+		String[] secondaries = new String[NUM_SECONDARY];
+		for (int i=0; i<NUM_SECONDARY; i++) {
+			secondaries[i] = elem.getElementsByTagName("autor_secundari"+(i+1))
+					.item(0).getTextContent();
+		}
+		String year = elem.getElementsByTagName("any")
+				.item(0).getTextContent();
+		String distinction = elem.getElementsByTagName("distincio")
+				.item(0).getTextContent();
+		String title = elem.getElementsByTagName("titol")
+				.item(0).getTextContent();
+		String mainTitle = elem.getElementsByTagName("titol_principal")
+				.item(0).getTextContent();
+		String volume = elem.getElementsByTagName("volum")
+				.item(0).getTextContent();
+		String place = elem.getElementsByTagName("lloc")
+				.item(0).getTextContent();
+		String editorial = elem.getElementsByTagName("editorial")
+				.item(0).getTextContent();
+		String series = elem.getElementsByTagName("serie")
+				.item(0).getTextContent();
+		int id = Integer.parseInt(elem.getElementsByTagName("id")
+				.item(0).getTextContent());
+		ArrayList<Integer> users = new ArrayList<>();
+		NodeList nodesDoc = elem.getElementsByTagName("usuari_id");
+		for (int i=0; i<nodesDoc.getLength(); i++) {
+			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
+		}
+		return new MiMusBibEntry(authors, secondaries, year, distinction, 
+				title, mainTitle, volume, place, editorial, series, id,
+				users);
+	}
+	
 	/* Implementation of MiMusWritable */
 	
 	@Override
@@ -435,5 +475,10 @@ public class MiMusBibEntry implements MiMusWritable {
 	@Override
 	public String getWritableCategory() {
 		return "bibliography";
+	}
+	
+	@Override
+	public String getWritableId() {
+		return String.valueOf(id);
 	}
 }

@@ -42,6 +42,18 @@ public class Artista extends Entity {
 	public String getLemma() {
 		return getName();
 	}
+	
+	public static Artista fromXMLElement(Element elem) {
+		String name = elem.getElementsByTagName("name")
+				.item(0).getTextContent();
+		boolean female = elem.getElementsByTagName("gender")
+				.item(0).getTextContent()
+				.equals("female");
+		int id = Integer.parseInt(
+				elem.getElementsByTagName("id")
+				.item(0).getTextContent());
+		return new Artista(id, name, female);
+	}
 
 	/* MiMusWritable implementation */
 	
@@ -52,8 +64,11 @@ public class Artista extends Entity {
 		tagName.appendChild(doc.createTextNode(getName()));
 		Element tagGender = doc.createElement("gender");
 		tagGender.appendChild(doc.createTextNode(getGender()));
+		Element tagID = doc.createElement("id");
+		tagID.appendChild(doc.createTextNode(String.valueOf(getId())));
 		tagEntry.appendChild(tagName);
 		tagEntry.appendChild(tagGender);
+		tagEntry.appendChild(tagID);
 		return tagEntry;
 	}
 	

@@ -57,9 +57,9 @@ import model.RelationsList;
 import ui.table.ReferenceTableViewer;
 //import ui.table.RelationTableViewer;
 import util.LabelPrinter;
-import util.MiMusBiblioReader;
 import util.MiMusEntryReader;
 import util.TextStyler;
+import util.xml.MiMusXML;
 import util.xml.MiMusXMLWriter;
 
 public class Editor extends EditorPart implements EventObserver {
@@ -392,9 +392,12 @@ public class Editor extends EditorPart implements EventObserver {
 				references.addUnit(new MiMusReference(references, 0, referenceCurrentID++));
 				
 				/* Reflect that the entry is being used by a document */
-				references.getBibEntries().get(0).getUsers().add(Integer.parseInt(docID));
-				MiMusBiblioReader.appendUser(resources.getBiblioPath(), 
-						references.getBibEntries().get(0), docID);
+				//references.getBibEntries().get(0).getUsers().add(Integer.parseInt(docID));
+				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
+				modifiedEntry.addUser(Integer.parseInt(docID));
+				MiMusXML.open(MiMusXML.ARTISTA).update(modifiedEntry).write();
+				//MiMusBiblioReader.appendUser(resources.getBiblioPath(), 
+				//		references.getBibEntries().get(0), docID);
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -410,12 +413,16 @@ public class Editor extends EditorPart implements EventObserver {
 					
 					/* Remove Editor using this biblio entry */
 					int oldId = ref.getBibEntry().getId();
-					references.getBibEntries()
-							.get(references.getBibEntryIdx(oldId)).getUsers()
-							.remove(new Integer(Integer.parseInt(docID)));
-					MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
-							references.getBibEntries().get(references.getBibEntryIdx(oldId)), 
-							docID);
+					MiMusBibEntry oldEntry = references.getBibEntries()
+							.get(references.getBibEntryIdx(oldId));
+					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
+					MiMusXML.open(MiMusXML.BIBLIO).update(oldEntry).write();
+//					references.getBibEntries()
+//							.get(references.getBibEntryIdx(oldId)).getUsers()
+//							.remove(new Integer(Integer.parseInt(docID)));
+//					MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
+//							references.getBibEntries().get(references.getBibEntryIdx(oldId)), 
+//							docID);
 					LabelPrinter.printInfo(referenceLabel, "Reference deleted successfully.");
 					System.out.println("Removing Reference " + ref.toString());
 				}

@@ -14,7 +14,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import model.MiMusBibEntry;
-import util.MiMusBiblioReader;
+//import util.MiMusBiblioReader;
 
 /**
  * 

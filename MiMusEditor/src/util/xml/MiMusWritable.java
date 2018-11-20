@@ -45,4 +45,9 @@ public interface MiMusWritable {
 	 */
 	public String getWritableCategory();
 	
+	/**
+	 * Returns the ID used to identify the model object from the
+	 * others of its category.
+	 */
+	public String getWritableId();
 }

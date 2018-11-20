@@ -35,7 +35,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.MiMusBibEntry;
 import util.LabelPrinter;
-import util.MiMusBiblioReader;
+import util.xml.MiMusXML;
 
 public class BiblioView extends ViewPart implements EventSubject {
 
@@ -184,7 +184,8 @@ public class BiblioView extends ViewPart implements EventSubject {
 						currentBiblioID++);
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
-				MiMusBiblioReader.appendEntry(resources.getBiblioPath(), newEntry);
+				MiMusXML.open(MiMusXML.BIBLIO).append(newEntry).write();
+				//MiMusBiblioReader.appendEntry(resources.getBiblioPath(), newEntry);
 				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
 				notifyObservers();
 			}
@@ -278,7 +279,8 @@ public class BiblioView extends ViewPart implements EventSubject {
 					resources.getBibEntries().remove(selectedEntry);
 					lv.refresh();
 					fullReference.setText(""); /* Clear full reference */
-					MiMusBiblioReader.removeEntry(resources.getBiblioPath(), selectedEntry);
+					MiMusXML.open(MiMusXML.BIBLIO).remove(selectedEntry).write();
+					//MiMusBiblioReader.removeEntry(resources.getBiblioPath(), selectedEntry);
 					System.out.println("BibEntry removed successfully.");
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
 					notifyObservers();

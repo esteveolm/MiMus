@@ -21,7 +21,8 @@ import model.MiMusBibEntry;
 import model.MiMusReference;
 import model.ReferencesList;
 import model.Unit;
-import util.MiMusBiblioReader;
+//import util.MiMusBiblioReader;
+import util.xml.MiMusXML;
 
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
@@ -125,21 +126,31 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			switch (colIdx) {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
-				/* This document is no longer using the old bibEntry */
-				MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
-						ref.getBibEntry(), docID);
-				ref.getBibEntry().getUsers().remove(new Integer(docID));
+				
+				//MiMusXML.open(MiMusXML.BIBLIO).update(modifiedEntry).write();
+//				MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
+//						ref.getBibEntry(), docID);
+//				ref.getBibEntry().getUsers().remove(new Integer(docID));
 				
 				/* Checks user is actually modifying to a new entry */
 				if (valueIdx>-1) {
-					MiMusBibEntry newEntry = ref.getReferences().getBibEntries().get(valueIdx);
-					if (newEntry.getId() != ref.getBibEntry().getId()) {
-						ref.setBibEntry(newEntry);
+					/* This document is no longer using the old bibEntry */
+					MiMusBibEntry reducedEntry = ref.getBibEntry();
+					MiMusBibEntry extendedEntry = ref.getReferences()
+							.getBibEntries().get(valueIdx);
+					if (extendedEntry.getId() != reducedEntry.getId()) {
+						/* Actually reduce entry's users */
+						reducedEntry.removeUser(new Integer(docID));
+						MiMusXML.open(MiMusXML.BIBLIO).update(reducedEntry).write();
 						
-						/* This document is now using the new bibEntry */
-						ref.getBibEntry().getUsers().add(new Integer(docID));
-						MiMusBiblioReader.appendUser(resources.getBiblioPath(),
-								ref.getBibEntry(), docID);
+						ref.setBibEntry(extendedEntry);
+						
+						/* Actually extend entry's users */
+						extendedEntry.addUser(new Integer(docID));
+						MiMusXML.open(MiMusXML.BIBLIO).update(extendedEntry).write();
+//						ref.getBibEntry().getUsers().add(new Integer(docID));
+//						MiMusBiblioReader.appendUser(resources.getBiblioPath(),
+//								ref.getBibEntry(), docID);
 					}
 				}
 				break;

@@ -18,4 +18,11 @@ public abstract class Entity extends Unit implements MiMusWritable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	/* Implementation of MiMusWritable that is common to all entities */
+	
+	@Override
+	public String getWritableId() {
+		return String.valueOf(id);
+	}
 }
