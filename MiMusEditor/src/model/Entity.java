@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Entity extends Unit {
+import util.xml.MiMusWritable;
+
+public abstract class Entity extends Unit implements MiMusWritable {
 	
 	private int id;
 	

@@ -1,5 +1,8 @@
 package model;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 public class Artista extends Entity {
 	
 	private String name;
@@ -38,5 +41,29 @@ public class Artista extends Entity {
 	@Override
 	public String getLemma() {
 		return getName();
+	}
+
+	/* MiMusWritable implementation */
+	
+	@Override
+	public Element toXMLElement(Document doc) {
+		Element tagEntry = doc.createElement(getWritableName());
+		Element tagName = doc.createElement("name");
+		tagName.appendChild(doc.createTextNode(getName()));
+		Element tagGender = doc.createElement("gender");
+		tagGender.appendChild(doc.createTextNode(getGender()));
+		tagEntry.appendChild(tagName);
+		tagEntry.appendChild(tagGender);
+		return tagEntry;
+	}
+	
+	@Override
+	public String getWritableName() {
+		return "artista";
+	}
+	
+	@Override
+	public String getWritableCategory() {
+		return "artistas";
 	}
 }
