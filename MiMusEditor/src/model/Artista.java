@@ -1,7 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import util.xml.MiMusXML;
 
 public class Artista extends Entity {
 	
@@ -80,5 +86,19 @@ public class Artista extends Entity {
 	@Override
 	public String getWritableCategory() {
 		return "artistas";
+	}
+	
+	public static ArrayList<Artista> read() {
+		ArrayList<Artista> entries = new ArrayList<>();
+		Document doc = MiMusXML.open(MiMusXML.ARTISTA).getDoc();
+		NodeList nl = doc.getElementsByTagName("artista");
+		for (int i=0; i<nl.getLength(); i++) {
+			Node node = nl.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element elem = (Element) node;
+				entries.add(Artista.fromXMLElement(elem));
+			}
+		}
+		return entries;
 	}
 }

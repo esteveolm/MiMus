@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import util.xml.MiMusWritable;
+import util.xml.MiMusXML;
 
 /**
  * 
@@ -480,5 +482,19 @@ public class MiMusBibEntry implements MiMusWritable {
 	@Override
 	public String getWritableId() {
 		return String.valueOf(id);
+	}
+	
+	public static ArrayList<MiMusBibEntry> read() {
+		ArrayList<MiMusBibEntry> entries = new ArrayList<>();
+		Document doc = MiMusXML.open(MiMusXML.BIBLIO).getDoc();
+		NodeList nl = doc.getElementsByTagName("entry");
+		for (int i=0; i<nl.getLength(); i++) {
+			Node node = nl.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element elem = (Element) node;
+				entries.add(MiMusBibEntry.fromXMLElement(elem));
+			}
+		}
+		return entries;
 	}
 }

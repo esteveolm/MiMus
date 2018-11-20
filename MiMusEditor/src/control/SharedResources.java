@@ -95,7 +95,7 @@ public final class SharedResources {
 		IFolder stringsFolder = corpus.getFolder("strings");
 		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
 		biblioPath = biblioFile.getLocation().toString();
-		bibEntries = MiMusBiblioReader.read(biblioPath);
+		bibEntries = MiMusBibEntry.read();
 		setEntityCurrentID(0);
 	}
 	

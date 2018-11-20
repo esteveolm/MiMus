@@ -2,7 +2,6 @@ package util.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,15 +41,18 @@ public class MiMusXML {
 	
 	private File f;
 	private Document doc;
+	private static String repoPath;
 	
 	static {
 		SharedResources resources = SharedResources.getInstance();
-		String repo = resources.getRepoPath();
-		BIBLIO = repo + "/bibliography.xml";
-		ARTISTA = repo + "/artista.xml";
+		repoPath = resources.getRepoPath();
+		System.out.println("Now1:" + repoPath);
+		BIBLIO = repoPath + "/bibliography.xml";
+		ARTISTA = repoPath + "/artista.xml";
 	}
 	
 	public MiMusXML(File xmlFile) {
+		System.out.println("IS: " + xmlFile);
 		this.f = xmlFile;
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -61,28 +63,28 @@ public class MiMusXML {
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			System.out.println("Could not configure XML Parser.");
+			this.doc = null;
 		} catch (SAXException e) {
 			e.printStackTrace();
 			System.out.println("Could not parse XML.");
+			this.doc = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Could not parse XML.");
+			this.doc = null;
 		}
-		/* If can't read the XML tree, <doc> receives null */
-		this.doc = null;
+		if (this.doc==null)
+			System.exit(1);
 	}
 	
 	public static MiMusXML open(String name) {
-		return MiMusXML.open(new File(name+".xml"));
+		System.out.println("NOW2: "+ repoPath);
+		return MiMusXML.open(new File(repoPath + "/" + name+".xml"));
 	}
 	
 	public static MiMusXML open(File path) {
 		return new MiMusXML(path);
 	}
-	
-//	public ArrayList<? extends MiMusWritable> read() {
-//		
-//	}
 	
 	public MiMusXML append(MiMusWritable entry) {
 		this.doc.appendChild(entry.toXMLElement(this.doc));
@@ -154,5 +156,19 @@ public class MiMusXML {
 		}
 		return false;
 	}
+
+	/* Getters and setters */
 	
+	public File getF() {
+		return f;
+	}
+	public void setF(File f) {
+		this.f = f;
+	}
+	public Document getDoc() {
+		return doc;
+	}
+	public void setDoc(Document doc) {
+		this.doc = doc;
+	}
 }
