@@ -3,6 +3,11 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import util.xml.MiMusWritable;
+
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -28,7 +33,7 @@ import java.util.List;
  * TODO: guarantee sequentiality of authors.
  * 
  */
-public class MiMusBibEntry {
+public class MiMusBibEntry implements MiMusWritable {
 	
 	/*
 	 * The number of authors and secondary authors is fixed and reflected
@@ -311,6 +316,12 @@ public class MiMusBibEntry {
 	public void setUsers(List<Integer> users) {
 		this.users = users;
 	}
+	public void addUser(int user) {
+		users.add(user);
+	}
+	public void removeUser(int user) {
+		users.remove(user);
+	}
 
 	/**
 	 * Creates an entity of this class that works as placeholder
@@ -340,5 +351,89 @@ public class MiMusBibEntry {
 		String str = author0 + " - " + author1;
 		str += " " + year + distinction;
 		return str;
+	}
+	
+	/* Implementation of MiMusWritable */
+	
+	@Override
+	public Element toXMLElement(Document doc) {
+		Element elem = doc.createElement("entry");
+		Element a1 = doc.createElement("autor1");
+		a1.appendChild(doc.createTextNode(getAuthor(0)));
+		Element a2 = doc.createElement("autor2");
+		a2.appendChild(doc.createTextNode(getAuthor(1)));
+		Element a3 = doc.createElement("autor3");
+		a3.appendChild(doc.createTextNode(getAuthor(2)));
+		Element a4 = doc.createElement("autor4");
+		a4.appendChild(doc.createTextNode(getAuthor(3)));
+		Element s1 = doc.createElement("autor_secundari1");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(0)));
+		Element s2 = doc.createElement("autor_secundari2");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(1)));
+		Element s3 = doc.createElement("autor_secundari3");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(2)));
+		Element s4 = doc.createElement("autor_secundari4");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(3)));
+		Element s5 = doc.createElement("autor_secundari5");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(4)));
+		Element s6 = doc.createElement("autor_secundari6");
+		s1.appendChild(doc.createTextNode(getSecondaryAuthor(5)));
+		Element year = doc.createElement("any");
+		year.appendChild(doc.createTextNode(getYear()));
+		Element distinction = doc.createElement("distincio");
+		distinction.appendChild(doc.createTextNode(getDistinction()));
+		Element title = doc.createElement("titol");
+		title.appendChild(doc.createTextNode(getTitle()));
+		Element mainTitle = doc.createElement("titol_principal");
+		mainTitle.appendChild(doc.createTextNode(getMainTitle()));
+		Element volume = doc.createElement("volum");
+		volume.appendChild(doc.createTextNode(getVolume()));
+		Element place = doc.createElement("lloc");
+		place.appendChild(doc.createTextNode(getPlace()));
+		Element editorial = doc.createElement("editorial");
+		editorial.appendChild(doc.createTextNode(getEditorial()));
+		Element series = doc.createElement("serie");
+		series.appendChild(doc.createTextNode(getSeries()));
+		Element id = doc.createElement("id");
+		id.appendChild(doc.createTextNode(String.valueOf(getId())));
+		
+		Element users = doc.createElement("usuaris");
+		for (int user: getUsers()) {
+			Element userId = doc.createElement("usuari_id");
+			userId.appendChild(doc.createTextNode(String.valueOf(user)));
+			users.appendChild(userId);
+		}
+		
+		elem.appendChild(id);
+		elem.appendChild(a1);
+		elem.appendChild(a2);
+		elem.appendChild(a3);
+		elem.appendChild(a4);
+		elem.appendChild(s1);
+		elem.appendChild(s2);
+		elem.appendChild(s3);
+		elem.appendChild(s4);
+		elem.appendChild(s5);
+		elem.appendChild(s6);
+		elem.appendChild(year);
+		elem.appendChild(distinction);
+		elem.appendChild(title);
+		elem.appendChild(mainTitle);
+		elem.appendChild(volume);
+		elem.appendChild(place);
+		elem.appendChild(editorial);
+		elem.appendChild(series);
+		elem.appendChild(users);
+		return elem;
+	}
+
+	@Override
+	public String getWritableName() {
+		return "entry";
+	}
+
+	@Override
+	public String getWritableCategory() {
+		return "bibliography";
 	}
 }
