@@ -59,8 +59,8 @@ import ui.table.ReferenceTableViewer;
 import util.LabelPrinter;
 import util.MiMusBiblioReader;
 import util.MiMusEntryReader;
-import util.MiMusXMLWriter;
 import util.TextStyler;
+import util.xml.MiMusXMLWriter;
 
 public class Editor extends EditorPart implements EventObserver {
 	
