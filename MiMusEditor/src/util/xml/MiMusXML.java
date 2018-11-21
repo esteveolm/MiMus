@@ -35,24 +35,10 @@ import control.SharedResources;
  */
 public class MiMusXML {
 	
-	/* Constants for different files*/
-	public static final String BIBLIO;
-	public static final String ARTISTA;
-	
 	private File f;
 	private Document doc;
-	private static String repoPath;
-	
-	static {
-		SharedResources resources = SharedResources.getInstance();
-		repoPath = resources.getRepoPath();
-		System.out.println("Now1:" + repoPath);
-		BIBLIO = repoPath + "/bibliography.xml";
-		ARTISTA = repoPath + "/artista.xml";
-	}
 	
 	public MiMusXML(File xmlFile) {
-		System.out.println("IS: " + xmlFile);
 		this.f = xmlFile;
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -77,9 +63,14 @@ public class MiMusXML {
 			System.exit(1);
 	}
 	
-	public static MiMusXML open(String name) {
-		System.out.println("NOW2: "+ repoPath);
-		return MiMusXML.open(new File(repoPath + "/" + name+".xml"));
+	public static MiMusXML openBiblio() {
+		SharedResources res = SharedResources.getInstance();
+		return MiMusXML.open(new File(res.getBiblioPath()));
+	}
+	
+	public static MiMusXML openArtista() {
+		SharedResources res = SharedResources.getInstance();
+		return MiMusXML.open(new File(res.getArtistaPath()));
 	}
 	
 	public static MiMusXML open(File path) {
@@ -87,7 +78,9 @@ public class MiMusXML {
 	}
 	
 	public MiMusXML append(MiMusWritable entry) {
-		this.doc.appendChild(entry.toXMLElement(this.doc));
+		Node parent = this.doc.getElementsByTagName(
+				entry.getWritableCategory()).item(0);
+		parent.appendChild(entry.toXMLElement(this.doc));
 		return this;
 	}
 	

@@ -141,13 +141,13 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 					if (extendedEntry.getId() != reducedEntry.getId()) {
 						/* Actually reduce entry's users */
 						reducedEntry.removeUser(new Integer(docID));
-						MiMusXML.open(MiMusXML.BIBLIO).update(reducedEntry).write();
+						MiMusXML.openBiblio().update(reducedEntry).write();
 						
 						ref.setBibEntry(extendedEntry);
 						
 						/* Actually extend entry's users */
 						extendedEntry.addUser(new Integer(docID));
-						MiMusXML.open(MiMusXML.BIBLIO).update(extendedEntry).write();
+						MiMusXML.openBiblio().update(extendedEntry).write();
 //						ref.getBibEntry().getUsers().add(new Integer(docID));
 //						MiMusBiblioReader.appendUser(resources.getBiblioPath(),
 //								ref.getBibEntry(), docID);

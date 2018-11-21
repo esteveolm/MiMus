@@ -90,7 +90,7 @@ public class Artista extends Entity {
 	
 	public static ArrayList<Artista> read() {
 		ArrayList<Artista> entries = new ArrayList<>();
-		Document doc = MiMusXML.open(MiMusXML.ARTISTA).getDoc();
+		Document doc = MiMusXML.openArtista().getDoc();
 		NodeList nl = doc.getElementsByTagName("artista");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);

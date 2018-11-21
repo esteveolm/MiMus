@@ -184,7 +184,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 						currentBiblioID++);
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
-				MiMusXML.open(MiMusXML.BIBLIO).append(newEntry).write();
+				MiMusXML.openBiblio().append(newEntry).write();
 				//MiMusBiblioReader.appendEntry(resources.getBiblioPath(), newEntry);
 				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
 				notifyObservers();
@@ -279,7 +279,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 					resources.getBibEntries().remove(selectedEntry);
 					lv.refresh();
 					fullReference.setText(""); /* Clear full reference */
-					MiMusXML.open(MiMusXML.BIBLIO).remove(selectedEntry).write();
+					MiMusXML.openBiblio().remove(selectedEntry).write();
 					//MiMusBiblioReader.removeEntry(resources.getBiblioPath(), selectedEntry);
 					System.out.println("BibEntry removed successfully.");
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");

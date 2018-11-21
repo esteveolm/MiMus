@@ -40,7 +40,10 @@ public final class SharedResources {
 	private List<MiMusBibEntry> bibEntries;
 	private String[] referenceTypes = {"Edition", "Register", "Citation"};
 	private String repoPath;
+	private IFolder corpusFolder;
+	private String corpusPath;
 	private String biblioPath;
+	private String artistaPath;
 	private String remote;
 	private Git git;
 	private int entityCurrentID;
@@ -54,31 +57,25 @@ public final class SharedResources {
 		/* Set repository directory in workspace */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspace.getProject("MiMus");
+		this.repoPath = project.getLocation().toString();
 		IFolder corpus = project.getFolder("MiMusCorpus");
-		repoPath = project.getLocation().toString();
-		System.out.println(repoPath);
+		this.setCorpusFolder(corpus);
+		this.setCorpusPath(corpus.getLocation().toString());
 		
 		/* Set git adapter */
 		try {
-			FileRepositoryBuilder repoBuilder = new FileRepositoryBuilder();
-			Repository repo = repoBuilder.setGitDir(
-					new File(repoPath))
-					.readEnvironment().findGitDir().build();
-			
 			/* Check if directory is a git repo already */
 			System.out.println(corpus.getLocation().toString());
 			if (!corpus.exists()) {
-				System.out.println("not exists!");
-				System.out.println(repoPath+"/MiMusCorpus/");
 				/* If not, clone it from github */
 				Git git = Git.cloneRepository()
 						.setURI(remote)
-						.setDirectory(new File(repoPath+"/MiMusCorpus/"))
+						.setDirectory(new File(corpusPath))
 						.call();
 				this.git = git;
 				System.out.println("Cloned repo from remote as could not be found in local.");
 			} else {
-				this.git = Git.open(new File(repoPath+"/MiMusCorpus/"));
+				this.git = Git.open(new File(corpusPath));
 				System.out.println("Opened existing repo.");
 			}
 		} catch (GitAPIException e) {
@@ -86,17 +83,13 @@ public final class SharedResources {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/* Re-read workspace paths with cloned repo */
-		workspace = ResourcesPlugin.getWorkspace().getRoot();
-		project = workspace.getProject("MiMus");
-		corpus = project.getFolder("MiMusCorpus");
 		
 		/* Once repo is functional, we can keep loading resources */
-		IFolder stringsFolder = corpus.getFolder("strings");
-		IFile biblioFile = stringsFolder.getFile("bibliography.xml");
-		biblioPath = biblioFile.getLocation().toString();
-		bibEntries = MiMusBibEntry.read();
-		setEntityCurrentID(0);
+		IFolder strings = corpus.getFolder("strings");
+		IFile biblioFile = strings.getFile("bibliography.xml");
+		IFile artistaFile = strings.getFile("artistas.xml");
+		this.biblioPath = biblioFile.getLocation().toString();
+		this.setArtistaPath(artistaFile.getLocation().toString());
 	}
 	
 	/**
@@ -110,6 +103,12 @@ public final class SharedResources {
 			instance = new SharedResources();
 		}
 		return instance;
+	}
+	
+	public List<MiMusBibEntry> readBiblio() {
+		bibEntries = MiMusBibEntry.read();
+		setEntityCurrentID(0);
+		return bibEntries;
 	}
 	
 	/**
@@ -130,6 +129,9 @@ public final class SharedResources {
 	}
 	
 	public List<MiMusBibEntry> getBibEntries() {
+		if (bibEntries == null) {
+			return readBiblio();
+		}
 		return bibEntries;
 	}
 	public void setBibEntries(List<MiMusBibEntry> bibEntries) {
@@ -147,11 +149,29 @@ public final class SharedResources {
 	public void setRepoPath(String repoPath) {
 		this.repoPath = repoPath;
 	}
+	public IFolder getCorpusFolder() {
+		return corpusFolder;
+	}
+	public void setCorpusFolder(IFolder corpusFolder) {
+		this.corpusFolder = corpusFolder;
+	}
+	public String getCorpusPath() {
+		return corpusPath;
+	}
+	public void setCorpusPath(String corpusPath) {
+		this.corpusPath = corpusPath;
+	}
 	public String getBiblioPath() {
 		return biblioPath;
 	}
 	public void setBiblioPath(String biblioPath) {
 		this.biblioPath = biblioPath;
+	}
+	public String getArtistaPath() {
+		return artistaPath;
+	}
+	public void setArtistaPath(String artistaPath) {
+		this.artistaPath = artistaPath;
 	}
 	public String getRemote() {
 		return remote;
@@ -162,11 +182,9 @@ public final class SharedResources {
 	public Git getGit() {
 		return git;
 	}
-
 	public void setGit(Git git) {
 		this.git = git;
 	}
-
 	public int getEntityCurrentID() {
 		return entityCurrentID;
 	}

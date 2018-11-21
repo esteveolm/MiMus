@@ -319,10 +319,10 @@ public class MiMusBibEntry implements MiMusWritable {
 	public void setUsers(List<Integer> users) {
 		this.users = users;
 	}
-	public void addUser(int user) {
+	public void addUser(Integer user) {
 		users.add(user);
 	}
-	public void removeUser(int user) {
+	public void removeUser(Integer user) {
 		users.remove(user);
 	}
 
@@ -486,7 +486,7 @@ public class MiMusBibEntry implements MiMusWritable {
 	
 	public static ArrayList<MiMusBibEntry> read() {
 		ArrayList<MiMusBibEntry> entries = new ArrayList<>();
-		Document doc = MiMusXML.open(MiMusXML.BIBLIO).getDoc();
+		Document doc = MiMusXML.openBiblio().getDoc();
 		NodeList nl = doc.getElementsByTagName("entry");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);
