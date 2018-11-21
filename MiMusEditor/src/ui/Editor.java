@@ -391,13 +391,13 @@ public class Editor extends EditorPart implements EventObserver {
 			public void widgetSelected(SelectionEvent e) {
 				references.addUnit(new MiMusReference(references, 0, referenceCurrentID++));
 				
-				/* Reflect that the entry is being used by a document */
-				//references.getBibEntries().get(0).getUsers().add(Integer.parseInt(docID));
+				/* Reflect document is user of entry, in model and xml */
 				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
-				//MiMusBiblioReader.appendUser(resources.getBiblioPath(), 
-				//		references.getBibEntries().get(0), docID);
+				
+				LabelPrinter.printInfo(referenceLabel, "Reference added successfully.");
+				System.out.println("Reference added successfully.");
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -411,18 +411,16 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					references.removeUnit(ref);
 					
-					/* Remove Editor using this biblio entry */
+					/* 
+					 * Reflect document is not user of entry anymore, 
+					 * in model and xml 
+					 */
 					int oldId = ref.getBibEntry().getId();
 					MiMusBibEntry oldEntry = references.getBibEntries()
 							.get(references.getBibEntryIdx(oldId));
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
-//					references.getBibEntries()
-//							.get(references.getBibEntryIdx(oldId)).getUsers()
-//							.remove(new Integer(Integer.parseInt(docID)));
-//					MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
-//							references.getBibEntries().get(references.getBibEntryIdx(oldId)), 
-//							docID);
+					
 					LabelPrinter.printInfo(referenceLabel, "Reference deleted successfully.");
 					System.out.println("Removing Reference " + ref.toString());
 				}

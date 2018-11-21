@@ -28,14 +28,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private ReferencesList references;
 	private String docID;
-	private SharedResources resources;
 	
 	public ReferenceTableViewer(Composite parent, ReferencesList references, 
 			String doc, SharedResources resources) {
 		super(parent);
 		this.references = references;
 		this.docID = doc;
-		this.resources = resources;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
@@ -127,11 +125,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			case 0:	// BibEntry
 				int valueIdx = (int) value;
 				
-				//MiMusXML.open(MiMusXML.BIBLIO).update(modifiedEntry).write();
-//				MiMusBiblioReader.removeUser(resources.getBiblioPath(), 
-//						ref.getBibEntry(), docID);
-//				ref.getBibEntry().getUsers().remove(new Integer(docID));
-				
 				/* Checks user is actually modifying to a new entry */
 				if (valueIdx>-1) {
 					/* This document is no longer using the old bibEntry */
@@ -148,9 +141,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 						/* Actually extend entry's users */
 						extendedEntry.addUser(new Integer(docID));
 						MiMusXML.openBiblio().update(extendedEntry).write();
-//						ref.getBibEntry().getUsers().add(new Integer(docID));
-//						MiMusBiblioReader.appendUser(resources.getBiblioPath(),
-//								ref.getBibEntry(), docID);
 					}
 				}
 				break;
