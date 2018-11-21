@@ -395,7 +395,7 @@ public class Editor extends EditorPart implements EventObserver {
 				//references.getBibEntries().get(0).getUsers().add(Integer.parseInt(docID));
 				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
-				MiMusXML.openArtista().update(modifiedEntry).write();
+				MiMusXML.openBiblio().update(modifiedEntry).write();
 				//MiMusBiblioReader.appendUser(resources.getBiblioPath(), 
 				//		references.getBibEntries().get(0), docID);
 			}

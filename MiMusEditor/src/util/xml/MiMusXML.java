@@ -98,7 +98,7 @@ public class MiMusXML {
 			}
 			if (updateIdx > -1) {
 				/* Delete old child, add new child */
-				Node toRemove = listIDs.item(updateIdx);
+				Node toRemove = listIDs.item(updateIdx).getParentNode();
 				Node parent = toRemove.getParentNode();
 				parent.removeChild(toRemove);
 				parent.appendChild(entry.toXMLElement(this.doc));
