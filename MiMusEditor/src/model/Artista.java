@@ -15,14 +15,11 @@ public class Artista extends Entity {
 	private boolean female;
 	
 	public Artista(int id) {
-		super(id);
-		this.name = "";
-		this.female = false;
-		this.setType("Artista");
+		this(id, "", false);
 	}
 	
 	public Artista(int id, String name, boolean female) {
-		super(id);
+		super(id, "Artista");
 		this.name = name;
 		this.female = female;
 	}
@@ -47,6 +44,10 @@ public class Artista extends Entity {
 
 	@Override
 	public String getLemma() {
+		return getName();
+	}
+	
+	public String toString() {
 		return getName();
 	}
 	

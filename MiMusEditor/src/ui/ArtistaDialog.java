@@ -59,7 +59,7 @@ public class ArtistaDialog extends Dialog {
 		// TODO: make it show
 		Label label = new Label(composite, SWT.VERTICAL);
 		label.setText("");
-		if (artists.size()<0) {
+		if (artists.size()==0) {
 			LabelPrinter.printError(label, "You cannot add any Artist because none was declared yet.");
 		}
 		

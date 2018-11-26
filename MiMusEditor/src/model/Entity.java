@@ -8,8 +8,12 @@ public abstract class Entity extends Unit implements MiMusWritable {
 	private String type;
 	
 	public Entity(int id) {
+		this(id, "Unknown");
+	}
+	
+	public Entity(int id, String type) {
 		this.setId(id);
-		this.setType("Unknown");
+		this.setType(type);
 	}
 
 	public abstract String getLemma();
