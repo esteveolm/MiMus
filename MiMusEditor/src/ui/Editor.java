@@ -14,6 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,6 +53,7 @@ import model.MiMusText;
 import model.ReferencesList;
 import model.Relation;
 import model.RelationsList;
+import ui.table.EntityTableViewer;
 //import ui.table.EntityTableViewer;
 //import ui.table.LemmaTableViewer;
 import ui.table.ReferenceTableViewer;
@@ -77,7 +79,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private String docID;
 	private int entityCurrentID;
 	private int referenceCurrentID;
-	//private EntityTableViewer entityHelper;
+	private EntityTableViewer entityHelper;
 	//private RelationTableViewer relationHelper;
 	//private LemmaTableViewer lemmaHelper;
 	private ReferenceTableViewer referenceHelper;
@@ -160,29 +162,29 @@ public class Editor extends EditorPart implements EventObserver {
 		regestText.setEditable(false);
 		TextStyler styler = new TextStyler(regestText);
 		
-//		/* List of entities */
-//		Section sectEnt = toolkit.createSection(form.getBody(), PROP_TITLE);
-//		sectEnt.setText("Entities at Regest");
-//		
-//		/* Table of entities */
-//		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
-//		TableViewer entityTV = entityHelper.createTableViewer();
-//		EntitiesList regestEntities = entityHelper.getEntities();
-//		
-//		/* Label of Regest entities */
-//		Label regestLabel = toolkit.createLabel(form.getBody(), "");
-//		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		/* Buttons to add/remove entities */
-//		GridData gridData = new GridData();
-//		gridData.widthHint = 100;
-//		Button setEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-//		setEnt.setLayoutData(gridData);
-//		setEnt.setText("Add");
-//		
-//		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-//		removeEnt.setLayoutData(gridData);
-//		removeEnt.setText("Delete");
+		/* List of entities */
+		Section sectEnt = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectEnt.setText("Entities at Regest");
+		
+		/* Table of entities */
+		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
+		TableViewer entityTV = entityHelper.createTableViewer();
+		EntitiesList regestEntities = entityHelper.getEntities();
+		
+		/* Label of Regest entities */
+		Label regestLabel = toolkit.createLabel(form.getBody(), "");
+		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove entities */
+		GridData gridData = new GridData();
+		gridData.widthHint = 100;
+		Button setEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		setEnt.setLayoutData(gridData);
+		setEnt.setText("Add");
+		
+		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		removeEnt.setLayoutData(gridData);
+		removeEnt.setText("Delete");
 		
 //		/* List of relations */
 //		Section sectRel = toolkit.createSection(form.getBody(), PROP_TITLE);
@@ -271,48 +273,51 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Button listeners */
 		
-//		setEnt.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				Point charCoords = regestText.getSelection();
-//				if (charCoords.x!=charCoords.y) {
-//					charCoords = regest.fromWordToCharCoordinates(
-//							regest.fromCharToWordCoordinates(charCoords));	// Trick to ensure selection of whole words
-//					Point wordCoords = regest.fromCharToWordCoordinates(charCoords);
-//					regestEntities.addUnit(new TypedEntity(regest.getWords(), wordCoords.x, wordCoords.y, entityCurrentID++));
-//					System.out.println("Adding Selected Entity - " + regestEntities.countUnits());
-//					LabelPrinter.printInfo(regestLabel, "Entity added successfully.");
-//					styler.addUpdate(charCoords.x, charCoords.y);
-//				} else {
-//					System.out.println("Could not add Selected Entity because no text was selected");
-//					LabelPrinter.printError(regestLabel, "You must select a part of text.");
-//				}
-//			}
-//		});
-//		removeEnt.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
-//						.getFirstElement();
-//				if (ent==null) {
-//					System.out.println("Could not remove Entity because none was selected.");
-//					LabelPrinter.printInfo(regestLabel, "You must select an entity to delete it.");
+		setEnt.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				ArtistaDialog dialog = new ArtistaDialog(
+						resources.getArtistas(), parent.getShell());
+				/* Dialog blocks Editor until user closes window */
+				int dialogResult = dialog.open();
+				if (dialogResult == Window.OK) {
+					int selection = dialog.getSelection();
+					if (selection>=0) {
+						regestEntities.addUnit(
+								resources.getArtistas().get(selection));
+						System.out.println("Adding selected Entity - " + regestEntities.countUnits());
+						LabelPrinter.printInfo(regestLabel, "Entity added successfully.");
+					} else {
+						System.out.println("No Entity added - " + regestEntities.countUnits());
+						LabelPrinter.printInfo(regestLabel, "Nothing was added. Go to ArtistaView first.");
+					}
+				} else {
+					System.out.println("No Entity added - " + regestEntities.countUnits());
+					LabelPrinter.printInfo(regestLabel, "Nothing was added.");
+				}
+			}
+		});
+		removeEnt.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
+						.getFirstElement();
+				if (ent==null) {
+					System.out.println("Could not remove Entity because none was selected.");
+					LabelPrinter.printInfo(regestLabel, "You must select an entity to delete it.");
 //				} else if (relations.using(ent)) {
 //					System.out.println("Could not remove Entity because it is used in an existing Relation.");
 //					LabelPrinter.printError(regestLabel, "You must remove all relations where this entity is used before you can remove it.");
 //				} else if (lemmas.using(ent)) {
 //					System.out.println("Could not remove Entity because it is used in an existing Lemmatization.");
 //					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
-//				} else {
-//					System.out.println(ent);
-//					Point charCoords = regest.fromWordToCharCoordinates(
-//							new Point(ent.getFrom(), ent.getTo()));
-//					regestEntities.removeUnit(ent);
-//					entityHelper.packColumns();
-//					System.out.println("Removing entity - " + regestEntities.countUnits());
-//					LabelPrinter.printInfo(regestLabel, "Entity deleted successfully.");
-//					styler.deleteUpdate(charCoords.x, charCoords.y);
-//				}
-//			}
-//		});
+				} else {
+					System.out.println(ent);
+					regestEntities.removeUnit(ent);
+					entityHelper.packColumns();
+					System.out.println("Removing entity - " + regestEntities.countUnits());
+					LabelPrinter.printInfo(regestLabel, "Entity deleted successfully.");
+				}
+			}
+		});
 //		addRel.addSelectionListener(new SelectionAdapter() {
 //			public void widgetSelected(SelectionEvent e) {
 //				if (regestEntities.countUnits()<2) {
@@ -598,7 +603,7 @@ public class Editor extends EditorPart implements EventObserver {
 		resources.refresh();
 		
 		/* Refresh all table viewers */
-		//entityHelper.refresh();
+		entityHelper.refresh();
 		//relationHelper.refresh();
 		//lemmaHelper.refresh();
 		referenceHelper.refresh();

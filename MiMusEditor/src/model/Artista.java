@@ -18,6 +18,7 @@ public class Artista extends Entity {
 		super(id);
 		this.name = "";
 		this.female = false;
+		this.setType("Artista");
 	}
 	
 	public Artista(int id, String name, boolean female) {

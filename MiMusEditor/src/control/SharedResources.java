@@ -11,10 +11,9 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+
+import model.Artista;
 import model.MiMusBibEntry;
-//import util.MiMusBiblioReader;
 
 /**
  * 
@@ -38,6 +37,7 @@ import model.MiMusBibEntry;
 public final class SharedResources {
 	
 	private List<MiMusBibEntry> bibEntries;
+	private List<Artista> artistas;
 	private String[] referenceTypes = {"Edition", "Register", "Citation"};
 	private String repoPath;
 	private IFolder corpusFolder;
@@ -130,12 +130,21 @@ public final class SharedResources {
 	
 	public List<MiMusBibEntry> getBibEntries() {
 		if (bibEntries == null) {
-			return readBiblio();
+			bibEntries = MiMusBibEntry.read();
 		}
 		return bibEntries;
 	}
 	public void setBibEntries(List<MiMusBibEntry> bibEntries) {
 		this.bibEntries = bibEntries;
+	}
+	public List<Artista> getArtistas() {
+		if (artistas == null) {
+			artistas = Artista.read();
+		}
+		return artistas;
+	}
+	public void setArtistas(List<Artista> artistas) {
+		this.artistas = artistas;
 	}
 	public String[] getReferenceTypes() {
 		return referenceTypes;

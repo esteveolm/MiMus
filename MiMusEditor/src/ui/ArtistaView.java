@@ -33,6 +33,7 @@ import model.Artista;
 import model.EntitiesList;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
+import util.xml.MiMusXML;
 
 public class ArtistaView extends ViewPart implements EventSubject {
 	
@@ -118,12 +119,15 @@ public class ArtistaView extends ViewPart implements EventSubject {
 					System.out.println("Could not create Artist because no sex was selected.");
 					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
 				} else {
-					artists.addUnit(new Artista(
+					Artista art = new Artista(
 							resources.getIncrementCurrentID(),
 							textName.getText(), 
-							comboSex.getText().equals("Female")));
+							comboSex.getText().equals("Female"));
+					artists.addUnit(art);
 					System.out.println("Artist created successfully.");
 					LabelPrinter.printInfo(label, "Artist created successfully.");
+					MiMusXML.openArtista().append(art).write();
+					notifyObservers();
 				}
 			}
 		});
@@ -150,7 +154,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 		btnLocal.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO: save xml.
+				
 			}
 		});
 		Button btnRemote = new Button(sectTable.getParent(), BUTTON_FLAGS);
