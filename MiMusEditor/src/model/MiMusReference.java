@@ -1,5 +1,10 @@
 package model;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import util.xml.MiMusWritable;
+
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -22,7 +27,7 @@ package model;
  * just by attaching the pages field at the end of it.
  * 
  */
-public class MiMusReference extends Unit {
+public class MiMusReference extends Unit implements MiMusWritable {
 	
 	private MiMusBibEntry bibEntry;
 	private String page;
@@ -65,6 +70,12 @@ public class MiMusReference extends Unit {
 	public void setPage(String page) {
 		this.page = page;
 	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public ReferencesList getReferences() {
 		return references;
 	}
@@ -77,10 +88,42 @@ public class MiMusReference extends Unit {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getType() {
-		return type;
+
+	/* Implementation of MiMusWritable */
+	
+	@Override
+	public Element toXMLElement(Document doc) {
+		Element tagRef = doc.createElement(getWritableName());
+		Element tagBiblioId = doc.createElement("biblio_id");
+		tagBiblioId.appendChild(doc.createTextNode(
+				String.valueOf(bibEntry.getId())));
+		Element tagPage = doc.createElement("page");
+		tagPage.appendChild(doc.createTextNode(page));
+		Element tagType = doc.createElement("type");
+		tagType.appendChild(doc.createTextNode(
+				String.valueOf(type)));
+		Element tagId = doc.createElement("id");
+		tagId.appendChild(doc.createTextNode(
+				String.valueOf(getWritableId())));
+		tagRef.appendChild(tagBiblioId);
+		tagRef.appendChild(tagPage);
+		tagRef.appendChild(tagType);
+		tagRef.appendChild(tagId);
+		return tagRef;
 	}
-	public void setType(int type) {
-		this.type = type;
+
+	@Override
+	public String getWritableName() {
+		return "reference";
+	}
+
+	@Override
+	public String getWritableCategory() {
+		return "references";
+	}
+
+	@Override
+	public String getWritableId() {
+		return String.valueOf(getId());
 	}
 }
