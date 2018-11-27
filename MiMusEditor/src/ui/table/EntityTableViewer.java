@@ -37,9 +37,6 @@ public class EntityTableViewer extends MiMusTableViewer {
 		}
 		tv.setUseHashlookup(true);
 		tv.setColumnProperties(columnNames);
-		
-		/* Create cell editors for each column */
-		//tv.setCellModifier(new EntityCellModifier());
 		tv.setContentProvider(new EntityContentProvider());
 		tv.setLabelProvider(new EntityLabelProvider());
 		tv.setInput(entities);
@@ -53,79 +50,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 	
-//	private static String[] entityTypesAsStrings() {
-//		String[] res = new String[Editor.ENTITY_TYPES.length];
-//		for (int i=0; i<res.length; i++) {
-//			res[i] = Editor.ENTITY_TYPES[i];
-//		}
-//		return res;
-//	}
-//	
-//	private static String[] personTypesAsStrings() {
-//		String[] res = new String[Editor.PERSON_TYPES.length];
-//		for (int i=0; i<res.length; i++) {
-//			res[i] = Editor.PERSON_TYPES[i];
-//		}
-//		return res;
-//	}
-//	
-//	private static String[] placeTypesAsStrings() {
-//		String[] res = new String[Editor.PLACE_TYPES.length];
-//		for (int i=0; i<res.length; i++) {
-//			res[i] = Editor.PLACE_TYPES[i];
-//		}
-//		return res;
-//	}
-	
-//	class EntityCellModifier implements ICellModifier {	
-//		@Override
-//		public boolean canModify(Object element, String property) {
-//			int colIdx = getColumnNames().indexOf(property);
-//			return colIdx != 0;	// Col 0 is Text, the rest can be modified
-//		}
-//
-//		@Override
-//		public Object getValue(Object element, String property) {
-//			int colIdx = getColumnNames().indexOf(property);
-//			TypedEntity ent = (TypedEntity) element;
-//			System.out.println(ent.toString());
-//			switch(colIdx) {
-//			case 1:	// Type
-//				return ent.getType();
-//			case 2: // Subtype
-//				return ent.getSubtype();
-//			default:	// Includes exceptions AND case 0 (Text)
-//				return 0;
-//			}
-//		}
-//
-//		@Override
-//		public void modify(Object element, String property, Object value) {
-//			int colIdx = getColumnNames().indexOf(property);
-//			TypedEntity ent = (TypedEntity) ((TableItem) element).getData();
-//			int valueIdx = (int) value;
-//			switch(colIdx) {
-//			case 1:	// Type
-//				ent.setType(valueIdx);
-//				if (valueIdx==0) {
-//					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.PERSON_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
-//				} else if (valueIdx==2) {
-//					tv.getCellEditors()[2] = new ComboBoxCellEditor(tv.getTable(), TypedEntity.PLACE_TYPES, SWT.READ_ONLY | SWT.DROP_DOWN);
-//				}
-//				tv.refresh();
-//				break;
-//			case 2:	// Subtype
-//				ent.setSubtype(valueIdx);
-//				break;
-//			default:	// Includes exceptions AND case 0 (Text)
-//				break;
-//			}
-//			entities.unitChanged(ent);
-//		}
-//	}
-	
 	class EntityLabelProvider extends LabelProvider implements ITableLabelProvider {
-
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;

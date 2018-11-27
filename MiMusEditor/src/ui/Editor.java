@@ -42,22 +42,20 @@ import org.xml.sax.SAXException;
 import control.EventObserver;
 import control.SharedControl;
 import control.SharedResources;
+import model.Artista;
 import model.EntitiesList;
 import model.Entity;
-import model.Lemma;
-import model.LemmasList;
+
 import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusReference;
 import model.MiMusText;
 import model.ReferencesList;
-import model.Relation;
-import model.RelationsList;
+import model.Transcription;
+import model.TranscriptionsList;
 import ui.table.EntityTableViewer;
-//import ui.table.EntityTableViewer;
-//import ui.table.LemmaTableViewer;
 import ui.table.ReferenceTableViewer;
-//import ui.table.RelationTableViewer;
+import ui.table.TranscriptionTableViewer;
 import util.LabelPrinter;
 import util.MiMusEntryReader;
 import util.TextStyler;
@@ -80,8 +78,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private int entityCurrentID;
 	private int referenceCurrentID;
 	private EntityTableViewer entityHelper;
-	//private RelationTableViewer relationHelper;
-	//private LemmaTableViewer lemmaHelper;
+	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
 	
 	public Editor() {
@@ -92,7 +89,8 @@ public class Editor extends EditorPart implements EventObserver {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
-		docID = getEditorInput().getName().substring(0, getEditorInput().getName().indexOf('.'));
+		docID = getEditorInput().getName()
+				.substring(0, getEditorInput().getName().indexOf('.'));
 		System.out.println("Doc ID: " + docID);
 		entityCurrentID = 0;
 		referenceCurrentID = 0;
@@ -149,16 +147,20 @@ public class Editor extends EditorPart implements EventObserver {
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Read-only data */
-		Text readOnlyText = new Text(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		Text readOnlyText = new Text(form.getBody(), 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		String readOnlyStr = docEntry.getReadOnlyText();
 		readOnlyText.setText(readOnlyStr);
 		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
 		
+		
+		/* ENTITIES PART */
 		/* Regest text */
-		regestText = new StyledText(form.getBody(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		regestText = new StyledText(form.getBody(), 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
-		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
+		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		regestText.setEditable(false);
 		TextStyler styler = new TextStyler(regestText);
 		
@@ -169,7 +171,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Table of entities */
 		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
-		EntitiesList regestEntities = entityHelper.getEntities();
+		EntitiesList entities = entityHelper.getEntities();
 		
 		/* Label of Regest entities */
 		Label regestLabel = toolkit.createLabel(form.getBody(), "");
@@ -185,64 +187,44 @@ public class Editor extends EditorPart implements EventObserver {
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
 		removeEnt.setText("Delete");
+
 		
-//		/* List of relations */
-//		Section sectRel = toolkit.createSection(form.getBody(), PROP_TITLE);
-//		sectRel.setText("Relations at Regest");
-//		
-//		/* Table of relations */
-//		relationHelper = new RelationTableViewer(sectRel.getParent(), styler, regestEntities);
-//		TableViewer relationTV = relationHelper.createTableViewer();
-//		RelationsList relations = relationHelper.getRelations();
-//		
-//		/* Label of relations */
-//		Label relationsLabel = toolkit.createLabel(form.getBody(), "");
-//		relationsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		/* Buttons to add/remove relations */
-//		GridData gridRel = new GridData();
-//		gridRel.widthHint = 100;
-//		Button addRel = new Button(sectRel.getParent(), SWT.PUSH | SWT.CENTER);
-//		addRel.setLayoutData(gridRel);
-//		addRel.setText("Add");
-//		
-//		Button removeRel = new Button(sectRel.getParent(), SWT.PUSH | SWT.CENTER);
-//		removeRel.setLayoutData(gridRel);
-//		removeRel.setText("Delete");
+		/* TRANSCRIPTIONS PART */
+		/* Transcription section */
+		Section sectTrans = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectTrans.setText("Transcriptions of Entities");
 		
-//		/* Transcription part of the form */
-//		Section sectTrans = toolkit.createSection(form.getBody(), PROP_TITLE);
-//		sectTrans.setText("Entities at Transcription");
-//		
-//		/* Transcription text */
-//		transcriptionText = new StyledText(sectTrans.getParent(), SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-//		transcriptionText.setText(docEntry.getTranscriptionText());
-//		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	// Necessary for wrapping
-//		transcriptionText.setEditable(false);
-//		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-//		EntitiesList transcriptionEntities = new EntitiesList(transcription.getWords());
-//
-//		/* Transcription entities & Lemmatizations table */
-//		lemmaHelper = new LemmaTableViewer(sectTrans.getParent(), transcriptionStyler, regestEntities, transcriptionEntities);
-//		TableViewer lemmaTV = lemmaHelper.createTableViewer();
-//		LemmasList lemmas = lemmaHelper.getLemmas();
-//		
-//		/* Label of transcriptions */
-//		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
-//		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
-//		/* Buttons to add/remove lemma associations */
-//		GridData gridLemma = new GridData();
-//		gridLemma.widthHint = 100;
-//		Button addLemma = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
-//		addLemma.setLayoutData(gridLemma);
-//		addLemma.setText("Add");
-//		
-//		Button removeLemma = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
-//		removeLemma.setLayoutData(gridLemma);
-//		removeLemma.setText("Delete");
+		/* Transcription text */
+		transcriptionText = new StyledText(sectTrans.getParent(), 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		transcriptionText.setText(docEntry.getTranscriptionText());
+		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		transcriptionText.setEditable(false);
+		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
+
+		/* Transcription entities and its table */
+		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent());
+		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
+		TranscriptionsList transcriptions = transcriptionHelper.getTranscriptions();
 		
-		/* References part of the form */
+		/* Label of transcriptions */
+		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
+		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove transcription associations */
+		GridData gridTrans = new GridData();
+		gridTrans.widthHint = 100;
+		Button addTrans = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
+		addTrans.setLayoutData(gridTrans);
+		addTrans.setText("Add");
+		
+		Button removeTrans = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
+		removeTrans.setLayoutData(gridTrans);
+		removeTrans.setText("Delete");
+		
+		
+		/* REFERENCES PART */
+		/* References section */
 		Section sectRef = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectRef.setText("References in bibliography");
 		
@@ -252,9 +234,10 @@ public class Editor extends EditorPart implements EventObserver {
 		Label rawRefsLabel = toolkit.createLabel(sectRef.getParent(), rawRefs);
 		rawRefsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Table of references, necessary to initialize it with Unknown with initList() */
+		/* Table of references */
 		ReferencesList references = new ReferencesList(resources.getBibEntries());
-		referenceHelper = new ReferenceTableViewer(sectRef.getParent(), references, docID, resources);
+		referenceHelper = new ReferenceTableViewer(
+				sectRef.getParent(), references, docID, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
 		/* Label of references */
@@ -271,8 +254,9 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRef.setLayoutData(gridRef);
 		removeRef.setText("Delete");
 		
-		/* Button listeners */
 		
+		/* BUTTON LISTENERS */
+		/* Entity buttons */
 		setEnt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ArtistaDialog dialog = new ArtistaDialog(
@@ -282,17 +266,23 @@ public class Editor extends EditorPart implements EventObserver {
 				if (dialogResult == Window.OK) {
 					int selection = dialog.getSelection();
 					if (selection>=0) {
-						regestEntities.addUnit(
+						entities.addUnit(
 								resources.getArtistas().get(selection));
-						System.out.println("Adding selected Entity - " + regestEntities.countUnits());
-						LabelPrinter.printInfo(regestLabel, "Entity added successfully.");
+						System.out.println("Adding selected Entity - " 
+								+ entities.countUnits());
+						LabelPrinter.printInfo(regestLabel, 
+								"Entity added successfully.");
 					} else {
-						System.out.println("No Entity added - " + regestEntities.countUnits());
-						LabelPrinter.printInfo(regestLabel, "Nothing was added. Go to ArtistaView first.");
+						System.out.println("No Entity added - " 
+								+ entities.countUnits());
+						LabelPrinter.printInfo(regestLabel, 
+								"Nothing was added. Go to ArtistaView first.");
 					}
 				} else {
-					System.out.println("No Entity added - " + regestEntities.countUnits());
-					LabelPrinter.printInfo(regestLabel, "Nothing was added.");
+					System.out.println("No Entity added - " 
+							+ entities.countUnits());
+					LabelPrinter.printInfo(regestLabel, 
+							"Nothing was added.");
 				}
 			}
 		});
@@ -301,8 +291,10 @@ public class Editor extends EditorPart implements EventObserver {
 				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
 						.getFirstElement();
 				if (ent==null) {
-					System.out.println("Could not remove Entity because none was selected.");
-					LabelPrinter.printInfo(regestLabel, "You must select an entity to delete it.");
+					System.out.println(
+							"Could not remove Entity because none was selected.");
+					LabelPrinter.printInfo(regestLabel, 
+							"You must select an entity to delete it.");
 //				} else if (relations.using(ent)) {
 //					System.out.println("Could not remove Entity because it is used in an existing Relation.");
 //					LabelPrinter.printError(regestLabel, "You must remove all relations where this entity is used before you can remove it.");
@@ -311,108 +303,132 @@ public class Editor extends EditorPart implements EventObserver {
 //					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
 				} else {
 					System.out.println(ent);
-					regestEntities.removeUnit(ent);
+					entities.removeUnit(ent);
 					entityHelper.packColumns();
-					System.out.println("Removing entity - " + regestEntities.countUnits());
-					LabelPrinter.printInfo(regestLabel, "Entity deleted successfully.");
+					System.out.println("Removing entity - " 
+							+ entities.countUnits());
+					LabelPrinter.printInfo(regestLabel, 
+							"Entity deleted successfully.");
 				}
 			}
 		});
-//		addRel.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				if (regestEntities.countUnits()<2) {
-//					LabelPrinter.printError(relationsLabel, "Cannot create a relation if fewer than 2 entities are created.");
-//					System.out.println("Cannot create relation with fewer than 2 entities.");
-//				} else {
-//					relations.addUnit(new Relation(regestEntities));
-//					LabelPrinter.printInfo(relationsLabel, "Relation created successfully.");
-//					System.out.println("Adding relation - " + relations.countUnits());
-//				}
-//				
-//			}
-//		});
-//		removeRel.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				Relation rel = (Relation) ((IStructuredSelection) relationTV.getSelection())
-//						.getFirstElement();
-//				if (rel==null) {
-//					System.out.println("Could not remove Relation because none was selected.");
-//					LabelPrinter.printError(relationsLabel, "You must select a relation to delete it.");
-//				} else {
-//					System.out.println(rel);
-//					relations.removeUnit(rel);
-//					LabelPrinter.printInfo(relationsLabel, "Relation deleted successfully.");
-//					System.out.println("Removing relation - " + relations.countUnits());
-//				}
-//			}
-//		});
-//		addLemma.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				Point charCoords = transcriptionText.getSelection();
-//				if (charCoords.x!=charCoords.y) {
-//					charCoords = transcription.fromWordToCharCoordinates(
-//							transcription.fromCharToWordCoordinates(
-//							charCoords));	// Trick to ensure selection of whole words
-//					Point wordCoords = transcription.fromCharToWordCoordinates(charCoords);
-//					Entity transEnt = new UntypedEntity(transcription.getWords(), wordCoords.x, wordCoords.y, entityCurrentID++);
-//					transcriptionEntities.addUnit(transEnt);
-//					lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, regestEntities.getIdAt(0), transEnt.getId()));
-//					LabelPrinter.printInfo(transcriptionLabel, "Lemma added successfully.");
-//					transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
-//				} else {
-//					System.out.println("Could not add Selected Entity because no text was selected");
-//					LabelPrinter.printError(transcriptionLabel, "You must select a part of the text.");
-//				}
-//			}
-//		});
-//		removeLemma.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				Lemma lemma = (Lemma) ((IStructuredSelection) lemmaTV.getSelection())
-//							.getFirstElement();
-//				if (lemma==null) {
-//					System.out.println("Could not remove Lemma because none was selected.");
-//					LabelPrinter.printError(transcriptionLabel, "You must select a lemma to delete it.");
-//				} else {
-//					/* First, undo colour using objects */
-//					LabelPrinter.printInfo(transcriptionLabel, "Lemma deleted successfully.");
-//					Point charCoords = transcription.fromWordToCharCoordinates(new Point(
-//							lemma.getTranscriptionEntityObject().getFrom(), 
-//							lemma.getTranscriptionEntityObject().getTo()));
-//					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
-//					
-//					/* Then, remove objects from lists */
-//					System.out.println(lemma);
-//					lemmas.removeUnit(lemma);
-//					System.out.println("Removing lemma - " + lemmas.countUnits());
-//					transcriptionEntities.removeUnit(lemma.getTranscriptionEntityObject());
-//					System.out.println("Removing transcription entity - " + transcriptionEntities.countUnits());
-//				}
-//			}
-//		});
+		
+		/* Transcription buttons */
+		addTrans.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Point charCoords = transcriptionText.getSelection();
+				if (charCoords.x!=charCoords.y) {
+					/* Picks transcripted form in String and text coordinates */
+					charCoords = transcription.fromWordToCharCoordinates(
+							transcription.fromCharToWordCoordinates(
+							charCoords));	// Trick to ensure selection of whole words
+					transcriptionText.setSelection(charCoords);
+					String form = transcriptionText.getSelectionText();
+					
+					/* Launches Dialog to pick Entity */
+					ArtistaDialog dialog = new ArtistaDialog(
+							resources.getArtistas(), parent.getShell());
+					/* Dialog blocks Editor until user closes window */
+					int dialogResult = dialog.open();
+					if (dialogResult == Window.OK) {
+						int selection = dialog.getSelection();
+						if (selection>=0) {
+							/* User actually selected something */
+							Artista art = resources.getArtistas()
+									.get(dialog.getSelection());
+							if (entities.getUnits().contains(art)) {
+								/* Selected entity has been marked in this document */
+								Transcription trans = new Transcription(
+										art, form, charCoords);
+								transcriptions.addUnit(trans);
+								System.out.println("Adding selected Transcription - " 
+										+ transcriptions.countUnits());
+								LabelPrinter.printInfo(transcriptionLabel, 
+										"Lemma added successfully.");
+								transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
+							} else {
+								/* Entity not in document, don't add transcription */
+								System.out.println("Entity of Transcription not in document - "
+										+ transcriptions.countUnits());
+								LabelPrinter.printError(transcriptionLabel, 
+										"Entity selected must have been marked in this document.");
+							}
+						} else {
+							/* User pressed OK but selected nothing */
+							System.out.println("No Transcription added - " 
+									+ transcriptions.countUnits());
+							LabelPrinter.printInfo(transcriptionLabel, 
+									"Nothing was added. Go to ArtistaView first.");
+						}
+					} else {
+						/* User pressed Cancel, nothing to add */
+						System.out.println("No Transcription added - " 
+								+ transcriptions.countUnits());
+						LabelPrinter.printInfo(transcriptionLabel, 
+								"Nothing was added.");
+					}
+				} else {
+					/* User marked no transcription in text */
+					System.out.println("Could not add Selected Entity because no text was selected");
+					LabelPrinter.printError(transcriptionLabel, "You must select a part of the text.");
+				}
+			}
+		});
+		removeTrans.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Transcription trans = (Transcription) 
+						((IStructuredSelection) transcriptionTV.getSelection())
+							.getFirstElement();
+				if (trans==null) {
+					System.out.println(
+							"Could not remove Transcription because none was selected.");
+					LabelPrinter.printError(transcriptionLabel, 
+							"You must select a transcription to delete it.");
+				} else {
+					/* Undo colour in text */
+					Point charCoords = trans.getCoords();
+					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
+					
+					/* Remove transcription */
+					transcriptions.removeUnit(trans);
+					System.out.println("Removing lemma - " 
+							+ transcriptions.countUnits());
+					LabelPrinter.printInfo(transcriptionLabel, 
+							"Transcription deleted successfully.");
+				}
+			}
+		});
+		
+		/* Reference buttons */
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				references.addUnit(new MiMusReference(references, 0, referenceCurrentID++));
+				references.addUnit(
+						new MiMusReference(references, 0, referenceCurrentID++));
 				
 				/* Reflect document is user of entry, in model and xml */
 				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
 				
-				LabelPrinter.printInfo(referenceLabel, "Reference added successfully.");
+				LabelPrinter.printInfo(referenceLabel, 
+						"Reference added successfully.");
 				System.out.println("Reference added successfully.");
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MiMusReference ref = (MiMusReference) ((IStructuredSelection) referenceTV.getSelection())
+				MiMusReference ref = (MiMusReference) 
+						((IStructuredSelection) referenceTV.getSelection())
 						.getFirstElement();
 				if (ref==null) {
-					System.out.println("Could not remove Reference because none was selected.");
-					LabelPrinter.printError(referenceLabel, "You must select a reference to delete it.");
+					System.out.println(
+							"Could not remove Reference because none was selected.");
+					LabelPrinter.printError(referenceLabel, 
+							"You must select a reference to delete it.");
 				} else {
 					references.removeUnit(ref);
 					
@@ -426,13 +442,16 @@ public class Editor extends EditorPart implements EventObserver {
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
 					
-					LabelPrinter.printInfo(referenceLabel, "Reference deleted successfully.");
+					LabelPrinter.printInfo(referenceLabel, 
+							"Reference deleted successfully.");
 					System.out.println("Removing Reference " + ref.toString());
 				}
 			}
 		});
 		
-		/* XML Button */
+		
+		/* INPUT/OUTPUT */
+		/* Button to output to XML */
 		Section sectXML = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectXML.setText("Create XML");
 		Label xmlLabel = toolkit.createLabel(sectXML.getParent(), "");
@@ -458,7 +477,8 @@ public class Editor extends EditorPart implements EventObserver {
 		if (hasXML) {
 			try {
 				File xmlFile = new File(xmlPath);
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilderFactory dbFactory = 
+						DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				Document doc = dBuilder.parse(xmlFile);
 				doc.getDocumentElement().normalize();
@@ -536,8 +556,12 @@ public class Editor extends EditorPart implements EventObserver {
 						
 						/* Finds bibEntry looking by id in references */
 						MiMusBibEntry foundBibEntry = null;
-						int refId = Integer.parseInt(eRef.getElementsByTagName("ref_id").item(0).getTextContent());
-						int bibId = Integer.parseInt(eRef.getElementsByTagName("biblio_id").item(0).getTextContent());
+						int refId = Integer.parseInt(
+								eRef.getElementsByTagName("ref_id")
+								.item(0).getTextContent());
+						int bibId = Integer.parseInt(
+								eRef.getElementsByTagName("biblio_id")
+								.item(0).getTextContent());
 						for (int j=0; j<resources.getBibEntries().size(); j++) {
 							if (resources.getBibEntries().get(j).getId()==bibId) {
 								foundBibEntry = resources.getBibEntries().get(j);
@@ -548,9 +572,11 @@ public class Editor extends EditorPart implements EventObserver {
 						if (foundBibEntry != null) {
 							MiMusReference foundRef = new MiMusReference(references,
 									foundBibEntry, 
-									eRef.getElementsByTagName("pages").item(0).getTextContent(),
+									eRef.getElementsByTagName("pages")
+									.item(0).getTextContent(),
 									Integer.parseInt(
-											eRef.getElementsByTagName("ref_type").item(0).getTextContent()),
+											eRef.getElementsByTagName("ref_type")
+											.item(0).getTextContent()),
 									refId);
 							references.addUnit(foundRef);
 						}
@@ -604,8 +630,8 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Refresh all table viewers */
 		entityHelper.refresh();
+		transcriptionHelper.refresh();
 		//relationHelper.refresh();
-		//lemmaHelper.refresh();
 		referenceHelper.refresh();
 	}
 
