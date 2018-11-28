@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import control.SharedResources;
+import model.MiMusEntry;
 
 /**
  * 
@@ -86,7 +87,7 @@ public class MiMusXML {
 		System.out.println("Document is:" + f);
 	}
 	
-	private static MiMusXML open(File file) {
+	private static MiMusXML openCommon(File file) {
 		/* If same file as before is asked, don't re-create it */
 		if (f == null || !f.getPath().equals(file.getPath())) {
 			return new MiMusXML(file);
@@ -96,13 +97,44 @@ public class MiMusXML {
 	}
 	
 	public static MiMusXML openBiblio() {
-		return open(new File(
+		return openCommon(new File(
 				SharedResources.getInstance().getBiblioPath()));
 	}
 	
 	public static MiMusXML openArtista() {
-		return open(new File(
+		return openCommon(new File(
 				SharedResources.getInstance().getArtistaPath()));
+	}
+	
+	public static MiMusXML openDoc(MiMusEntry doc) {
+		File path = new File(SharedResources.getInstance().getTxtPath()
+				+ "/" + doc.getIdStr() + ".txt");
+		f = path;
+		if (!path.exists()) {
+			MiMusXML.createDoc().write().close();
+		}
+		return openCommon(path);
+	}
+	
+	private static MiMusXML createDoc() {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		try {
+			docBuilder = docFactory.newDocumentBuilder();
+			org.w3c.dom.Document newDoc = docBuilder.newDocument();
+			Element root = newDoc.createElement("document");
+			newDoc.appendChild(root);
+			Element entities = newDoc.createElement("entities");
+			Element transcriptions = newDoc.createElement("transcriptions");
+			Element references = newDoc.createElement("references");
+			root.appendChild(entities);
+			root.appendChild(transcriptions);
+			root.appendChild(references);
+			doc = newDoc;
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		return new MiMusXML();
 	}
 	
 	public MiMusXML append(MiMusWritable entry) {

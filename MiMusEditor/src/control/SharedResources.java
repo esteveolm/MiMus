@@ -42,6 +42,7 @@ public final class SharedResources {
 	private String repoPath;
 	private IFolder corpusFolder;
 	private String corpusPath;
+	private String txtPath;
 	private String biblioPath;
 	private String artistaPath;
 	private String remote;
@@ -90,6 +91,8 @@ public final class SharedResources {
 		IFile artistaFile = strings.getFile("artistas.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
+		IFolder txts = corpus.getFolder("txt");
+		this.setTxtPath(txts.getLocation().toString());
 	}
 	
 	/**
@@ -169,6 +172,12 @@ public final class SharedResources {
 	}
 	public void setCorpusPath(String corpusPath) {
 		this.corpusPath = corpusPath;
+	}
+	public String getTxtPath() {
+		return txtPath;
+	}
+	public void setTxtPath(String txtPath) {
+		this.txtPath = txtPath;
 	}
 	public String getBiblioPath() {
 		return biblioPath;
