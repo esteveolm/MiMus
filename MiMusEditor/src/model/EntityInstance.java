@@ -60,6 +60,7 @@ public class EntityInstance extends Entity implements MiMusWritable {
 
 	@Override
 	public String getWritableCategory() {
+		System.out.println("category is entities");
 		return "entities";
 	}
 

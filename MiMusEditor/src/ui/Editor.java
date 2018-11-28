@@ -15,6 +15,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CommitCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -139,6 +144,9 @@ public class Editor extends EditorPart implements EventObserver {
 	
 	@Override
 	public void createPartControl(Composite parent) {
+		/* Create XML schema if not present */
+		MiMusXML xml = MiMusXML.openDoc(docEntry).write();
+		
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
@@ -235,7 +243,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Table of references */
 		ReferencesList references = new ReferencesList(resources.getBibEntries());
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), references, docID, resources);
+				sectRef.getParent(), references, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
 		/* Label of references */
@@ -268,6 +276,7 @@ public class Editor extends EditorPart implements EventObserver {
 								resources.getArtistas().get(selection),
 								entityCurrentID++);
 						entities.addUnit(inst);
+						MiMusXML.openDoc(docEntry).append(inst).write();
 						System.out.println("Adding selected Entity - " 
 								+ entities.countUnits());
 						LabelPrinter.printInfo(regestLabel, 
@@ -305,6 +314,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					System.out.println(inst);
 					entities.removeUnit(inst);
+					MiMusXML.openDoc(docEntry).remove(inst).write();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
 							+ entities.countUnits());
@@ -343,6 +353,7 @@ public class Editor extends EditorPart implements EventObserver {
 								Transcription trans = new Transcription(
 										art, form, charCoords);
 								transcriptions.addUnit(trans);
+								MiMusXML.openDoc(docEntry).append(trans).write();
 								System.out.println("Adding selected Transcription - " 
 										+ transcriptions.countUnits());
 								LabelPrinter.printInfo(transcriptionLabel, 
@@ -394,6 +405,7 @@ public class Editor extends EditorPart implements EventObserver {
 					
 					/* Remove transcription */
 					transcriptions.removeUnit(trans);
+					MiMusXML.openDoc(docEntry).remove(trans).write();
 					System.out.println("Removing lemma - " 
 							+ transcriptions.countUnits());
 					LabelPrinter.printInfo(transcriptionLabel, 
@@ -406,13 +418,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				references.addUnit(
-						new MiMusReference(references, 0, referenceCurrentID++));
+				MiMusReference ref = 
+						new MiMusReference(references, 0, referenceCurrentID++);
+				references.addUnit(ref);
 				
 				/* Reflect document is user of entry, in model and xml */
 				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
+				MiMusXML.openDoc(docEntry).append(ref).write();
 				
 				LabelPrinter.printInfo(referenceLabel, 
 						"Reference added successfully.");
@@ -442,6 +456,7 @@ public class Editor extends EditorPart implements EventObserver {
 							.get(references.getBibEntryIdx(oldId));
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
+					MiMusXML.openDoc(docEntry).remove(ref).write();
 					
 					LabelPrinter.printInfo(referenceLabel, 
 							"Reference deleted successfully.");
@@ -452,40 +467,50 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		
 		/* INPUT/OUTPUT */
-		/* Button to output to XML */
-		Section sectXML = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectXML.setText("Create XML");
-		Label xmlLabel = toolkit.createLabel(sectXML.getParent(), "");
-		xmlLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		/* Button to push to upstream */
+		Section sectPush = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectPush.setText("Upload your annotations");
+		Label pushLabel = toolkit.createLabel(sectPush.getParent(), "");
+		pushLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Button btn = new Button(sectXML.getParent(), SWT.PUSH);
-		btn.setText("Press to save as XML");
-//		btn.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				MiMusXMLWriter xmlWriter = new MiMusXMLWriter(regest, transcription,
-//						regestEntities, transcriptionEntities, lemmas, references, docID);
-//				if (xmlWriter.create() && xmlWriter.write(xmlPath)) {
-//					LabelPrinter.printInfo(xmlLabel, "Saved to XML file successfully.");
-//				} else {
-//					LabelPrinter.printError(xmlLabel, "Could not save to XML.");
-//				}
-//			}
-//		});
+		Button btnPush = new Button(sectPush.getParent(), SWT.PUSH);
+		btnPush.setText("Press to upload document");
+		btnPush.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					/* Push artista.xml to github */
+					Git git = resources.getGit();
+					AddCommand add = git.add();
+					add.addFilepattern(resources.getRepoPath() 
+							+ "/MiMusCorpus/xml/" + docID + ".xml");
+					add.call();
+					CommitCommand commit = git.commit();
+					commit.setMessage("Saving " + docID + ".xml to remote.");
+					commit.call();
+					PushCommand push = git.push();
+					push.setRemote(resources.getRemote());
+					push.call();
+				} catch (GitAPIException e1) {
+					e1.printStackTrace();
+					System.out.println("Could not push " + docID + ".xml.");
+				}
+			}
+		});
 		toolkit.dispose();
 		
-		/* Load entities that were declared in the XML */
-		if (hasXML) {
-			try {
-				File xmlFile = new File(xmlPath);
-				DocumentBuilderFactory dbFactory = 
-						DocumentBuilderFactory.newInstance();
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				Document doc = dBuilder.parse(xmlFile);
-				doc.getDocumentElement().normalize();
-				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
-
-				/* Load entities */
+//		/* Load entities that were declared in the XML */
+//		if (hasXML) {
+//			try {
+//				File xmlFile = new File(xmlPath);
+//				DocumentBuilderFactory dbFactory = 
+//						DocumentBuilderFactory.newInstance();
+//				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//				Document doc = dBuilder.parse(xmlFile);
+//				doc.getDocumentElement().normalize();
+//				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
+//
+//				/* Load entities */
 //				NodeList nl = doc.getElementsByTagName("entity");
 //				for (int i=0; i<nl.getLength(); i++) {
 //					Node nEnt = nl.item(i);
@@ -547,50 +572,50 @@ public class Editor extends EditorPart implements EventObserver {
 //						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, foundRegestEntity.getId(), foundTranscriptionEntity.getId()));
 //					}
 //				}
-				
-				/* Load references */
-				NodeList nl = doc.getElementsByTagName("reference");
-				for (int i=0; i<nl.getLength(); i++) {
-					Node nRef = nl.item(i);
-					if (nRef.getNodeType() == Node.ELEMENT_NODE) {
-						Element eRef = (Element) nRef;
-						
-						/* Finds bibEntry looking by id in references */
-						MiMusBibEntry foundBibEntry = null;
-						int refId = Integer.parseInt(
-								eRef.getElementsByTagName("ref_id")
-								.item(0).getTextContent());
-						int bibId = Integer.parseInt(
-								eRef.getElementsByTagName("biblio_id")
-								.item(0).getTextContent());
-						for (int j=0; j<resources.getBibEntries().size(); j++) {
-							if (resources.getBibEntries().get(j).getId()==bibId) {
-								foundBibEntry = resources.getBibEntries().get(j);
-								break;
-							}
-						}
-						/* Checks actually found corresponding bibEntry by id */
-						if (foundBibEntry != null) {
-							MiMusReference foundRef = new MiMusReference(references,
-									foundBibEntry, 
-									eRef.getElementsByTagName("pages")
-									.item(0).getTextContent(),
-									Integer.parseInt(
-											eRef.getElementsByTagName("ref_type")
-											.item(0).getTextContent()),
-									refId);
-							references.addUnit(foundRef);
-						}
-					}
-				}
-			} catch (ParserConfigurationException pce) {
-				System.out.println("Error with DOM parser.");
-				pce.printStackTrace();
-			} catch (IOException | SAXException ioe) {
-				System.out.println("Error parsing document " + xmlPath);
-				ioe.printStackTrace();
-			}
-		}
+//				
+//				/* Load references */
+//				NodeList nl = doc.getElementsByTagName("reference");
+//				for (int i=0; i<nl.getLength(); i++) {
+//					Node nRef = nl.item(i);
+//					if (nRef.getNodeType() == Node.ELEMENT_NODE) {
+//						Element eRef = (Element) nRef;
+//						
+//						/* Finds bibEntry looking by id in references */
+//						MiMusBibEntry foundBibEntry = null;
+//						int refId = Integer.parseInt(
+//								eRef.getElementsByTagName("ref_id")
+//								.item(0).getTextContent());
+//						int bibId = Integer.parseInt(
+//								eRef.getElementsByTagName("biblio_id")
+//								.item(0).getTextContent());
+//						for (int j=0; j<resources.getBibEntries().size(); j++) {
+//							if (resources.getBibEntries().get(j).getId()==bibId) {
+//								foundBibEntry = resources.getBibEntries().get(j);
+//								break;
+//							}
+//						}
+//						/* Checks actually found corresponding bibEntry by id */
+//						if (foundBibEntry != null) {
+//							MiMusReference foundRef = new MiMusReference(references,
+//									foundBibEntry, 
+//									eRef.getElementsByTagName("pages")
+//									.item(0).getTextContent(),
+//									Integer.parseInt(
+//											eRef.getElementsByTagName("ref_type")
+//											.item(0).getTextContent()),
+//									refId);
+//							references.addUnit(foundRef);
+//						}
+//					}
+//				}
+//			} catch (ParserConfigurationException pce) {
+//				System.out.println("Error with DOM parser.");
+//				pce.printStackTrace();
+//			} catch (IOException | SAXException ioe) {
+//				System.out.println("Error parsing document " + xmlPath);
+//				ioe.printStackTrace();
+//			}
+//		}
 	}
 	
 	public ReferencesList getReferences() {

@@ -78,11 +78,13 @@ public class Transcription extends Unit implements MiMusWritable {
 		Element tagForm = doc.createElement("form");
 		tagForm.appendChild(doc.createTextNode(form));
 		Element tagStartChar = doc.createElement("start_char");
-		tagStartChar.appendChild(doc.createTextNode(
-				String.valueOf(coords.x)));
 		Element tagEndChar = doc.createElement("end_char");
-		tagEndChar.appendChild(doc.createTextNode(
-				String.valueOf(coords.y)));
+		if (coords != null) {
+			tagStartChar.appendChild(doc.createTextNode(
+					String.valueOf(coords.x)));
+			tagEndChar.appendChild(doc.createTextNode(
+					String.valueOf(coords.y)));
+		}
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(getWritableId()));
 		tagTrans.appendChild(tagEntityId);

@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
 import model.MiMusBibEntry;
+import model.MiMusEntry;
 import model.MiMusReference;
 import model.ReferencesList;
 import model.Unit;
@@ -27,13 +28,13 @@ import util.xml.MiMusXML;
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private ReferencesList references;
-	private String docID;
+	private MiMusEntry docEntry;
 	
 	public ReferenceTableViewer(Composite parent, ReferencesList references, 
-			String doc, SharedResources resources) {
+			MiMusEntry docEntry, SharedResources resources) {
 		super(parent);
 		this.references = references;
-		this.docID = doc;
+		this.docEntry = docEntry;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
@@ -133,14 +134,15 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 							.getBibEntries().get(valueIdx);
 					if (extendedEntry.getId() != reducedEntry.getId()) {
 						/* Actually reduce entry's users */
-						reducedEntry.removeUser(new Integer(docID));
+						reducedEntry.removeUser(new Integer(docEntry.getId()));
 						MiMusXML.openBiblio().update(reducedEntry).write();
 						
 						ref.setBibEntry(extendedEntry);
 						
 						/* Actually extend entry's users */
-						extendedEntry.addUser(new Integer(docID));
+						extendedEntry.addUser(new Integer(docEntry.getId()));
 						MiMusXML.openBiblio().update(extendedEntry).write();
+						MiMusXML.openDoc(docEntry).update(ref).write();
 					}
 				}
 				break;
@@ -148,9 +150,11 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
 				String page = (String) value;
 				ref.setPage(page);
+				MiMusXML.openDoc(docEntry).update(ref).write();
 				break;
 			case 2:	// Reference Type
 				ref.setType((int) value);
+				MiMusXML.openDoc(docEntry).update(ref).write();
 			default:	// Should never reach here
 				break;
 			}

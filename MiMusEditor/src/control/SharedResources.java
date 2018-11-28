@@ -43,6 +43,7 @@ public final class SharedResources {
 	private IFolder corpusFolder;
 	private String corpusPath;
 	private String txtPath;
+	private String xmlPath;
 	private String biblioPath;
 	private String artistaPath;
 	private String remote;
@@ -93,6 +94,12 @@ public final class SharedResources {
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
+		IFolder xmls = corpus.getFolder("xml");
+		this.setXmlPath(xmls.getLocation().toString());
+		if (!xmls.exists()) {
+			xmls.getLocation().toFile().mkdirs();
+			System.out.println("xml folder created because it was not present.");
+		}
 	}
 	
 	/**
@@ -178,6 +185,12 @@ public final class SharedResources {
 	}
 	public void setTxtPath(String txtPath) {
 		this.txtPath = txtPath;
+	}
+	public String getXmlPath() {
+		return xmlPath;
+	}
+	public void setXmlPath(String xmlPath) {
+		this.xmlPath = xmlPath;
 	}
 	public String getBiblioPath() {
 		return biblioPath;

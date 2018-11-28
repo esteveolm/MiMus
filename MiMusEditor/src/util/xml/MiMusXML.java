@@ -107,16 +107,16 @@ public class MiMusXML {
 	}
 	
 	public static MiMusXML openDoc(MiMusEntry doc) {
-		File path = new File(SharedResources.getInstance().getTxtPath()
-				+ "/" + doc.getIdStr() + ".txt");
-		f = path;
+		File path = new File(SharedResources.getInstance().getXmlPath()
+				+ "/" + doc.getIdStr() + ".xml");
+		System.out.println("filepath: " + path);
 		if (!path.exists()) {
-			MiMusXML.createDoc().write().close();
+			MiMusXML.createDoc(path).write().close();
 		}
 		return openCommon(path);
 	}
 	
-	private static MiMusXML createDoc() {
+	private static MiMusXML createDoc(File path) {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
 		try {
@@ -131,6 +131,7 @@ public class MiMusXML {
 			root.appendChild(transcriptions);
 			root.appendChild(references);
 			doc = newDoc;
+			f = path;
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
