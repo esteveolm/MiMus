@@ -25,69 +25,99 @@ import control.SharedResources;
 
 /**
  * 
- * TODO: This class could be based on Java Streams.
+ * MiMusXML handles connections to the MiMus local database of XML files
+ * that is stored locally in the annotator's workspace. Programmatically,
+ * it works as a stream where the main methods return the object itself
+ * with a modified state, allowing to pipe several operators from the
+ * opening of a file to its writing. This pipe may consist of 4 stages:
+ * 
+ * 1. Open: static methods that search for specific files of the XML
+ * database, such as the Bibliography or a Document, and return the
+ * MiMusXML object to handle this file. Repeatedly asking to open the
+ * same file does not re-create it from scratch. This is done to
+ * improve efficiency, because most times the code is performing editions
+ * on one file at a time. Open methods are the only way to use MiMusXML,
+ * constructors are private.
+ * 
+ * 2. CRUD operations: objects that properly implement MiMusWritable and
+ * follow the naming schema of the XML database can be appended, updated
+ * or removed from the file opened.
+ * 
+ * 3. Write: modifications to the opened file are written down to disk.
+ * 
+ * 4. Close: the opened file can be closed explicitly. This will make the
+ * Open methods to reload the file from disk, even if it was already
+ * loaded.
+ * 
  * TODO: how to handle failures to append/update/remove?
- * TODO: always calling MiMusXML.open() is too costly in I/O. Make
- * persistent connections.
  * 
  * @author Javier Beltrán Jorba
  *
  */
 public class MiMusXML {
 	
-	private File f;
-	private Document doc;
+	private static File f;
+	private static Document doc;
 	
-	public MiMusXML(File xmlFile) {
-		this.f = xmlFile;
+	private MiMusXML() {}
+	
+	private MiMusXML(File xmlFile) {
+		f = xmlFile;
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
-			this.doc = doc;
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			System.out.println("Could not configure XML Parser.");
-			this.doc = null;
+			doc = null;
 		} catch (SAXException e) {
 			e.printStackTrace();
 			System.out.println("Could not parse XML.");
-			this.doc = null;
+			doc = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Could not parse XML.");
-			this.doc = null;
+			doc = null;
 		}
-		if (this.doc==null)
+		if (doc==null)
 			System.exit(1);
+		System.out.println("Document is:" + f);
+	}
+	
+	private static MiMusXML open(File file) {
+		/* If same file as before is asked, don't re-create it */
+		if (f == null || !f.getPath().equals(file.getPath())) {
+			return new MiMusXML(file);
+		} else {
+			return new MiMusXML();
+		}
 	}
 	
 	public static MiMusXML openBiblio() {
-		SharedResources res = SharedResources.getInstance();
-		return MiMusXML.open(new File(res.getBiblioPath()));
+		return open(new File(
+				SharedResources.getInstance().getBiblioPath()));
 	}
 	
 	public static MiMusXML openArtista() {
-		SharedResources res = SharedResources.getInstance();
-		return MiMusXML.open(new File(res.getArtistaPath()));
-	}
-	
-	public static MiMusXML open(File path) {
-		return new MiMusXML(path);
+		return open(new File(
+				SharedResources.getInstance().getArtistaPath()));
 	}
 	
 	public MiMusXML append(MiMusWritable entry) {
-		Node parent = this.doc.getElementsByTagName(
+		System.out.println(entry.toString());
+		Node parent = doc.getElementsByTagName(
 				entry.getWritableCategory()).item(0);
-		parent.appendChild(entry.toXMLElement(this.doc));
+		System.out.println(parent.getNodeName());
+		parent.appendChild(entry.toXMLElement(doc));
 		return this;
 	}
 	
 	public MiMusXML update(MiMusWritable entry) {
-		if (this.doc != null) {
+		if (doc != null) {
 			/* Find entry to append user, looking at entry id */
-			NodeList listIDs = this.doc.getElementsByTagName("id");
+			NodeList listIDs = doc.getElementsByTagName("id");
 			int updateIdx = -1;
 			for (int i=0; i<listIDs.getLength(); i++) {
 				Node nodeID = listIDs.item(i);
@@ -101,16 +131,16 @@ public class MiMusXML {
 				Node toRemove = listIDs.item(updateIdx).getParentNode();
 				Node parent = toRemove.getParentNode();
 				parent.removeChild(toRemove);
-				parent.appendChild(entry.toXMLElement(this.doc));
+				parent.appendChild(entry.toXMLElement(doc));
 			}
 		}
 		return this;
 	}
 	
 	public MiMusXML remove(MiMusWritable entry) {
-		if (this.doc != null) {
+		if (doc != null) {
 			/* Find id to remove */
-			NodeList listIDs = this.doc.getElementsByTagName("id");
+			NodeList listIDs = doc.getElementsByTagName("id");
 			int removeID = -1;
 			for (int i=0; i<listIDs.getLength(); i++) {
 				Node nodeID = listIDs.item(i);
@@ -129,17 +159,16 @@ public class MiMusXML {
 		return this;
 	}
 	
-	public boolean write() {
-		this.doc.getDocumentElement().normalize();
+	public MiMusXML write() {
+		doc.getDocumentElement().normalize();
 		try {
 			/* Converts Java XML Document to file-system XML */
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
-	        DOMSource source = new DOMSource(this.doc);
+	        DOMSource source = new DOMSource(doc);
 	        
-	        StreamResult console = new StreamResult(this.f);
+	        StreamResult console = new StreamResult(f);
 	        transformer.transform(source, console);
-	        return true;
 		} catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
 			e.printStackTrace();
 			System.out.println("Could not write XML.");
@@ -147,7 +176,13 @@ public class MiMusXML {
 			e.printStackTrace();
 			System.out.println("Could not write XML.");
 		}
-		return false;
+		return this;
+	}
+	
+	public MiMusXML close() {
+		f = null;
+		doc = null;
+		return this;
 	}
 
 	/* Getters and setters */
@@ -155,13 +190,13 @@ public class MiMusXML {
 	public File getF() {
 		return f;
 	}
-	public void setF(File f) {
-		this.f = f;
+	public void setF(File file) {
+		f = file;
 	}
 	public Document getDoc() {
 		return doc;
 	}
-	public void setDoc(Document doc) {
-		this.doc = doc;
+	public void setDoc(Document d) {
+		doc = d;
 	}
 }
