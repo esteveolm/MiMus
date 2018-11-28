@@ -44,8 +44,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Artista;
 import model.EntitiesList;
-import model.Entity;
-
+import model.EntityInstance;
 import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusReference;
@@ -60,7 +59,6 @@ import util.LabelPrinter;
 import util.MiMusEntryReader;
 import util.TextStyler;
 import util.xml.MiMusXML;
-import util.xml.MiMusXMLWriter;
 
 public class Editor extends EditorPart implements EventObserver {
 	
@@ -266,8 +264,10 @@ public class Editor extends EditorPart implements EventObserver {
 				if (dialogResult == Window.OK) {
 					int selection = dialog.getSelection();
 					if (selection>=0) {
-						entities.addUnit(
-								resources.getArtistas().get(selection));
+						EntityInstance inst = new EntityInstance(
+								resources.getArtistas().get(selection),
+								entityCurrentID++);
+						entities.addUnit(inst);
 						System.out.println("Adding selected Entity - " 
 								+ entities.countUnits());
 						LabelPrinter.printInfo(regestLabel, 
@@ -288,9 +288,10 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Entity ent = (Entity) ((IStructuredSelection) entityTV.getSelection())
+				EntityInstance inst = (EntityInstance) 
+						((IStructuredSelection) entityTV.getSelection())
 						.getFirstElement();
-				if (ent==null) {
+				if (inst==null) {
 					System.out.println(
 							"Could not remove Entity because none was selected.");
 					LabelPrinter.printInfo(regestLabel, 
@@ -302,8 +303,8 @@ public class Editor extends EditorPart implements EventObserver {
 //					System.out.println("Could not remove Entity because it is used in an existing Lemmatization.");
 //					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
 				} else {
-					System.out.println(ent);
-					entities.removeUnit(ent);
+					System.out.println(inst);
+					entities.removeUnit(inst);
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
 							+ entities.countUnits());
@@ -337,7 +338,7 @@ public class Editor extends EditorPart implements EventObserver {
 							/* User actually selected something */
 							Artista art = resources.getArtistas()
 									.get(dialog.getSelection());
-							if (entities.getUnits().contains(art)) {
+							if (EntityInstance.containsEntity(entities, art)) {
 								/* Selected entity has been marked in this document */
 								Transcription trans = new Transcription(
 										art, form, charCoords);

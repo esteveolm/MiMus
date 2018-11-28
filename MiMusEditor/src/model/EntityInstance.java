@@ -5,18 +5,19 @@ import org.w3c.dom.Element;
 
 import util.xml.MiMusWritable;
 
-public class EntityInstance implements MiMusWritable {
+public class EntityInstance extends Entity implements MiMusWritable {
 
 	private Entity itsEntity;
-	private int id;
 	
 	public EntityInstance(Entity itsEntity) {
 		this(itsEntity, 0);
 	}
 	
 	public EntityInstance(Entity itsEntity, int id) {
+		/* ID is set after super() for the instance, not the concept */
+		super(-1, itsEntity.getType());
 		this.itsEntity = itsEntity;
-		this.id = id;
+		this.setId(id);
 	}
 	
 	public Entity getItsEntity() {
@@ -25,15 +26,19 @@ public class EntityInstance implements MiMusWritable {
 	public void setItsEntity(Entity itsEntity) {
 		this.itsEntity = itsEntity;
 	}
-	public int getId() {
-		return id;
+
+	@Override
+	public String getLemma() {
+		return itsEntity.getLemma();
 	}
-	public void setId(int id) {
-		this.id = id;
+	
+	@Override
+	public String toString() {
+		return getLemma();
 	}
 	
 	/* Implementation of MiMusWritable */
-	
+
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntity = doc.createElement(getWritableName());
@@ -62,5 +67,19 @@ public class EntityInstance implements MiMusWritable {
 	public String getWritableId() {
 		return String.valueOf(getId());
 	}
-
+	
+	/**
+	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
+	 * to check if any equals <ent>.
+	 */
+	public static boolean containsEntity(EntitiesList list, Entity ent) {
+		for (Entity e: list.getUnits()) {
+			if (e instanceof EntityInstance) {
+				if (((EntityInstance) e).getItsEntity().equals(ent)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
