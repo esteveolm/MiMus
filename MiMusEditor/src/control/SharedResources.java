@@ -46,6 +46,7 @@ public final class SharedResources {
 	private String xmlPath;
 	private String biblioPath;
 	private String artistaPath;
+	private String instrumentPath;
 	private String remote;
 	private Git git;
 	private int entityCurrentID;
@@ -203,6 +204,12 @@ public final class SharedResources {
 	}
 	public void setArtistaPath(String artistaPath) {
 		this.artistaPath = artistaPath;
+	}
+	public String getInstrumentPath() {
+		return instrumentPath;
+	}
+	public void setInstrumentPath(String instrumentPath) {
+		this.instrumentPath = instrumentPath;
 	}
 	public String getRemote() {
 		return remote;
