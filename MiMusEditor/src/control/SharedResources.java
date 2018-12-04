@@ -98,8 +98,11 @@ public final class SharedResources {
 		IFolder strings = corpus.getFolder("strings");
 		IFile biblioFile = strings.getFile("bibliography.xml");
 		IFile artistaFile = strings.getFile("artistas.xml");
+		IFile instrumentFile = strings.getFile("instruments.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
+		this.setInstrumentPath(instrumentFile.getLocation().toString());
+		
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
 		IFolder xmls = corpus.getFolder("xml");
