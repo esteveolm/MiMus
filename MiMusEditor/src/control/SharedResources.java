@@ -36,9 +36,16 @@ import model.MiMusBibEntry;
  */
 public final class SharedResources {
 	
+	public static final String[] FAMILY = {"Cordòfon", "Aeròfon", 
+			"Idiòfon/Membranòfon", "Altres"};
+	public static final String[] CLASSE = {"amb mànec", "sense mànec",
+			"d'arc", "de tecla", "tipus flauta", "de llengüeta",
+			"de dipòsit d'aire", "tipus trompa"};
+	public static final String [] REF_TYPES = 
+		{"Edition", "Register", "Citation"};
+	
 	private List<MiMusBibEntry> bibEntries;
 	private List<Artista> artistas;
-	private String[] referenceTypes = {"Edition", "Register", "Citation"};
 	private String repoPath;
 	private IFolder corpusFolder;
 	private String corpusPath;
@@ -156,12 +163,6 @@ public final class SharedResources {
 	}
 	public void setArtistas(List<Artista> artistas) {
 		this.artistas = artistas;
-	}
-	public String[] getReferenceTypes() {
-		return referenceTypes;
-	}
-	public void setReferenceTypes(String[] referenceTypes) {
-		this.referenceTypes = referenceTypes;
 	}
 	public String getRepoPath() {
 		return repoPath;

@@ -1,74 +1,46 @@
 package ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jgit.api.AddCommand;
-import org.eclipse.jgit.api.CommitCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PushCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
-
-import control.EventObserver;
-import control.EventSubject;
-import control.SharedControl;
-import control.SharedResources;
 import model.Artista;
 import model.EntitiesList;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
 
-public class ArtistaView extends ViewPart implements EventSubject {
+public class ArtistaView extends DeclarativeView {
 	
-	private SharedResources resources;
-	private SharedControl control;
-	private List<EventObserver> observers;
-	private TableViewer tv;
 	private EntitiesList artists;
 	
 	public ArtistaView() {
 		super();
-		observers = new ArrayList<>();
-		resources = SharedResources.getInstance();
-		control = SharedControl.getInstance();
-		control.setArtistaView(this);
+		getControl().setArtistaView(this);
 		artists = new EntitiesList();
 		// TODO: load previously created artists
 	}
 	
-	@Override
-	public void createPartControl(Composite parent) {
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-		ScrolledForm form = toolkit.createScrolledForm(parent);
-		form.setText("Declare Artist Entity");
-		form.getBody().setLayout(new GridLayout());
-		
+	public String getViewName() {
+		return "Artista";
+	}
+	
+	public String getAddPattern() {
+		return "/MiMusCorpus/artista.xml";
+	}
+	
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new Entity");
 		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		final int LABEL_FLAGS = SWT.VERTICAL;
-		final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
-		final int COMBO_FLAGS = SWT.DROP_DOWN | SWT.READ_ONLY;
-		final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
 		
 		/* Name: text field */
 		Label labelName = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -83,10 +55,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 		comboSex.setItems("Male", "Female");
 		
 		/* Form buttons */
-		Button btnAdd = new Button(sectAdd.getParent(), BUTTON_FLAGS);
-		btnAdd.setText("Add Entity");
-		Button btnClr = new Button(sectAdd.getParent(), BUTTON_FLAGS);
-		btnClr.setText("Clear fields");
+		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -101,7 +70,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 				
 		ArtistaTableViewer artistaHelper = 
 				new ArtistaTableViewer(sectTable.getParent(), artists);
-		tv = artistaHelper.createTableViewer();	
+		setTv(artistaHelper.createTableViewer());	
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -120,7 +89,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
 				} else {
 					Artista art = new Artista(
-							resources.getIncrementCurrentID(),
+							getResources().getIncrementCurrentID(),
 							textName.getText(), 
 							comboSex.getText().equals("Female"));
 					artists.addUnit(art);
@@ -136,7 +105,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Artista art = (Artista) 
-						((IStructuredSelection) tv.getSelection())
+						((IStructuredSelection) getTv().getSelection())
 						.getFirstElement();
 				if (art==null) {
 					System.out.println("Could not remove Artist because none was selected.");
@@ -162,22 +131,7 @@ public class ArtistaView extends ViewPart implements EventSubject {
 		btnRemote.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					/* Push artista.xml to github */
-					Git git = resources.getGit();
-					AddCommand add = git.add();
-					add.addFilepattern(resources.getRepoPath()+"/MiMusCorpus/artista.xml");
-					add.call();
-					CommitCommand commit = git.commit();
-					commit.setMessage("Saving artista.xml to remote.");
-					commit.call();
-					PushCommand push = git.push();
-					push.setRemote(resources.getRemote());
-					push.call();
-				} catch (GitAPIException e1) {
-					e1.printStackTrace();
-					System.out.println("Could not push artista.xml.");
-				}
+				pushToGit();
 			}
 		});
 	}
@@ -188,24 +142,6 @@ public class ArtistaView extends ViewPart implements EventSubject {
 	@Override
 	public void dispose() {
 		super.dispose();
-		control.unsetArtistaView();
-	}
-	
-	@Override
-	public void setFocus() {}
-
-	@Override
-	public void attach(EventObserver o) {
-		observers.add(o);
-	}
-
-	@Override
-	public void detach(EventObserver o) {
-		observers.remove(o);
-	}
-
-	@Override
-	public List<EventObserver> getObservers() {
-		return observers;
+		getControl().unsetArtistaView();
 	}
 }

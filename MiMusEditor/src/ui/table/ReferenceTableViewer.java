@@ -55,7 +55,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new ComboBoxCellEditor(tv.getTable(), 
-				SharedResources.getInstance().getReferenceTypes(), 
+				SharedResources.REF_TYPES, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new ReferenceCellModifier());
@@ -177,7 +177,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			case 1: // Page
 				return ref.getPage();
 			case 2:	// Reference Type
-				return SharedResources.getInstance().getReferenceTypes()[ref.getType()];
+				return SharedResources.REF_TYPES[ref.getType()];
 			default:
 				return "";
 			}
