@@ -2,6 +2,7 @@ package ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +13,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -49,6 +51,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Artista;
 import model.EntitiesList;
+import model.Entity;
 import model.EntityInstance;
 import model.MiMusBibEntry;
 import model.MiMusEntry;
@@ -145,7 +148,7 @@ public class Editor extends EditorPart implements EventObserver {
 	@Override
 	public void createPartControl(Composite parent) {
 		/* Create XML schema if not present */
-		MiMusXML xml = MiMusXML.openDoc(docEntry).write();
+		MiMusXML.openDoc(docEntry).write();
 		
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
@@ -186,9 +189,12 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
 		gridData.widthHint = 100;
-		Button setEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		setEnt.setLayoutData(gridData);
-		setEnt.setText("Add");
+		Button addArt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addArt.setLayoutData(gridData);
+		addArt.setText("Add Artist");
+		Button addInst = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addInst.setLayoutData(gridData);
+		addInst.setText("Add Instrument");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -263,36 +269,29 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* BUTTON LISTENERS */
 		/* Entity buttons */
-		setEnt.addSelectionListener(new SelectionAdapter() {
+		addArt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ArtistaDialog dialog = new ArtistaDialog(
-						resources.getArtistas(), parent.getShell());
-				/* Dialog blocks Editor until user closes window */
-				int dialogResult = dialog.open();
-				if (dialogResult == Window.OK) {
-					int selection = dialog.getSelection();
-					if (selection>=0) {
-						EntityInstance inst = new EntityInstance(
-								resources.getArtistas().get(selection),
-								entityCurrentID++);
-						entities.addUnit(inst);
-						MiMusXML.openDoc(docEntry).append(inst).write();
-						System.out.println("Adding selected Entity - " 
-								+ entities.countUnits());
-						LabelPrinter.printInfo(regestLabel, 
-								"Entity added successfully.");
-					} else {
-						System.out.println("No Entity added - " 
-								+ entities.countUnits());
-						LabelPrinter.printInfo(regestLabel, 
-								"Nothing was added. Go to ArtistaView first.");
+				InstanceDialog dialog = new InstanceDialog(
+						resources.getArtistas(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Artista";
 					}
-				} else {
-					System.out.println("No Entity added - " 
-							+ entities.countUnits());
-					LabelPrinter.printInfo(regestLabel, 
-							"Nothing was added.");
-				}
+				};
+				runDialog(dialog, entities, regestLabel);
+				/* Dialog blocks Editor until user closes window */
+			}
+		});
+		addInst.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				InstanceDialog dialog = new InstanceDialog(
+						resources.getInstruments(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Instrument";
+					}
+				};
+				runDialog(dialog, entities, regestLabel);
 			}
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
@@ -338,8 +337,13 @@ public class Editor extends EditorPart implements EventObserver {
 					String form = transcriptionText.getSelectionText();
 					
 					/* Launches Dialog to pick Entity */
-					ArtistaDialog dialog = new ArtistaDialog(
-							resources.getArtistas(), parent.getShell());
+					InstanceDialog dialog = new InstanceDialog(
+							resources.getArtistas(), parent.getShell()) {
+						@Override
+						public String getDialogName() {
+							return "Artista";
+						}
+					};
 					/* Dialog blocks Editor until user closes window */
 					int dialogResult = dialog.open();
 					if (dialogResult == Window.OK) {
@@ -616,6 +620,35 @@ public class Editor extends EditorPart implements EventObserver {
 //				ioe.printStackTrace();
 //			}
 //		}
+	}
+	
+	private void runDialog(InstanceDialog dialog, EntitiesList entities,
+			Label label) {
+		int dialogResult = dialog.open();
+		if (dialogResult == Window.OK) {
+			int selection = dialog.getSelection();
+			if (selection>=0) {
+				EntityInstance inst = new EntityInstance(
+						dialog.getEntity(),
+						entityCurrentID++);
+				entities.addUnit(inst);
+				MiMusXML.openDoc(docEntry).append(inst).write();
+				System.out.println("Adding selected Entity - " 
+						+ entities.countUnits());
+				LabelPrinter.printInfo(label, 
+						"Entity added successfully.");
+			} else {
+				System.out.println("No Entity added - " 
+						+ entities.countUnits());
+				LabelPrinter.printInfo(label, 
+						"Nothing was added. Must declare any first.");
+			}
+		} else {
+			System.out.println("No Entity added - " 
+					+ entities.countUnits());
+			LabelPrinter.printInfo(label, 
+					"Nothing was added.");
+		}
 	}
 	
 	public ReferencesList getReferences() {

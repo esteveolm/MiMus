@@ -15,23 +15,28 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-import model.Artista;
+import model.Entity;
 import util.LabelPrinter;
 
-public class ArtistaDialog extends Dialog {
+public abstract class InstanceDialog extends Dialog {
 
-	private List<Artista> artists;
+	private List<? extends Entity> entities;
 	private int selection;
+	private Entity entity;
 	
-	protected ArtistaDialog(List<Artista> artists, Shell parentShell) {
+	public InstanceDialog(List<? extends Entity> artists, Shell parentShell) {
 		super(parentShell);
-		this.artists = artists;
-		System.out.println("Artists available: " + this.artists.size());
+		this.entities = artists;
+		System.out.println("Entities of type " + getDialogName() 
+				+ " available: " + this.entities.size());
 		this.setSelection(-1);
+		this.setEntity(null);
 		
 		/* Dialog window will block Editor until closed */
 		this.setBlockOnOpen(true);
 	}
+	
+	public abstract String getDialogName();
 	
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -42,9 +47,9 @@ public class ArtistaDialog extends Dialog {
 		
 		/* Create combo with artist string representations as values */
 		Combo combo = new Combo(composite, SWT.SINGLE | SWT.WRAP);
-		String[] artistNames = new String[artists.size()];
-		for (int i=0; i<artists.size(); i++) {
-			artistNames[i] = artists.get(i).toString();
+		String[] artistNames = new String[entities.size()];
+		for (int i=0; i<entities.size(); i++) {
+			artistNames[i] = entities.get(i).toString();
 		}
 		combo.setItems(artistNames);
 		combo.select(0);
@@ -52,15 +57,17 @@ public class ArtistaDialog extends Dialog {
 		/* Updates variable that stores selected artist index */
 		combo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ArtistaDialog.this.setSelection(combo.getSelectionIndex());
+				InstanceDialog.this.setSelection(combo.getSelectionIndex());
+				InstanceDialog.this.setEntity(entities.get(getSelection()));
 			}
 		});
 		
 		// TODO: make it show
 		Label label = new Label(composite, SWT.VERTICAL);
 		label.setText("");
-		if (artists.size()==0) {
-			LabelPrinter.printError(label, "You cannot add any Artist because none was declared yet.");
+		if (entities.size()==0) {
+			LabelPrinter.printError(label, "You cannot add any " 
+					+ getDialogName() + " because none was declared yet.");
 		}
 		
 		return composite;
@@ -71,6 +78,11 @@ public class ArtistaDialog extends Dialog {
 	}
 	public void setSelection(int selection) {
 		this.selection = selection;
-		System.out.println(selection);
+	}
+	public Entity getEntity() {
+		return entity;
+	}
+	public void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 }

@@ -77,7 +77,7 @@ public class Instrument extends Entity {
 		Element entry = doc.createElement(getWritableName());
 		Element tagName = doc.createElement("nom");
 		tagName.appendChild(doc.createTextNode(getName()));
-		Element tagFamily = doc.createElement("family");
+		Element tagFamily = doc.createElement("familia");
 		tagFamily.appendChild(doc.createTextNode(String.valueOf(getFamily())));
 		Element tagClasse = doc.createElement("classe");
 		tagClasse.appendChild(doc.createTextNode(String.valueOf(getClasse())));

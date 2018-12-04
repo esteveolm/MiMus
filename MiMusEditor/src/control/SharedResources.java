@@ -13,6 +13,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import model.Artista;
+import model.Instrument;
 import model.MiMusBibEntry;
 
 /**
@@ -46,6 +47,7 @@ public final class SharedResources {
 	
 	private List<MiMusBibEntry> bibEntries;
 	private List<Artista> artistas;
+	private List<Instrument> instruments;
 	private String repoPath;
 	private IFolder corpusFolder;
 	private String corpusPath;
@@ -159,13 +161,20 @@ public final class SharedResources {
 		this.bibEntries = bibEntries;
 	}
 	public List<Artista> getArtistas() {
-		if (artistas == null) {
+		if (artistas == null)
 			artistas = Artista.read();
-		}
 		return artistas;
 	}
 	public void setArtistas(List<Artista> artistas) {
 		this.artistas = artistas;
+	}
+	public List<Instrument> getInstruments() {
+		if (instruments == null)
+			instruments = Instrument.read();
+		return instruments;
+	}
+	public void setInstruments(List<Instrument> instruments) {
+		this.instruments = instruments;
 	}
 	public String getRepoPath() {
 		return repoPath;

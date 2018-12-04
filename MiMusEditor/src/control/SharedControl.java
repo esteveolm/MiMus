@@ -40,6 +40,8 @@ public final class SharedControl {
 	
 	private SharedControl() {
 		this.biblioView = null;
+		this.artistaView = null;
+		this.instrumentView = null;
 		this.editors = new ArrayList<>();
 	}
 	
@@ -140,9 +142,14 @@ public final class SharedControl {
 		if (biblioView != null) {
 			biblioView.attach(editor);
 			System.out.println("Subscribed editor to biblio.");
-		} else if (artistaView != null) {
+		}
+		if (artistaView != null) {
 			artistaView.attach(editor);
 			System.out.println("Subscribed editor to artist view");
+		}
+		if (instrumentView != null) {
+			instrumentView.attach(editor);
+			System.out.println("Subscribed editor to instrument view");
 		}
 	}
 	
@@ -159,6 +166,9 @@ public final class SharedControl {
 		}
 		if (artistaView != null) {
 			artistaView.detach(editor);
+		}
+		if (instrumentView != null) {
+			instrumentView.detach(editor);
 		}
 	}
 }
