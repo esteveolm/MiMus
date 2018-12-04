@@ -42,6 +42,14 @@
             name="Artista View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.InstrumentView"
+            icon="icons/sample.png"
+            id="MiMusEditor.instrumentView"
+            name="Instrument View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

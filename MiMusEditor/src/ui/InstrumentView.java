@@ -66,6 +66,7 @@ public class InstrumentView extends DeclarativeView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				textName.setText("");
+				comboFamily.deselectAll();
 				comboClasse.deselectAll();
 			}
 		});
@@ -85,7 +86,28 @@ public class InstrumentView extends DeclarativeView {
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
 		btnDel.setText("Delete instrument");
 		
-		// TODO: BUTTON LISTENERS
+		/* Button listeners */
+		
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO: add inst
+			}
+		});
+		btnDel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO: del inst
+			}
+		});
+		Button btnRemote = new Button(sectTable.getParent(), BUTTON_FLAGS);
+		btnRemote.setText("Save to remote");
+		btnRemote.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				pushToGit();
+			}
+		});
 	}
 	
 	/**
