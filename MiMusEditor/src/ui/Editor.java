@@ -226,11 +226,17 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Buttons to add/remove transcription associations */
 		GridData gridTrans = new GridData();
 		gridTrans.widthHint = 100;
-		Button addTrans = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
-		addTrans.setLayoutData(gridTrans);
-		addTrans.setText("Add");
+		Button addTransArt = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransArt.setLayoutData(gridTrans);
+		addTransArt.setText("Add Artist");
+		Button addTransInst = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransInst.setLayoutData(gridTrans);
+		addTransInst.setText("Add Instrument");
 		
-		Button removeTrans = new Button(sectTrans.getParent(), SWT.PUSH | SWT.CENTER);
+		Button removeTrans = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
 		removeTrans.setLayoutData(gridTrans);
 		removeTrans.setText("Delete");
 		
@@ -324,71 +330,32 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 		
 		/* Transcription buttons */
-		addTrans.addSelectionListener(new SelectionAdapter() {
+		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Point charCoords = transcriptionText.getSelection();
-				if (charCoords.x!=charCoords.y) {
-					/* Picks transcripted form in String and text coordinates */
-					charCoords = transcription.fromWordToCharCoordinates(
-							transcription.fromCharToWordCoordinates(
-							charCoords));	// Trick to ensure selection of whole words
-					transcriptionText.setSelection(charCoords);
-					String form = transcriptionText.getSelectionText();
-					
-					/* Launches Dialog to pick Entity */
-					InstanceDialog dialog = new InstanceDialog(
-							resources.getArtistas(), parent.getShell()) {
-						@Override
-						public String getDialogName() {
-							return "Artista";
-						}
-					};
-					/* Dialog blocks Editor until user closes window */
-					int dialogResult = dialog.open();
-					if (dialogResult == Window.OK) {
-						int selection = dialog.getSelection();
-						if (selection>=0) {
-							/* User actually selected something */
-							Artista art = resources.getArtistas()
-									.get(dialog.getSelection());
-							if (EntityInstance.containsEntity(entities, art)) {
-								/* Selected entity has been marked in this document */
-								Transcription trans = new Transcription(
-										art, form, charCoords);
-								transcriptions.addUnit(trans);
-								MiMusXML.openDoc(docEntry).append(trans).write();
-								System.out.println("Adding selected Transcription - " 
-										+ transcriptions.countUnits());
-								LabelPrinter.printInfo(transcriptionLabel, 
-										"Lemma added successfully.");
-								transcriptionStyler.addUpdate(charCoords.x, charCoords.y);
-							} else {
-								/* Entity not in document, don't add transcription */
-								System.out.println("Entity of Transcription not in document - "
-										+ transcriptions.countUnits());
-								LabelPrinter.printError(transcriptionLabel, 
-										"Entity selected must have been marked in this document.");
-							}
-						} else {
-							/* User pressed OK but selected nothing */
-							System.out.println("No Transcription added - " 
-									+ transcriptions.countUnits());
-							LabelPrinter.printInfo(transcriptionLabel, 
-									"Nothing was added. Go to ArtistaView first.");
-						}
-					} else {
-						/* User pressed Cancel, nothing to add */
-						System.out.println("No Transcription added - " 
-								+ transcriptions.countUnits());
-						LabelPrinter.printInfo(transcriptionLabel, 
-								"Nothing was added.");
+				InstanceDialog dialog = new InstanceDialog(
+						resources.getArtistas(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Artista";
 					}
-				} else {
-					/* User marked no transcription in text */
-					System.out.println("Could not add Selected Entity because no text was selected");
-					LabelPrinter.printError(transcriptionLabel, "You must select a part of the text.");
-				}
+				};
+				runTranscriptionDialog(dialog, transcriptions, entities, 
+						transcriptionLabel, transcriptionStyler);
+			}
+		});
+		addTransInst.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				InstanceDialog dialog = new InstanceDialog(
+						resources.getInstruments(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Instrument";
+					}
+				};
+				runTranscriptionDialog(dialog, transcriptions, entities, 
+						transcriptionLabel, transcriptionStyler);
 			}
 		});
 		removeTrans.addSelectionListener(new SelectionAdapter() {
@@ -648,6 +615,68 @@ public class Editor extends EditorPart implements EventObserver {
 					+ entities.countUnits());
 			LabelPrinter.printInfo(label, 
 					"Nothing was added.");
+		}
+	}
+	
+	private void runTranscriptionDialog(InstanceDialog dialog, 
+			TranscriptionsList transcriptions, EntitiesList entities, 
+			Label label, TextStyler styler) {
+		Point charCoords = transcriptionText.getSelection();
+		if (charCoords.x!=charCoords.y) {
+			/* Picks transcripted form in String and text coordinates */
+			charCoords = transcription.fromWordToCharCoordinates(
+					transcription.fromCharToWordCoordinates(
+					charCoords));	// Trick to ensure selection of whole words
+			transcriptionText.setSelection(charCoords);
+			String form = transcriptionText.getSelectionText();
+						
+			/* Dialog blocks Editor until user closes window */
+			int dialogResult = dialog.open();
+			if (dialogResult == Window.OK) {
+				int selection = dialog.getSelection();
+				if (selection>=0) {
+					/* User actually selected something */
+					Entity ent = dialog.getEntity();
+					if (EntityInstance.containsEntity(entities, ent)) {
+						/* Selected entity has been marked in this document */
+						Transcription trans = new Transcription(
+								ent, form, charCoords);
+						transcriptions.addUnit(trans);
+						MiMusXML.openDoc(docEntry).append(trans).write();
+						System.out.println("Adding selected Transcription - " 
+								+ transcriptions.countUnits());
+						LabelPrinter.printInfo(label, 
+								"Lemma added successfully.");
+						styler.addUpdate(charCoords.x, charCoords.y);
+					} else {
+						/* Entity not in document, don't add transcription */
+						System.out.println(
+								"Entity of Transcription not in document - "
+								+ transcriptions.countUnits());
+						LabelPrinter.printError(label, 
+								"Entity selected must have been marked in"
+								+ " this document.");
+					}
+				} else {
+					/* User pressed OK but selected nothing */
+					System.out.println("No Transcription added - " 
+							+ transcriptions.countUnits());
+					LabelPrinter.printInfo(label, 
+							"Nothing was added. Must add any entity first.");
+				}
+			} else {
+				/* User pressed Cancel, nothing to add */
+				System.out.println("No Transcription added - " 
+						+ transcriptions.countUnits());
+				LabelPrinter.printInfo(label, 
+						"Nothing was added.");
+			}
+		} else {
+			/* User marked no transcription in text */
+			System.out.println("Could not add Selected Entity"
+					+ " because no text was selected");
+			LabelPrinter.printError(label, 
+					"You must select a part of the text.");
 		}
 	}
 	
