@@ -339,8 +339,8 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				InstanceDialog dialog = new InstanceDialog(
-						resources.getArtistas(), parent.getShell()) {
+				TranscriptionDialog dialog = new TranscriptionDialog(
+						resources.getArtistas(), parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Artista";
@@ -353,8 +353,8 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransInst.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				InstanceDialog dialog = new InstanceDialog(
-						resources.getInstruments(), parent.getShell()) {
+				TranscriptionDialog dialog = new TranscriptionDialog(
+						resources.getInstruments(), parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
@@ -624,7 +624,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 	}
 	
-	private void runTranscriptionDialog(InstanceDialog dialog, 
+	private void runTranscriptionDialog(TranscriptionDialog dialog, 
 			TranscriptionsList transcriptions, EntitiesList entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();
@@ -634,8 +634,9 @@ public class Editor extends EditorPart implements EventObserver {
 					transcription.fromCharToWordCoordinates(
 					charCoords));	// Trick to ensure selection of whole words
 			transcriptionText.setSelection(charCoords);
-			String form = transcriptionText.getSelectionText();
-						
+			String selectedText = transcriptionText.getSelectionText();
+			dialog.setSelectedText(selectedText);
+			
 			/* Dialog blocks Editor until user closes window */
 			int dialogResult = dialog.open();
 			if (dialogResult == Window.OK) {
@@ -643,10 +644,16 @@ public class Editor extends EditorPart implements EventObserver {
 				if (selection>=0) {
 					/* User actually selected something */
 					Entity ent = dialog.getEntity();
+					String form = dialog.getTranscription();
+					System.out.println("Selected text: -" + dialog.getSelectedText() + "-");
+					System.out.println("Form: -" + form + "-");
+					if (form=="")
+						/* User did not add a form, use selection directly */
+						form = dialog.getSelectedText();
 					if (EntityInstance.containsEntity(entities.getUnits(), ent)) {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
-								ent, form, charCoords);
+								ent, selectedText, form, charCoords);
 						transcriptions.addUnit(trans);
 						MiMusXML.openDoc(docEntry).append(trans).write();
 						System.out.println("Adding selected Transcription - " 

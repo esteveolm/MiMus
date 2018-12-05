@@ -21,7 +21,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 	
 	public TranscriptionTableViewer(Composite parent) {
 		super(parent);
-		String[] cols = {"Transcription", "Lemma"};
+		String[] cols = {"Selection", "Transcription", "Lemma"};
 		columnNames = cols;
 		transcriptions = new TranscriptionsList();
 	}
@@ -94,9 +94,11 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Transcription tra = (Transcription) element;
 			switch (columnIndex) {
-			case 0:	// Transcription
+			case 0:	// Selected Text
+				return tra.getSelectedText();
+			case 1:	// Transcription
 				return tra.getForm();
-			case 1:	// Lemma
+			case 2:	// Lemma
 				return tra.getItsEntity().getLemma();
 			default:	// Should never reach here
 				return "";
