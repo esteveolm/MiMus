@@ -86,6 +86,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private EntityTableViewer entityHelper;
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
+	private InstanceDialog dialog;
 	
 	public Editor() {
 		super();
@@ -290,7 +291,7 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 		addInst.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				InstanceDialog dialog = new InstanceDialog(
+				dialog = new InstanceDialog(
 						resources.getInstruments(), parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -339,28 +340,30 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog dialog = new TranscriptionDialog(
+				dialog = new TranscriptionDialog(
 						resources.getArtistas(), parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Artista";
 					}
 				};
-				runTranscriptionDialog(dialog, transcriptions, entities, 
+				runTranscriptionDialog((TranscriptionDialog) dialog, 
+						transcriptions, entities, 
 						transcriptionLabel, transcriptionStyler);
 			}
 		});
 		addTransInst.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog dialog = new TranscriptionDialog(
+				dialog = new TranscriptionDialog(
 						resources.getInstruments(), parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
 					}
 				};
-				runTranscriptionDialog(dialog, transcriptions, entities, 
+				runTranscriptionDialog((TranscriptionDialog)dialog, 
+						transcriptions, entities, 
 						transcriptionLabel, transcriptionStyler);
 			}
 		});
@@ -645,8 +648,6 @@ public class Editor extends EditorPart implements EventObserver {
 					/* User actually selected something */
 					Entity ent = dialog.getEntity();
 					String form = dialog.getTranscription();
-					System.out.println("Selected text: -" + dialog.getSelectedText() + "-");
-					System.out.println("Form: -" + form + "-");
 					if (form=="")
 						/* User did not add a form, use selection directly */
 						form = dialog.getSelectedText();
