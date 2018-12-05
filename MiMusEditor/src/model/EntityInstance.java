@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Vector;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -73,10 +75,10 @@ public class EntityInstance extends Entity implements MiMusWritable {
 	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
 	 * to check if any equals <ent>.
 	 */
-	public static boolean containsEntity(EntitiesList list, Entity ent) {
-		for (Entity e: list.getUnits()) {
-			if (e instanceof EntityInstance) {
-				if (((EntityInstance) e).getItsEntity().equals(ent)) {
+	public static boolean containsEntity(Vector<? extends Unit> list, Entity ent) {
+		for (Unit u: list) {
+			if (u instanceof EntityInstance) {
+				if (((EntityInstance) u).getItsEntity().equals(ent)) {
 					return true;
 				}
 			}

@@ -41,10 +41,11 @@ public class Transcription extends Unit implements MiMusWritable {
 	
 	/* Getters and setters */
 	
-	public Entity getEntity() {
+	public Entity getItsEntity() {
+		System.out.println("getting " + itsEntity.getLemma());
 		return itsEntity;
 	}
-	public void setEntity(Entity itsEntity) {
+	public void setItsEntity(Entity itsEntity) {
 		this.itsEntity = itsEntity;
 	}
 	public String getForm() {
@@ -108,5 +109,14 @@ public class Transcription extends Unit implements MiMusWritable {
 	@Override
 	public String getWritableId() {
 		return String.valueOf(getId());
+	}
+	
+	public static boolean containsEntity(TranscriptionsList list, Entity ent) {
+		for (Transcription t : list.getUnits()) {
+			if (((Transcription) t).getItsEntity().equals(ent)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

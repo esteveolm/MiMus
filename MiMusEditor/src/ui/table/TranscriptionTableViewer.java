@@ -97,7 +97,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 			case 0:	// Transcription
 				return tra.getForm();
 			case 1:	// Lemma
-				return tra.getEntity().getLemma();
+				return tra.getItsEntity().getLemma();
 			default:	// Should never reach here
 				return "";
 			}
@@ -113,8 +113,8 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Transcription tra1 = (Transcription) e1;
 			Transcription tra2 = (Transcription) e2;
-			int byLemma = tra1.getEntity().getLemma()
-					.compareTo(tra2.getEntity().getLemma());
+			int byLemma = tra1.getItsEntity().getLemma()
+					.compareTo(tra2.getItsEntity().getLemma());
 			if (byLemma==0) {
 				return tra1.getForm().compareTo(tra2.getForm());
 			} else {

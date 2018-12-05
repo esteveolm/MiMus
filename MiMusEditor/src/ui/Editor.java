@@ -302,13 +302,13 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				EntityInstance inst = (EntityInstance) 
+				EntityInstance ent = (EntityInstance) 
 						((IStructuredSelection) entityTV.getSelection())
 						.getFirstElement();
-				if (inst==null) {
+				if (ent==null) {
 					System.out.println(
 							"Could not remove Entity because none was selected.");
-					LabelPrinter.printInfo(regestLabel, 
+					LabelPrinter.printError(regestLabel, 
 							"You must select an entity to delete it.");
 //				} else if (relations.using(ent)) {
 //					System.out.println("Could not remove Entity because it is used in an existing Relation.");
@@ -316,10 +316,16 @@ public class Editor extends EditorPart implements EventObserver {
 //				} else if (lemmas.using(ent)) {
 //					System.out.println("Could not remove Entity because it is used in an existing Lemmatization.");
 //					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
+				} else if (Transcription.containsEntity(
+						transcriptions, ent)) {
+					System.out.println(
+							"Could not remove Entity because being used by Transcription.");
+					LabelPrinter.printError(regestLabel, 
+							"You must remove all transcriptions using this entity before.");
 				} else {
-					System.out.println(inst);
-					entities.removeUnit(inst);
-					MiMusXML.openDoc(docEntry).remove(inst).write();
+					System.out.println(ent);
+					entities.removeUnit(ent);
+					MiMusXML.openDoc(docEntry).remove(ent).write();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
 							+ entities.countUnits());
@@ -637,7 +643,7 @@ public class Editor extends EditorPart implements EventObserver {
 				if (selection>=0) {
 					/* User actually selected something */
 					Entity ent = dialog.getEntity();
-					if (EntityInstance.containsEntity(entities, ent)) {
+					if (EntityInstance.containsEntity(entities.getUnits(), ent)) {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
 								ent, form, charCoords);
