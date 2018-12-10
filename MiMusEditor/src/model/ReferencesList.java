@@ -12,11 +12,6 @@ public class ReferencesList extends UnitsList<MiMusReference> {
 	public ReferencesList(List<MiMusBibEntry> bibEntries) {
 		this.setBibEntries(bibEntries);
 	}
-	
-	@Override
-	public void initList() {
-		
-	}
 
 	@Override
 	public void addUnit(MiMusReference unit) {

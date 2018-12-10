@@ -20,13 +20,18 @@ import util.xml.MiMusXML;
 
 public class InstrumentView extends DeclarativeView {
 	
+	private SharedResources resources;
 	private EntitiesList instruments;
 	
 	public InstrumentView() {
 		super();
-		instruments = new EntitiesList();
+		getControl().setInstrumentView(this);
+		
+		/* Loads previously created instruments if they exist */
+		resources = SharedResources.getInstance();
+		instruments = new EntitiesList(resources.getInstruments());
 	}
-
+	
 	@Override
 	public String getViewName() {
 		return "Instrument";

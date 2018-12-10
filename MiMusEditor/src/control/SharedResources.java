@@ -128,12 +128,6 @@ public final class SharedResources {
 		return instance;
 	}
 	
-	public List<MiMusBibEntry> readBiblio() {
-		bibEntries = MiMusBibEntry.read();
-		setEntityCurrentID(0);
-		return bibEntries;
-	}
-	
 	/**
 	 * Constructs a new SharedResources in the same Singleton reference.
 	 */

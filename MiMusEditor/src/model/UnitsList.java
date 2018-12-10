@@ -15,8 +15,6 @@ public abstract class UnitsList<U> {
 		units = new Vector<>();
 		changeListeners = new HashSet<>();
 	}
-	
-	public abstract void initList();
 		
 	public abstract void addUnit(U unit);
 	

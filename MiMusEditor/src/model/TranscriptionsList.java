@@ -8,12 +8,8 @@ public class TranscriptionsList extends UnitsList<Transcription> {
 
 	public TranscriptionsList() {
 		super();
-		initList();
 	}
 	
-	@Override
-	public void initList() {}
-
 	@Override
 	public void addUnit(Transcription unit) {
 		getUnits().add(unit);

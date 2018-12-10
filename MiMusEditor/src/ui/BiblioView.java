@@ -230,6 +230,9 @@ public class BiblioView extends ViewPart implements EventSubject {
 		StyledText fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
 		fullReference.setEditable(false);
 		fullReference.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		/* Listeners for buttons and list */
+		
 		lv.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {

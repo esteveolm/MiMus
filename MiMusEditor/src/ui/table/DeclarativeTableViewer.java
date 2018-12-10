@@ -85,5 +85,4 @@ public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 			tv.refresh();
 		}
 	}
-
 }

@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+
+import control.SharedResources;
 import model.Artista;
 import model.EntitiesList;
 import ui.table.ArtistaTableViewer;
@@ -18,13 +20,16 @@ import util.xml.MiMusXML;
 
 public class ArtistaView extends DeclarativeView {
 	
+	private SharedResources resources;
 	private EntitiesList artists;
 	
 	public ArtistaView() {
 		super();
 		getControl().setArtistaView(this);
-		artists = new EntitiesList();
-		// TODO: load previously created artists
+		
+		/* Loads previously created artists if they exist */
+		resources = SharedResources.getInstance();
+		artists = new EntitiesList(resources.getArtistas());
 	}
 	
 	public String getViewName() {

@@ -11,7 +11,6 @@ public class RelationsList extends UnitsList<Relation> {
 	public RelationsList(EntitiesList entities) {
 		super();
 		this.entities = entities;
-		initList();
 	}
 
 	@Override
@@ -47,11 +46,6 @@ public class RelationsList extends UnitsList<Relation> {
 			}
 		}
 		return false;
-	}
-	
-	@Override
-	public void initList() {
-		//addUnit();
 	}
 	
 	public EntitiesList getEntities() {
