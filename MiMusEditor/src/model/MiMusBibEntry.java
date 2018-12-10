@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import util.xml.MiMusWritable;
+import util.xml.Persistable;
 import util.xml.MiMusXML;
 
 /**
@@ -36,7 +36,7 @@ import util.xml.MiMusXML;
  * TODO: guarantee sequentiality of authors.
  * 
  */
-public class MiMusBibEntry implements MiMusWritable {
+public class MiMusBibEntry implements Persistable {
 	
 	/*
 	 * The number of authors and secondary authors is fixed and reflected

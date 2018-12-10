@@ -5,9 +5,9 @@ import java.util.Vector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import util.xml.MiMusWritable;
+import util.xml.Persistable;
 
-public class EntityInstance extends Entity implements MiMusWritable {
+public class EntityInstance extends Entity implements Persistable {
 
 	private Entity itsEntity;
 	

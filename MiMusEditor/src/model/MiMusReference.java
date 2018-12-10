@@ -3,7 +3,7 @@ package model;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import util.xml.MiMusWritable;
+import util.xml.Persistable;
 
 /**
  * 
@@ -27,7 +27,7 @@ import util.xml.MiMusWritable;
  * just by attaching the pages field at the end of it.
  * 
  */
-public class MiMusReference extends Unit implements MiMusWritable {
+public class MiMusReference extends Unit implements Persistable {
 	
 	private MiMusBibEntry bibEntry;
 	private String page;

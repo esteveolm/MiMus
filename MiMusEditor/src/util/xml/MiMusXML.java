@@ -143,7 +143,7 @@ public class MiMusXML {
 		return new MiMusXML();
 	}
 	
-	public MiMusXML append(MiMusWritable entry) {
+	public MiMusXML append(Persistable entry) {
 		System.out.println(entry.toString());
 		Node parent = doc.getElementsByTagName(
 				entry.getWritableCategory()).item(0);
@@ -152,7 +152,7 @@ public class MiMusXML {
 		return this;
 	}
 	
-	public MiMusXML update(MiMusWritable entry) {
+	public MiMusXML update(Persistable entry) {
 		if (doc != null) {
 			/* Find entry to append user, looking at entry id */
 			NodeList listIDs = doc.getElementsByTagName("id");
@@ -175,7 +175,7 @@ public class MiMusXML {
 		return this;
 	}
 	
-	public MiMusXML remove(MiMusWritable entry) {
+	public MiMusXML remove(Persistable entry) {
 		if (doc != null) {
 			/* Find id to remove */
 			NodeList listIDs = doc.getElementsByTagName("id");

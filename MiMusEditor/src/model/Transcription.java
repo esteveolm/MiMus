@@ -4,7 +4,7 @@ import org.eclipse.swt.graphics.Point;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import util.xml.MiMusWritable;
+import util.xml.Persistable;
 
 /**
  * 
@@ -13,7 +13,7 @@ import util.xml.MiMusWritable;
  * @author Javier Beltrán Jorba
  *
  */
-public class Transcription extends Unit implements MiMusWritable {
+public class Transcription extends Unit implements Persistable {
 	
 	private Entity itsEntity;
 	private String selectedText;

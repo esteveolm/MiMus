@@ -1,8 +1,8 @@
 package model;
 
-import util.xml.MiMusWritable;
+import util.xml.Persistable;
 
-public abstract class Entity extends Unit implements MiMusWritable {
+public abstract class Entity extends Unit implements Persistable {
 	
 	private int id;
 	private String type;

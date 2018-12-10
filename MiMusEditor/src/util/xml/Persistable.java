@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
  * @author Javier Beltrán Jorba
  *
  */
-public interface MiMusWritable {
+public interface Persistable {
 	
 	/**
 	 * Converts a model object into an XML Element that can be
