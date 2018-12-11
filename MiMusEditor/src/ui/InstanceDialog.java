@@ -16,6 +16,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import model.Entity;
+import model.Unit;
 import util.LabelPrinter;
 
 public abstract class InstanceDialog extends Dialog {
@@ -23,7 +24,7 @@ public abstract class InstanceDialog extends Dialog {
 	protected ScrolledForm form;
 	private List<? extends Entity> entities;
 	private int selection;
-	private Entity entity;
+	private Unit entity;
 	
 	public InstanceDialog(List<? extends Entity> entities, Shell parentShell) {
 		super(parentShell);
@@ -80,10 +81,10 @@ public abstract class InstanceDialog extends Dialog {
 	public void setSelection(int selection) {
 		this.selection = selection;
 	}
-	public Entity getEntity() {
+	public Unit getEntity() {
 		return entity;
 	}
-	public void setEntity(Entity entity) {
+	public void setEntity(Unit entity) {
 		this.entity = entity;
 	}
 }

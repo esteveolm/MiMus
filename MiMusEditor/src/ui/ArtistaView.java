@@ -1,5 +1,8 @@
 package ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,7 +16,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
 import model.Artista;
-import model.EntitiesList;
+import model.Unit;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -21,7 +24,7 @@ import util.xml.MiMusXML;
 public class ArtistaView extends DeclarativeView {
 	
 	private SharedResources resources;
-	private EntitiesList artists;
+	private List<Unit> artists;
 	
 	public ArtistaView() {
 		super();
@@ -29,7 +32,7 @@ public class ArtistaView extends DeclarativeView {
 		
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
-		artists = new EntitiesList(resources.getArtistas());
+		artists = new ArrayList<>(resources.getArtistas());
 	}
 	
 	public String getViewName() {
@@ -97,7 +100,7 @@ public class ArtistaView extends DeclarativeView {
 							getResources().getIncrementCurrentID(),
 							textName.getText(), 
 							comboSex.getText().equals("Female"));
-					artists.addUnit(art);
+					artists.add(art);
 					System.out.println("Artist created successfully.");
 					LabelPrinter.printInfo(label, "Artist created successfully.");
 					MiMusXML.openArtista().append(art).write();
@@ -116,7 +119,7 @@ public class ArtistaView extends DeclarativeView {
 					System.out.println("Could not remove Artist because none was selected.");
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
-					artists.removeUnit(art);
+					artists.remove(art);
 					MiMusXML.openInstrument().remove(art).write();
 					System.out.println("Artist removed successfully.");
 					LabelPrinter.printInfo(label, "Artist removed successfully.");

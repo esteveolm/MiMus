@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import org.eclipse.swt.graphics.Point;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,28 +15,33 @@ import util.xml.Persistable;
  * @author Javier Beltrán Jorba
  *
  */
-public class Transcription extends Unit implements Persistable {
+public class Transcription extends ConcreteUnit 
+		implements Persistable {
 	
-	private Entity itsEntity;
+	private EntityInstance itsEntity;
 	private String selectedText;
 	private String form;
 	private Point coords;
 	private int id;
 	
+	public Transcription(List<Entity> allEntities) {
+		super(allEntities);
+	}
+	
 	public Transcription() {
 		this(null, "", "", null, 0);
 	}
 	
-	public Transcription(Entity itsEntity, String selectedText, String form) {
+	public Transcription(EntityInstance itsEntity, String selectedText, String form) {
 		this(itsEntity, selectedText, form, null, 0);
 	}
 	
-	public Transcription(Entity itsEntity, String selectedText, 
+	public Transcription(EntityInstance itsEntity, String selectedText, 
 			String form, Point coords) {
 		this(itsEntity, selectedText, form, null, 0);
 	}
 	
-	public Transcription(Entity itsEntity, String selectedText, 
+	public Transcription(EntityInstance itsEntity, String selectedText, 
 			String form, Point coords, int id) {
 		this.itsEntity = itsEntity;
 		this.setSelectedText(selectedText);
@@ -45,11 +52,11 @@ public class Transcription extends Unit implements Persistable {
 	
 	/* Getters and setters */
 	
-	public Entity getItsEntity() {
-		System.out.println("getting " + itsEntity.getLemma());
+	public EntityInstance getItsEntity() {
+		System.out.println("getting " + itsEntity.toString());
 		return itsEntity;
 	}
-	public void setItsEntity(Entity itsEntity) {
+	public void setItsEntity(EntityInstance itsEntity) {
 		this.itsEntity = itsEntity;
 	}
 	public String getSelectedText() {
@@ -79,6 +86,42 @@ public class Transcription extends Unit implements Persistable {
 	}
 	
 	/* Implementation of MiMusWritable */
+	
+	@Override
+	public Persistable fromXMLElement(Element elem) {
+		int entId = Integer.parseInt(
+				elem.getElementsByTagName("entity_id")
+				.item(0).getTextContent());
+		EntityInstance ent = null;
+		for (int i=0; i<getItsConcepts().size(); i++) {
+			Unit u = getItsConcepts().get(i);
+			if (u instanceof EntityInstance) {
+				EntityInstance thisEnt = ((EntityInstance) u);
+				if (thisEnt.getId() == entId) {
+					ent = thisEnt;
+					break;
+				}
+			}
+		}
+		if (ent != null) {
+			String selectedText = elem.getElementsByTagName("selected_text")
+					.item(0).getTextContent();
+			String form = elem.getElementsByTagName("form")
+					.item(0).getTextContent();
+			int startCh = Integer.parseInt(
+					elem.getElementsByTagName("start_char")
+					.item(0).getTextContent());
+			int endCh = Integer.parseInt(
+					elem.getElementsByTagName("end_char")
+					.item(0).getTextContent());
+			Point coords = new Point(startCh, endCh);
+			int id = Integer.parseInt(
+					elem.getElementsByTagName("id")
+					.item(0).getTextContent());
+			return new Transcription(ent, selectedText, form, coords, id);
+		}
+		return null;
+	}
 	
 	@Override
 	public Element toXMLElement(Document doc) {
@@ -124,9 +167,10 @@ public class Transcription extends Unit implements Persistable {
 		return String.valueOf(getId());
 	}
 	
-	public static boolean containsEntity(TranscriptionsList list, Entity ent) {
-		for (Transcription t : list.getUnits()) {
-			if (((Transcription) t).getItsEntity().equals(ent)) {
+	public static boolean containsEntity(List<Unit> list, EntityInstance ent) {
+		for (Unit t : list) {
+			if (t instanceof Transcription &&
+					((Transcription) t).getItsEntity().equals(ent)) {
 				return true;
 			}
 		}

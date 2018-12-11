@@ -1,5 +1,9 @@
 package ui.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -10,7 +14,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
-import model.EntitiesList;
 import model.Entity;
 import model.MiMusText;
 import model.Unit;
@@ -18,13 +21,13 @@ import util.TextStyler;
 
 public class EntityTableViewer extends MiMusTableViewer {
 
-	private EntitiesList entities;
+	private List<Unit> entities;
 
 	public EntityTableViewer(Composite parent, TextStyler styler, MiMusText text) {
 		super(parent, styler);
 		String[] aux = {"Type", "Entity"};
 		columnNames = aux;
-		entities = new EntitiesList();
+		entities = new ArrayList<>();
 	}
 
 	@Override
@@ -37,7 +40,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 		}
 		tv.setUseHashlookup(true);
 		tv.setColumnProperties(columnNames);
-		tv.setContentProvider(new EntityContentProvider());
+		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setLabelProvider(new EntityLabelProvider());
 		tv.setInput(entities);
 		tv.getTable().setHeaderVisible(true);
@@ -70,41 +73,6 @@ public class EntityTableViewer extends MiMusTableViewer {
 		}
 	}
 	
-	public class EntityContentProvider implements MiMusContentProvider {		
-		@Override
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null) {
-				((EntitiesList) newInput).addChangeListener(this);
-			}
-			if (oldInput != null) {
-				((EntitiesList) oldInput).removeChangeListener(this);
-			}
-		}
-		
-		@Override
-		public void dispose() {
-			entities.removeChangeListener(this);
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			return entities.getUnits().toArray();
-		}
-		
-		public void addUnit(Unit u) {
-			tv.add(u);
-		}
-		
-		public void removeUnit(Unit u) {
-			tv.remove(u);
-		}
-		
-		public void updateUnit(Unit u) {
-			tv.update(u, null);
-			tv.refresh();
-		}
-	}
-	
 	public class EntityComparator extends ViewerComparator {
 		/**
 		 * Compares entities alphanumerically, using two criteria:
@@ -126,11 +94,11 @@ public class EntityTableViewer extends MiMusTableViewer {
 	
 	/* Getters and setters */
 	
-	public EntitiesList getEntities() {
+	public List<Unit> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(EntitiesList entities) {
+	public void setEntities(List<Unit> entities) {
 		this.entities = entities;
 	}
 }

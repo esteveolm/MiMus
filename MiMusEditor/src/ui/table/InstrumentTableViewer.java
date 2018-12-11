@@ -1,5 +1,7 @@
 package ui.table;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -14,12 +16,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
-import model.EntitiesList;
 import model.Instrument;
+import model.Unit;
 
 public class InstrumentTableViewer extends DeclarativeTableViewer {
 
-	public InstrumentTableViewer(Composite parent, EntitiesList instruments) {
+	public InstrumentTableViewer(Composite parent, List<Unit> instruments) {
 		super(parent);
 		this.entities = instruments;
 		String[] aux = {"Nom", "Família", "Classe"};

@@ -1,5 +1,7 @@
 package ui.table;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -14,13 +16,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.Artista;
-import model.EntitiesList;
+import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
 
 	private static final String[] GENDERS = {"Male", "Female"};
 	
-	public ArtistaTableViewer(Composite parent, EntitiesList artists) {
+	public ArtistaTableViewer(Composite parent, List<Unit> artists) {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Name", "Sex"};
@@ -77,7 +79,6 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			default:	// Shouldn't reach here
 				break;
 			}
-			entities.unitChanged(art);
 		}
 	}
 	

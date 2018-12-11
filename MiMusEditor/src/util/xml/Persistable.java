@@ -28,6 +28,11 @@ import org.w3c.dom.Element;
 public interface Persistable {
 	
 	/**
+	 * Converts an XML Element into a model object.
+	 */
+	public Persistable fromXMLElement(Element elem);
+	
+	/**
 	 * Converts a model object into an XML Element that can be
 	 * appended to an XML Document.
 	 */

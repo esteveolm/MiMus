@@ -36,7 +36,7 @@ import util.xml.MiMusXML;
  * TODO: guarantee sequentiality of authors.
  * 
  */
-public class MiMusBibEntry implements Persistable {
+public class MiMusBibEntry extends Unit implements Persistable {
 	
 	/*
 	 * The number of authors and secondary authors is fixed and reflected
@@ -60,6 +60,8 @@ public class MiMusBibEntry implements Persistable {
 	private String shortReference;
 	private int id;
 	private List<Integer> users;
+	
+	public MiMusBibEntry() {}
 	
 	/**
 	 * Initializes a Bibliography Entry with no values filled.
@@ -356,7 +358,7 @@ public class MiMusBibEntry implements Persistable {
 		return str;
 	}
 	
-	public static MiMusBibEntry fromXMLElement(Element elem) {
+	public MiMusBibEntry fromXMLElement(Element elem) {
 		String[] authors = new String[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			authors[i] = elem.getElementsByTagName("autor"+(i+1))
@@ -492,7 +494,7 @@ public class MiMusBibEntry implements Persistable {
 			Node node = nl.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element elem = (Element) node;
-				entries.add(MiMusBibEntry.fromXMLElement(elem));
+				entries.add(new MiMusBibEntry().fromXMLElement(elem));
 			}
 		}
 		return entries;

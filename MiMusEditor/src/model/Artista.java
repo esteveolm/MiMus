@@ -14,6 +14,8 @@ public class Artista extends Entity {
 	private String name;
 	private boolean female;
 	
+	public Artista() {}
+	
 	public Artista(int id) {
 		this(id, "", false);
 	}
@@ -50,8 +52,11 @@ public class Artista extends Entity {
 	public String toString() {
 		return getName();
 	}
+
+	/* MiMusWritable implementation */
 	
-	public static Artista fromXMLElement(Element elem) {
+	@Override
+	public Artista fromXMLElement(Element elem) {
 		String name = elem.getElementsByTagName("name")
 				.item(0).getTextContent();
 		boolean female = elem.getElementsByTagName("gender")
@@ -62,8 +67,6 @@ public class Artista extends Entity {
 				.item(0).getTextContent());
 		return new Artista(id, name, female);
 	}
-
-	/* MiMusWritable implementation */
 	
 	@Override
 	public Element toXMLElement(Document doc) {
@@ -98,7 +101,7 @@ public class Artista extends Entity {
 			Node node = nl.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element elem = (Element) node;
-				entries.add(Artista.fromXMLElement(elem));
+				entries.add(new Artista().fromXMLElement(elem));
 			}
 		}
 		return entries;

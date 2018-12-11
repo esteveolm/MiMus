@@ -1,5 +1,8 @@
 package ui.table;
 
+import java.util.List;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -20,20 +23,20 @@ import control.SharedResources;
 import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusReference;
-import model.ReferencesList;
 import model.Unit;
-//import util.MiMusBiblioReader;
 import util.xml.MiMusXML;
 
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
-	private ReferencesList references;
+	private List<Unit> references;
+	private List<Unit> bibEntries;
 	private MiMusEntry docEntry;
 	
-	public ReferenceTableViewer(Composite parent, ReferencesList references, 
-			MiMusEntry docEntry, SharedResources resources) {
+	public ReferenceTableViewer(Composite parent, List<Unit> references, 
+			List<Unit> bibEntries, MiMusEntry docEntry, SharedResources resources) {
 		super(parent);
 		this.references = references;
+		this.bibEntries = bibEntries;
 		this.docEntry = docEntry;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
@@ -59,7 +62,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setCellModifier(new ReferenceCellModifier());
-		tv.setContentProvider(new ReferenceContentProvider());
+		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setLabelProvider(new ReferenceLabelProvider());
 		tv.setInput(references);
 		tv.getTable().setHeaderVisible(true);
@@ -73,9 +76,9 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	}
 
 	private String[] getBibEntriesText() {
-		String[] res = new String[references.getBibEntries().size()];
-		for (int i=0; i<references.getBibEntries().size(); i++) {
-			res[i] = references.getBibEntries().get(i).getShortReference();
+		String[] res = new String[bibEntries.size()];
+		for (int i=0; i<bibEntries.size(); i++) {
+			res[i] = ((MiMusBibEntry) bibEntries.get(i)).getShortReference();
 		}
 		return res;
 	}
@@ -130,7 +133,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				if (valueIdx>-1) {
 					/* This document is no longer using the old bibEntry */
 					MiMusBibEntry reducedEntry = ref.getBibEntry();
-					MiMusBibEntry extendedEntry = ref.getReferences()
+					MiMusBibEntry extendedEntry = SharedResources.getInstance()
 							.getBibEntries().get(valueIdx);
 					if (extendedEntry.getId() != reducedEntry.getId()) {
 						/* Actually reduce entry's users */
@@ -158,7 +161,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			default:	// Should never reach here
 				break;
 			}
-			references.unitChanged(ref);
 		}
 	}
 	
@@ -184,56 +186,25 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		}
 	}
 	
-	class ReferenceContentProvider implements MiMusContentProvider {
-		@Override
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null) {
-				((ReferencesList) newInput).addChangeListener(this);
-			}
-			if (oldInput != null) {
-				((ReferencesList) oldInput).removeChangeListener(this);
-			}
-		}
-		
-		@Override
-		public void dispose() {
-			references.removeChangeListener(this);
-		}
-		
-		@Override
-		public Object[] getElements(Object inputElement) {
-			return references.getUnits().toArray();
-		}
-
-		@Override
-		public void addUnit(Unit u) {
-			tv.add(u);
-		}
-
-		@Override
-		public void removeUnit(Unit u) {
-			tv.remove(u);
-		}
-
-		@Override
-		public void updateUnit(Unit u) {
-			tv.update(u, null);
-			tv.refresh();
-		}
-	}
-	
 	class ReferenceComparator extends ViewerComparator {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			MiMusReference ref1 = (MiMusReference) e1;
 			MiMusReference ref2 = (MiMusReference) e2;
-			return ref1.getBibEntry().getYear().compareTo(ref2.getBibEntry().getYear());
+			return ref1.getBibEntry().getYear()
+					.compareTo(ref2.getBibEntry().getYear());
 		}
 	}
 	
-	public ReferencesList getReferences() {
+	public List<Unit> getReferences() {
 		return references;
 	}
-	public void setReferences(ReferencesList references) {
+	public void setReferences(List<Unit> references) {
 		this.references = references;
+	}
+	public List<Unit> getBibEntries() {
+		return bibEntries;
+	}
+	public void setBibEntries(List<Unit> bibEntries) {
+		this.bibEntries = bibEntries;
 	}
 }

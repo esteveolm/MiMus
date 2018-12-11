@@ -1,5 +1,9 @@
 package ui.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -12,18 +16,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
 import model.Transcription;
-import model.TranscriptionsList;
 import model.Unit;
 
 public class TranscriptionTableViewer extends MiMusTableViewer {
 	
-	private TranscriptionsList transcriptions;
+	private List<Unit> transcriptions;
 	
 	public TranscriptionTableViewer(Composite parent) {
 		super(parent);
 		String[] cols = {"Selection", "Transcription", "Lemma"};
 		columnNames = cols;
-		transcriptions = new TranscriptionsList();
+		transcriptions = new ArrayList<>();
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		}
 		tv.setUseHashlookup(true);
 		tv.setColumnProperties(columnNames);
-		tv.setContentProvider(new TranscriptionContentProvider());
+		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setLabelProvider(new TranscriptionLabelProvider());
 		tv.setInput(transcriptions);
 		tv.getTable().setHeaderVisible(true);
@@ -47,41 +50,6 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		tv.setComparator(new TranscriptionComparator());
 		packColumns();
 		return tv;
-	}
-	
-	public class TranscriptionContentProvider implements MiMusContentProvider {		
-		@Override
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null) {
-				((TranscriptionsList) newInput).addChangeListener(this);
-			}
-			if (oldInput != null) {
-				((TranscriptionsList) oldInput).removeChangeListener(this);
-			}
-		}
-		
-		@Override
-		public void dispose() {
-			transcriptions.removeChangeListener(this);
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			return transcriptions.getUnits().toArray();
-		}
-		
-		public void addUnit(Unit u) {
-			tv.add(u);
-		}
-		
-		public void removeUnit(Unit u) {
-			tv.remove(u);
-		}
-		
-		public void updateUnit(Unit u) {
-			tv.update(u, null);
-			tv.refresh();
-		}
 	}
 	
 	class TranscriptionLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -99,7 +67,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 			case 1:	// Transcription
 				return tra.getForm();
 			case 2:	// Lemma
-				return tra.getItsEntity().getLemma();
+				return tra.getItsEntity().getItsEntity().getLemma();
 			default:	// Should never reach here
 				return "";
 			}
@@ -115,8 +83,8 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Transcription tra1 = (Transcription) e1;
 			Transcription tra2 = (Transcription) e2;
-			int byLemma = tra1.getItsEntity().getLemma()
-					.compareTo(tra2.getItsEntity().getLemma());
+			int byLemma = tra1.getItsEntity().getItsEntity().getLemma()
+					.compareTo(tra2.getItsEntity().getItsEntity().getLemma());
 			if (byLemma==0) {
 				return tra1.getForm().compareTo(tra2.getForm());
 			} else {
@@ -125,10 +93,10 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		}
 	}
 
-	public TranscriptionsList getTranscriptions() {
+	public List<Unit> getTranscriptions() {
 		return transcriptions;
 	}
-	public void setTranscriptions(TranscriptionsList transcriptions) {
+	public void setTranscriptions(List<Unit> transcriptions) {
 		this.transcriptions = transcriptions;
 	}
 }

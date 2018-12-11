@@ -15,6 +15,8 @@ public class Instrument extends Entity {
 	private int family;
 	private int classe;
 	
+	public Instrument() {}
+	
 	public Instrument(int id) {
 		this(id, "", 0, 0);
 	}
@@ -55,7 +57,7 @@ public class Instrument extends Entity {
 		this.classe = classe;
 	}
 	
-	public static Instrument fromXMLElement(Element elem) {
+	public Instrument fromXMLElement(Element elem) {
 		String name = elem.getElementsByTagName("nom")
 				.item(0).getTextContent();
 		int family = Integer.parseInt(
@@ -108,7 +110,7 @@ public class Instrument extends Entity {
 			Node node = nl.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element elem = (Element) node;
-				entries.add(Instrument.fromXMLElement(elem));
+				entries.add(new Instrument().fromXMLElement(elem));
 			}
 		}
 		return entries;

@@ -1,46 +1,75 @@
 package model;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import util.xml.Persistable;
 
-public class EntityInstance extends Entity implements Persistable {
-
+public class EntityInstance extends ConcreteUnit implements Persistable {
+	
+	private int id;
 	private Entity itsEntity;
+	
+	public EntityInstance(List<Entity> allEntities) {
+		super(allEntities);
+	}
 	
 	public EntityInstance(Entity itsEntity) {
 		this(itsEntity, 0);
 	}
 	
 	public EntityInstance(Entity itsEntity, int id) {
-		/* ID is set after super() for the instance, not the concept */
-		super(-1, itsEntity.getType());
 		this.itsEntity = itsEntity;
-		this.setId(id);
+		this.id = id;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public Entity getItsEntity() {
 		return itsEntity;
 	}
 	public void setItsEntity(Entity itsEntity) {
 		this.itsEntity = itsEntity;
 	}
-
-	@Override
-	public String getLemma() {
-		return itsEntity.getLemma();
-	}
 	
 	@Override
 	public String toString() {
-		return getLemma();
+		return getItsEntity().getLemma();
 	}
 	
 	/* Implementation of MiMusWritable */
-
+	
+	@Override
+	public Persistable fromXMLElement(Element elem) {
+		int entId = Integer.parseInt(
+				elem.getElementsByTagName("entity_id")
+				.item(0).getTextContent());
+		Entity ent = null;
+		for (int i=0; i<getItsConcepts().size(); i++) {
+			Unit u = getItsConcepts().get(i);
+			if (u instanceof Entity) {
+				Entity thisEnt = ((Entity) u);
+				if (thisEnt.getId() == entId) {
+					ent = thisEnt;
+					break;
+				}
+			}
+		}
+		if (ent != null) {
+			int id = Integer.parseInt(
+					elem.getElementsByTagName("id")
+					.item(0).getTextContent());
+			return new EntityInstance(ent, id);
+		}
+		return null;
+	}
+	
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntity = doc.createElement(getWritableName());
@@ -75,7 +104,7 @@ public class EntityInstance extends Entity implements Persistable {
 	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
 	 * to check if any equals <ent>.
 	 */
-	public static boolean containsEntity(Vector<? extends Unit> list, Entity ent) {
+	public static boolean containsEntity(List<Unit> list, EntityInstance ent) {
 		for (Unit u: list) {
 			if (u instanceof EntityInstance) {
 				if (((EntityInstance) u).getItsEntity().equals(ent)) {

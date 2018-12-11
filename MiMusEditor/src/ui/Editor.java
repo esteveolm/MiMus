@@ -1,19 +1,13 @@
 package ui;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -40,26 +34,17 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import control.EventObserver;
 import control.SharedControl;
 import control.SharedResources;
-import model.Artista;
-import model.EntitiesList;
 import model.Entity;
 import model.EntityInstance;
 import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusReference;
 import model.MiMusText;
-import model.ReferencesList;
 import model.Transcription;
-import model.TranscriptionsList;
+import model.Unit;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.TranscriptionTableViewer;
@@ -72,7 +57,6 @@ public class Editor extends EditorPart implements EventObserver {
 	
 	protected String txtPath;
 	protected String xmlPath;
-	private boolean hasXML;
 	private SharedResources resources;
 	private SharedControl control;
 	private MiMusEntry docEntry;
@@ -116,14 +100,11 @@ public class Editor extends EditorPart implements EventObserver {
 		if (getEditorInput().getName().endsWith(".txt")) {
 			txtPath += "/" + getEditorInput().getName();
 			xmlPath += "/" + getEditorInput().getName().replace(".txt", ".xml");
-			File xmlFile = new File(xmlPath);
-			hasXML = xmlFile.exists();
 			System.out.println(xmlPath);
 			System.out.println(txtPath);
 		} else if (getEditorInput().getName().endsWith(".xml")) {
 			xmlPath += "/" + getEditorInput().getName();
 			txtPath += "/" + getEditorInput().getName().replace(".xml", ".txt");
-			hasXML = true;
 			System.out.println(xmlPath);
 			System.out.println(txtPath);
 		} else {
@@ -181,7 +162,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Table of entities */
 		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
-		EntitiesList entities = entityHelper.getEntities();
+		List<Unit> entities = entityHelper.getEntities();
 		
 		/* Label of Regest entities */
 		Label regestLabel = toolkit.createLabel(form.getBody(), "");
@@ -218,7 +199,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Transcription entities and its table */
 		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent());
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
-		TranscriptionsList transcriptions = transcriptionHelper.getTranscriptions();
+		List<Unit> transcriptions = transcriptionHelper.getTranscriptions();
 		
 		/* Label of transcriptions */
 		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
@@ -254,9 +235,11 @@ public class Editor extends EditorPart implements EventObserver {
 		rawRefsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Table of references */
-		ReferencesList references = new ReferencesList(resources.getBibEntries());
+		List<Unit> references = new ArrayList<>();
+		List<Unit> bibEntries = new ArrayList<>(resources.getBibEntries());
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), references, docEntry, resources);
+				sectRef.getParent(), references, bibEntries, 
+				docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		
 		/* Label of references */
@@ -325,11 +308,11 @@ public class Editor extends EditorPart implements EventObserver {
 							"You must remove all transcriptions using this entity before.");
 				} else {
 					System.out.println(ent);
-					entities.removeUnit(ent);
+					entities.remove(ent);
 					MiMusXML.openDoc(docEntry).remove(ent).write();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
-							+ entities.countUnits());
+							+ entities.size());
 					LabelPrinter.printInfo(regestLabel, 
 							"Entity deleted successfully.");
 				}
@@ -384,10 +367,10 @@ public class Editor extends EditorPart implements EventObserver {
 					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
 					
 					/* Remove transcription */
-					transcriptions.removeUnit(trans);
+					transcriptions.remove(trans);
 					MiMusXML.openDoc(docEntry).remove(trans).write();
 					System.out.println("Removing lemma - " 
-							+ transcriptions.countUnits());
+							+ transcriptions.size());
 					LabelPrinter.printInfo(transcriptionLabel, 
 							"Transcription deleted successfully.");
 				}
@@ -398,12 +381,16 @@ public class Editor extends EditorPart implements EventObserver {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MiMusReference ref = 
-						new MiMusReference(references, 0, referenceCurrentID++);
-				references.addUnit(ref);
+				MiMusReference ref = new MiMusReference(
+						SharedResources.getInstance().getBibEntries().get(0),
+						"",
+						0, 
+						referenceCurrentID++);
+				references.add(ref);
 				
 				/* Reflect document is user of entry, in model and xml */
-				MiMusBibEntry modifiedEntry = references.getBibEntries().get(0);
+				MiMusBibEntry modifiedEntry = 
+						SharedResources.getInstance().getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
 				MiMusXML.openDoc(docEntry).append(ref).write();
@@ -425,15 +412,13 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printError(referenceLabel, 
 							"You must select a reference to delete it.");
 				} else {
-					references.removeUnit(ref);
+					references.remove(ref);
 					
 					/* 
 					 * Reflect document is not user of entry anymore, 
 					 * in model and xml 
 					 */
-					int oldId = ref.getBibEntry().getId();
-					MiMusBibEntry oldEntry = references.getBibEntries()
-							.get(references.getBibEntryIdx(oldId));
+					MiMusBibEntry oldEntry = ref.getBibEntry();
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
 					MiMusXML.openDoc(docEntry).remove(ref).write();
@@ -598,37 +583,37 @@ public class Editor extends EditorPart implements EventObserver {
 //		}
 	}
 	
-	private void runDialog(InstanceDialog dialog, EntitiesList entities,
+	private void runDialog(InstanceDialog dialog, List<Unit> entities,
 			Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
 			int selection = dialog.getSelection();
 			if (selection>=0) {
 				EntityInstance inst = new EntityInstance(
-						dialog.getEntity(),
+						(Entity) dialog.getEntity(),
 						entityCurrentID++);
-				entities.addUnit(inst);
+				entities.add(inst);
 				MiMusXML.openDoc(docEntry).append(inst).write();
 				System.out.println("Adding selected Entity - " 
-						+ entities.countUnits());
+						+ entities.size());
 				LabelPrinter.printInfo(label, 
 						"Entity added successfully.");
 			} else {
 				System.out.println("No Entity added - " 
-						+ entities.countUnits());
+						+ entities.size());
 				LabelPrinter.printInfo(label, 
 						"Nothing was added. Must declare any first.");
 			}
 		} else {
 			System.out.println("No Entity added - " 
-					+ entities.countUnits());
+					+ entities.size());
 			LabelPrinter.printInfo(label, 
 					"Nothing was added.");
 		}
 	}
 	
 	private void runTranscriptionDialog(TranscriptionDialog dialog, 
-			TranscriptionsList transcriptions, EntitiesList entities, 
+			List<Unit> transcriptions, List<Unit> entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();
 		if (charCoords.x!=charCoords.y) {
@@ -646,19 +631,19 @@ public class Editor extends EditorPart implements EventObserver {
 				int selection = dialog.getSelection();
 				if (selection>=0) {
 					/* User actually selected something */
-					Entity ent = dialog.getEntity();
+					EntityInstance ent = (EntityInstance) dialog.getEntity();
 					String form = dialog.getTranscription();
 					if (form=="")
 						/* User did not add a form, use selection directly */
 						form = dialog.getSelectedText();
-					if (EntityInstance.containsEntity(entities.getUnits(), ent)) {
+					if (EntityInstance.containsEntity(entities, ent)) {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
 								ent, selectedText, form, charCoords);
-						transcriptions.addUnit(trans);
+						transcriptions.add(trans);
 						MiMusXML.openDoc(docEntry).append(trans).write();
 						System.out.println("Adding selected Transcription - " 
-								+ transcriptions.countUnits());
+								+ transcriptions.size());
 						LabelPrinter.printInfo(label, 
 								"Lemma added successfully.");
 						styler.addUpdate(charCoords.x, charCoords.y);
@@ -666,7 +651,7 @@ public class Editor extends EditorPart implements EventObserver {
 						/* Entity not in document, don't add transcription */
 						System.out.println(
 								"Entity of Transcription not in document - "
-								+ transcriptions.countUnits());
+								+ transcriptions.size());
 						LabelPrinter.printError(label, 
 								"Entity selected must have been marked in"
 								+ " this document.");
@@ -674,14 +659,14 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					/* User pressed OK but selected nothing */
 					System.out.println("No Transcription added - " 
-							+ transcriptions.countUnits());
+							+ transcriptions.size());
 					LabelPrinter.printInfo(label, 
 							"Nothing was added. Must add any entity first.");
 				}
 			} else {
 				/* User pressed Cancel, nothing to add */
 				System.out.println("No Transcription added - " 
-						+ transcriptions.countUnits());
+						+ transcriptions.size());
 				LabelPrinter.printInfo(label, 
 						"Nothing was added.");
 			}
@@ -694,7 +679,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 	}
 	
-	public ReferencesList getReferences() {
+	public List<Unit> getReferences() {
 		return referenceHelper.getReferences();
 	}
 	

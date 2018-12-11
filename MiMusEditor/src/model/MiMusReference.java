@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -27,25 +29,18 @@ import util.xml.Persistable;
  * just by attaching the pages field at the end of it.
  * 
  */
-public class MiMusReference extends Unit implements Persistable {
+public class MiMusReference extends ConcreteUnit implements Persistable {
 	
 	private MiMusBibEntry bibEntry;
 	private String page;
-	private ReferencesList references;
 	private int type;
 	private int id;
 	
-	public MiMusReference(ReferencesList references, int type, int id) {
-		this.setReferences(references);
-		this.bibEntry = references.getBibEntries().get(0);
-		this.page = "";
-		this.setType(type);
-		this.setId(id);
+	public MiMusReference(List<MiMusBibEntry> allBiblio) {
+		super(allBiblio);
 	}
 	
-	public MiMusReference(ReferencesList references, MiMusBibEntry bibEntry, 
-			String page, int type, int id) {
-		this.setReferences(references);
+	public MiMusReference(MiMusBibEntry bibEntry, String page, int type, int id) {
 		this.bibEntry = bibEntry;
 		this.page = page;
 		this.setType(type);
@@ -76,20 +71,44 @@ public class MiMusReference extends Unit implements Persistable {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public ReferencesList getReferences() {
-		return references;
-	}
-	public void setReferences(ReferencesList references) {
-		this.references = references;
-	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
 	/* Implementation of MiMusWritable */
+	
+	@Override
+	public Persistable fromXMLElement(Element elem) {
+		int bibId = Integer.parseInt(
+				elem.getElementsByTagName("biblio_id")
+				.item(0).getTextContent());
+		MiMusBibEntry biblio = null;
+		for (int i=0; i<getItsConcepts().size(); i++) {
+			Unit u = getItsConcepts().get(i);
+			if (u instanceof MiMusBibEntry) {
+				MiMusBibEntry thisBiblio = (MiMusBibEntry) u;
+				if (thisBiblio.getId() == bibId) {
+					biblio = thisBiblio;
+					break;
+				}
+			}
+		}
+		if (biblio != null) {
+			String page = elem.getElementsByTagName("page")
+					.item(0).getTextContent();
+			int type = Integer.parseInt(
+					elem.getElementsByTagName("type")
+					.item(0).getTextContent());
+			int id = Integer.parseInt(
+					elem.getElementsByTagName("id")
+					.item(0).getTextContent());
+			return new MiMusReference(biblio, page, type, id);
+		}
+		return null;
+	}
 	
 	@Override
 	public Element toXMLElement(Document doc) {

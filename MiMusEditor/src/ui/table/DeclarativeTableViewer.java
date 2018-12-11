@@ -1,19 +1,20 @@
 package ui.table;
 
+import java.util.List;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
-import model.EntitiesList;
 import model.Unit;
 
 public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 	
-	protected EntitiesList entities;
+	protected List<Unit> entities;
 	
 	public DeclarativeTableViewer(Composite parent) {
 		super(parent);
@@ -35,7 +36,7 @@ public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 		tv.setColumnProperties(columnNames);
 		
 		tv.setCellEditors(developEditors());
-		tv.setContentProvider(new DeclarativeContentProvider());
+		tv.setContentProvider(ArrayContentProvider.getInstance());
 		developProviders();
 		
 		tv.setInput(entities);
@@ -46,43 +47,5 @@ public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 		tv.getTable().setLayoutData(gd);
 		packColumns();
 		return tv;
-	}
-	
-	class DeclarativeContentProvider implements MiMusContentProvider {
-		@Override
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null) {
-				((EntitiesList) newInput).addChangeListener(this);
-			}
-			if (oldInput != null) {
-				((EntitiesList) oldInput).removeChangeListener(this);
-			}
-		}
-		
-		@Override
-		public void dispose() {
-			entities.removeChangeListener(this);
-		}
-		
-		@Override
-		public Object[] getElements(Object inputElement) {
-			return entities.getUnits().toArray();
-		}
-
-		@Override
-		public void addUnit(Unit u) {
-			tv.add(u);
-		}
-
-		@Override
-		public void removeUnit(Unit u) {
-			tv.remove(u);
-		}
-
-		@Override
-		public void updateUnit(Unit u) {
-			tv.update(u, null);
-			tv.refresh();
-		}
 	}
 }

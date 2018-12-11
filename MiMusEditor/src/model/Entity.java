@@ -2,10 +2,13 @@ package model;
 
 import util.xml.Persistable;
 
-public abstract class Entity extends Unit implements Persistable {
+public abstract class Entity extends Unit 
+		implements Persistable {
 	
 	private int id;
 	private String type;
+	
+	public Entity() {}
 	
 	public Entity(int id) {
 		this(id, "Unknown");
