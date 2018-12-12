@@ -269,7 +269,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entities, regestLabel);
-				/* Dialog blocks Editor until user closes window */
+				entityTV.refresh();
 			}
 		});
 		addInst.addSelectionListener(new SelectionAdapter() {
@@ -282,6 +282,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entities, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
@@ -310,6 +311,7 @@ public class Editor extends EditorPart implements EventObserver {
 					System.out.println(ent);
 					entities.remove(ent);
 					MiMusXML.openDoc(docEntry).remove(ent).write();
+					entityTV.refresh();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
 							+ entities.size());
@@ -333,6 +335,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog) dialog, 
 						transcriptions, entities, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		addTransInst.addSelectionListener(new SelectionAdapter() {
@@ -348,6 +351,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entities, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		removeTrans.addSelectionListener(new SelectionAdapter() {
@@ -369,6 +373,7 @@ public class Editor extends EditorPart implements EventObserver {
 					/* Remove transcription */
 					transcriptions.remove(trans);
 					MiMusXML.openDoc(docEntry).remove(trans).write();
+					transcriptionTV.refresh();
 					System.out.println("Removing lemma - " 
 							+ transcriptions.size());
 					LabelPrinter.printInfo(transcriptionLabel, 
@@ -394,6 +399,7 @@ public class Editor extends EditorPart implements EventObserver {
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
 				MiMusXML.openDoc(docEntry).append(ref).write();
+				referenceTV.refresh();
 				
 				LabelPrinter.printInfo(referenceLabel, 
 						"Reference added successfully.");
@@ -422,6 +428,7 @@ public class Editor extends EditorPart implements EventObserver {
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
 					MiMusXML.openDoc(docEntry).remove(ref).write();
+					referenceTV.refresh();
 					
 					LabelPrinter.printInfo(referenceLabel, 
 							"Reference deleted successfully.");
@@ -631,7 +638,7 @@ public class Editor extends EditorPart implements EventObserver {
 				int selection = dialog.getSelection();
 				if (selection>=0) {
 					/* User actually selected something */
-					EntityInstance ent = (EntityInstance) dialog.getEntity();
+					Entity ent = (Entity) dialog.getEntity();
 					String form = dialog.getTranscription();
 					if (form=="")
 						/* User did not add a form, use selection directly */
@@ -639,7 +646,8 @@ public class Editor extends EditorPart implements EventObserver {
 					if (EntityInstance.containsEntity(entities, ent)) {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
-								ent, selectedText, form, charCoords);
+								EntityInstance.getInstanceWithEntity(entities, ent),
+								selectedText, form, charCoords);
 						transcriptions.add(trans);
 						MiMusXML.openDoc(docEntry).append(trans).write();
 						System.out.println("Adding selected Transcription - " 

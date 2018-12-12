@@ -40,6 +40,8 @@ public abstract class TranscriptionDialog extends InstanceDialog {
 			public void modifyText(ModifyEvent e) {
 				/* Stores text introduced by user */
 				TranscriptionDialog.this.setTranscription(textForm.getText());
+				TranscriptionDialog.this.setEntity(
+						TranscriptionDialog.this.getEntities().get(getSelection()));
 			}
 			
 		});

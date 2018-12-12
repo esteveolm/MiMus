@@ -37,7 +37,10 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	public void setItsEntity(Entity itsEntity) {
 		this.itsEntity = itsEntity;
 	}
-	
+	public String getType() {
+		return itsEntity.getWritableName();
+	}
+
 	@Override
 	public String toString() {
 		return getItsEntity().getLemma();
@@ -91,7 +94,6 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 
 	@Override
 	public String getWritableCategory() {
-		System.out.println("category is entities");
 		return "entities";
 	}
 
@@ -104,7 +106,7 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
 	 * to check if any equals <ent>.
 	 */
-	public static boolean containsEntity(List<Unit> list, EntityInstance ent) {
+	public static boolean containsEntity(List<Unit> list, Entity ent) {
 		for (Unit u: list) {
 			if (u instanceof EntityInstance) {
 				if (((EntityInstance) u).getItsEntity().equals(ent)) {
@@ -113,5 +115,16 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 			}
 		}
 		return false;
+	}
+	
+	public static EntityInstance getInstanceWithEntity(List<Unit> list, Entity ent) {
+		for (Unit u: list) {
+			if (u instanceof EntityInstance) {
+				if (((EntityInstance) u).getItsEntity().equals(ent)) {
+					return (EntityInstance) u;
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -104,6 +104,7 @@ public class ArtistaView extends DeclarativeView {
 					System.out.println("Artist created successfully.");
 					LabelPrinter.printInfo(label, "Artist created successfully.");
 					MiMusXML.openArtista().append(art).write();
+					getTv().refresh();
 					notifyObservers();
 				}
 			}
@@ -121,6 +122,7 @@ public class ArtistaView extends DeclarativeView {
 				} else {
 					artists.remove(art);
 					MiMusXML.openInstrument().remove(art).write();
+					getTv().refresh();
 					System.out.println("Artist removed successfully.");
 					LabelPrinter.printInfo(label, "Artist removed successfully.");
 				}

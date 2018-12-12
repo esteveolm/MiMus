@@ -14,7 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
-import model.Entity;
+import model.EntityInstance;
 import model.MiMusText;
 import model.Unit;
 import util.TextStyler;
@@ -61,7 +61,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			Entity ent = (Entity) element;
+			EntityInstance ent = (EntityInstance) element;
 			switch (columnIndex) {
 			case 0:	// Type
 				return ent.getType();
@@ -81,8 +81,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 		 * representation (e.g. Joan I goes before Pere IV).
 		 */
 		public int compare(Viewer viewer, Object e1, Object e2) {
-			Entity ent1 = (Entity) e1;
-			Entity ent2 = (Entity) e2;
+			EntityInstance ent1 = (EntityInstance) e1;
+			EntityInstance ent2 = (EntityInstance) e2;
 			int byType = ent1.getType().compareTo(ent2.getType());
 			if (byType==0) {
 				return ent1.toString().compareTo(ent2.toString());

@@ -75,6 +75,12 @@ public abstract class InstanceDialog extends Dialog {
 		return composite;
 	}
 
+	public List<? extends Entity> getEntities() {
+		return entities;
+	}
+	public void setEntities(List<? extends Entity> entities) {
+		this.entities = entities;
+	}
 	public int getSelection() {
 		return selection;
 	}

@@ -119,6 +119,7 @@ public class InstrumentView extends DeclarativeView {
 					System.out.println("Instrument created successfully.");
 					LabelPrinter.printInfo(label, "Instrument created successfully.");
 					MiMusXML.openInstrument().append(inst).write();
+					getTv().refresh();
 					notifyObservers();
 				}
 			}
@@ -135,6 +136,7 @@ public class InstrumentView extends DeclarativeView {
 				} else {
 					instruments.remove(inst);
 					MiMusXML.openInstrument().remove(inst).write();
+					getTv().refresh();
 					System.out.println("Instrument removed successfully.");
 					LabelPrinter.printInfo(label, "Instrument removed successfully.");
 				}
