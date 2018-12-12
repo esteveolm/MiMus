@@ -22,11 +22,11 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 	
 	private List<Unit> transcriptions;
 	
-	public TranscriptionTableViewer(Composite parent) {
+	public TranscriptionTableViewer(Composite parent, List<Unit> initials) {
 		super(parent);
 		String[] cols = {"Selection", "Transcription", "Lemma"};
 		columnNames = cols;
-		transcriptions = new ArrayList<>();
+		transcriptions = new ArrayList<>(initials);
 	}
 
 	@Override

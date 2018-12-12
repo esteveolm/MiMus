@@ -1,10 +1,18 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import control.SharedResources;
+import util.xml.MiMusXML;
 import util.xml.Persistable;
 
 public class EntityInstance extends ConcreteUnit implements Persistable {
@@ -12,7 +20,9 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	private int id;
 	private Entity itsEntity;
 	
-	public EntityInstance(List<Entity> allEntities) {
+	public EntityInstance() {}
+	
+	public EntityInstance(List<Unit> allEntities) {
 		super(allEntities);
 	}
 	
@@ -49,7 +59,7 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	/* Implementation of MiMusWritable */
 	
 	@Override
-	public Persistable fromXMLElement(Element elem) {
+	public EntityInstance fromXMLElement(Element elem) {
 		int entId = Integer.parseInt(
 				elem.getElementsByTagName("entity_id")
 				.item(0).getTextContent());
@@ -100,6 +110,25 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	@Override
 	public String getWritableId() {
 		return String.valueOf(getId());
+	}
+	
+	public static List<Unit> read(MiMusEntry entry) {
+		List<Artista> arts = SharedResources.getInstance().getArtistas();
+		List<Instrument> insts = SharedResources.getInstance().getInstruments();
+		List<Unit> all = Stream.of(arts, insts)
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList());
+		ArrayList<Unit> entries = new ArrayList<>();
+		Document doc = MiMusXML.openDoc(entry).getDoc();
+		NodeList nl = doc.getElementsByTagName("entity");
+		for (int i=0; i<nl.getLength(); i++) {
+			Node node = nl.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element elem = (Element) node;
+				entries.add(new EntityInstance(all).fromXMLElement(elem));
+			}
+		}
+		return entries;
 	}
 	
 	/**

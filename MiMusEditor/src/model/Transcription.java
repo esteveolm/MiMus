@@ -1,11 +1,15 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import util.xml.MiMusXML;
 import util.xml.Persistable;
 
 /**
@@ -24,7 +28,7 @@ public class Transcription extends ConcreteUnit
 	private Point coords;
 	private int id;
 	
-	public Transcription(List<Entity> allEntities) {
+	public Transcription(List<Unit> allEntities) {
 		super(allEntities);
 	}
 	
@@ -37,8 +41,8 @@ public class Transcription extends ConcreteUnit
 	}
 	
 	public Transcription(EntityInstance itsEntity, String selectedText, 
-			String form, Point coords) {
-		this(itsEntity, selectedText, form, null, 0);
+			String form, int id) {
+		this(itsEntity, selectedText, form, null, id);
 	}
 	
 	public Transcription(EntityInstance itsEntity, String selectedText, 
@@ -88,7 +92,7 @@ public class Transcription extends ConcreteUnit
 	/* Implementation of MiMusWritable */
 	
 	@Override
-	public Persistable fromXMLElement(Element elem) {
+	public Transcription fromXMLElement(Element elem) {
 		int entId = Integer.parseInt(
 				elem.getElementsByTagName("entity_id")
 				.item(0).getTextContent());
@@ -104,21 +108,27 @@ public class Transcription extends ConcreteUnit
 			}
 		}
 		if (ent != null) {
+			int id = Integer.parseInt(
+					elem.getElementsByTagName("id")
+					.item(0).getTextContent());
 			String selectedText = elem.getElementsByTagName("selected_text")
 					.item(0).getTextContent();
 			String form = elem.getElementsByTagName("form")
 					.item(0).getTextContent();
-			int startCh = Integer.parseInt(
-					elem.getElementsByTagName("start_char")
-					.item(0).getTextContent());
-			int endCh = Integer.parseInt(
-					elem.getElementsByTagName("end_char")
-					.item(0).getTextContent());
-			Point coords = new Point(startCh, endCh);
-			int id = Integer.parseInt(
-					elem.getElementsByTagName("id")
-					.item(0).getTextContent());
-			return new Transcription(ent, selectedText, form, coords, id);
+			String startCh = elem.getElementsByTagName("start_char")
+					.item(0).getTextContent();
+			String endCh = elem.getElementsByTagName("end_char")
+					.item(0).getTextContent();
+			if (startCh.length()>0 && endCh.length()>0) {
+				Point coords = new Point(
+						Integer.parseInt(startCh), Integer.parseInt(endCh));
+				return new Transcription(ent, selectedText, form, coords, id);
+			}
+			else {
+				return new Transcription(ent, selectedText, form, id);
+			}
+			
+			
 		}
 		return null;
 	}
@@ -165,6 +175,21 @@ public class Transcription extends ConcreteUnit
 	@Override
 	public String getWritableId() {
 		return String.valueOf(getId());
+	}
+	
+	public static List<Unit> read(MiMusEntry entry, List<Unit> entityInstances) {
+		ArrayList<Unit> entries = new ArrayList<>();
+		Document doc = MiMusXML.openDoc(entry).getDoc();
+		NodeList nl = doc.getElementsByTagName("transcription");
+		for (int i=0; i<nl.getLength(); i++) {
+			Node node = nl.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element elem = (Element) node;
+				entries.add(new Transcription(entityInstances)
+						.fromXMLElement(elem));
+			}
+		}
+		return entries;
 	}
 	
 	public static boolean containsEntity(List<Unit> list, EntityInstance ent) {

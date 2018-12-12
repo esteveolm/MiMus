@@ -1,10 +1,14 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import util.xml.MiMusXML;
 import util.xml.Persistable;
 
 /**
@@ -36,7 +40,9 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 	private int type;
 	private int id;
 	
-	public MiMusReference(List<MiMusBibEntry> allBiblio) {
+	public MiMusReference() {}
+	
+	public MiMusReference(List<Unit> allBiblio) {
 		super(allBiblio);
 	}
 	
@@ -81,7 +87,7 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 	/* Implementation of MiMusWritable */
 	
 	@Override
-	public Persistable fromXMLElement(Element elem) {
+	public MiMusReference fromXMLElement(Element elem) {
 		int bibId = Integer.parseInt(
 				elem.getElementsByTagName("biblio_id")
 				.item(0).getTextContent());
@@ -144,5 +150,20 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 	@Override
 	public String getWritableId() {
 		return String.valueOf(getId());
+	}
+	
+	public static List<Unit> read(MiMusEntry entry, List<Unit> bibEntries) {
+		ArrayList<Unit> entries = new ArrayList<>();
+		Document doc = MiMusXML.openDoc(entry).getDoc();
+		NodeList nl = doc.getElementsByTagName("reference");
+		for (int i=0; i<nl.getLength(); i++) {
+			Node node = nl.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element elem = (Element) node;
+				entries.add(new MiMusReference(bibEntries).fromXMLElement(elem));
+			}
+		}
+		System.out.println(entries.size() + " references read");
+		return entries;
 	}
 }

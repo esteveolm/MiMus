@@ -71,6 +71,9 @@ public class Editor extends EditorPart implements EventObserver {
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
 	private InstanceDialog dialog;
+	private List<Unit> entityInstances;
+	private List<Unit> transcriptions;
+	private List<Unit> references;
 	
 	public Editor() {
 		super();
@@ -160,9 +163,11 @@ public class Editor extends EditorPart implements EventObserver {
 		sectEnt.setText("Entities at Regest");
 		
 		/* Table of entities */
-		entityHelper = new EntityTableViewer(sectEnt.getParent(), styler, regest);
+		entityHelper = new EntityTableViewer(sectEnt.getParent(), 
+				EntityInstance.read(docEntry),
+				styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
-		List<Unit> entities = entityHelper.getEntities();
+		entityInstances = entityHelper.getEntities();
 		
 		/* Label of Regest entities */
 		Label regestLabel = toolkit.createLabel(form.getBody(), "");
@@ -197,9 +202,10 @@ public class Editor extends EditorPart implements EventObserver {
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 
 		/* Transcription entities and its table */
-		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent());
+		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent(),
+				Transcription.read(docEntry, entityInstances));
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
-		List<Unit> transcriptions = transcriptionHelper.getTranscriptions();
+		transcriptions = transcriptionHelper.getTranscriptions();
 		
 		/* Label of transcriptions */
 		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
@@ -235,12 +241,13 @@ public class Editor extends EditorPart implements EventObserver {
 		rawRefsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Table of references */
-		List<Unit> references = new ArrayList<>();
 		List<Unit> bibEntries = new ArrayList<>(resources.getBibEntries());
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), references, bibEntries, 
-				docEntry, resources);
+				sectRef.getParent(), 
+				MiMusReference.read(docEntry, bibEntries), 
+				bibEntries, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
+		references = referenceHelper.getReferences();
 		
 		/* Label of references */
 		Label referenceLabel = toolkit.createLabel(sectRef.getParent(), "");
@@ -268,7 +275,7 @@ public class Editor extends EditorPart implements EventObserver {
 						return "Artista";
 					}
 				};
-				runDialog(dialog, entities, regestLabel);
+				runDialog(dialog, entityInstances, regestLabel);
 				entityTV.refresh();
 			}
 		});
@@ -281,7 +288,7 @@ public class Editor extends EditorPart implements EventObserver {
 						return "Instrument";
 					}
 				};
-				runDialog(dialog, entities, regestLabel);
+				runDialog(dialog, entityInstances, regestLabel);
 				entityTV.refresh();
 			}
 		});
@@ -309,12 +316,12 @@ public class Editor extends EditorPart implements EventObserver {
 							"You must remove all transcriptions using this entity before.");
 				} else {
 					System.out.println(ent);
-					entities.remove(ent);
+					entityInstances.remove(ent);
 					MiMusXML.openDoc(docEntry).remove(ent).write();
 					entityTV.refresh();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
-							+ entities.size());
+							+ entityInstances.size());
 					LabelPrinter.printInfo(regestLabel, 
 							"Entity deleted successfully.");
 				}
@@ -333,7 +340,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runTranscriptionDialog((TranscriptionDialog) dialog, 
-						transcriptions, entities, 
+						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
 			}
@@ -349,7 +356,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
-						transcriptions, entities, 
+						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
 			}
@@ -470,124 +477,6 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		toolkit.dispose();
-		
-//		/* Load entities that were declared in the XML */
-//		if (hasXML) {
-//			try {
-//				File xmlFile = new File(xmlPath);
-//				DocumentBuilderFactory dbFactory = 
-//						DocumentBuilderFactory.newInstance();
-//				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//				Document doc = dBuilder.parse(xmlFile);
-//				doc.getDocumentElement().normalize();
-//				docID = doc.getElementsByTagName("doc_id").item(0).getTextContent();
-//
-//				/* Load entities */
-//				NodeList nl = doc.getElementsByTagName("entity");
-//				for (int i=0; i<nl.getLength(); i++) {
-//					Node nEnt = nl.item(i);
-//					if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
-//						/* Read fields from XML entry <entity> */
-//						Element eEnt = (Element) nEnt;
-//						
-//						/* Discern if <entity> under <regest_entities> or <transcription_entities> */
-//						if (nEnt.getParentNode().getNodeName().equals("regest_entities")) {
-//							Entity ent = regest.xmlElementToEntity(eEnt, true);
-//							entityCurrentID++;
-//							regestEntities.addUnit(ent);
-//							Point charCoord = regest.fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()));
-//							styler.add(charCoord.x, charCoord.y);
-//						} else if (nEnt.getParentNode().getNodeName().equals("transcription_entities")) {
-//							Entity ent = transcription.xmlElementToEntity(eEnt, false);
-//							entityCurrentID++;
-//							transcriptionEntities.addUnit(ent);
-//							Point charCoord = transcription.fromWordToCharCoordinates(new Point(ent.getFrom(), ent.getTo()));
-//							transcriptionStyler.add(charCoord.x, charCoord.y);
-//						}					
-//					}
-//				}
-//				styler.update();
-//				transcriptionStyler.update();
-//				entityHelper.packColumns();
-//				
-//				/* Load lemmatizations */
-//				nl = doc.getElementsByTagName("lemmatization");
-//				for (int i=0; i<nl.getLength(); i++) {
-//					Node nLem = nl.item(i);
-//					if (nLem.getNodeType() == Node.ELEMENT_NODE) {
-//						Element eLem = (Element) nLem;
-//						String strTranscriptionID = eLem.getElementsByTagName("transcription_id").item(0).getTextContent();
-//						String strRegestID = eLem.getElementsByTagName("regest_id").item(0).getTextContent();
-//						Entity foundTranscriptionEntity = null;
-//						Entity foundRegestEntity = null;
-//						
-//						/* Find entities whose IDs coincide with the IDs stored in the <lemmatization> entry */
-//						NodeList entNL = doc.getElementsByTagName("entity");
-//						for (int j=0; (foundTranscriptionEntity==null || foundRegestEntity==null) 
-//								&& j<entNL.getLength(); j++) {
-//							Node nEnt = entNL.item(j);
-//							if (nEnt.getNodeType() == Node.ELEMENT_NODE) {
-//								Element eEnt = (Element) nEnt;
-//								
-//								/* Discern if <entity> entries retrieved are under <transcription_entities> or <regest_entities> */
-//								if (nEnt.getParentNode().getNodeName().equals("transcription_entities")
-//										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strTranscriptionID)) {
-//									foundTranscriptionEntity = transcription.xmlElementToEntity(eEnt, false);
-//								} else if (nEnt.getParentNode().getNodeName().equals("regest_entities")
-//										&& eEnt.getElementsByTagName("entity_id").item(0).getTextContent().equals(strRegestID)) {
-//									foundRegestEntity = regest.xmlElementToEntity(eEnt, true);
-//								}
-//							}
-//						}
-//						
-//						/* Find index of the entities retrieved in their corresponding EntitiesList */
-//						lemmas.addUnit(new Lemma(regestEntities, transcriptionEntities, foundRegestEntity.getId(), foundTranscriptionEntity.getId()));
-//					}
-//				}
-//				
-//				/* Load references */
-//				NodeList nl = doc.getElementsByTagName("reference");
-//				for (int i=0; i<nl.getLength(); i++) {
-//					Node nRef = nl.item(i);
-//					if (nRef.getNodeType() == Node.ELEMENT_NODE) {
-//						Element eRef = (Element) nRef;
-//						
-//						/* Finds bibEntry looking by id in references */
-//						MiMusBibEntry foundBibEntry = null;
-//						int refId = Integer.parseInt(
-//								eRef.getElementsByTagName("ref_id")
-//								.item(0).getTextContent());
-//						int bibId = Integer.parseInt(
-//								eRef.getElementsByTagName("biblio_id")
-//								.item(0).getTextContent());
-//						for (int j=0; j<resources.getBibEntries().size(); j++) {
-//							if (resources.getBibEntries().get(j).getId()==bibId) {
-//								foundBibEntry = resources.getBibEntries().get(j);
-//								break;
-//							}
-//						}
-//						/* Checks actually found corresponding bibEntry by id */
-//						if (foundBibEntry != null) {
-//							MiMusReference foundRef = new MiMusReference(references,
-//									foundBibEntry, 
-//									eRef.getElementsByTagName("pages")
-//									.item(0).getTextContent(),
-//									Integer.parseInt(
-//											eRef.getElementsByTagName("ref_type")
-//											.item(0).getTextContent()),
-//									refId);
-//							references.addUnit(foundRef);
-//						}
-//					}
-//				}
-//			} catch (ParserConfigurationException pce) {
-//				System.out.println("Error with DOM parser.");
-//				pce.printStackTrace();
-//			} catch (IOException | SAXException ioe) {
-//				System.out.println("Error parsing document " + xmlPath);
-//				ioe.printStackTrace();
-//			}
-//		}
 	}
 	
 	private void runDialog(InstanceDialog dialog, List<Unit> entities,
@@ -647,7 +536,7 @@ public class Editor extends EditorPart implements EventObserver {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
 								EntityInstance.getInstanceWithEntity(entities, ent),
-								selectedText, form, charCoords);
+								selectedText, form, charCoords, 0);
 						transcriptions.add(trans);
 						MiMusXML.openDoc(docEntry).append(trans).write();
 						System.out.println("Adding selected Transcription - " 
