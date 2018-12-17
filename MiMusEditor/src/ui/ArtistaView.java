@@ -121,7 +121,7 @@ public class ArtistaView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
 					artists.remove(art);
-					MiMusXML.openInstrument().remove(art).write();
+					MiMusXML.openArtista().remove(art).write();
 					getTv().refresh();
 					System.out.println("Artist removed successfully.");
 					LabelPrinter.printInfo(label, "Artist removed successfully.");

@@ -191,7 +191,8 @@ public class MiMusXML {
 			/* Delete node with id to remove by removing it from its parent */
 			if (removeID > -1) {
 				Element toRemove = (Element) listIDs.item(removeID).getParentNode();
-				listIDs.item(removeID).getParentNode().getParentNode().removeChild(toRemove);
+				listIDs.item(removeID)
+						.getParentNode().getParentNode().removeChild(toRemove);
 			}
 		}
 		return this;
