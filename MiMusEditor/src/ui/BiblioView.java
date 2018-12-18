@@ -34,6 +34,7 @@ import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
 import model.MiMusBibEntry;
+import model.Unit;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
 
@@ -44,7 +45,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 	private ListViewer lv;
 	private SharedResources resources;
 	private SharedControl control;
-	private int currentBiblioID;
 	private List<EventObserver> observers;
 	
 	public BiblioView() {
@@ -54,13 +54,9 @@ public class BiblioView extends ViewPart implements EventSubject {
 		control = SharedControl.getInstance();
 		control.setBiblioView(this);
 		
-		/* Next ID is max ID of other bibliography entries +1 */
-		currentBiblioID = -1;
-		for (MiMusBibEntry entry: resources.getBibEntries()) {
-			currentBiblioID = Math.max(currentBiblioID, entry.getId());
+		for (Unit u : resources.getBibEntries()) {
+			resources.setUpdateId(u.getId());
 		}
-		currentBiblioID++;
-		System.out.println("Current Biblio ID set at " + currentBiblioID);
 	}
 	
 	@Override
@@ -181,7 +177,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 						textEditorial.getText(), 
 						textSeries.getText(),
 						textShort.getText(),
-						currentBiblioID++);
+						resources.getIncrementId());
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
 				MiMusXML.openBiblio().append(newEntry).write();

@@ -58,13 +58,21 @@ public final class SharedResources {
 	private String instrumentPath;
 	private String remote;
 	private Git git;
-	private int entityCurrentID;
+	
+	/* local + id make the identification of unique entities possible globally */
+	private int id;
+	private int local;
+	
 	/* Singleton instance of SharedResources */
 	private static SharedResources instance = null;
 	
 	/* Constructor made private so the object can only initialized by singleton */
 	private SharedResources() {
 		setRemote("https://github.com/JavierBJ/MiMusCorpus.git");
+		
+		/* Set local id */
+		setLocal(1);	// This must be read from outside the program
+		setId(getLocal()*1000000);
 		
 		/* Set repository directory in workspace */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
@@ -113,6 +121,7 @@ public final class SharedResources {
 			xmls.getLocation().toFile().mkdirs();
 			System.out.println("xml folder created because it was not present.");
 		}
+		
 	}
 	
 	/**
@@ -230,14 +239,26 @@ public final class SharedResources {
 	public void setGit(Git git) {
 		this.git = git;
 	}
-	public int getEntityCurrentID() {
-		return entityCurrentID;
+	public int getId() {
+		return id;
 	}
-	public int getIncrementCurrentID() {
-		++entityCurrentID;
-		return entityCurrentID-1;
+	public int getIncrementId() {
+		return ++id-1;
 	}
-	public void setEntityCurrentID(int entityCurrentID) {
-		this.entityCurrentID = entityCurrentID;
+	public void setId(int id) {
+		this.id = id;
+	}
+	public void setUpdateId(int id) {
+		/* Only consider the maximum of ids with same local as yours */
+		int itsLocal = id / 1000000;
+		if (itsLocal == this.local) {
+			this.id = Math.max(this.id, id);
+		}
+	}
+	public int getLocal() {
+		return local;
+	}
+	public void setLocal(int local) {
+		this.local = local;
 	}
 }

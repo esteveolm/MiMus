@@ -33,6 +33,9 @@ public class InstrumentView extends DeclarativeView {
 		/* Loads previously created instruments if they exist */
 		resources = SharedResources.getInstance();
 		instruments = new ArrayList<>(resources.getInstruments());
+		for (Unit u: resources.getInstruments()) {
+			resources.setUpdateId(u.getId());
+		}
 	}
 	
 	@Override
@@ -111,7 +114,7 @@ public class InstrumentView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must specify a classe to create an Instrument.");
 				} else {
 					Instrument inst = new Instrument(
-							getResources().getIncrementCurrentID(),
+							getResources().getIncrementId(),
 							textName.getText(),
 							comboFamily.getSelectionIndex(),
 							comboClasse.getSelectionIndex());

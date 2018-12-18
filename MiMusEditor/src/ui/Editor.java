@@ -65,8 +65,6 @@ public class Editor extends EditorPart implements EventObserver {
 	private StyledText regestText;
 	private StyledText transcriptionText;
 	private String docID;
-	private int entityCurrentID;
-	private int referenceCurrentID;
 	private EntityTableViewer entityHelper;
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
@@ -86,8 +84,6 @@ public class Editor extends EditorPart implements EventObserver {
 		docID = getEditorInput().getName()
 				.substring(0, getEditorInput().getName().indexOf('.'));
 		System.out.println("Doc ID: " + docID);
-		entityCurrentID = 0;
-		referenceCurrentID = 0;
 		resources = SharedResources.getInstance();
 		control = SharedControl.getInstance();
 		control.addEditor(this);
@@ -397,7 +393,7 @@ public class Editor extends EditorPart implements EventObserver {
 						SharedResources.getInstance().getBibEntries().get(0),
 						"",
 						0, 
-						referenceCurrentID++);
+						resources.getIncrementId());
 				references.add(ref);
 				
 				/* Reflect document is user of entry, in model and xml */
@@ -487,7 +483,7 @@ public class Editor extends EditorPart implements EventObserver {
 			if (selection>=0) {
 				EntityInstance inst = new EntityInstance(
 						(Entity) dialog.getEntity(),
-						entityCurrentID++);
+						resources.getIncrementId());
 				entities.add(inst);
 				MiMusXML.openDoc(docEntry).append(inst).write();
 				System.out.println("Adding selected Entity - " 
@@ -536,7 +532,8 @@ public class Editor extends EditorPart implements EventObserver {
 						/* Selected entity has been marked in this document */
 						Transcription trans = new Transcription(
 								EntityInstance.getInstanceWithEntity(entities, ent),
-								selectedText, form, charCoords, 0);
+								selectedText, form, charCoords, 
+								resources.getIncrementId());
 						transcriptions.add(trans);
 						MiMusXML.openDoc(docEntry).append(trans).write();
 						System.out.println("Adding selected Transcription - " 

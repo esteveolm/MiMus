@@ -33,6 +33,9 @@ public class ArtistaView extends DeclarativeView {
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
 		artists = new ArrayList<>(resources.getArtistas());
+		for (Unit u: resources.getArtistas()) {
+			resources.setUpdateId(u.getId());
+		}
 	}
 	
 	public String getViewName() {
@@ -97,7 +100,7 @@ public class ArtistaView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
 				} else {
 					Artista art = new Artista(
-							getResources().getIncrementCurrentID(),
+							getResources().getIncrementId(),
 							textName.getText(), 
 							comboSex.getText().equals("Female"));
 					artists.add(art);
