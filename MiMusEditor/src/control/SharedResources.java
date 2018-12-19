@@ -17,7 +17,6 @@ import model.Artista;
 import model.EntityInstance;
 import model.Instrument;
 import model.MiMusBibEntry;
-import model.MiMusEntry;
 import model.MiMusReference;
 import model.Transcription;
 import model.Unit;
@@ -127,7 +126,6 @@ public final class SharedResources {
 			xmls.getLocation().toFile().mkdirs();
 			System.out.println("xml folder created because it was not present.");
 		}
-		
 	}
 	
 	/**
@@ -270,7 +268,7 @@ public final class SharedResources {
 		/* Only consider the maximum of ids with same local as yours */
 		int itsLocal = id / 1000000;
 		if (itsLocal == this.local) {
-			this.id = Math.max(this.id, id);
+			this.id = Math.max(this.id, id+1);
 		}
 	}
 	
@@ -309,5 +307,7 @@ public final class SharedResources {
 				} catch (NumberFormatException e) {}
 			}
 		}
+		id++;
+		System.out.println("Updated ID is: "+ id);
 	}
 }

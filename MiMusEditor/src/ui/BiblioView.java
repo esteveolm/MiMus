@@ -51,6 +51,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 		super();
 		observers = new ArrayList<>();
 		resources = SharedResources.getInstance();
+		resources.globallySetUpdateId();
 		control = SharedControl.getInstance();
 		control.setBiblioView(this);
 		

@@ -32,6 +32,7 @@ public class ArtistaView extends DeclarativeView {
 		
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
+		resources.globallySetUpdateId();
 		artists = new ArrayList<>(resources.getArtistas());
 		for (Unit u: resources.getArtistas()) {
 			resources.setUpdateId(u.getId());
