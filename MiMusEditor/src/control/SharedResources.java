@@ -2,6 +2,7 @@ package control;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -13,8 +14,13 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import model.Artista;
+import model.EntityInstance;
 import model.Instrument;
 import model.MiMusBibEntry;
+import model.MiMusEntry;
+import model.MiMusReference;
+import model.Transcription;
+import model.Unit;
 
 /**
  * 
@@ -152,6 +158,29 @@ public final class SharedResources {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
+	}
+	
+	public int retrieveMaxId(int local) {
+		List<Artista> artistas = Artista.read();
+		List<Instrument> instruments = Instrument.read();
+		List<Unit> bibEntries = new ArrayList<>(MiMusBibEntry.read());
+		File docs = new File(getXmlPath());
+		for (File f : docs.listFiles()) {
+			if (f.getName().endsWith(".xml")) {
+				try {
+					String num = f.getName().substring(0, 3);
+					Integer.parseInt(num);	// Catches exception if not a number
+					List<Unit> instances = 
+							EntityInstance.read(String.valueOf(num));
+					List<Unit> transcriptions = 
+							Transcription.read(String.valueOf(num), instances);
+					List<Unit> references = 
+							MiMusReference.read(String.valueOf(num), bibEntries);
+				} catch (NumberFormatException e) {}
+			}
+		}
+		
+		return 0;
 	}
 	
 	public List<MiMusBibEntry> getBibEntries() {

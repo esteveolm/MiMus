@@ -22,7 +22,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import control.SharedResources;
-import model.MiMusEntry;
 
 /**
  * 
@@ -111,9 +110,9 @@ public class MiMusXML {
 				SharedResources.getInstance().getInstrumentPath()));
 	}
 	
-	public static MiMusXML openDoc(MiMusEntry doc) {
+	public static MiMusXML openDoc(String docIdStr) {
 		File path = new File(SharedResources.getInstance().getXmlPath()
-				+ "/" + doc.getIdStr() + ".xml");
+				+ "/" + docIdStr + ".xml");
 		System.out.println("filepath: " + path);
 		if (!path.exists()) {
 			MiMusXML.createDoc(path).write().close();

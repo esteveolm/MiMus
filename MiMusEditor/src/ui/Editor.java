@@ -60,6 +60,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private SharedResources resources;
 	private SharedControl control;
 	private MiMusEntry docEntry;
+	private String docIdStr;
 	private MiMusText regest;
 	private MiMusText transcription;
 	private StyledText regestText;
@@ -113,6 +114,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Txt must always be present so the text can be loaded */
 		docEntry = new MiMusEntryReader().read(txtPath);
+		docIdStr = docEntry.getIdStr();
 		regest = docEntry.getRegest();
 		transcription = docEntry.getTranscription();
 	}
@@ -129,7 +131,7 @@ public class Editor extends EditorPart implements EventObserver {
 	@Override
 	public void createPartControl(Composite parent) {
 		/* Create XML schema if not present */
-		MiMusXML.openDoc(docEntry).write();
+		MiMusXML.openDoc(docIdStr).write();
 		
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
@@ -160,7 +162,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Table of entities */
 		entityHelper = new EntityTableViewer(sectEnt.getParent(), 
-				EntityInstance.read(docEntry),
+				EntityInstance.read(docIdStr),
 				styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		entityInstances = entityHelper.getEntities();
@@ -199,7 +201,7 @@ public class Editor extends EditorPart implements EventObserver {
 
 		/* Transcription entities and its table */
 		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent(),
-				Transcription.read(docEntry, entityInstances));
+				Transcription.read(docIdStr, entityInstances));
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
 		transcriptions = transcriptionHelper.getTranscriptions();
 		
@@ -240,7 +242,7 @@ public class Editor extends EditorPart implements EventObserver {
 		List<Unit> bibEntries = new ArrayList<>(resources.getBibEntries());
 		referenceHelper = new ReferenceTableViewer(
 				sectRef.getParent(), 
-				MiMusReference.read(docEntry, bibEntries), 
+				MiMusReference.read(docIdStr, bibEntries), 
 				bibEntries, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		references = referenceHelper.getReferences();
@@ -313,7 +315,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					System.out.println(ent);
 					entityInstances.remove(ent);
-					MiMusXML.openDoc(docEntry).remove(ent).write();
+					MiMusXML.openDoc(docIdStr).remove(ent).write();
 					entityTV.refresh();
 					entityHelper.packColumns();
 					System.out.println("Removing entity - " 
@@ -375,7 +377,7 @@ public class Editor extends EditorPart implements EventObserver {
 					
 					/* Remove transcription */
 					transcriptions.remove(trans);
-					MiMusXML.openDoc(docEntry).remove(trans).write();
+					MiMusXML.openDoc(docIdStr).remove(trans).write();
 					transcriptionTV.refresh();
 					System.out.println("Removing lemma - " 
 							+ transcriptions.size());
@@ -401,7 +403,7 @@ public class Editor extends EditorPart implements EventObserver {
 						SharedResources.getInstance().getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
-				MiMusXML.openDoc(docEntry).append(ref).write();
+				MiMusXML.openDoc(docIdStr).append(ref).write();
 				referenceTV.refresh();
 				
 				LabelPrinter.printInfo(referenceLabel, 
@@ -430,7 +432,7 @@ public class Editor extends EditorPart implements EventObserver {
 					MiMusBibEntry oldEntry = ref.getBibEntry();
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
-					MiMusXML.openDoc(docEntry).remove(ref).write();
+					MiMusXML.openDoc(docIdStr).remove(ref).write();
 					referenceTV.refresh();
 					
 					LabelPrinter.printInfo(referenceLabel, 
@@ -485,7 +487,7 @@ public class Editor extends EditorPart implements EventObserver {
 						(Entity) dialog.getEntity(),
 						resources.getIncrementId());
 				entities.add(inst);
-				MiMusXML.openDoc(docEntry).append(inst).write();
+				MiMusXML.openDoc(docIdStr).append(inst).write();
 				System.out.println("Adding selected Entity - " 
 						+ entities.size());
 				LabelPrinter.printInfo(label, 
@@ -535,7 +537,7 @@ public class Editor extends EditorPart implements EventObserver {
 								selectedText, form, charCoords, 
 								resources.getIncrementId());
 						transcriptions.add(trans);
-						MiMusXML.openDoc(docEntry).append(trans).write();
+						MiMusXML.openDoc(docIdStr).append(trans).write();
 						System.out.println("Adding selected Transcription - " 
 								+ transcriptions.size());
 						LabelPrinter.printInfo(label, 

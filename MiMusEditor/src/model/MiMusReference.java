@@ -152,9 +152,9 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 		return String.valueOf(getId());
 	}
 	
-	public static List<Unit> read(MiMusEntry entry, List<Unit> bibEntries) {
+	public static List<Unit> read(String docIdStr, List<Unit> bibEntries) {
 		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openDoc(entry).getDoc();
+		Document doc = MiMusXML.openDoc(docIdStr).getDoc();
 		NodeList nl = doc.getElementsByTagName("reference");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);

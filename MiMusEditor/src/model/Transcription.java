@@ -177,9 +177,9 @@ public class Transcription extends ConcreteUnit
 		return String.valueOf(getId());
 	}
 	
-	public static List<Unit> read(MiMusEntry entry, List<Unit> entityInstances) {
+	public static List<Unit> read(String docIdStr, List<Unit> entityInstances) {
 		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openDoc(entry).getDoc();
+		Document doc = MiMusXML.openDoc(docIdStr).getDoc();
 		NodeList nl = doc.getElementsByTagName("transcription");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);

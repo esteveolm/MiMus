@@ -112,14 +112,14 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 		return String.valueOf(getId());
 	}
 	
-	public static List<Unit> read(MiMusEntry entry) {
+	public static List<Unit> read(String docIdStr) {
 		List<Artista> arts = SharedResources.getInstance().getArtistas();
 		List<Instrument> insts = SharedResources.getInstance().getInstruments();
 		List<Unit> all = Stream.of(arts, insts)
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
 		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openDoc(entry).getDoc();
+		Document doc = MiMusXML.openDoc(docIdStr).getDoc();
 		NodeList nl = doc.getElementsByTagName("entity");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);

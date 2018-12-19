@@ -145,7 +145,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 						/* Actually extend entry's users */
 						extendedEntry.addUser(new Integer(docEntry.getId()));
 						MiMusXML.openBiblio().update(extendedEntry).write();
-						MiMusXML.openDoc(docEntry).update(ref).write();
+						MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
 					}
 				}
 				break;
@@ -153,11 +153,11 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
 				String page = (String) value;
 				ref.setPage(page);
-				MiMusXML.openDoc(docEntry).update(ref).write();
+				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
 				break;
 			case 2:	// Reference Type
 				ref.setType((int) value);
-				MiMusXML.openDoc(docEntry).update(ref).write();
+				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
 			default:	// Should never reach here
 				break;
 			}
