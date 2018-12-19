@@ -160,29 +160,6 @@ public final class SharedResources {
 		throw new CloneNotSupportedException();
 	}
 	
-	public int retrieveMaxId(int local) {
-		List<Artista> artistas = Artista.read();
-		List<Instrument> instruments = Instrument.read();
-		List<Unit> bibEntries = new ArrayList<>(MiMusBibEntry.read());
-		File docs = new File(getXmlPath());
-		for (File f : docs.listFiles()) {
-			if (f.getName().endsWith(".xml")) {
-				try {
-					String num = f.getName().substring(0, 3);
-					Integer.parseInt(num);	// Catches exception if not a number
-					List<Unit> instances = 
-							EntityInstance.read(String.valueOf(num));
-					List<Unit> transcriptions = 
-							Transcription.read(String.valueOf(num), instances);
-					List<Unit> references = 
-							MiMusReference.read(String.valueOf(num), bibEntries);
-				} catch (NumberFormatException e) {}
-			}
-		}
-		
-		return 0;
-	}
-	
 	public List<MiMusBibEntry> getBibEntries() {
 		if (bibEntries == null) {
 			bibEntries = MiMusBibEntry.read();
@@ -268,15 +245,27 @@ public final class SharedResources {
 	public void setGit(Git git) {
 		this.git = git;
 	}
+	public int getLocal() {
+		return local;
+	}
+	public void setLocal(int local) {
+		this.local = local;
+	}
+	
+	/* ID getters and setters to work as counters */
+	
 	public int getId() {
 		return id;
 	}
+	
 	public int getIncrementId() {
 		return ++id-1;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public void setUpdateId(int id) {
 		/* Only consider the maximum of ids with same local as yours */
 		int itsLocal = id / 1000000;
@@ -284,10 +273,41 @@ public final class SharedResources {
 			this.id = Math.max(this.id, id);
 		}
 	}
-	public int getLocal() {
-		return local;
-	}
-	public void setLocal(int local) {
-		this.local = local;
+	
+	public void globallySetUpdateId() {
+		for (Artista a : Artista.read()) {
+			setUpdateId(a.getId());
+		}
+		for (Instrument i : Instrument.read()) {
+			setUpdateId(i.getId());
+		}
+		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());
+		for (Unit e : biblio) {
+			setUpdateId(e.getId());
+		}
+		File docs = new File(getXmlPath());
+		for (File f : docs.listFiles()) {
+			if (f.getName().endsWith(".xml")) {
+				try {
+					String num = f.getName().substring(0, 3);
+					Integer.parseInt(num);	// Catches exception if not a number
+					List<Unit> instances = 
+							EntityInstance.read(String.valueOf(num));
+					List<Unit> transcriptions = 
+							Transcription.read(String.valueOf(num), instances);
+					List<Unit> references = 
+							MiMusReference.read(String.valueOf(num), biblio);
+					for (Unit u : instances) {
+						setUpdateId(u.getId());
+					}
+					for (Unit u : transcriptions) {
+						setUpdateId(u.getId());
+					}
+					for (Unit u : references) {
+						setUpdateId(u.getId());
+					}
+				} catch (NumberFormatException e) {}
+			}
+		}
 	}
 }
