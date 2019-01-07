@@ -32,11 +32,8 @@ public class InstrumentView extends DeclarativeView {
 		
 		/* Loads previously created instruments if they exist */
 		resources = SharedResources.getInstance();
-		resources.globallySetUpdateId();
+		//resources.globallySetUpdateId();
 		instruments = new ArrayList<>(resources.getInstruments());
-		for (Unit u: resources.getInstruments()) {
-			resources.setUpdateId(u.getId());
-		}
 	}
 	
 	@Override

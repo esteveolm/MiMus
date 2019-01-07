@@ -86,7 +86,7 @@ public class Editor extends EditorPart implements EventObserver {
 				.substring(0, getEditorInput().getName().indexOf('.'));
 		System.out.println("Doc ID: " + docID);
 		resources = SharedResources.getInstance();
-		resources.globallySetUpdateId();
+		//resources.globallySetUpdateId();
 		control = SharedControl.getInstance();
 		control.addEditor(this);
 		
@@ -608,10 +608,7 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 
 	@Override
-	public void update() {
-		/* Re-creates SharedResources in the same reference */
-		resources.refresh();
-		
+	public void update() {		
 		/* Refresh all table viewers */
 		entityHelper.refresh();
 		transcriptionHelper.refresh();

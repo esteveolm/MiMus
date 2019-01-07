@@ -136,7 +136,9 @@ public final class SharedResources {
 	 */
 	public static SharedResources getInstance() {
 		if (instance == null) {
+			System.out.println("Creating NEW SharedResources");
 			instance = new SharedResources();
+			instance.globallySetUpdateId();
 		}
 		return instance;
 	}
@@ -145,7 +147,9 @@ public final class SharedResources {
 	 * Constructs a new SharedResources in the same Singleton reference.
 	 */
 	public void refresh() {
+		System.out.println("Creating REFRESHED SharedResources");
 		instance = new SharedResources();
+		instance.globallySetUpdateId();
 	}
 	
 	/**
@@ -257,6 +261,7 @@ public final class SharedResources {
 	}
 	
 	public int getIncrementId() {
+		System.out.println("Get and Increment ID at " + id);
 		return ++id-1;
 	}
 	
@@ -266,13 +271,16 @@ public final class SharedResources {
 	
 	public void setUpdateId(int id) {
 		/* Only consider the maximum of ids with same local as yours */
+		int old = this.id;
 		int itsLocal = id / 1000000;
 		if (itsLocal == this.local) {
 			this.id = Math.max(this.id, id+1);
 		}
+		System.out.println("Set and Update ID from " + old + " to " + this.id);
 	}
 	
 	public void globallySetUpdateId() {
+		System.out.println("Entering global setupdate");
 		for (Artista a : Artista.read()) {
 			setUpdateId(a.getId());
 		}
@@ -307,7 +315,6 @@ public final class SharedResources {
 				} catch (NumberFormatException e) {}
 			}
 		}
-		id++;
 		System.out.println("Updated ID is: "+ id);
 	}
 }
