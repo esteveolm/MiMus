@@ -113,8 +113,8 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	}
 	
 	public static List<Unit> read(String docIdStr) {
-		List<Artista> arts = SharedResources.getInstance().getArtistas();
-		List<Instrument> insts = SharedResources.getInstance().getInstruments();
+		List<Unit> arts = SharedResources.getInstance().getArtistas();
+		List<Unit> insts = SharedResources.getInstance().getInstruments();
 		List<Unit> all = Stream.of(arts, insts)
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());

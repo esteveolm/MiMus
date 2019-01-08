@@ -102,8 +102,8 @@ public class Instrument extends Entity {
 		return "instruments";
 	}
 	
-	public static ArrayList<Instrument> read() {
-		ArrayList<Instrument> entries = new ArrayList<>();
+	public static ArrayList<Unit> read() {
+		ArrayList<Unit> entries = new ArrayList<>();
 		Document doc = MiMusXML.openInstrument().getDoc();
 		NodeList nl = doc.getElementsByTagName("instrument");
 		for (int i=0; i<nl.getLength(); i++) {

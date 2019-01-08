@@ -33,7 +33,7 @@ public class ArtistaView extends DeclarativeView {
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
 		//resources.globallySetUpdateId();
-		artists = new ArrayList<>(resources.getArtistas());
+		artists = resources.getArtistas();
 	}
 	
 	public String getViewName() {
@@ -107,6 +107,7 @@ public class ArtistaView extends DeclarativeView {
 					MiMusXML.openArtista().append(art).write();
 					getTv().refresh();
 					notifyObservers();
+					System.out.println(resources.getArtistas().size() + "ARTISTS");
 				}
 			}
 		});

@@ -22,11 +22,11 @@ import util.LabelPrinter;
 public abstract class InstanceDialog extends Dialog {
 
 	protected ScrolledForm form;
-	private List<? extends Entity> entities;
+	private List<Unit> entities;
 	private int selection;
 	private Unit entity;
 	
-	public InstanceDialog(List<? extends Entity> entities, Shell parentShell) {
+	public InstanceDialog(List<Unit> entities, Shell parentShell) {
 		super(parentShell);
 		form = null;
 		this.entities = entities;
@@ -75,10 +75,10 @@ public abstract class InstanceDialog extends Dialog {
 		return composite;
 	}
 
-	public List<? extends Entity> getEntities() {
+	public List<Unit> getEntities() {
 		return entities;
 	}
-	public void setEntities(List<? extends Entity> entities) {
+	public void setEntities(List<Unit> entities) {
 		this.entities = entities;
 	}
 	public int getSelection() {

@@ -51,8 +51,8 @@ public final class SharedResources {
 		{"Edition", "Register", "Citation"};
 	
 	private List<MiMusBibEntry> bibEntries;
-	private List<Artista> artistas;
-	private List<Instrument> instruments;
+	private List<Unit> artistas;
+	private List<Unit> instruments;
 	private String repoPath;
 	private IFolder corpusFolder;
 	private String corpusPath;
@@ -171,20 +171,20 @@ public final class SharedResources {
 	public void setBibEntries(List<MiMusBibEntry> bibEntries) {
 		this.bibEntries = bibEntries;
 	}
-	public List<Artista> getArtistas() {
+	public List<Unit> getArtistas() {
 		if (artistas == null)
 			artistas = Artista.read();
 		return artistas;
 	}
-	public void setArtistas(List<Artista> artistas) {
+	public void setArtistas(List<Unit> artistas) {
 		this.artistas = artistas;
 	}
-	public List<Instrument> getInstruments() {
+	public List<Unit> getInstruments() {
 		if (instruments == null)
 			instruments = Instrument.read();
 		return instruments;
 	}
-	public void setInstruments(List<Instrument> instruments) {
+	public void setInstruments(List<Unit> instruments) {
 		this.instruments = instruments;
 	}
 	public String getRepoPath() {
@@ -281,10 +281,10 @@ public final class SharedResources {
 	
 	public void globallySetUpdateId() {
 		System.out.println("Entering global setupdate");
-		for (Artista a : Artista.read()) {
+		for (Unit a : Artista.read()) {
 			setUpdateId(a.getId());
 		}
-		for (Instrument i : Instrument.read()) {
+		for (Unit i : Instrument.read()) {
 			setUpdateId(i.getId());
 		}
 		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());

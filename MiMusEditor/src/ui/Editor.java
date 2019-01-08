@@ -267,6 +267,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Entity buttons */
 		addArt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				System.out.println(resources.getArtistas().size() + "ARTISTS");
 				InstanceDialog dialog = new InstanceDialog(
 						resources.getArtistas(), parent.getShell()) {
 					@Override
