@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-import model.Entity;
 import model.Unit;
 import util.LabelPrinter;
 
@@ -32,8 +31,6 @@ public abstract class InstanceDialog extends Dialog {
 		this.entities = entities;
 		System.out.println("Entities of type " + getDialogName() 
 				+ " available: " + this.entities.size());
-		this.setSelection(-1);
-		this.setEntity(null);
 		
 		/* Dialog window will block Editor until closed */
 		this.setBlockOnOpen(true);
@@ -56,6 +53,14 @@ public abstract class InstanceDialog extends Dialog {
 		}
 		combo.setItems(artistNames);
 		combo.select(0);
+		
+		/* Initialize stored values */
+		this.setSelection(0);
+		if (entities.size()==0) {
+			this.setEntity(null);
+		} else {
+			this.setEntity(entities.get(0));
+		}
 		
 		/* Updates variable that stores selected artist index */
 		combo.addSelectionListener(new SelectionAdapter() {

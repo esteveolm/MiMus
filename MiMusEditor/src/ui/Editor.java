@@ -483,10 +483,10 @@ public class Editor extends EditorPart implements EventObserver {
 			Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
-			int selection = dialog.getSelection();
-			if (selection>=0) {
+			Entity added = (Entity) dialog.getEntity();
+			if (added != null) {
 				EntityInstance inst = new EntityInstance(
-						(Entity) dialog.getEntity(),
+						added,
 						resources.getIncrementId());
 				entities.add(inst);
 				MiMusXML.openDoc(docIdStr).append(inst).write();
