@@ -43,7 +43,7 @@ public class InstrumentView extends DeclarativeView {
 	
 	@Override
 	public String getAddPattern() {
-		return "/MiMusCorpus/instruments.xml";
+		return "/instruments.xml";
 	}
 
 	@Override

@@ -91,8 +91,7 @@ public class Editor extends EditorPart implements EventObserver {
 		control.addEditor(this);
 		
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = workspace.getProject("MiMus");
-		IFolder corpus = project.getFolder("MiMusCorpus");
+		IProject corpus = workspace.getProject("MiMusCorpus");
 		IFolder txtFolder = corpus.getFolder("txt");
 		IFolder xmlFolder = corpus.getFolder("xml");
 		txtPath = txtFolder.getLocation().toString();
@@ -462,7 +461,7 @@ public class Editor extends EditorPart implements EventObserver {
 					Git git = resources.getGit();
 					AddCommand add = git.add();
 					add.addFilepattern(resources.getRepoPath() 
-							+ "/MiMusCorpus/xml/" + docID + ".xml");
+							+ "/xml/" + docID + ".xml");
 					add.call();
 					CommitCommand commit = git.commit();
 					commit.setMessage("Saving " + docID + ".xml to remote.");

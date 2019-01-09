@@ -41,7 +41,7 @@ public class ArtistaView extends DeclarativeView {
 	}
 	
 	public String getAddPattern() {
-		return "/MiMusCorpus/artista.xml";
+		return "/artista.xml";
 	}
 	
 	public void developForm(ScrolledForm form) {

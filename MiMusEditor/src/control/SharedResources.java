@@ -54,7 +54,7 @@ public final class SharedResources {
 	private List<Unit> artistas;
 	private List<Unit> instruments;
 	private String repoPath;
-	private IFolder corpusFolder;
+	private IProject corpusFolder;
 	private String corpusPath;
 	private String txtPath;
 	private String xmlPath;
@@ -81,9 +81,8 @@ public final class SharedResources {
 		
 		/* Set repository directory in workspace */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = workspace.getProject("MiMus");
-		this.repoPath = project.getLocation().toString();
-		IFolder corpus = project.getFolder("MiMusCorpus");
+		this.repoPath = workspace.getLocation().toString();
+		IProject corpus = workspace.getProject("MiMusCorpus");
 		this.setCorpusFolder(corpus);
 		this.setCorpusPath(corpus.getLocation().toString());
 		
@@ -193,10 +192,10 @@ public final class SharedResources {
 	public void setRepoPath(String repoPath) {
 		this.repoPath = repoPath;
 	}
-	public IFolder getCorpusFolder() {
+	public IProject getCorpusFolder() {
 		return corpusFolder;
 	}
-	public void setCorpusFolder(IFolder corpusFolder) {
+	public void setCorpusFolder(IProject corpusFolder) {
 		this.corpusFolder = corpusFolder;
 	}
 	public String getCorpusPath() {

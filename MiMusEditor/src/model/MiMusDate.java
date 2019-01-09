@@ -43,8 +43,7 @@ public class MiMusDate {
 	static {
 		/* Stream all lines and convert to array */
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = workspace.getProject("MiMus");
-		IFolder corpus = project.getFolder("MiMusCorpus");
+		IProject corpus = workspace.getProject("MiMusCorpus");
 		IFolder stringsFolder = corpus.getFolder("strings");
 		IFile monthsFile = stringsFolder.getFile("months");
 		String monthsPath = monthsFile.getLocation().toString() + ".txt";
