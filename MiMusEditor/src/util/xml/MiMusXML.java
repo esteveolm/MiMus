@@ -110,6 +110,11 @@ public class MiMusXML {
 				SharedResources.getInstance().getInstrumentPath()));
 	}
 	
+	public static MiMusXML openCasa() {
+		return openCommon(new File(
+				SharedResources.getInstance().getCasaPath()));
+	}
+	
 	public static MiMusXML openDoc(String docIdStr) {
 		File path = new File(SharedResources.getInstance().getXmlPath()
 				+ "/" + docIdStr + ".xml");

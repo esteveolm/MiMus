@@ -5,6 +5,7 @@ import java.util.List;
 
 import ui.ArtistaView;
 import ui.BiblioView;
+import ui.CasaView;
 import ui.Editor;
 import ui.InstrumentView;
 
@@ -33,6 +34,7 @@ public final class SharedControl {
 	private BiblioView biblioView;
 	private ArtistaView artistaView;
 	private InstrumentView instrumentView;
+	private CasaView casaView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -42,6 +44,7 @@ public final class SharedControl {
 		this.biblioView = null;
 		this.artistaView = null;
 		this.instrumentView = null;
+		this.casaView = null;
 		this.editors = new ArrayList<>();
 	}
 	
@@ -125,6 +128,22 @@ public final class SharedControl {
 	public void unsetInstrumentView() {
 		this.instrumentView = null;
 	}
+	
+	public void setCasaView(CasaView casaView) {
+		this.casaView = casaView;
+		
+		/* Subscribe all Editors to CasaView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.casaView.attach(e);
+			}
+		}
+		System.out.println("prepared casa view for subscribers.");
+	}
+	
+	public void unsetCasaView() {
+		this.casaView = null;
+	}
 
 	public List<Editor> getEditors() {
 		return editors;
@@ -151,6 +170,10 @@ public final class SharedControl {
 			instrumentView.attach(editor);
 			System.out.println("Subscribed editor to instrument view");
 		}
+		if (casaView != null) {
+			casaView.attach(editor);
+			System.out.println("Subscribed editor to casa view");
+		}
 	}
 	
 	/**
@@ -169,6 +192,9 @@ public final class SharedControl {
 		}
 		if (instrumentView != null) {
 			instrumentView.detach(editor);
+		}
+		if (casaView != null) {
+			casaView.detach(editor);
 		}
 	}
 }

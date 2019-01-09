@@ -14,6 +14,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import model.Artista;
+import model.Casa;
 import model.EntityInstance;
 import model.Instrument;
 import model.MiMusBibEntry;
@@ -53,6 +54,7 @@ public final class SharedResources {
 	private List<MiMusBibEntry> bibEntries;
 	private List<Unit> artistas;
 	private List<Unit> instruments;
+	private List<Unit> cases;
 	private String repoPath;
 	private IProject corpusFolder;
 	private String corpusPath;
@@ -61,6 +63,7 @@ public final class SharedResources {
 	private String biblioPath;
 	private String artistaPath;
 	private String instrumentPath;
+	private String casaPath;
 	private String remote;
 	private Git git;
 	
@@ -113,9 +116,11 @@ public final class SharedResources {
 		IFile biblioFile = strings.getFile("bibliography.xml");
 		IFile artistaFile = strings.getFile("artistas.xml");
 		IFile instrumentFile = strings.getFile("instruments.xml");
+		IFile casaFile = strings.getFile("cases.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		this.setInstrumentPath(instrumentFile.getLocation().toString());
+		this.setCasaPath(casaFile.getLocation().toString());
 		
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
@@ -186,6 +191,14 @@ public final class SharedResources {
 	public void setInstruments(List<Unit> instruments) {
 		this.instruments = instruments;
 	}
+	public List<Unit> getCases() {
+		if (cases == null)
+			cases = Casa.read();
+		return cases;
+	}
+	public void setCases(List<Unit> cases) {
+		this.cases = cases;
+	}
 	public String getRepoPath() {
 		return repoPath;
 	}
@@ -233,6 +246,12 @@ public final class SharedResources {
 	}
 	public void setInstrumentPath(String instrumentPath) {
 		this.instrumentPath = instrumentPath;
+	}
+	public String getCasaPath() {
+		return casaPath;
+	}
+	public void setCasaPath(String casaPath) {
+		this.casaPath = casaPath;
 	}
 	public String getRemote() {
 		return remote;

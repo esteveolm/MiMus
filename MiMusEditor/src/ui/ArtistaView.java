@@ -46,7 +46,7 @@ public class ArtistaView extends DeclarativeView {
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
-		sectAdd.setText("Add a new Entity");
+		sectAdd.setText("Add a new " + getViewName());
 		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
