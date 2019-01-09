@@ -20,12 +20,13 @@ import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
 
-	private static final String[] GENDERS = {"Male", "Female"};
+	private static final String[] GENDERS = {"No marcat", "Home", "Dona"};
 	
 	public ArtistaTableViewer(Composite parent, List<Unit> artists) {
 		super(parent);
 		this.entities = artists;
-		String[] aux = {"Name", "Sex"};
+		String[] aux = {"Lema", "Tractament", "Nom", "Cognom", "Sobrenom",
+				"Gènere", "Religió"};
 		this.columnNames = aux;
 	}
 	
@@ -54,10 +55,20 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			Artista art = (Artista) element;
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
-			case 0:	// Name	(Text)
+			case 0:	// Lema	(Text)
 				return art.getNombreCompleto();
-			case 1:	// Sex (ComboBox)
+			case 1:	// Tractament	(Text)
+				return art.getNombreCompleto();
+			case 2:	// Nom	(Text)
+				return art.getNombreCompleto();
+			case 3:	// Cognom	(Text)
+				return art.getNombreCompleto();
+			case 4:	// Sobrenom	(Text)
+				return art.getNombreCompleto();
+			case 5:	// Gènere (ComboBox)
 				return art.getGenero();
+			case 6: // Religió (ComboBox)
+				return art.getReligion();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -69,12 +80,25 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
 			case 0:	// Name (Text)
-				String newName = (String) value;
-				art.setNombreCompleto(newName);
+				art.setNombreCompleto((String) value);
 				break;
-			case 1:	// Sex (ComboBox)
-				int selectionIdx = (int) value;
-				art.setGenero(selectionIdx);
+			case 1:	// Tractament (Text)
+				art.setTratamiento((String) value);
+				break;
+			case 2:	// Nom (Text)
+				art.setNombre((String) value);
+				break;
+			case 3:	// Cognom (Text)
+				art.setApellido((String) value);
+				break;
+			case 4:	// Sobrenom (Text)
+				art.setSobrenombre((String) value);
+				break;
+			case 5:	// Gènere (ComboBox)
+				art.setGenero((int) value);
+				break;
+			case 6:	// Religió (ComboBox)
+				art.setGenero((int) value);
 				break;
 			default:	// Shouldn't reach here
 				break;
@@ -93,10 +117,20 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Artista art = (Artista) element;
 			switch(columnIndex) {
-			case 0:	// Name (Text)
+			case 0:	// Lema (Text)
 				return art.getNombreCompleto();
-			case 1:	// Sex (ComboBox)
+			case 1:	// Tractament (Text)
+				return art.getTratamiento();
+			case 2:	// Nom (Text)
+				return art.getNombre();
+			case 3:	// Cognom (Text)
+				return art.getApellido();
+			case 4:	// Sobrenom (Text)
+				return art.getSobrenombre();
+			case 5:	// Gènere (ComboBox)
 				return art.getGeneroStr();
+			case 6:	// Religió (ComboBox)
+				return art.getReligionStr();
 			default:	// Shouldn't reach here
 				return "";
 			}
