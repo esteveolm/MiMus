@@ -55,9 +55,9 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
 			case 0:	// Name	(Text)
-				return art.getName();
+				return art.getNombreCompleto();
 			case 1:	// Sex (ComboBox)
-				return art.isFemale() ? 1 : 0;
+				return art.getGenero();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -70,11 +70,11 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			switch(colIdx) {
 			case 0:	// Name (Text)
 				String newName = (String) value;
-				art.setName(newName);
+				art.setNombreCompleto(newName);
 				break;
 			case 1:	// Sex (ComboBox)
 				int selectionIdx = (int) value;
-				art.setFemale(selectionIdx>0);
+				art.setGenero(selectionIdx);
 				break;
 			default:	// Shouldn't reach here
 				break;
@@ -94,9 +94,9 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			Artista art = (Artista) element;
 			switch(columnIndex) {
 			case 0:	// Name (Text)
-				return art.getName();
+				return art.getNombreCompleto();
 			case 1:	// Sex (ComboBox)
-				return art.getGender();
+				return art.getGeneroStr();
 			default:	// Shouldn't reach here
 				return "";
 			}

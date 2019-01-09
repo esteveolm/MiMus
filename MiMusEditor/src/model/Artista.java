@@ -11,74 +11,159 @@ import util.xml.MiMusXML;
 
 public class Artista extends Entity {
 	
-	private String name;
-	private boolean female;
+	private String nombreCompleto;
+	private String tratamiento;
+	private String nombre;
+	private String apellido;
+	private String sobrenombre;
+	private int genero;
+	private int religion;
+	// Foreign key: Origen
+	// Foreign key: Oficio
 	
 	public Artista() {}
-	
+
 	public Artista(int id) {
-		this(id, "", false);
+		this(id, "", "", "", "", "", 0, 0);
 	}
 	
-	public Artista(int id, String name, boolean female) {
-		super(id, "Artista");
-		this.name = name;
-		this.female = female;
+	public Artista(int id, String nombreCompleto, String tratamiento,
+			String nombre, String apellido, String sobrenombre,
+			int genero, int religion) {
+		this.setId(id);
+		this.nombreCompleto = nombreCompleto;
+		this.tratamiento = tratamiento;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.sobrenombre = sobrenombre;
+		this.genero = genero;
+		this.genero = genero;
 	}
 	
 	/* Getters and setters */
-	
-	public String getName() {
-		return name;
+	public String getTratamiento() {
+		return tratamiento;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setTratamiento(String tratamiento) {
+		this.tratamiento = tratamiento;
 	}
-	public boolean isFemale() {
-		return female;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
-	public void setFemale(boolean female) {
-		this.female = female;
+	public void setNombreCompleto(String name) {
+		this.nombreCompleto = name;
 	}
-	public String getGender() {
-		return female ? "Female" : "Male";
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public String getApellido() {
+		return apellido;
+	}
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+	public String getSobrenombre() {
+		return sobrenombre;
+	}
+	public void setSobrenombre(String sobrenombre) {
+		this.sobrenombre = sobrenombre;
+	}
+	public int getGenero() {
+		return genero;
+	}
+	public void setGenero(int genero) {
+		this.genero = genero;
+	}
+	public String getGeneroStr() {
+		if (genero==0)
+			return "No marcat";
+		if (genero==1)
+			return "Home";
+		if (genero==2)
+			return "Dona";
+		return "Desconegut";
+	}
+	public int getReligion() {
+		return religion;
+	}
+	public void setReligion(int religion) {
+		this.religion = religion;
+	}
+	public String getReligionStr() {
+		if (religion==0)
+			return "No marcat";
+		if (religion==1)
+			return "Jueu";
+		if (religion==2)
+			return "Musulmà";
+		return "Desconegut";
 	}
 
 	@Override
 	public String getLemma() {
-		return getName();
+		return getNombreCompleto();
 	}
 	
 	public String toString() {
-		return getName();
+		return getNombreCompleto();
 	}
 
 	/* MiMusWritable implementation */
 	
 	@Override
 	public Artista fromXMLElement(Element elem) {
-		String name = elem.getElementsByTagName("name")
+		String nombreCompleto = elem.getElementsByTagName("nombre_completo")
 				.item(0).getTextContent();
-		boolean female = elem.getElementsByTagName("gender")
-				.item(0).getTextContent()
-				.equals("female");
+		String tratamiento = elem.getElementsByTagName("tratamiento")
+				.item(0).getTextContent();
+		String nombre = elem.getElementsByTagName("nombre")
+				.item(0).getTextContent();
+		String apellido = elem.getElementsByTagName("apellido")
+				.item(0).getTextContent();
+		String sobrenombre = elem.getElementsByTagName("sobrenombre")
+				.item(0).getTextContent();
+		int genero = Integer.parseInt(
+				elem.getElementsByTagName("genero")
+				.item(0).getTextContent());
+		int religion = Integer.parseInt(
+				elem.getElementsByTagName("religion")
+				.item(0).getTextContent());
 		int id = Integer.parseInt(
 				elem.getElementsByTagName("id")
 				.item(0).getTextContent());
-		return new Artista(id, name, female);
+		return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
+				sobrenombre, genero, religion);
 	}
 	
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntry = doc.createElement(getWritableName());
-		Element tagName = doc.createElement("name");
-		tagName.appendChild(doc.createTextNode(getName()));
-		Element tagGender = doc.createElement("gender");
-		tagGender.appendChild(doc.createTextNode(getGender()));
+		Element tagNombreCompleto = doc.createElement("nombre_completo");
+		tagNombreCompleto.appendChild(doc.createTextNode(getNombreCompleto()));
+		Element tagTratamiento = doc.createElement("tratamiento");
+		tagTratamiento.appendChild(doc.createTextNode(getTratamiento()));
+		Element tagNombre = doc.createElement("nombre");
+		tagNombre.appendChild(doc.createTextNode(getNombre()));
+		Element tagApellido = doc.createElement("apellido");
+		tagApellido.appendChild(doc.createTextNode(getApellido()));
+		Element tagSobrenombre = doc.createElement("sobrenombre");
+		tagSobrenombre.appendChild(doc.createTextNode(getSobrenombre()));
+		Element tagGenero = doc.createElement("genero");
+		tagGenero.appendChild(doc.createTextNode(String.valueOf(getGenero())));
+		Element tagReligion = doc.createElement("religion");
+		tagReligion.appendChild(doc.createTextNode(String.valueOf(getReligion())));
 		Element tagID = doc.createElement("id");
 		tagID.appendChild(doc.createTextNode(String.valueOf(getId())));
-		tagEntry.appendChild(tagName);
-		tagEntry.appendChild(tagGender);
+		tagEntry.appendChild(tagNombreCompleto);
+		tagEntry.appendChild(tagTratamiento);
+		tagEntry.appendChild(tagNombre);
+		tagEntry.appendChild(tagApellido);
+		tagEntry.appendChild(tagSobrenombre);
+		tagEntry.appendChild(tagGenero);
+		tagEntry.appendChild(tagReligion);
 		tagEntry.appendChild(tagID);
 		return tagEntry;
 	}

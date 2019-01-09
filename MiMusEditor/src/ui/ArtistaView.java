@@ -1,6 +1,5 @@
 package ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -51,25 +50,60 @@ public class ArtistaView extends DeclarativeView {
 		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
-		/* Name: text field */
-		Label labelName = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelName.setText("Name:");
-		Text textName = new Text(sectAdd.getParent(), TEXT_FLAGS);
-		textName.setLayoutData(grid);
+		/* NombreCompleto: text field */
+		Label labelNombreCompleto = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNombreCompleto.setText("Nom complet:");
+		Text textNombreCompleto = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNombreCompleto.setLayoutData(grid);
+
+		/* Tratamiento: text field */
+		Label labelTratamiento = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelTratamiento.setText("Tractament:");
+		Text textTratamiento = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textTratamiento.setLayoutData(grid);
+
+		/* Nombre: text field */
+		Label labelNombre = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNombre.setText("Nom:");
+		Text textNombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNombre.setLayoutData(grid);
+
+		/* Apellido: text field */
+		Label labelApellido = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelApellido.setText("Cognom:");
+		Text textApellido = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textApellido.setLayoutData(grid);
+
+		/* Sobrenombre: text field */
+		Label labelSobrenombre = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelSobrenombre.setText("Sobrenom:");
+		Text textSobrenombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textSobrenombre.setLayoutData(grid);
 		
-		/* Sex: option field */
-		Label labelSex = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelSex.setText("Sex:");
-		Combo comboSex = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboSex.setItems("Male", "Female");
+		/* Genero: option field */
+		Label labelGenero = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelGenero.setText("Gènere:");
+		Combo comboGenero = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboGenero.setItems("No marcat", "Home", "Dona");
+		
+		/* Religion: option field */
+		Label labelReligion = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelReligion.setText("Religió:");
+		Combo comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboReligion.setItems("No marcat", "Jueu", "Musulmà");
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				textName.setText("");
-				comboSex.deselectAll();
+				textNombreCompleto.setText("");
+				textTratamiento.setText("");
+				textNombre.setText("");
+				textApellido.setText("");
+				textSobrenombre.setText("");
+				comboGenero.deselectAll();
+				comboReligion.deselectAll();
 			}
 		});
 		
@@ -93,22 +127,29 @@ public class ArtistaView extends DeclarativeView {
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (comboSex.getSelectionIndex()==-1) {
-					System.out.println("Could not create Artist because no sex was selected.");
-					LabelPrinter.printError(label, "You must specify a sex to create an Artist.");
-				} else {
-					Artista art = new Artista(
-							getResources().getIncrementId(),
-							textName.getText(), 
-							comboSex.getText().equals("Female"));
-					artists.add(art);
-					System.out.println("Artist created successfully.");
-					LabelPrinter.printInfo(label, "Artist created successfully.");
-					MiMusXML.openArtista().append(art).write();
-					getTv().refresh();
-					notifyObservers();
-					System.out.println(resources.getArtistas().size() + "ARTISTS");
+				/* Selecting nothing == Selection index 0 ("unmarked") */
+				if (comboGenero.getSelectionIndex() == -1) {
+					comboGenero.select(0);
+				} 
+				if (comboReligion.getSelectionIndex() == -1) {
+					comboReligion.select(0);
 				}
+				Artista art = new Artista(
+						getResources().getIncrementId(),
+						textNombreCompleto.getText(), 
+						textTratamiento.getText(), 
+						textNombre.getText(), 
+						textApellido.getText(), 
+						textSobrenombre.getText(), 
+						comboGenero.getSelectionIndex(),
+						comboReligion.getSelectionIndex());
+				artists.add(art);
+				System.out.println("Artist created successfully.");
+				LabelPrinter.printInfo(label, "Artist created successfully.");
+				MiMusXML.openArtista().append(art).write();
+				getTv().refresh();
+				notifyObservers();
+				System.out.println(resources.getArtistas().size() + "ARTISTS");
 			}
 		});
 		
