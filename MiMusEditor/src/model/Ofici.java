@@ -59,7 +59,7 @@ public class Ofici extends Entity {
 		Element tagEspecialitat = doc.createElement("especialitat");
 		tagEspecialitat.appendChild(doc.createTextNode(getEspecialitat()));
 		Element tagInstrumentId = doc.createElement("instrument_id");
-		if (getInstrument() != null)	/* Otherwise, left it blank */
+		if (getInstrument() != null)	/* Otherwise, leave it blank */
 			tagInstrumentId.appendChild(doc.createTextNode(
 					String.valueOf(getInstrument().getId())));
 		Element tagId = doc.createElement("id");

@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import control.SharedResources;
 import util.xml.MiMusXML;
 
 public class Artista extends Entity {
@@ -18,18 +19,18 @@ public class Artista extends Entity {
 	private String sobrenombre;
 	private int genero;
 	private int religion;
+	private Ofici ofici;
 	// Foreign key: Origen
-	// Foreign key: Oficio
 	
 	public Artista() {}
 
 	public Artista(int id) {
-		this(id, "", "", "", "", "", 0, 0);
+		this(id, "", "", "", "", "", 0, 0, null);
 	}
 	
 	public Artista(int id, String nombreCompleto, String tratamiento,
 			String nombre, String apellido, String sobrenombre,
-			int genero, int religion) {
+			int genero, int religion, Ofici ofici) {
 		this.setId(id);
 		this.nombreCompleto = nombreCompleto;
 		this.tratamiento = tratamiento;
@@ -37,7 +38,8 @@ public class Artista extends Entity {
 		this.apellido = apellido;
 		this.sobrenombre = sobrenombre;
 		this.genero = genero;
-		this.genero = genero;
+		this.religion = religion;
+		this.ofici = ofici;
 	}
 	
 	/* Getters and setters */
@@ -101,6 +103,12 @@ public class Artista extends Entity {
 			return "Musulmà";
 		return "Desconegut";
 	}
+	public Ofici getOfici() {
+		return ofici;
+	}
+	public void setOfici(Ofici ofici) {
+		this.ofici = ofici;
+	}
 
 	@Override
 	public String getLemma() {
@@ -131,11 +139,26 @@ public class Artista extends Entity {
 		int religion = Integer.parseInt(
 				elem.getElementsByTagName("religion")
 				.item(0).getTextContent());
+		int oficiId = -1;
+		try {	/* Unspecified Ofici takes value -1 in this method */
+			oficiId = Integer.parseInt(
+					elem.getElementsByTagName("ofici_id")
+					.item(0).getTextContent());
+		} catch (NumberFormatException e) {}
+		
 		int id = Integer.parseInt(
 				elem.getElementsByTagName("id")
 				.item(0).getTextContent());
+		
+		/* If Ofici unspecified, its field in Artista will be null */
+		if (oficiId == -1)
+			return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
+					sobrenombre, genero, religion, null); 
+		
+		Ofici ofici = (Ofici) Unit.findUnit(
+				SharedResources.getInstance().getOficis(), oficiId);
 		return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
-				sobrenombre, genero, religion);
+				sobrenombre, genero, religion, ofici);
 	}
 	
 	@Override
@@ -155,6 +178,10 @@ public class Artista extends Entity {
 		tagGenero.appendChild(doc.createTextNode(String.valueOf(getGenero())));
 		Element tagReligion = doc.createElement("religion");
 		tagReligion.appendChild(doc.createTextNode(String.valueOf(getReligion())));
+		Element tagOficiId = doc.createElement("ofici_id");
+		if (getOfici() != null)		/* Otherwise, leave it blank */
+			tagOficiId.appendChild(doc.createTextNode(
+					String.valueOf(getOfici().getId())));
 		Element tagID = doc.createElement("id");
 		tagID.appendChild(doc.createTextNode(String.valueOf(getId())));
 		tagEntry.appendChild(tagNombreCompleto);
@@ -164,6 +191,7 @@ public class Artista extends Entity {
 		tagEntry.appendChild(tagSobrenombre);
 		tagEntry.appendChild(tagGenero);
 		tagEntry.appendChild(tagReligion);
+		tagEntry.appendChild(tagOficiId);
 		tagEntry.appendChild(tagID);
 		return tagEntry;
 	}

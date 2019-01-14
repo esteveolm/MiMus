@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.Artista;
+import model.Ofici;
 import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
@@ -26,7 +27,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Lema", "Tractament", "Nom", "Cognom", "Sobrenom",
-				"Gènere", "Religió"};
+				"Gènere", "Religió", "Ofici"};
 		this.columnNames = aux;
 	}
 	
@@ -131,6 +132,11 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getGeneroStr();
 			case 6:	// Religió (ComboBox)
 				return art.getReligionStr();
+			case 7:	// Ofici
+				Ofici ofici = art.getOfici();
+				if (ofici != null)
+					return ofici.getLemma();
+				return "";
 			default:	// Shouldn't reach here
 				return "";
 			}

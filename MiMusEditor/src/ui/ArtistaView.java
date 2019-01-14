@@ -15,6 +15,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
 import model.Artista;
+import model.Ofici;
 import model.Unit;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
@@ -92,6 +93,18 @@ public class ArtistaView extends DeclarativeView {
 		Combo comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboReligion.setItems("No marcat", "Jueu", "Musulmà");
 		
+		/* Ofici: option field */
+		Label labelOfici = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelOfici.setText("Ofici:");
+		Combo comboOfici = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		// XXX: find a better way to extract a list of attributes from any Unit
+		List<Unit> oficis = SharedResources.getInstance().getOficis();
+		String[] oficiNames = new String[oficis.size()];
+		for (int i=0; i<oficiNames.length; i++) {
+			oficiNames[i] = ((Ofici) oficis.get(i)).getLemma();
+		}
+		comboOfici.setItems(oficiNames);
+		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
@@ -104,6 +117,7 @@ public class ArtistaView extends DeclarativeView {
 				textSobrenombre.setText("");
 				comboGenero.deselectAll();
 				comboReligion.deselectAll();
+				comboOfici.deselectAll();
 			}
 		});
 		
@@ -134,6 +148,13 @@ public class ArtistaView extends DeclarativeView {
 				if (comboReligion.getSelectionIndex() == -1) {
 					comboReligion.select(0);
 				}
+				
+				Ofici ofici = null;
+				if (oficis.size()>0 &&
+						comboOfici.getSelectionIndex()>=0) {
+					/* Only set Ofici if available */
+					ofici = (Ofici) oficis.get(comboOfici.getSelectionIndex());
+				}
 				Artista art = new Artista(
 						getResources().getIncrementId(),
 						textNombreCompleto.getText(), 
@@ -142,7 +163,8 @@ public class ArtistaView extends DeclarativeView {
 						textApellido.getText(), 
 						textSobrenombre.getText(), 
 						comboGenero.getSelectionIndex(),
-						comboReligion.getSelectionIndex());
+						comboReligion.getSelectionIndex(),
+						ofici);
 				artists.add(art);
 				System.out.println("Artist created successfully.");
 				LabelPrinter.printInfo(label, "Artist created successfully.");
