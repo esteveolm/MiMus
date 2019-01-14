@@ -58,6 +58,14 @@
             name="Casa View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.PromotorView"
+            icon="icons/sample.png"
+            id="MiMusEditor.promotorView"
+            name="Promotor View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

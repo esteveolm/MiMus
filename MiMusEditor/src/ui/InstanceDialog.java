@@ -42,7 +42,7 @@ public abstract class InstanceDialog extends Dialog {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
 		form = toolkit.createScrolledForm(composite);
-		form.setText("Select an Artist");
+		form.setText("Select " + getDialogName());
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Create combo with artist string representations as values */

@@ -40,7 +40,7 @@ public class CasaView extends DeclarativeView {
 	
 	@Override
 	public String getAddPattern() {
-		return "/casa.xml";
+		return "/cases.xml";
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import model.EntityInstance;
 import model.Instrument;
 import model.MiMusBibEntry;
 import model.MiMusReference;
+import model.Promotor;
 import model.Transcription;
 import model.Unit;
 
@@ -55,6 +56,7 @@ public final class SharedResources {
 	private List<Unit> artistas;
 	private List<Unit> instruments;
 	private List<Unit> cases;
+	private List<Unit> promotors;
 	private String repoPath;
 	private IProject corpusFolder;
 	private String corpusPath;
@@ -64,6 +66,7 @@ public final class SharedResources {
 	private String artistaPath;
 	private String instrumentPath;
 	private String casaPath;
+	private String promotorPath;
 	private String remote;
 	private Git git;
 	
@@ -117,10 +120,12 @@ public final class SharedResources {
 		IFile artistaFile = strings.getFile("artistas.xml");
 		IFile instrumentFile = strings.getFile("instruments.xml");
 		IFile casaFile = strings.getFile("cases.xml");
+		IFile promotorFile = strings.getFile("promotors.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		this.setInstrumentPath(instrumentFile.getLocation().toString());
 		this.setCasaPath(casaFile.getLocation().toString());
+		this.setPromotorPath(promotorFile.getLocation().toString());
 		
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
@@ -199,6 +204,14 @@ public final class SharedResources {
 	public void setCases(List<Unit> cases) {
 		this.cases = cases;
 	}
+	public List<Unit> getPromotors() {
+		if (promotors == null)
+			promotors = Promotor.read();
+		return promotors;
+	}
+	public void setPromotors(List<Unit> promotors) {
+		this.promotors = promotors;
+	}
 	public String getRepoPath() {
 		return repoPath;
 	}
@@ -253,6 +266,12 @@ public final class SharedResources {
 	public void setCasaPath(String casaPath) {
 		this.casaPath = casaPath;
 	}
+	public String getPromotorPath() {
+		return promotorPath;
+	}
+	public void setPromotorPath(String promotorPath) {
+		this.promotorPath = promotorPath;
+	}
 	public String getRemote() {
 		return remote;
 	}
@@ -306,6 +325,9 @@ public final class SharedResources {
 			setUpdateId(i.getId());
 		}
 		for (Unit i : Casa.read()) {
+			setUpdateId(i.getId());
+		}
+		for (Unit i : Promotor.read()) {
 			setUpdateId(i.getId());
 		}
 		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());

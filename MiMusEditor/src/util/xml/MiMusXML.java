@@ -115,6 +115,11 @@ public class MiMusXML {
 				SharedResources.getInstance().getCasaPath()));
 	}
 	
+	public static MiMusXML openPromotor() {
+		return openCommon(new File(
+				SharedResources.getInstance().getPromotorPath()));
+	}
+	
 	public static MiMusXML openDoc(String docIdStr) {
 		File path = new File(SharedResources.getInstance().getXmlPath()
 				+ "/" + docIdStr + ".xml");

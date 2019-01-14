@@ -8,6 +8,7 @@ import ui.BiblioView;
 import ui.CasaView;
 import ui.Editor;
 import ui.InstrumentView;
+import ui.PromotorView;
 
 /**
  * 
@@ -35,6 +36,7 @@ public final class SharedControl {
 	private ArtistaView artistaView;
 	private InstrumentView instrumentView;
 	private CasaView casaView;
+	private PromotorView promotorView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -45,6 +47,7 @@ public final class SharedControl {
 		this.artistaView = null;
 		this.instrumentView = null;
 		this.casaView = null;
+		this.setPromotorView(null);
 		this.editors = new ArrayList<>();
 	}
 	
@@ -106,7 +109,7 @@ public final class SharedControl {
 				this.artistaView.attach(e);
 			}
 		}
-		System.out.println("prepared artist view for subscribers.");
+		System.out.println("prepared ArtistaView for subscribers.");
 	}
 	
 	public void unsetArtistaView() {
@@ -122,7 +125,7 @@ public final class SharedControl {
 				this.instrumentView.attach(e);
 			}
 		}
-		System.out.println("prepared instrument view for subscribers.");
+		System.out.println("Prepared InstrumentView for subscribers.");
 	}
 	
 	public void unsetInstrumentView() {
@@ -138,11 +141,27 @@ public final class SharedControl {
 				this.casaView.attach(e);
 			}
 		}
-		System.out.println("prepared casa view for subscribers.");
+		System.out.println("Prepared CasaView for subscribers.");
 	}
-	
+
 	public void unsetCasaView() {
 		this.casaView = null;
+	}
+	
+	public void setPromotorView(PromotorView promotorView) {
+		this.promotorView = promotorView;
+		
+		/* Subscribe all Editors to PromotorView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.promotorView.attach(e);
+			}
+		}
+		System.out.println("Prepared PromotorView for subscribers.");
+	}
+	
+	public void unsetPromotorView() {
+		this.promotorView = null;
 	}
 
 	public List<Editor> getEditors() {
@@ -160,19 +179,23 @@ public final class SharedControl {
 		/* Subscribe new Editor to BiblioView */
 		if (biblioView != null) {
 			biblioView.attach(editor);
-			System.out.println("Subscribed editor to biblio.");
+			System.out.println("Subscribed editor to BiblioView.");
 		}
 		if (artistaView != null) {
 			artistaView.attach(editor);
-			System.out.println("Subscribed editor to artist view");
+			System.out.println("Subscribed editor to ArtistaView.");
 		}
 		if (instrumentView != null) {
 			instrumentView.attach(editor);
-			System.out.println("Subscribed editor to instrument view");
+			System.out.println("Subscribed editor to InstrumentView.");
 		}
 		if (casaView != null) {
 			casaView.attach(editor);
-			System.out.println("Subscribed editor to casa view");
+			System.out.println("Subscribed editor to CasaView.");
+		}
+		if (promotorView != null) {
+			promotorView.attach(editor);
+			System.out.println("Subscribed editor to PromotorView.");
 		}
 	}
 	
@@ -195,6 +218,9 @@ public final class SharedControl {
 		}
 		if (casaView != null) {
 			casaView.detach(editor);
+		}
+		if (promotorView != null) {
+			promotorView.detach(editor);
 		}
 	}
 }

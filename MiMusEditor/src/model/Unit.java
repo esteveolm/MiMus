@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 public class Unit {
 	
 	private int id;
@@ -12,4 +14,12 @@ public class Unit {
 		this.id = id;
 	}
 	
+	public static Unit findUnit(List<Unit> units, int id) {
+		for (Unit u : units) {
+			if (u.getId() == id) {
+				return u;
+			}
+		}
+		return null;
+	}
 }
