@@ -81,7 +81,7 @@ public class PromotorView extends DeclarativeView {
 		Combo comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenere.setItems("No marcat", "Home", "Dona");
 		
-		/* Casa (?) */
+		/* Casa (combo) */
 		Label labelCasa = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelCasa.setText("Casa:");
 		Combo comboCasa = new Combo(sectAdd.getParent(), COMBO_FLAGS);
@@ -107,7 +107,7 @@ public class PromotorView extends DeclarativeView {
 			}
 		});
 		
-		/* Table for artists created */
+		/* Table for promotors created */
 		Section sectTable = new Section(form.getBody(), 0);
 		sectTable.setText(getViewName() + "s created");
 				

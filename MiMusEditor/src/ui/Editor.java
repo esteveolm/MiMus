@@ -186,6 +186,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Button addProm = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addProm.setLayoutData(gridData);
 		addProm.setText("Add Promotor");
+		Button addOfici = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addOfici.setLayoutData(gridData);
+		addOfici.setText("Add Ofici");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -317,6 +320,19 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Promotor";
+					}
+				};
+				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
+			}
+		});
+		addOfici.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new InstanceDialog(
+						resources.getOficis(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Ofici";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);

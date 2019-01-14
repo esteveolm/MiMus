@@ -8,6 +8,7 @@ import ui.BiblioView;
 import ui.CasaView;
 import ui.Editor;
 import ui.InstrumentView;
+import ui.OficiView;
 import ui.PromotorView;
 
 /**
@@ -37,6 +38,7 @@ public final class SharedControl {
 	private InstrumentView instrumentView;
 	private CasaView casaView;
 	private PromotorView promotorView;
+	private OficiView oficiView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -162,6 +164,22 @@ public final class SharedControl {
 	
 	public void unsetPromotorView() {
 		this.promotorView = null;
+	}
+	
+	public void setOficiView(OficiView oficiView) {
+		this.oficiView = oficiView;
+		
+		/* Subscribe all Editors to OficiView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.oficiView.attach(e);
+			}
+		}
+		System.out.println("Prepared OficiView for subscribers.");
+	}
+	
+	public void unsetOficiView() {
+		this.oficiView = null;
 	}
 
 	public List<Editor> getEditors() {

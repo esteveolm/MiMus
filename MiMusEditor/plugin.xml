@@ -66,6 +66,14 @@
             name="Promotor View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.OficiView"
+            icon="icons/sample.png"
+            id="MiMusEditor.oficiView"
+            name="Ofici View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

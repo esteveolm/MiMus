@@ -120,6 +120,11 @@ public class MiMusXML {
 				SharedResources.getInstance().getPromotorPath()));
 	}
 	
+	public static MiMusXML openOfici() {
+		return openCommon(new File(
+				SharedResources.getInstance().getOficiPath()));
+	}
+	
 	public static MiMusXML openDoc(String docIdStr) {
 		File path = new File(SharedResources.getInstance().getXmlPath()
 				+ "/" + docIdStr + ".xml");

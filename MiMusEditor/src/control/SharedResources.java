@@ -19,6 +19,7 @@ import model.EntityInstance;
 import model.Instrument;
 import model.MiMusBibEntry;
 import model.MiMusReference;
+import model.Ofici;
 import model.Promotor;
 import model.Transcription;
 import model.Unit;
@@ -57,6 +58,7 @@ public final class SharedResources {
 	private List<Unit> instruments;
 	private List<Unit> cases;
 	private List<Unit> promotors;
+	private List<Unit> oficis;
 	private String repoPath;
 	private IProject corpusFolder;
 	private String corpusPath;
@@ -67,6 +69,7 @@ public final class SharedResources {
 	private String instrumentPath;
 	private String casaPath;
 	private String promotorPath;
+	private String oficiPath;
 	private String remote;
 	private Git git;
 	
@@ -121,11 +124,13 @@ public final class SharedResources {
 		IFile instrumentFile = strings.getFile("instruments.xml");
 		IFile casaFile = strings.getFile("cases.xml");
 		IFile promotorFile = strings.getFile("promotors.xml");
+		IFile oficiFile = strings.getFile("oficis.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		this.setInstrumentPath(instrumentFile.getLocation().toString());
 		this.setCasaPath(casaFile.getLocation().toString());
 		this.setPromotorPath(promotorFile.getLocation().toString());
+		this.setOficiPath(oficiFile.getLocation().toString());
 		
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
@@ -212,6 +217,14 @@ public final class SharedResources {
 	public void setPromotors(List<Unit> promotors) {
 		this.promotors = promotors;
 	}
+	public List<Unit> getOficis() {
+		if (oficis == null)
+			oficis = Ofici.read();
+		return oficis;
+	}
+	public void setOficis(List<Unit> oficis) {
+		this.oficis = oficis;
+	}
 	public String getRepoPath() {
 		return repoPath;
 	}
@@ -272,6 +285,12 @@ public final class SharedResources {
 	public void setPromotorPath(String promotorPath) {
 		this.promotorPath = promotorPath;
 	}
+	public String getOficiPath() {
+		return oficiPath;
+	}
+	public void setOficiPath(String oficiPath) {
+		this.oficiPath = oficiPath;
+	}
 	public String getRemote() {
 		return remote;
 	}
@@ -328,6 +347,9 @@ public final class SharedResources {
 			setUpdateId(i.getId());
 		}
 		for (Unit i : Promotor.read()) {
+			setUpdateId(i.getId());
+		}
+		for (Unit i : Ofici.read()) {
 			setUpdateId(i.getId());
 		}
 		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());
