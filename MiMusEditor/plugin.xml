@@ -50,6 +50,14 @@
             name="Instrument View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.CasaView"
+            icon="icons/sample.png"
+            id="MiMusEditor.casaView"
+            name="Casa View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

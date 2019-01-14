@@ -305,6 +305,9 @@ public final class SharedResources {
 		for (Unit i : Instrument.read()) {
 			setUpdateId(i.getId());
 		}
+		for (Unit i : Casa.read()) {
+			setUpdateId(i.getId());
+		}
 		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());
 		for (Unit e : biblio) {
 			setUpdateId(e.getId());

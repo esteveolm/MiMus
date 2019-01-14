@@ -180,6 +180,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Button addInst = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addInst.setLayoutData(gridData);
 		addInst.setText("Add Instrument");
+		Button addCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addCasa.setLayoutData(gridData);
+		addCasa.setText("Add Casa");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -285,6 +288,19 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
+					}
+				};
+				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
+			}
+		});
+		addCasa.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new InstanceDialog(
+						resources.getCases(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Casa";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
