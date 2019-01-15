@@ -76,9 +76,10 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	}
 
 	private String[] getBibEntriesText() {
-		String[] res = new String[bibEntries.size()];
-		for (int i=0; i<bibEntries.size(); i++) {
-			res[i] = ((MiMusBibEntry) bibEntries.get(i)).getShortReference();
+		List<MiMusBibEntry> entries = SharedResources.getInstance().getBibEntries();
+		String[] res = new String[entries.size()];
+		for (int i=0; i<entries.size(); i++) {
+			res[i] = entries.get(i).getShortReference();
 		}
 		return res;
 	}
