@@ -229,6 +229,18 @@ public class Editor extends EditorPart implements EventObserver {
 				SWT.PUSH | SWT.CENTER);
 		addTransInst.setLayoutData(gridTrans);
 		addTransInst.setText("Add Instrument");
+		Button addTransCasa = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransCasa.setLayoutData(gridTrans);
+		addTransCasa.setText("Add Casa");
+		Button addTransProm = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransProm.setLayoutData(gridTrans);
+		addTransProm.setText("Add Promotor");
+		Button addTransOfici = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransOfici.setLayoutData(gridTrans);
+		addTransOfici.setText("Add Ofici");
 		
 		Button removeTrans = new Button(sectTrans.getParent(), 
 				SWT.PUSH | SWT.CENTER);
@@ -400,6 +412,54 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
+					}
+				};
+				runTranscriptionDialog((TranscriptionDialog)dialog, 
+						transcriptions, entityInstances, 
+						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
+			}
+		});
+		addTransCasa.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new TranscriptionDialog(
+						resources.getCases(), parent.getShell(), "") {
+					@Override
+					public String getDialogName() {
+						return "Casa";
+					}
+				};
+				runTranscriptionDialog((TranscriptionDialog)dialog, 
+						transcriptions, entityInstances, 
+						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
+			}
+		});
+		addTransProm.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new TranscriptionDialog(
+						resources.getPromotors(), parent.getShell(), "") {
+					@Override
+					public String getDialogName() {
+						return "Promotor";
+					}
+				};
+				runTranscriptionDialog((TranscriptionDialog)dialog, 
+						transcriptions, entityInstances, 
+						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
+			}
+		});
+		addTransOfici.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new TranscriptionDialog(
+						resources.getOficis(), parent.getShell(), "") {
+					@Override
+					public String getDialogName() {
+						return "Ofici";
 					}
 				};
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
