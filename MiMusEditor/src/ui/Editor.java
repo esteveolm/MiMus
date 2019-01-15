@@ -282,7 +282,6 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRef.setLayoutData(gridRef);
 		removeRef.setText("Delete");
 		
-		
 		/* BUTTON LISTENERS */
 		/* Entity buttons */
 		addArt.addSelectionListener(new SelectionAdapter() {

@@ -161,6 +161,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			default:	// Should never reach here
 				break;
 			}
+			tv.refresh();
 		}
 	}
 	
