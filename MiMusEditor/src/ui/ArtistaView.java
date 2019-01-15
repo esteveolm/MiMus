@@ -25,6 +25,7 @@ public class ArtistaView extends DeclarativeView {
 	
 	private SharedResources resources;
 	private List<Unit> artists;
+	private Combo comboOfici;
 	
 	public ArtistaView() {
 		super();
@@ -34,6 +35,8 @@ public class ArtistaView extends DeclarativeView {
 		resources = SharedResources.getInstance();
 		//resources.globallySetUpdateId();
 		artists = resources.getArtistas();
+		
+		comboOfici = null;
 	}
 	
 	public String getViewName() {
@@ -96,7 +99,7 @@ public class ArtistaView extends DeclarativeView {
 		/* Ofici: option field */
 		Label labelOfici = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelOfici.setText("Ofici:");
-		Combo comboOfici = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboOfici = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		// XXX: find a better way to extract a list of attributes from any Unit
 		List<Unit> oficis = SharedResources.getInstance().getOficis();
 		String[] oficiNames = new String[oficis.size()];
@@ -171,7 +174,7 @@ public class ArtistaView extends DeclarativeView {
 				MiMusXML.openArtista().append(art).write();
 				getTv().refresh();
 				notifyObservers();
-				System.out.println(resources.getArtistas().size() + "ARTISTS");
+				System.out.println(resources.getArtistas().size() + " ARTISTS");
 			}
 		});
 		
@@ -188,6 +191,7 @@ public class ArtistaView extends DeclarativeView {
 					artists.remove(art);
 					MiMusXML.openArtista().remove(art).write();
 					getTv().refresh();
+					notifyObservers();
 					System.out.println("Artist removed successfully.");
 					LabelPrinter.printInfo(label, "Artist removed successfully.");
 				}
@@ -219,5 +223,16 @@ public class ArtistaView extends DeclarativeView {
 	public void dispose() {
 		super.dispose();
 		getControl().unsetArtistaView();
+	}
+
+	@Override
+	public void update() {
+		List<Unit> oficis = resources.getOficis();
+		System.out.println("Updating oficis: now there are " + oficis.size());
+		String[] oficiNames = new String[oficis.size()];
+		for (int i=0; i<oficiNames.length; i++) {
+			oficiNames[i] = ((Ofici) oficis.get(i)).getLemma();
+		}
+		comboOfici.setItems(oficiNames);
 	}
 }

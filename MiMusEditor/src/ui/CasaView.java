@@ -118,6 +118,7 @@ public class CasaView extends DeclarativeView {
 					cases.remove(casa);
 					MiMusXML.openCasa().remove(casa).write();
 					getTv().refresh();
+					notifyObservers();
 					System.out.println(getViewName() + " removed successfully.");
 					LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
 				}
@@ -133,4 +134,7 @@ public class CasaView extends DeclarativeView {
 		super.dispose();
 		getControl().unsetCasaView();
 	}
+
+	@Override
+	public void update() {}
 }

@@ -111,10 +111,14 @@ public final class SharedControl {
 				this.artistaView.attach(e);
 			}
 		}
+		if (this.oficiView != null)
+			this.oficiView.attach(this.artistaView);
 		System.out.println("prepared ArtistaView for subscribers.");
 	}
 	
 	public void unsetArtistaView() {
+		if (this.oficiView != null)
+			this.oficiView.detach(this.artistaView);
 		this.artistaView = null;
 	}
 	
@@ -127,6 +131,8 @@ public final class SharedControl {
 				this.instrumentView.attach(e);
 			}
 		}
+		if (this.oficiView != null)
+			this.instrumentView.attach(this.oficiView);
 		System.out.println("Prepared InstrumentView for subscribers.");
 	}
 	
@@ -143,6 +149,8 @@ public final class SharedControl {
 				this.casaView.attach(e);
 			}
 		}
+		if (this.promotorView != null)
+			this.casaView.attach(this.promotorView);
 		System.out.println("Prepared CasaView for subscribers.");
 	}
 
@@ -159,10 +167,14 @@ public final class SharedControl {
 				this.promotorView.attach(e);
 			}
 		}
+		if (this.casaView != null)
+			this.casaView.attach(this.promotorView);
 		System.out.println("Prepared PromotorView for subscribers.");
 	}
 	
 	public void unsetPromotorView() {
+		if (this.casaView != null)
+			this.casaView.detach(this.promotorView);
 		this.promotorView = null;
 	}
 	
@@ -175,10 +187,16 @@ public final class SharedControl {
 				this.oficiView.attach(e);
 			}
 		}
+		if (artistaView != null)
+			this.oficiView.attach(artistaView);
+		if (instrumentView != null)
+			this.instrumentView.attach(this.oficiView);
 		System.out.println("Prepared OficiView for subscribers.");
 	}
 	
 	public void unsetOficiView() {
+		if (this.instrumentView != null)
+			this.instrumentView.detach(this.oficiView);
 		this.oficiView = null;
 	}
 

@@ -25,6 +25,7 @@ public class OficiView extends DeclarativeView {
 
 	private SharedResources resources;
 	private List<Unit> oficis;
+	private Combo comboInstrument;
 	
 	public OficiView() {
 		super();
@@ -33,6 +34,8 @@ public class OficiView extends DeclarativeView {
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
 		oficis = resources.getOficis();
+		
+		comboInstrument = null;
 	}
 	
 	@Override
@@ -67,7 +70,7 @@ public class OficiView extends DeclarativeView {
 		/* Instrument (combo) */
 		Label labelInstrument = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelInstrument.setText("Instrument:");
-		Combo comboInstrument = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboInstrument = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		// XXX: find a better way to extract a list of attributes from any Unit
 		List<Unit> insts = SharedResources.getInstance().getInstruments();
 		String[] instNames = new String[insts.size()];
@@ -144,6 +147,7 @@ public class OficiView extends DeclarativeView {
 					oficis.remove(ofici);
 					MiMusXML.openOfici().remove(ofici).write();
 					getTv().refresh();
+					notifyObservers();
 					System.out.println(getViewName() + " removed successfully.");
 					LabelPrinter.printInfo(label, getViewName() 
 							+ " removed successfully.");
@@ -159,5 +163,16 @@ public class OficiView extends DeclarativeView {
 	public void dispose() {
 		super.dispose();
 		getControl().unsetOficiView();
+	}
+
+	@Override
+	public void update() {
+		/* Re-read instruments and set Combo items again */
+		List<Unit> insts = resources.getInstruments();
+		String[] instNames = new String[insts.size()];
+		for (int i=0; i<instNames.length; i++) {
+			instNames[i] = ((Instrument) insts.get(i)).getLemma();
+		}
+		comboInstrument.setItems(instNames);
 	}
 }

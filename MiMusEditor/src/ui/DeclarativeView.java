@@ -22,7 +22,8 @@ import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
 
-public abstract class DeclarativeView extends ViewPart implements EventSubject {
+public abstract class DeclarativeView extends ViewPart 
+		implements EventSubject, EventObserver {
 	
 	final int LABEL_FLAGS = SWT.VERTICAL;
 	final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;

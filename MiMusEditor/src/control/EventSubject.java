@@ -10,6 +10,7 @@ public interface EventSubject {
 	
 	public default void notifyObservers() {
 		for (EventObserver o: getObservers()) {
+			System.out.println("Notifying " + o.getClass().getName());
 			o.update();
 		}
 	}

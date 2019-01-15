@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
-import org.w3c.dom.Element;
 
 public class MiMusText {
 	

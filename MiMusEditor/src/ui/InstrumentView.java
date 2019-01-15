@@ -1,6 +1,5 @@
 package ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -138,6 +137,7 @@ public class InstrumentView extends DeclarativeView {
 					instruments.remove(inst);
 					MiMusXML.openInstrument().remove(inst).write();
 					getTv().refresh();
+					notifyObservers();
 					System.out.println("Instrument removed successfully.");
 					LabelPrinter.printInfo(label, "Instrument removed successfully.");
 				}
@@ -161,4 +161,7 @@ public class InstrumentView extends DeclarativeView {
 		super.dispose();
 		getControl().unsetInstrumentView();
 	}
+
+	@Override
+	public void update() {}
 }

@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import model.Entity;
 import model.Unit;
 
 public abstract class TranscriptionDialog extends InstanceDialog {

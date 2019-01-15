@@ -24,6 +24,7 @@ public class PromotorView extends DeclarativeView {
 	
 	private SharedResources resources;
 	private List<Unit> promotors;
+	private Combo comboCasa;
 	
 	public PromotorView() {
 		super();
@@ -32,6 +33,8 @@ public class PromotorView extends DeclarativeView {
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
 		promotors = resources.getPromotors();
+		
+		comboCasa = null;
 	}
 	
 	@Override
@@ -84,7 +87,7 @@ public class PromotorView extends DeclarativeView {
 		/* Casa (combo) */
 		Label labelCasa = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelCasa.setText("Casa:");
-		Combo comboCasa = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboCasa = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		// XXX: find a better way to extract a list of attributes from any Unit
 		List<Unit> cases = SharedResources.getInstance().getCases();
 		String[] casaNames = new String[cases.size()];
@@ -174,6 +177,7 @@ public class PromotorView extends DeclarativeView {
 					promotors.remove(prom);
 					MiMusXML.openPromotor().remove(prom).write();
 					getTv().refresh();
+					notifyObservers();
 					System.out.println(getViewName() + " removed successfully.");
 					LabelPrinter.printInfo(label, getViewName() 
 							+ " removed successfully.");
@@ -189,5 +193,15 @@ public class PromotorView extends DeclarativeView {
 	public void dispose() {
 		super.dispose();
 		getControl().unsetPromotorView();
+	}
+
+	@Override
+	public void update() {
+		List<Unit> cases = resources.getCases();
+		String[] casaNames = new String[cases.size()];
+		for (int i=0; i<casaNames.length; i++) {
+			casaNames[i] = ((Casa) cases.get(i)).getLemma();
+		}
+		comboCasa.setItems(casaNames);
 	}
 }

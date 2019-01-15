@@ -34,7 +34,6 @@ import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
 import model.MiMusBibEntry;
-import model.Unit;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
 
