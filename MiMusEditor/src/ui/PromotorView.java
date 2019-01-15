@@ -134,6 +134,12 @@ public class PromotorView extends DeclarativeView {
 				if (comboCasa.getSelectionIndex() == -1) {
 					comboCasa.select(0);
 				}
+				Casa casa = null;
+				if (cases.size()>0 &&
+						comboCasa.getSelectionIndex()>=0) {
+					/* Only set Casa if available */
+					casa = (Casa) cases.get(comboCasa.getSelectionIndex());
+				}
 				Promotor prom = new Promotor(
 						getResources().getIncrementId(),
 						textNom.getText(),
@@ -141,7 +147,7 @@ public class PromotorView extends DeclarativeView {
 						textCognom.getText(),
 						textSobrenom.getText(),
 						comboGenere.getSelectionIndex(),
-						(Casa) cases.get(comboCasa.getSelectionIndex()));
+						casa);
 				promotors.add(prom);
 				System.out.println(getViewName() + " created successfully.");
 				LabelPrinter.printInfo(label, 

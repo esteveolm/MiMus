@@ -79,7 +79,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			case 5:		// Genere
 				return prom.getGenere();
 			case 6:		// Casa
-				return prom.getCasa().getLemma();
+				return prom.getCasa();
 			default:
 				return "";
 			}
@@ -142,7 +142,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			case 5:		// Genere
 				return GENDERS[prom.getGenere()];
 			case 6:		// Casa
-				return prom.getCasa().getLemma();
+				return (prom.getCasa()!=null ? prom.getCasa().getLemma() : "");
 			default:	// Shouldn't reach here
 				return "";
 			}

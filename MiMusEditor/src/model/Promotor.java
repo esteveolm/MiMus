@@ -45,12 +45,21 @@ public class Promotor extends Entity {
 		int genere = Integer.parseInt(
 				elem.getElementsByTagName("genere")
 				.item(0).getTextContent());
-		int casaId = Integer.parseInt(
-				elem.getElementsByTagName("casa_id")
-				.item(0).getTextContent());
+		int casaId = -1;
+		try {
+			casaId = Integer.parseInt(
+					elem.getElementsByTagName("casa_id")
+					.item(0).getTextContent());
+		} catch (NumberFormatException e) {}
+				
 		int id = Integer.parseInt(
 				elem.getElementsByTagName("id")
 				.item(0).getTextContent());
+		
+		/* If Casa unspecified, its field in Promotor will be null */
+		if (casaId == -1)
+			return new Promotor(id, nom, numeral, cognom, sobrenom, genere, null);
+		
 		Casa casa = (Casa) 
 				Unit.findUnit(SharedResources.getInstance().getCases(), casaId);
 		return new Promotor(id, nom, numeral, cognom, sobrenom, genere, casa);
@@ -70,7 +79,9 @@ public class Promotor extends Entity {
 		Element tagGenere = doc.createElement("genere");
 		tagGenere.appendChild(doc.createTextNode(String.valueOf(getGenere())));
 		Element tagCasaId = doc.createElement("casa_id");
-		tagCasaId.appendChild(doc.createTextNode(String.valueOf(getCasa().getId())));
+		if (getCasa() != null)	/* Otherwise, leave it blank */
+			tagCasaId.appendChild(doc.createTextNode(
+					String.valueOf(getCasa().getId())));
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(String.valueOf(getId())));
 		tagEntry.appendChild(tagNom);

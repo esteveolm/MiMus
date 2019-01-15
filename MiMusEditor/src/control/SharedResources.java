@@ -118,13 +118,13 @@ public final class SharedResources {
 		}
 		
 		/* Once repo is functional, we can keep loading resources */
-		IFolder strings = corpus.getFolder("strings");
-		IFile biblioFile = strings.getFile("bibliography.xml");
-		IFile artistaFile = strings.getFile("artistas.xml");
-		IFile instrumentFile = strings.getFile("instruments.xml");
-		IFile casaFile = strings.getFile("cases.xml");
-		IFile promotorFile = strings.getFile("promotors.xml");
-		IFile oficiFile = strings.getFile("oficis.xml");
+		IFolder entitiesFolder = corpus.getFolder("entities");
+		IFile biblioFile = entitiesFolder.getFile("bibliography.xml");
+		IFile artistaFile = entitiesFolder.getFile("artistas.xml");
+		IFile instrumentFile = entitiesFolder.getFile("instruments.xml");
+		IFile casaFile = entitiesFolder.getFile("cases.xml");
+		IFile promotorFile = entitiesFolder.getFile("promotors.xml");
+		IFile oficiFile = entitiesFolder.getFile("oficis.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		this.setInstrumentPath(instrumentFile.getLocation().toString());
