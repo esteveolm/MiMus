@@ -54,17 +54,17 @@ public class PromotorView extends DeclarativeView {
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
+		/* Nom Complet (text) */
+		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNomComplet.setText("Nom Complet:");
+		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet.setLayoutData(grid);
+		
 		/* Nom (text) */
 		Label labelNom = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNom.setText("Nom:");
 		Text textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNom.setLayoutData(grid);
-		
-		/* Numeral (text) */
-		Label labelNumeral = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelNumeral.setText("Numeral:");
-		Text textNumeral = new Text(sectAdd.getParent(), TEXT_FLAGS);
-		textNumeral.setLayoutData(grid);
 		
 		/* Cognom (text) */
 		Label labelCognom = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -101,8 +101,8 @@ public class PromotorView extends DeclarativeView {
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				textNomComplet.setText("");
 				textNom.setText("");
-				textNumeral.setText("");
 				textCognom.setText("");
 				textSobrenom.setText("");
 				comboGenere.deselectAll();
@@ -145,8 +145,8 @@ public class PromotorView extends DeclarativeView {
 				}
 				Promotor prom = new Promotor(
 						getResources().getIncrementId(),
+						textNomComplet.getText(),
 						textNom.getText(),
-						textNumeral.getText(),
 						textCognom.getText(),
 						textSobrenom.getText(),
 						comboGenere.getSelectionIndex(),

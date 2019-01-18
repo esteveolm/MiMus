@@ -50,6 +50,12 @@ public class CasaView extends DeclarativeView {
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
+		/* Nom Complet (text) */
+		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNomComplet.setText("Nom Complet:");
+		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet.setLayoutData(grid);
+		
 		/* Titol (text) */
 		Label labelTitol = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTitol.setText("Titol:");
@@ -67,6 +73,7 @@ public class CasaView extends DeclarativeView {
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				textNomComplet.setText("");
 				textTitol.setText("");
 				textCort.setText("");
 			}
@@ -93,6 +100,7 @@ public class CasaView extends DeclarativeView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Casa casa = new Casa(getResources().getIncrementId(),
+						textNomComplet.getText(),
 						textTitol.getText(), 
 						textCort.getText());
 				cases.add(casa);

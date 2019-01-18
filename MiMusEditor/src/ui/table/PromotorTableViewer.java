@@ -27,7 +27,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 	public PromotorTableViewer(Composite parent, List<Unit> promotors) {
 		super(parent);
 		this.entities = promotors;
-		String[] aux = {"Nom complet", "Nom", "Numeral", "Cognom", "Sobrenom",
+		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",
 				"Gènere", "Casa"};
 		this.columnNames = aux;
 	}
@@ -35,14 +35,13 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 	@Override
 	public CellEditor[] developEditors() {
 		CellEditor[] editors = new CellEditor[columnNames.length];
-		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE | SWT.READ_ONLY);
+		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[5] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
+		editors[4] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[6] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
+		editors[5] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		return editors;
 	}
@@ -57,8 +56,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 	class PromotorCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(Object element, String property) {
-			/* Lemma (field 0) is auto-generated from others, so it's read-only */
-			return getColumnNames().indexOf(property) != 0;
+			return true;
 		}
 
 		@Override
@@ -66,19 +64,17 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			Promotor prom = (Promotor) element;
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
-			case 0:		// Lemma
-				return prom.getLemma();
+			case 0:		// NomComplet
+				return prom.getNomComplet();
 			case 1:		// Nom
 				return prom.getNom();
-			case 2:		// Numeral
-				return prom.getNumeral();
-			case 3:		// Cognom
+			case 2:		// Cognom
 				return prom.getCognom();
-			case 4:		// Sobrenom
+			case 3:		// Sobrenom
 				return prom.getSobrenom();
-			case 5:		// Genere
+			case 4:		// Genere
 				return prom.getGenere();
-			case 6:		// Casa
+			case 5:		// Casa
 				return prom.getCasa();
 			default:
 				return "";
@@ -90,11 +86,11 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			Promotor prom = (Promotor) ((TableItem) element).getData();
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
+			case 0:		// Nom Complet
+				prom.setNomComplet((String) value);
+				break;
 			case 1:		// Nom
 				prom.setNom((String) value);
-				break;
-			case 2:		// Numeral
-				prom.setNumeral((String) value);
 				break;
 			case 3:		// Cognom
 				prom.setCognom((String) value);
@@ -129,19 +125,17 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Promotor prom = (Promotor) element;
 			switch (columnIndex) {
-			case 0:		// Lemma
-				return prom.getLemma();
+			case 0:		// Nom Complet
+				return prom.getNomComplet();
 			case 1:		// Nom
 				return prom.getNom();
-			case 2:		// Numeral
-				return prom.getNumeral();
-			case 3:		// Cognom
+			case 2:		// Cognom
 				return prom.getCognom();
-			case 4:		// Sobrenom
+			case 3:		// Sobrenom
 				return prom.getSobrenom();
-			case 5:		// Genere
+			case 4:		// Genere
 				return GENDERS[prom.getGenere()];
-			case 6:		// Casa
+			case 5:		// Casa
 				return (prom.getCasa()!=null ? prom.getCasa().getLemma() : "");
 			default:	// Shouldn't reach here
 				return "";

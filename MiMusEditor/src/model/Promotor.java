@@ -12,8 +12,8 @@ import util.xml.MiMusXML;
 
 public class Promotor extends Entity {
 	
+	private String nomComplet;
 	private String nom;
-	private String numeral;
 	private String cognom;
 	private String sobrenom;
 	private int genere;
@@ -21,11 +21,11 @@ public class Promotor extends Entity {
 	
 	public Promotor() {}
 
-	public Promotor(int id, String nom, String numeral, String cognom,
+	public Promotor(int id, String nomComplet, String nom, String cognom,
 			String sobrenom, int genere, Casa casa) {
 		super(id);
+		this.nomComplet = nomComplet;
 		this.nom = nom;
-		this.numeral = numeral;
 		this.cognom = cognom;
 		this.sobrenom = sobrenom;
 		this.genere = genere;
@@ -34,9 +34,9 @@ public class Promotor extends Entity {
 
 	@Override
 	public Promotor fromXMLElement(Element elem) {
-		String nom = elem.getElementsByTagName("nom")
+		String nomComplet = elem.getElementsByTagName("nom_complet")
 				.item(0).getTextContent();
-		String numeral = elem.getElementsByTagName("numeral")
+		String nom = elem.getElementsByTagName("nom")
 				.item(0).getTextContent();
 		String cognom = elem.getElementsByTagName("cognom")
 				.item(0).getTextContent();
@@ -58,20 +58,20 @@ public class Promotor extends Entity {
 		
 		/* If Casa unspecified, its field in Promotor will be null */
 		if (casaId == -1)
-			return new Promotor(id, nom, numeral, cognom, sobrenom, genere, null);
+			return new Promotor(id, nomComplet, nom, cognom, sobrenom, genere, null);
 		
 		Casa casa = (Casa) 
 				Unit.findUnit(SharedResources.getInstance().getCases(), casaId);
-		return new Promotor(id, nom, numeral, cognom, sobrenom, genere, casa);
+		return new Promotor(id, nomComplet, nom, cognom, sobrenom, genere, casa);
 	}
 
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntry = doc.createElement(getWritableName());
+		Element tagNomComplet = doc.createElement("nom_complet");
+		tagNomComplet.appendChild(doc.createTextNode(getNomComplet()));
 		Element tagNom = doc.createElement("nom");
 		tagNom.appendChild(doc.createTextNode(getNom()));
-		Element tagNumeral = doc.createElement("numeral");
-		tagNumeral.appendChild(doc.createTextNode(getNumeral()));
 		Element tagCognom = doc.createElement("cognom");
 		tagCognom.appendChild(doc.createTextNode(getCognom()));
 		Element tagSobrenom = doc.createElement("sobrenom");
@@ -84,8 +84,8 @@ public class Promotor extends Entity {
 					String.valueOf(getCasa().getId())));
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(String.valueOf(getId())));
+		tagEntry.appendChild(tagNomComplet);
 		tagEntry.appendChild(tagNom);
-		tagEntry.appendChild(tagNumeral);
 		tagEntry.appendChild(tagCognom);
 		tagEntry.appendChild(tagSobrenom);
 		tagEntry.appendChild(tagGenere);
@@ -120,26 +120,24 @@ public class Promotor extends Entity {
 
 	@Override
 	public String getLemma() {
-		return getNom() + " " + getNumeral() + " " 
-				+ getCognom() + " " + getSobrenom();
+		return getNomComplet();
 	}
 	
 	@Override
 	public String toString() {
 		return getLemma();
 	}
-
+	public String getNomComplet() {
+		return nomComplet;
+	}
+	public void setNomComplet(String nomComplet) {
+		this.nomComplet = nomComplet;
+	}
 	public String getNom() {
 		return nom;
 	}
 	public void setNom(String nom) {
 		this.nom = nom;
-	}
-	public String getNumeral() {
-		return numeral;
-	}
-	public void setNumeral(String numeral) {
-		this.numeral = numeral;
 	}
 	public String getCognom() {
 		return cognom;

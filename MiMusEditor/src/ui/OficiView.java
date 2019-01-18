@@ -55,17 +55,25 @@ public class OficiView extends DeclarativeView {
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
+		/* Nom Complet (text) */
+		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNomComplet.setText("Nom Complet:");
+		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet.setLayoutData(grid);
+		
 		/* Terme (text) */
 		Label labelTerme = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTerme.setText("Terme:");
 		Text textTerme = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTerme.setLayoutData(grid);
 		
-		/* Especialitat (text) */
+		/* Especialitat (combo) */
 		Label labelEspecialitat = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelEspecialitat.setText("Especialitat:");
-		Text textEspecialitat = new Text(sectAdd.getParent(), TEXT_FLAGS);
-		textEspecialitat.setLayoutData(grid);
+		Combo comboEspecialitat = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboEspecialitat.setLayoutData(grid);
+		comboEspecialitat.setItems("Sense especificar", "Instrument",
+				"Veu", "Dansa", "Artesà", "Malabars i altres");
 		
 		/* Instrument (combo) */
 		Label labelInstrument = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -84,8 +92,9 @@ public class OficiView extends DeclarativeView {
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				textNomComplet.setText("");
 				textTerme.setText("");
-				textEspecialitat.setText("");
+				comboEspecialitat.deselectAll();
 				comboInstrument.deselectAll();
 			}
 		});
@@ -118,8 +127,9 @@ public class OficiView extends DeclarativeView {
 				}
 				Ofici ofici = new Ofici(
 						getResources().getIncrementId(),
+						textNomComplet.getText(),
 						textTerme.getText(),
-						textEspecialitat.getText(),
+						comboEspecialitat.getSelectionIndex(),
 						inst);
 				oficis.add(ofici);
 				System.out.println(getViewName() + " created successfully.");

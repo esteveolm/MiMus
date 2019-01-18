@@ -22,14 +22,14 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 	public CasaTableViewer(Composite parent, List<Unit> cases) {
 		super(parent);
 		this.entities = cases;
-		String[] aux = {"Lema", "Titol", "Cort"};
+		String[] aux = {"Nom Complet", "Titol", "Cort"};
 		this.columnNames = aux;
 	}
 
 	@Override
 	public CellEditor[] developEditors() {
 		CellEditor[] editors = new CellEditor[columnNames.length];
-		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE | SWT.READ_ONLY);
+		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
@@ -45,8 +45,7 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 	class CasaCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(Object element, String property) {
-			/* 0 is the lemma generated from fields 1 and 2, so it's read-only */
-			return getColumnNames().indexOf(property) != 0;
+			return true;
 		}
 
 		@Override
@@ -54,8 +53,8 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 			Casa casa = (Casa) element;
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
-			case 0:		// Lema		// XXX: necessary when 0 is not modifiable?
-				return casa.getLemma();
+			case 0:		// Nom Complet
+				return casa.getNomComplet();
 			case 1:		// Titol
 				return casa.getTitol();
 			case 2:		// Cort
@@ -70,6 +69,8 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 			Casa casa = (Casa) ((TableItem) element).getData();
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
+			case 0:		// Nom Complet
+				casa.setNomComplet((String) value);
 			case 1:		// Titol
 				casa.setTitol((String) value);
 				break;
@@ -93,8 +94,8 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Casa casa = (Casa) element;
 			switch (columnIndex) {
-			case 0:		// Lemma
-				return casa.getLemma();
+			case 0:		// Nom Complet
+				return casa.getNomComplet();
 			case 1:		// Titol
 				return casa.getTitol();
 			case 2:		// Cort

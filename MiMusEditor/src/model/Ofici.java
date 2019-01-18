@@ -12,14 +12,17 @@ import util.xml.MiMusXML;
 
 public class Ofici extends Entity {
 	
+	private String nomComplet;
 	private String terme;
-	private String especialitat;
+	private int especialitat;
 	private Instrument instrument;
 	
 	public Ofici() {}
 	
-	public Ofici(int id, String terme, String especialitat, Instrument instrument) {
+	public Ofici(int id, String nomComplet, String terme, 
+			int especialitat, Instrument instrument) {
 		super(id);
+		this.setNomComplet(nomComplet);
 		this.terme = terme;
 		this.especialitat = especialitat;
 		this.instrument = instrument;
@@ -27,10 +30,13 @@ public class Ofici extends Entity {
 
 	@Override
 	public Ofici fromXMLElement(Element elem) {
+		String nomComplet = elem.getElementsByTagName("nom_complet")
+				.item(0).getTextContent();
 		String terme = elem.getElementsByTagName("terme")
 				.item(0).getTextContent();
-		String especialitat = elem.getElementsByTagName("especialitat")
-				.item(0).getTextContent();
+		int especialitat = Integer.parseInt(
+				elem.getElementsByTagName("especialitat")
+				.item(0).getTextContent());
 		int instrumentId = -1;
 		try {	/* Unspecified Instrument takes auxiliary value -1 in this method */
 			instrumentId = Integer.parseInt(
@@ -44,26 +50,30 @@ public class Ofici extends Entity {
 		
 		/* If instrument unspecified, its field in Ofici will be null */
 		if (instrumentId == -1)
-			return new Ofici(id, terme, especialitat, null);
+			return new Ofici(id, nomComplet, terme, especialitat, null);
 
 		Instrument inst = (Instrument) Unit.findUnit(
 				SharedResources.getInstance().getInstruments(), instrumentId);
-		return new Ofici(id, terme, especialitat, inst);
+		return new Ofici(id, nomComplet, terme, especialitat, inst);
 	}
 
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntry = doc.createElement(getWritableName());
+		Element tagNomComplet = doc.createElement("nom_complet");
+		tagNomComplet.appendChild(doc.createTextNode(getNomComplet()));
 		Element tagTerme = doc.createElement("terme");
 		tagTerme.appendChild(doc.createTextNode(getTerme()));
 		Element tagEspecialitat = doc.createElement("especialitat");
-		tagEspecialitat.appendChild(doc.createTextNode(getEspecialitat()));
+		tagEspecialitat.appendChild(doc.createTextNode(
+				String.valueOf(getEspecialitat())));
 		Element tagInstrumentId = doc.createElement("instrument_id");
 		if (getInstrument() != null)	/* Otherwise, leave it blank */
 			tagInstrumentId.appendChild(doc.createTextNode(
 					String.valueOf(getInstrument().getId())));
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(String.valueOf(getId())));
+		tagEntry.appendChild(tagNomComplet);
 		tagEntry.appendChild(tagTerme);
 		tagEntry.appendChild(tagEspecialitat);
 		tagEntry.appendChild(tagInstrumentId);
@@ -97,10 +107,7 @@ public class Ofici extends Entity {
 
 	@Override
 	public String getLemma() {
-		String lemma = getTerme() + " " + getEspecialitat();
-		if (instrument != null)
-			lemma += " " + getInstrument().getLemma();
-		return lemma;
+		return getNomComplet();
 	}
 	
 	@Override
@@ -108,16 +115,22 @@ public class Ofici extends Entity {
 		return getLemma();
 	}
 	
+	public String getNomComplet() {
+		return nomComplet;
+	}
+	public void setNomComplet(String nomComplet) {
+		this.nomComplet = nomComplet;
+	}
 	public String getTerme() {
 		return terme;
 	}
 	public void setTerme(String terme) {
 		this.terme = terme;
 	}
-	public String getEspecialitat() {
+	public int getEspecialitat() {
 		return especialitat;
 	}
-	public void setEspecialitat(String especialitat) {
+	public void setEspecialitat(int especialitat) {
 		this.especialitat = especialitat;
 	}
 	public Instrument getInstrument() {

@@ -21,6 +21,9 @@ import model.Unit;
 
 public class OficiTableViewer extends DeclarativeTableViewer {
 
+	private static final String[] ESPECIALITATS = {"Sense especificar", "Instrument",
+				"Veu", "Dansa", "Artesà", "Malabars i altres"};
+	
 	public OficiTableViewer(Composite parent, List<Unit> oficis) {
 		super(parent);
 		this.entities = oficis;
@@ -48,8 +51,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 	class OficiCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(Object element, String property) {
-			/* Lemma (field 0) is auto-generated from others, so it's read-only */
-			return getColumnNames().indexOf(property) != 0;
+			return true;
 		}
 
 		@Override
@@ -57,8 +59,8 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 			Ofici ofici = (Ofici) element;
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
-			case 0:		// Lemma
-				return ofici.getLemma();
+			case 0:		// Nom Complet
+				return ofici.getNomComplet();
 			case 1:		// Terme
 				return ofici.getTerme();
 			case 2:		// Especialitat
@@ -75,11 +77,14 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 			Ofici ofici = (Ofici) ((TableItem) element).getData();
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
+			case 0:		// Nom Complet
+				ofici.setNomComplet((String) value);
+				break;
 			case 1:		// Terme
 				ofici.setTerme((String) value);
 				break;
 			case 2:		// Especialitat
-				ofici.setEspecialitat((String) value);
+				ofici.setEspecialitat((int) value);
 				break;
 			case 3:		// Instrument
 				Instrument inst = (Instrument) Unit.findUnit(
@@ -105,12 +110,12 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Ofici ofici = (Ofici) element;
 			switch (columnIndex) {
-			case 0:		// Lemma
-				return ofici.getLemma();
+			case 0:		// Nom Complet
+				return ofici.getNomComplet();
 			case 1:		// Terme
 				return ofici.getTerme();
 			case 2:		// Especialitat
-				return ofici.getEspecialitat();
+				return ESPECIALITATS[ofici.getEspecialitat()];
 			case 3:		// Instrument
 				Instrument inst = ofici.getInstrument();
 				if (inst != null)

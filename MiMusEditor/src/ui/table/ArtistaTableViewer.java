@@ -3,7 +3,6 @@ package ui.table;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -15,27 +14,32 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
+import control.SharedResources;
 import model.Artista;
 import model.Ofici;
 import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
-
-	private static final String[] GENDERS = {"No marcat", "Home", "Dona"};
 	
 	public ArtistaTableViewer(Composite parent, List<Unit> artists) {
 		super(parent);
 		this.entities = artists;
-		String[] aux = {"Lema", "Tractament", "Nom", "Cognom", "Sobrenom",
-				"Gènere", "Religió", "Ofici"};
+		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
+				"Gènere", "Religió", "Origen", "Ofici"};
 		this.columnNames = aux;
 	}
 	
 	public CellEditor[] developEditors() {
 		CellEditor[] editors = new CellEditor[columnNames.length];
 		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[1] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
-				SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[5] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[6] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[7] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[8] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 	
@@ -56,7 +60,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			Artista art = (Artista) element;
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
-			case 0:	// Lema	(Text)
+			case 0:	// Nom Complet	(Text)
 				return art.getNombreCompleto();
 			case 1:	// Tractament	(Text)
 				return art.getNombreCompleto();
@@ -70,6 +74,10 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getGenero();
 			case 6: // Religió (ComboBox)
 				return art.getReligion();
+			case 7:	// Origen (Text)
+				return art.getOrigen();
+			case 8:	// Ofici (ComboBox)
+				return art.getOfici().getLemma();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -80,7 +88,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			Artista art = (Artista) ((TableItem) element).getData();
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
-			case 0:	// Name (Text)
+			case 0:	// Nom Complet (Text)
 				art.setNombreCompleto((String) value);
 				break;
 			case 1:	// Tractament (Text)
@@ -101,6 +109,16 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			case 6:	// Religió (ComboBox)
 				art.setGenero((int) value);
 				break;
+			case 7:	// Origen (ComboBox)
+				art.setOrigen((String) value);
+				break;
+			case 8:	// Ofici (ComboBox)
+				Ofici ofici = (Ofici) Unit.findUnit(
+						SharedResources.getInstance().getOficis(),
+						(int) value);
+				if (ofici != null)
+					art.setOfici(ofici);
+				break;
 			default:	// Shouldn't reach here
 				break;
 			}
@@ -118,7 +136,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Artista art = (Artista) element;
 			switch(columnIndex) {
-			case 0:	// Lema (Text)
+			case 0:	// Nom Complet (Text)
 				return art.getNombreCompleto();
 			case 1:	// Tractament (Text)
 				return art.getTratamiento();
@@ -132,7 +150,9 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getGeneroStr();
 			case 6:	// Religió (ComboBox)
 				return art.getReligionStr();
-			case 7:	// Ofici
+			case 7:	// Origen (Text)
+				return art.getOrigen();
+			case 8:	// Ofici
 				Ofici ofici = art.getOfici();
 				if (ofici != null)
 					return ofici.getLemma();

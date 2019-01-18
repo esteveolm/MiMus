@@ -24,7 +24,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 	public InstrumentTableViewer(Composite parent, List<Unit> instruments) {
 		super(parent);
 		this.entities = instruments;
-		String[] aux = {"Nom", "Família", "Classe"};
+		String[] aux = {"Nom", "Família", "Classe", "Part"};
 		this.columnNames = aux;
 	}
 
@@ -34,8 +34,9 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[1] = new ComboBoxCellEditor(tv.getTable(), 
 				SharedResources.FAMILY,	SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[1] = new ComboBoxCellEditor(tv.getTable(), 
+		editors[2] = new ComboBoxCellEditor(tv.getTable(), 
 				SharedResources.CLASSE,	SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -58,11 +59,13 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
 			case 0:	// Name (text)
-				return inst.getName();
+				return inst.getNom();
 			case 1:	// Family (combo)
 				return inst.getFamily();
 			case 2:	// Classe (combo)
 				return inst.getClasse();
+			case 3:	// Part (text)
+				return inst.getPart();
 			default:	// This should never happen
 				return "";
 			}
@@ -74,7 +77,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch (colIdx) {
 			case 0:	// Name (text)
-				inst.setName((String) value);
+				inst.setNom((String) value);
 				break;
 			case 1:	// Family (combo)
 				inst.setFamily((int) value);
@@ -82,6 +85,8 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			case 2:	// Classe (combo)
 				inst.setClasse((int) value);
 				break;
+			case 3:	// Part (text)
+				inst.setPart((String) value);
 			default:	// This should never happen
 				break;
 			}
@@ -100,11 +105,13 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			Instrument inst = (Instrument) element;
 			switch (columnIndex) {
 			case 0:	// Name (text)
-				return inst.getName();
+				return inst.getNom();
 			case 1:	// Family (combo)
 				return SharedResources.FAMILY[inst.getFamily()];
 			case 2: // Classe (combo)
 				return SharedResources.CLASSE[inst.getClasse()];
+			case 3:	// Part (text)
+				return inst.getPart();
 			default:	// This should never happen
 				return "";
 			}
@@ -119,7 +126,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			if (byFamily == 0) {
 				int byClasse = i1.getClasse() - i2.getClasse();
 				if (byClasse == 0) {
-					return i1.getName().compareTo(i2.getName());
+					return i1.getNom().compareTo(i2.getNom());
 				}
 				return byClasse;
 			}		

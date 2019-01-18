@@ -52,11 +52,11 @@ public class InstrumentView extends DeclarativeView {
 		sectAdd.setText("Add a new Entity");
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
-		/* Name: text field */
-		Label labelName = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelName.setText("Nom:");
-		Text textName = new Text(sectAdd.getParent(), TEXT_FLAGS);
-		textName.setLayoutData(grid);
+		/* Nom: text field */
+		Label labelNom = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelNom.setText("Nom:");
+		Text textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNom.setLayoutData(grid);
 		
 		/* Family: categorical field (Combo) */
 		Label labelFamily = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -72,14 +72,21 @@ public class InstrumentView extends DeclarativeView {
 		comboClasse.setItems(SharedResources.CLASSE);
 		comboClasse.setLayoutData(grid);
 		
+		/* Part: text field */
+		Label labelPart = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelPart.setText("Part:");
+		Text textPart = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textPart.setLayoutData(grid);
+		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				textName.setText("");
+				textNom.setText("");
 				comboFamily.deselectAll();
 				comboClasse.deselectAll();
+				textPart.setText("");
 			}
 		});
 		
@@ -112,9 +119,10 @@ public class InstrumentView extends DeclarativeView {
 				} else {
 					Instrument inst = new Instrument(
 							getResources().getIncrementId(),
-							textName.getText(),
+							textNom.getText(),
 							comboFamily.getSelectionIndex(),
-							comboClasse.getSelectionIndex());
+							comboClasse.getSelectionIndex(),
+							textPart.getText());
 					instruments.add(inst);
 					System.out.println("Instrument created successfully.");
 					LabelPrinter.printInfo(label, "Instrument created successfully.");

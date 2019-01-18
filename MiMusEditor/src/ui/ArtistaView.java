@@ -96,6 +96,12 @@ public class ArtistaView extends DeclarativeView {
 		Combo comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboReligion.setItems("No marcat", "Jueu", "Musulmà");
 		
+		/* Origen: text field */
+		Label labelOrigen = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelOrigen.setText("Origen:");
+		Text textOrigen = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textOrigen.setLayoutData(grid);
+		
 		/* Ofici: option field */
 		Label labelOfici = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelOfici.setText("Ofici:");
@@ -120,6 +126,7 @@ public class ArtistaView extends DeclarativeView {
 				textSobrenombre.setText("");
 				comboGenero.deselectAll();
 				comboReligion.deselectAll();
+				textOrigen.setText("");
 				comboOfici.deselectAll();
 			}
 		});
@@ -167,6 +174,7 @@ public class ArtistaView extends DeclarativeView {
 						textSobrenombre.getText(), 
 						comboGenero.getSelectionIndex(),
 						comboReligion.getSelectionIndex(),
+						textOrigen.getText(),
 						ofici);
 				artists.add(art);
 				System.out.println("Artist created successfully.");

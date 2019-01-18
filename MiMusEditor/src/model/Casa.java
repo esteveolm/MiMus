@@ -11,19 +11,23 @@ import util.xml.MiMusXML;
 
 public class Casa extends Entity {
 	
+	private String nomComplet;
 	private String titol;
 	private String cort;
 	
 	public Casa() {}
 	
-	public Casa(int id, String titol, String cort) {
+	public Casa(int id, String nomComplet, String titol, String cort) {
 		super(id);
+		this.nomComplet = nomComplet;
 		this.titol = titol;
 		this.cort = cort;
 	}
 
 	@Override
 	public Casa fromXMLElement(Element elem) {
+		String nomComplet = elem.getElementsByTagName("nom_complet")
+				.item(0).getTextContent();
 		String titol = elem.getElementsByTagName("titol")
 				.item(0).getTextContent();
 		String cort = elem.getElementsByTagName("cort")
@@ -31,18 +35,21 @@ public class Casa extends Entity {
 		int id = Integer.parseInt(
 				elem.getElementsByTagName("id")
 				.item(0).getTextContent());
-		return new Casa(id, titol, cort);
+		return new Casa(id, nomComplet, titol, cort);
 	}
 
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntry = doc.createElement(getWritableName());
+		Element tagNomComplet = doc.createElement("nom_complet");
+		tagNomComplet.appendChild(doc.createTextNode(getNomComplet()));
 		Element tagTitol = doc.createElement("titol");
 		tagTitol.appendChild(doc.createTextNode(getTitol()));
 		Element tagCort = doc.createElement("cort");
 		tagCort.appendChild(doc.createTextNode(getCort()));
 		Element tagID = doc.createElement("id");
 		tagID.appendChild(doc.createTextNode(String.valueOf(getId())));
+		tagEntry.appendChild(tagNomComplet);
 		tagEntry.appendChild(tagTitol);
 		tagEntry.appendChild(tagCort);
 		tagEntry.appendChild(tagID);
@@ -61,7 +68,7 @@ public class Casa extends Entity {
 
 	@Override
 	public String getLemma() {
-		return getTitol() + " de " + getCort();
+		return getNomComplet();
 	}
 	
 	@Override
@@ -69,6 +76,12 @@ public class Casa extends Entity {
 		return getLemma();
 	}
 
+	public String getNomComplet() {
+		return nomComplet;
+	}
+	public void setNomComplet(String nomComplet) {
+		this.nomComplet = nomComplet;
+	}
 	public String getTitol() {
 		return titol;
 	}
