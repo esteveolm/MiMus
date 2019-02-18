@@ -165,11 +165,11 @@ public class MiMusEntryReader {
 		String regest = "";
 		for (int i=regestIdx; i<lines.size(); i++) {
 			if (lines.get(i).startsWith(STARTERS[9])) {
-				regest += lines.get(i).substring(2);
+				regest += lines.get(i).substring(2) + "\n";
 			} else if (lines.get(i).startsWith(STARTERS[10])) {
 				break;
 			} else {
-				regest +=lines.get(i);
+				regest +=lines.get(i) + "\n";
 			}
 		}
 		entry.setRegestText(regest);
@@ -177,11 +177,13 @@ public class MiMusEntryReader {
 		String transcription = "";
 		for (int i=transcriptionIdx; i<lines.size(); i++) {
 			if (lines.get(i).startsWith(STARTERS[25])) {
-				transcription += lines.get(i).substring(2);
-			} else if (lines.get(i).startsWith(STARTERS[26])) {
+				transcription += lines.get(i).substring(2) + "\n";
+			} else if (lines.get(i).startsWith(STARTERS[26]) 
+					|| lines.get(i).startsWith(STARTERS[27])) {
+				/* May have q: notes or not (r:) */
 				break;
 			} else {
-				transcription +=lines.get(i);
+				transcription +=lines.get(i) + "\n";
 			}
 		}
 		entry.setTranscriptionText(transcription);
