@@ -53,7 +53,7 @@ public class MiMusEntryReader {
 		for (int i=0; i<lines.size(); i++) {
 			if (lines.get(i).length()>=2) {		// Prevents from empty lines
 				String content = lines.get(i).substring(2).trim();
-				String start = lines.get(i).substring(0, 2);
+				String start = lines.get(i).substring(0, lines.get(i).indexOf(':')+1);
 				for (int j=0; j<STARTERS.length; j++) {
 					if (start.equals(STARTERS[j])) {
 						try {
@@ -66,18 +66,21 @@ public class MiMusEntryReader {
 								break;
 							case 2:
 								date.setYear2(content);
+								date.setInterval(true);
 								break;
 							case 3:
 								date.setMonth1(content);
 								break;
 							case 4:
 								date.setMonth2(content);
+								date.setInterval(true);
 								break;
 							case 5:
 								date.setDay1(content);
 								break;
 							case 6:
 								date.setDay2(content);
+								date.setInterval(true);
 								break;
 							case 7:
 								entry.setPlace1(content);
