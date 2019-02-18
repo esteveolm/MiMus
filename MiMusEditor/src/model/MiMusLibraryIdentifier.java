@@ -41,10 +41,10 @@ public class MiMusLibraryIdentifier {
 		if (page != null)
 			str += page + ", ";
 		/* 
-		 * Remove last ", " ignoring 2 last characters (length-3).
+		 * Remove last ", " ignoring 2 last characters (length-2).
 		 * If everything is null, return empty sequence.
 		 */
-		return str.substring(0, Math.max(0,str.length()-3));
+		return str.substring(0, Math.max(0,str.length()-2));
 	}
 
 	public String getArchive() {
