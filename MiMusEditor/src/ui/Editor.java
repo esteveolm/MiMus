@@ -11,11 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jgit.api.AddCommand;
-import org.eclipse.jgit.api.CommitCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PushCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -558,30 +553,6 @@ public class Editor extends EditorPart implements EventObserver {
 		Label pushLabel = toolkit.createLabel(sectPush.getParent(), "");
 		pushLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Button btnPush = new Button(sectPush.getParent(), SWT.PUSH);
-		btnPush.setText("Press to upload document");
-		btnPush.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					/* Push artista.xml to github */
-					Git git = resources.getGit();
-					AddCommand add = git.add();
-					add.addFilepattern(resources.getRepoPath() 
-							+ "/xml/" + docID + ".xml");
-					add.call();
-					CommitCommand commit = git.commit();
-					commit.setMessage("Saving " + docID + ".xml to remote.");
-					commit.call();
-					PushCommand push = git.push();
-					push.setRemote(resources.getRemote());
-					push.call();
-				} catch (GitAPIException e1) {
-					e1.printStackTrace();
-					System.out.println("Could not push " + docID + ".xml.");
-				}
-			}
-		});
 		toolkit.dispose();
 	}
 	
