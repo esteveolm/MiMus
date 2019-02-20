@@ -5,8 +5,8 @@
          point="org.eclipse.ui.editors">
       <editor
             class="ui.Editor"
-            default="false"
-            extensions="txt, xml"
+            default="true"
+            extensions="txt"
             icon="icons/sample.png"
             id="MiMusEditor.mimusEditor"
             name="MiMus Editor">
