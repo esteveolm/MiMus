@@ -35,7 +35,7 @@ public class MiMusLibraryIdentifier {
 		if (subseries1 != null)
 			str += subseries1 + ", ";
 		if (subseries2 != null)
-			str += subseries2 + ", ";
+			str += subseries2 + " ";
 		if (number != null)
 			str += number + ", ";
 		if (page != null)
