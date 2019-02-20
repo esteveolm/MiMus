@@ -52,7 +52,7 @@ public class MiMusEntryReader {
 		String subjects = "";
 		for (int i=0; i<lines.size(); i++) {
 			if (lines.get(i).length()>=2) {		// Prevents from empty lines
-				String content = lines.get(i).substring(2).trim();
+				String content = lines.get(i).substring(lines.get(i).indexOf(':')+1).trim();
 				String start = lines.get(i).substring(0, lines.get(i).indexOf(':')+1);
 				for (int j=0; j<STARTERS.length; j++) {
 					if (start.equals(STARTERS[j])) {

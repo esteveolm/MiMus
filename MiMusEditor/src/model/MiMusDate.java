@@ -251,7 +251,7 @@ public class MiMusDate {
 		setuDay1(false);
 	}
 	public void setDay1(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethDay1(true);
 		}
 		setDay1(Integer.parseInt(text.replace("[", "").replace("]","")));
@@ -264,7 +264,7 @@ public class MiMusDate {
 		setuMonth1(false);
 	}
 	public void setMonth1(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethMonth1(true);
 			text = text.replace("[", "").replaceAll("]", "");
 		}
@@ -282,7 +282,7 @@ public class MiMusDate {
 		setuYear1(false);
 	}
 	public void setYear1(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethYear1(true);
 		}
 		setYear1(Integer.parseInt(text.replace("[", "").replace("]","")));
@@ -295,7 +295,7 @@ public class MiMusDate {
 		setuDay2(false);
 	}
 	public void setDay2(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethDay2(true);
 		}
 		setDay2(Integer.parseInt(text.replace("[", "").replace("]","")));
@@ -308,7 +308,7 @@ public class MiMusDate {
 		setuMonth2(false);
 	}
 	public void setMonth2(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethMonth2(true);
 			text = text.replace("[", "").replaceAll("]", "");
 		}
@@ -326,7 +326,7 @@ public class MiMusDate {
 		setuYear2(false);
 	}
 	public void setYear2(String text) {
-		if (text.startsWith("[") && text.startsWith("]")) {
+		if (text.startsWith("[") && text.endsWith("]")) {
 			sethYear2(true);
 		}
 		setYear2(Integer.parseInt(text.replace("[", "").replace("]","")));
