@@ -82,6 +82,13 @@ public class MiMusText {
 				idxSpace = text.indexOf(' ', idxSpace+1)) {
 			spaces.add(idxSpace);
 		}
+//		for (int idxSpace = 1;
+//				idxSpace < text.length();
+//				idxSpace++) {
+//			if (text.charAt(idxSpace)==' ' || text.charAt(idxSpace)==',' || 
+//					text.charAt(idxSpace)=='.')
+//				spaces.add(idxSpace);
+//		}
 		spaces.add(text.length());
 		return spaces;
 	}

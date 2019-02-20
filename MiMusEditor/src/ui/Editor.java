@@ -582,9 +582,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Point charCoords = transcriptionText.getSelection();
 		if (charCoords.x!=charCoords.y) {
 			/* Picks transcripted form in String and text coordinates */
-			charCoords = transcription.fromWordToCharCoordinates(
-					transcription.fromCharToWordCoordinates(
-					charCoords));	// Trick to ensure selection of whole words
+//			charCoords = transcription.fromWordToCharCoordinates(
+//					transcription.fromCharToWordCoordinates(
+//					charCoords));	// Trick to ensure selection of whole words
 			transcriptionText.setSelection(charCoords);
 			String selectedText = transcriptionText.getSelectionText();
 			dialog.setSelectedText(selectedText);
