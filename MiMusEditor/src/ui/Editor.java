@@ -544,15 +544,6 @@ public class Editor extends EditorPart implements EventObserver {
 				}
 			}
 		});
-		
-		
-		/* INPUT/OUTPUT */
-		/* Button to push to upstream */
-		Section sectPush = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectPush.setText("Upload your annotations");
-		Label pushLabel = toolkit.createLabel(sectPush.getParent(), "");
-		pushLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
 		toolkit.dispose();
 	}
 	
