@@ -112,6 +112,8 @@ public class Editor extends EditorPart implements EventObserver {
 		docIdStr = docEntry.getIdStr();
 		regest = docEntry.getRegest();
 		transcription = docEntry.getTranscription();
+		
+		this.setPartName("Doc. " + docIdStr);
 	}
 	
 	/**
