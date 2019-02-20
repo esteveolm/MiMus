@@ -211,6 +211,12 @@ public class Editor extends EditorPart implements EventObserver {
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
 		transcriptions = transcriptionHelper.getTranscriptions();
 		
+		/* Paint transcriptions */
+		for (Unit u: transcriptions) {
+			Transcription t = (Transcription) u;
+			transcriptionStyler.addUpdate(t.getCoords().x, t.getCoords().y);
+		}
+		
 		/* Label of transcriptions */
 		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
 		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -659,19 +665,13 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 
 	@Override
-	public void setFocus() {
-		
-	}
+	public void setFocus() {}
 	
 	@Override
-	public void doSave(IProgressMonitor monitor) {
-		
-	}
+	public void doSave(IProgressMonitor monitor) {}
 	
 	@Override
-	public void doSaveAs() {
-		
-	}
+	public void doSaveAs() {}
 	
 	@Override
 	public boolean isSaveAsAllowed() {
@@ -686,5 +686,4 @@ public class Editor extends EditorPart implements EventObserver {
 		//relationHelper.refresh();
 		referenceHelper.refresh();
 	}
-
 }
