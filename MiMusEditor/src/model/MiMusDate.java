@@ -181,25 +181,25 @@ public class MiMusDate {
 		
 		/* First, write date1 */
 		if (uDay1) {
-			str += "(??)";
+			str += "-";
 		} else if (hDay1) {
-			str += "(" + day1 + "?)";
+			str += day1 + "?";
 		} else {
 			str += day1;
 		}
 		str += " / ";
 		if (uMonth1) {
-			str += "(??)";
+			str += "-";
 		} else if (hMonth1) {
-			str += "(" + month1 + "?)";
+			str += month1 + "?";
 		} else {
 			str += month1;
 		}
 		str += " / ";
 		if (uYear1) {
-			str += "(??)";
+			str += "-";
 		} else if (hYear1) {
-			str += "(" + year1 + "?)";
+			str += year1 + "?";
 		} else {
 			str += year1;
 		}
@@ -210,23 +210,23 @@ public class MiMusDate {
 			if (uDay2) {
 				str += "(??)";
 			} else if (hDay2) {
-				str += "(" + day2 + "?)";
+				str += day2 + "?";
 			} else {
 				str += day2;
 			}
 			str += " / ";
 			if (uMonth2) {
-				str += "(??)";
+				str += "-";
 			} else if (hMonth2) {
-				str += "(" + month2 + "?)";
+				str += month2 + "?";
 			} else {
 				str += month2;
 			}
 			str += " / ";
 			if (uYear2) {
-				str += "(??)";
+				str += "-";
 			} else if (hYear2) {
-				str += "(" + year2 + "?)";
+				str += year2 + "?";
 			} else {
 				str += year2;
 			}
