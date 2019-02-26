@@ -67,17 +67,17 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 * Initializes a Bibliography Entry with no values filled.
 	 */
 	public MiMusBibEntry(int id) {
-		/* Authors are set to null and their flags to false */
+		/* Authors are set to "" and their flags to false */
 		authors = new String[NUM_AUTHORS];
 		activeAuthors = new boolean[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
-			authors[i] = null;
+			authors[i] = "";
 			activeAuthors[i] = false;
 		}
 		secondaryAuthors = new String[NUM_SECONDARY];
 		activeSecondaryAuthors = new boolean[NUM_SECONDARY];
 		for (int i=0; i<NUM_SECONDARY; i++) {
-			secondaryAuthors[i] = null;
+			secondaryAuthors[i] = "";
 			activeSecondaryAuthors[i] = false;
 		}
 		
@@ -105,16 +105,16 @@ public class MiMusBibEntry extends Unit implements Persistable {
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
 			String shortReference, int id, List<Integer> users) {
-		/* Infers activeAuthors values from nulls in <authors> */
+		/* Infers activeAuthors values from "" in <authors> */
 		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
 		for (int i=0; i<NUM_AUTHORS; i++) {
-			activeAuthors[i] = (authors[i] != null);
+			activeAuthors[i] = (authors[i] != "");
 		}
 		activeSecondaryAuthors = new boolean[NUM_SECONDARY];
 		this.secondaryAuthors = secondaryAuthors;
 		for (int i=0; i<NUM_SECONDARY; i++) {
-			activeSecondaryAuthors[i] = (secondaryAuthors[i] != null);
+			activeSecondaryAuthors[i] = (secondaryAuthors[i] != "");
 		}
 		
 		this.year = year;
@@ -177,8 +177,8 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 * between year and distinction.
 	 */
 	public String generateShortReference() {
-		String str = getAuthorShort(0) + " - ";
-		str += (getAuthor(1) == null) ? "" : getAuthorShort(1);
+		String str = getAuthorShort(0);
+		str += (getAuthor(1) == "") ? "" : " - " + getAuthorShort(1);
 		str += " " + getYear() + getDistinction();
 		return str;
 	}
@@ -190,14 +190,36 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public String getFullReference() {
 		String str = "";
 		for (int i=0; i<NUM_AUTHORS; i++) {
-			str += activeAuthors[i] ? getAuthor(i) + "; " : "";
+			str += getAuthor(i)!="" ? getAuthor(i) + "; " : "";
 		}
-		str += year + ". \"" + getTitle() + "\", " + getMainTitle() + ", " +
-				getVolume() + ", ";
+		if (str.length()>=2)
+			str = str.substring(0, str.length()-2) + ", ";
+		if (getYear() != "")
+			str += year + ". ";
+		if (getTitle() != "")
+			str += "\"" + getTitle() + "\", ";
+		if (getMainTitle() != "")
+			str += getMainTitle() + ", ";
+		if (getVolume() != "")
+			str += getVolume() + ", ";
 		for (int i=0; i<NUM_SECONDARY; i++) {
-			str += activeSecondaryAuthors[i] ? getSecondaryAuthor(i) + ", " : "";
+			str += getSecondaryAuthor(i)!="" ? getSecondaryAuthor(i) + ", " : "";
 		}
-		str += getPlace() + ": " + getEditorial() + " (" + getSeries() + ")";
+		if (getPlace() != "")
+			str += getPlace() + ", ";
+		if (getPlace() != "" && getEditorial() != "")
+			str = str.substring(0, str.length()-2) + ": ";
+		if (getEditorial() != "")
+			str += getEditorial() + ", ";
+		if (getSeries() != "") {
+			if (str.endsWith(", "))
+				str = str.substring(0, str.length()-2);
+			str += " (" + getSeries() + "), ";
+		}
+		//if (getPages() != "")
+		//	str += "p. " + getPages();
+		if (str.endsWith(", "))
+			str = str.substring(0, str.length()-2) + ".";
 		return str;
 	}
 	
@@ -205,7 +227,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	
 	/**
 	 * Returns the full name of the main author of index <i>,
-	 * or null if such author is not specified.
+	 * or "" if such author is not specified.
 	 */
 	public String getAuthor(int i) {
 		return authors[i];
@@ -216,26 +238,24 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 */
 	public String getAuthorShort(int i) {
 		String author = getAuthor(i);
-		if (author == null)
-			return "";
 		return author.replaceAll(",", "").split(" ")[0];
 	}
 	
 	/**
 	 * Sets the name of one of the main authors, of index <i>.
 	 * 
-	 * The field <author> may take value null to indicate that
+	 * The field <author> may take value "" to indicate that
 	 * the author previously stored in such position is removed,
 	 * and activeAuthors internal variable is updated accordingly.
 	 */
 	public void setAuthor(int i, String author) {
 		authors[i] = author;
-		activeAuthors[i] = (author != null);
+		activeAuthors[i] = (author != "");
 	}
 	
 	/**
 	 * Returns the full name of the secondary author of index <i>,
-	 * or null if such author is not specified.
+	 * or "" if such author is not specified.
 	 */
 	public String getSecondaryAuthor(int i) {
 		return secondaryAuthors[i];
@@ -244,13 +264,13 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	/**
 	 *  Sets the name of one of the secondary authors, of index <i>.
 	 *  
-	 *  The field <secondaryAuthor> may take value null to indicate that
+	 *  The field <secondaryAuthor> may take value "" to indicate that
 	 *  the author previously stored in such position is removed,
 	 *  and activeSecondaryAuthors internal variable is updated accordingly.
 	 */
 	public void setSecondaryAuthor(int i, String secondaryAuthor) {
 		secondaryAuthors[i] = secondaryAuthor;
-		activeAuthors[i] = (secondaryAuthor != null);
+		activeAuthors[i] = (secondaryAuthor != "");
 	}
 	
 	/* Standard Getters and Setters */
@@ -341,10 +361,10 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			if (i==0) {
 				unknownAut[i] = "unknown reference";
-				second[i] = null;
+				second[i] = "";
 			} else {
-				unknownAut[i] = null;
-				second[i] = null;
+				unknownAut[i] = "";
+				second[i] = "";
 			}
 		}
 		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
@@ -413,15 +433,15 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		Element s1 = doc.createElement("autor_secundari1");
 		s1.appendChild(doc.createTextNode(getSecondaryAuthor(0)));
 		Element s2 = doc.createElement("autor_secundari2");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(1)));
+		s2.appendChild(doc.createTextNode(getSecondaryAuthor(1)));
 		Element s3 = doc.createElement("autor_secundari3");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(2)));
+		s3.appendChild(doc.createTextNode(getSecondaryAuthor(2)));
 		Element s4 = doc.createElement("autor_secundari4");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(3)));
+		s4.appendChild(doc.createTextNode(getSecondaryAuthor(3)));
 		Element s5 = doc.createElement("autor_secundari5");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(4)));
+		s5.appendChild(doc.createTextNode(getSecondaryAuthor(4)));
 		Element s6 = doc.createElement("autor_secundari6");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(5)));
+		s6.appendChild(doc.createTextNode(getSecondaryAuthor(5)));
 		Element year = doc.createElement("any");
 		year.appendChild(doc.createTextNode(getYear()));
 		Element distinction = doc.createElement("distincio");
