@@ -561,22 +561,33 @@ public class Editor extends EditorPart implements EventObserver {
 		if (dialogResult == Window.OK) {
 			Entity added = (Entity) dialog.getEntity();
 			if (added != null) {
-				EntityInstance inst = new EntityInstance(
-						added,
-						resources.getIncrementId());
-				entities.add(inst);
-				MiMusXML.openDoc(docIdStr).append(inst).write();
-				System.out.println("Adding selected Entity - " 
-						+ entities.size());
-				LabelPrinter.printInfo(label, 
-						"Entity added successfully.");
+				if (EntityInstance.containsEntity(entities, added)) {
+					/* Trying to add entity already added */
+					System.out.println("No Entity added - "
+							+ entities.size());
+					LabelPrinter.printError(label, 
+							"Cannot add the same entity twice.");
+				} else {
+					/* OK case */
+					EntityInstance inst = new EntityInstance(
+							added,
+							resources.getIncrementId());
+					entities.add(inst);
+					MiMusXML.openDoc(docIdStr).append(inst).write();
+					System.out.println("Adding selected Entity - " 
+							+ entities.size());
+					LabelPrinter.printInfo(label, 
+							"Entity added successfully.");
+				}
 			} else {
+				/* No entities declared, nothing could be selected */
 				System.out.println("No Entity added - " 
 						+ entities.size());
 				LabelPrinter.printInfo(label, 
 						"Nothing was added. Must declare any first.");
 			}
 		} else {
+			/* No entity was selected from the list */
 			System.out.println("No Entity added - " 
 					+ entities.size());
 			LabelPrinter.printInfo(label, 
