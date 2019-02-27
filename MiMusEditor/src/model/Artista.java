@@ -12,95 +12,103 @@ import util.xml.MiMusXML;
 
 public class Artista extends Entity {
 	
-	private String nombreCompleto;
-	private String tratamiento;
-	private String nombre;
-	private String apellido;
-	private String sobrenombre;
-	private int genero;
-	private int religion;
+	private String nomComplet;
+	private String tractament;
+	private String nom;
+	private String cognom;
+	private String sobrenom;
+	private String distintiu;
+	private int genere;
+	private int religio;
 	private String origen;
 	private Ofici ofici;
 	
 	public Artista() {}
 
 	public Artista(int id) {
-		this(id, "", "", "", "", "", 0, 0, "", null);
+		this(id, "", "", "", "", "", "", 0, 0, "", null);
 	}
 	
-	public Artista(int id, String nombreCompleto, String tratamiento,
-			String nombre, String apellido, String sobrenombre,
-			int genero, int religion, String origen, Ofici ofici) {
+	public Artista(int id, String nomComplet, String tractament,
+			String nom, String cognom, String sobrenom, String distintiu,
+			int genere, int religio, String origen, Ofici ofici) {
 		this.setId(id);
-		this.nombreCompleto = nombreCompleto;
-		this.tratamiento = tratamiento;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.sobrenombre = sobrenombre;
-		this.genero = genero;
-		this.religion = religion;
+		this.nomComplet = nomComplet;
+		this.tractament = tractament;
+		this.nom = nom;
+		this.cognom = cognom;
+		this.sobrenom = sobrenom;
+		this.setDistintiu(distintiu);
+		this.genere = genere;
+		this.religio = religio;
 		this.origen = origen;
 		this.ofici = ofici;
 	}
 	
 	/* Getters and setters */
-	public String getTratamiento() {
-		return tratamiento;
+	public String getTractament() {
+		return tractament;
 	}
-	public void setTratamiento(String tratamiento) {
-		this.tratamiento = tratamiento;
+	public void setTractament(String tractament) {
+		this.tractament = tractament;
 	}
-	public String getNombreCompleto() {
-		return nombreCompleto;
+	public String getNomComplet() {
+		return nomComplet;
 	}
-	public void setNombreCompleto(String name) {
-		this.nombreCompleto = name;
+	public void setNomComplet(String nom) {
+		this.nomComplet = nom;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getNom() {
+		return nom;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
-	public String getApellido() {
-		return apellido;
+	public String getCognom() {
+		return cognom;
 	}
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setCognom(String cognom) {
+		this.cognom = cognom;
 	}
-	public String getSobrenombre() {
-		return sobrenombre;
+	public String getSobrenom() {
+		return sobrenom;
 	}
-	public void setSobrenombre(String sobrenombre) {
-		this.sobrenombre = sobrenombre;
+	public void setSobrenom(String sobrenom) {
+		this.sobrenom = sobrenom;
 	}
-	public int getGenero() {
-		return genero;
+	public String getDistintiu() {
+		return distintiu;
 	}
-	public void setGenero(int genero) {
-		this.genero = genero;
+	public void setDistintiu(String distintiu) {
+		this.distintiu = distintiu;
 	}
-	public String getGeneroStr() {
-		if (genero==0)
+	public int getGenere() {
+		return genere;
+	}
+	public void setGenere(int genere) {
+		this.genere = genere;
+	}
+	public String getGenereStr() {
+		if (genere==0)
 			return "No marcat";
-		if (genero==1)
+		if (genere==1)
 			return "Home";
-		if (genero==2)
+		if (genere==2)
 			return "Dona";
 		return "Desconegut";
 	}
-	public int getReligion() {
-		return religion;
+	public int getReligio() {
+		return religio;
 	}
-	public void setReligion(int religion) {
-		this.religion = religion;
+	public void setReligio(int religio) {
+		this.religio = religio;
 	}
-	public String getReligionStr() {
-		if (religion==0)
+	public String getReligioStr() {
+		if (religio==0)
 			return "No marcat";
-		if (religion==1)
+		if (religio==1)
 			return "Jueu";
-		if (religion==2)
+		if (religio==2)
 			return "Musulmà";
 		return "Desconegut";
 	}
@@ -119,11 +127,11 @@ public class Artista extends Entity {
 
 	@Override
 	public String getLemma() {
-		return getNombreCompleto();
+		return getNomComplet();
 	}
 	
 	public String toString() {
-		return getNombreCompleto();
+		return getNomComplet();
 	}
 
 	/* MiMusWritable implementation */
@@ -139,6 +147,8 @@ public class Artista extends Entity {
 		String apellido = elem.getElementsByTagName("apellido")
 				.item(0).getTextContent();
 		String sobrenombre = elem.getElementsByTagName("sobrenombre")
+				.item(0).getTextContent();
+		String distintiu = elem.getElementsByTagName("distintiu")
 				.item(0).getTextContent();
 		int genero = Integer.parseInt(
 				elem.getElementsByTagName("genero")
@@ -162,31 +172,33 @@ public class Artista extends Entity {
 		/* If Ofici unspecified, its field in Artista will be null */
 		if (oficiId == -1)
 			return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
-					sobrenombre, genero, religion, origen, null); 
+					sobrenombre, distintiu, genero, religion, origen, null); 
 		
 		Ofici ofici = (Ofici) Unit.findUnit(
 				SharedResources.getInstance().getOficis(), oficiId);
 		return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
-				sobrenombre, genero, religion, origen, ofici);
+				sobrenombre, distintiu, genero, religion, origen, ofici);
 	}
 	
 	@Override
 	public Element toXMLElement(Document doc) {
 		Element tagEntry = doc.createElement(getWritableName());
 		Element tagNombreCompleto = doc.createElement("nombre_completo");
-		tagNombreCompleto.appendChild(doc.createTextNode(getNombreCompleto()));
+		tagNombreCompleto.appendChild(doc.createTextNode(getNomComplet()));
 		Element tagTratamiento = doc.createElement("tratamiento");
-		tagTratamiento.appendChild(doc.createTextNode(getTratamiento()));
+		tagTratamiento.appendChild(doc.createTextNode(getTractament()));
 		Element tagNombre = doc.createElement("nombre");
-		tagNombre.appendChild(doc.createTextNode(getNombre()));
+		tagNombre.appendChild(doc.createTextNode(getNom()));
 		Element tagApellido = doc.createElement("apellido");
-		tagApellido.appendChild(doc.createTextNode(getApellido()));
+		tagApellido.appendChild(doc.createTextNode(getCognom()));
 		Element tagSobrenombre = doc.createElement("sobrenombre");
-		tagSobrenombre.appendChild(doc.createTextNode(getSobrenombre()));
+		tagSobrenombre.appendChild(doc.createTextNode(getSobrenom()));
+		Element tagDistintiu = doc.createElement("distintiu");
+		tagDistintiu.appendChild(doc.createTextNode(getDistintiu()));
 		Element tagGenero = doc.createElement("genero");
-		tagGenero.appendChild(doc.createTextNode(String.valueOf(getGenero())));
+		tagGenero.appendChild(doc.createTextNode(String.valueOf(getGenere())));
 		Element tagReligion = doc.createElement("religion");
-		tagReligion.appendChild(doc.createTextNode(String.valueOf(getReligion())));
+		tagReligion.appendChild(doc.createTextNode(String.valueOf(getReligio())));
 		Element tagOrigen = doc.createElement("origen");
 		tagOrigen.appendChild(doc.createTextNode(getOrigen()));
 		Element tagOficiId = doc.createElement("ofici_id");
@@ -200,6 +212,7 @@ public class Artista extends Entity {
 		tagEntry.appendChild(tagNombre);
 		tagEntry.appendChild(tagApellido);
 		tagEntry.appendChild(tagSobrenombre);
+		tagEntry.appendChild(tagDistintiu);
 		tagEntry.appendChild(tagGenero);
 		tagEntry.appendChild(tagReligion);
 		tagEntry.appendChild(tagOrigen);

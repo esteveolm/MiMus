@@ -28,7 +28,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = promotors;
 		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",
-				"Gènere", "Casa"};
+				"Distintiu", "Gènere", "Casa"};
 		this.columnNames = aux;
 	}
 
@@ -39,9 +39,10 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[4] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
-				SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[5] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
+				SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[6] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		return editors;
 	}
@@ -72,9 +73,11 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getCognom();
 			case 3:		// Sobrenom
 				return prom.getSobrenom();
-			case 4:		// Genere
+			case 4:		// Distintiu
+				return prom.getDistintiu();
+			case 5:		// Genere
 				return prom.getGenere();
-			case 5:		// Casa
+			case 6:		// Casa
 				return prom.getCasa();
 			default:
 				return "";
@@ -92,11 +95,14 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			case 1:		// Nom
 				prom.setNom((String) value);
 				break;
-			case 3:		// Cognom
+			case 2:		// Cognom
 				prom.setCognom((String) value);
 				break;
-			case 4:		// Sobrenom
+			case 3:		// Sobrenom
 				prom.setSobrenom((String) value);
+				break;
+			case 4:		// Distintiu
+				prom.setDistintiu((String) value);
 				break;
 			case 5:		// Genere
 				prom.setGenere((int) value);
@@ -133,9 +139,11 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getCognom();
 			case 3:		// Sobrenom
 				return prom.getSobrenom();
-			case 4:		// Genere
+			case 4:		// Distintiu
+				return prom.getDistintiu();
+			case 5:		// Genere
 				return GENDERS[prom.getGenere()];
-			case 5:		// Casa
+			case 6:		// Casa
 				return (prom.getCasa()!=null ? prom.getCasa().getLemma() : "");
 			default:	// Shouldn't reach here
 				return "";

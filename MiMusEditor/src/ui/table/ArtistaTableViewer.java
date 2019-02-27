@@ -25,7 +25,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
-				"Gènere", "Religió", "Origen", "Ofici"};
+				"Distintiu", "Gènere", "Religió", "Origen", "Ofici"};
 		this.columnNames = aux;
 	}
 	
@@ -40,6 +40,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		editors[6] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[7] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[8] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[9] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 	
@@ -61,22 +62,24 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
 			case 0:	// Nom Complet	(Text)
-				return art.getNombreCompleto();
+				return art.getNomComplet();
 			case 1:	// Tractament	(Text)
-				return art.getNombreCompleto();
+				return art.getTractament();
 			case 2:	// Nom	(Text)
-				return art.getNombreCompleto();
+				return art.getNom();
 			case 3:	// Cognom	(Text)
-				return art.getNombreCompleto();
+				return art.getCognom();
 			case 4:	// Sobrenom	(Text)
-				return art.getNombreCompleto();
-			case 5:	// Gènere (ComboBox)
-				return art.getGenero();
-			case 6: // Religió (ComboBox)
-				return art.getReligion();
-			case 7:	// Origen (Text)
+				return art.getSobrenom();
+			case 5:	// Distintiu (Text)
+				return art.getDistintiu();
+			case 6:	// Gènere (ComboBox)
+				return art.getGenere();
+			case 7: // Religió (ComboBox)
+				return art.getReligio();
+			case 8:	// Origen (Text)
 				return art.getOrigen();
-			case 8:	// Ofici (ComboBox)
+			case 9:	// Ofici (ComboBox)
 				return art.getOfici().getLemma();
 			default:	// Shouldn't reach here
 				return "";
@@ -89,30 +92,33 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			int colIdx = getColumnNames().indexOf(property);
 			switch(colIdx) {
 			case 0:	// Nom Complet (Text)
-				art.setNombreCompleto((String) value);
+				art.setNomComplet((String) value);
 				break;
 			case 1:	// Tractament (Text)
-				art.setTratamiento((String) value);
+				art.setTractament((String) value);
 				break;
 			case 2:	// Nom (Text)
-				art.setNombre((String) value);
+				art.setNom((String) value);
 				break;
 			case 3:	// Cognom (Text)
-				art.setApellido((String) value);
+				art.setCognom((String) value);
 				break;
 			case 4:	// Sobrenom (Text)
-				art.setSobrenombre((String) value);
+				art.setSobrenom((String) value);
 				break;
-			case 5:	// Gènere (ComboBox)
-				art.setGenero((int) value);
+			case 5:	// Distintiu (Text)
+				art.setDistintiu((String) value);
 				break;
-			case 6:	// Religió (ComboBox)
-				art.setGenero((int) value);
+			case 6:	// Gènere (ComboBox)
+				art.setGenere((int) value);
 				break;
-			case 7:	// Origen (ComboBox)
+			case 7:	// Religió (ComboBox)
+				art.setReligio((int) value);
+				break;
+			case 8:	// Origen (ComboBox)
 				art.setOrigen((String) value);
 				break;
-			case 8:	// Ofici (ComboBox)
+			case 9:	// Ofici (ComboBox)
 				Ofici ofici = (Ofici) Unit.findUnit(
 						SharedResources.getInstance().getOficis(),
 						(int) value);
@@ -137,22 +143,24 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			Artista art = (Artista) element;
 			switch(columnIndex) {
 			case 0:	// Nom Complet (Text)
-				return art.getNombreCompleto();
+				return art.getNomComplet();
 			case 1:	// Tractament (Text)
-				return art.getTratamiento();
+				return art.getTractament();
 			case 2:	// Nom (Text)
-				return art.getNombre();
+				return art.getNom();
 			case 3:	// Cognom (Text)
-				return art.getApellido();
+				return art.getCognom();
 			case 4:	// Sobrenom (Text)
-				return art.getSobrenombre();
-			case 5:	// Gènere (ComboBox)
-				return art.getGeneroStr();
-			case 6:	// Religió (ComboBox)
-				return art.getReligionStr();
-			case 7:	// Origen (Text)
+				return art.getSobrenom();
+			case 5:	// Distintiu (Text)
+				return art.getDistintiu();
+			case 6:	// Gènere (ComboBox)
+				return art.getGenereStr();
+			case 7:	// Religió (ComboBox)
+				return art.getReligioStr();
+			case 8:	// Origen (Text)
 				return art.getOrigen();
-			case 8:	// Ofici
+			case 9:	// Ofici
 				Ofici ofici = art.getOfici();
 				if (ofici != null)
 					return ofici.getLemma();

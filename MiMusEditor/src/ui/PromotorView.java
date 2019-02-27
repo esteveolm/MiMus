@@ -78,6 +78,12 @@ public class PromotorView extends DeclarativeView {
 		Text textSobrenom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSobrenom.setLayoutData(grid);
 		
+		/* Distintiu (text) */
+		Label labelDistintiu = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelDistintiu.setText("Distintiu:");
+		Text textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDistintiu.setLayoutData(grid);
+		
 		/* Genere (combo) */
 		Label labelGenere = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenere.setText("Genere:");
@@ -105,6 +111,7 @@ public class PromotorView extends DeclarativeView {
 				textNom.setText("");
 				textCognom.setText("");
 				textSobrenom.setText("");
+				textDistintiu.setText("");
 				comboGenere.deselectAll();
 				comboCasa.deselectAll();
 			}
@@ -149,6 +156,7 @@ public class PromotorView extends DeclarativeView {
 						textNom.getText(),
 						textCognom.getText(),
 						textSobrenom.getText(),
+						textDistintiu.getText(),
 						comboGenere.getSelectionIndex(),
 						casa);
 				promotors.add(prom);

@@ -84,6 +84,12 @@ public class ArtistaView extends DeclarativeView {
 		Text textSobrenombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSobrenombre.setLayoutData(grid);
 		
+		/* Distintiu: text field */
+		Label labelDistintiu = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelDistintiu.setText("Distintiu:");
+		Text textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDistintiu.setLayoutData(grid);
+		
 		/* Genero: option field */
 		Label labelGenero = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenero.setText("Gènere:");
@@ -124,6 +130,7 @@ public class ArtistaView extends DeclarativeView {
 				textNombre.setText("");
 				textApellido.setText("");
 				textSobrenombre.setText("");
+				textDistintiu.setText("");
 				comboGenero.deselectAll();
 				comboReligion.deselectAll();
 				textOrigen.setText("");
@@ -171,7 +178,8 @@ public class ArtistaView extends DeclarativeView {
 						textTratamiento.getText(), 
 						textNombre.getText(), 
 						textApellido.getText(), 
-						textSobrenombre.getText(), 
+						textSobrenombre.getText(),
+						textDistintiu.getText(),
 						comboGenero.getSelectionIndex(),
 						comboReligion.getSelectionIndex(),
 						textOrigen.getText(),
