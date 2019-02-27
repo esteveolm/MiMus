@@ -129,7 +129,10 @@ public class Promotor extends Entity {
 
 	@Override
 	public String getLemma() {
-		return getNomComplet();
+		String str = getNomComplet();
+		if (getDistintiu().length()>0)
+			str += " / " + getDistintiu();
+		return str;
 	}
 	
 	@Override

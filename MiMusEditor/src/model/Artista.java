@@ -127,7 +127,10 @@ public class Artista extends Entity {
 
 	@Override
 	public String getLemma() {
-		return getNomComplet();
+		String str = getNomComplet();
+		if (getDistintiu().length()>0)
+			str += " / " + getDistintiu();
+		return str;
 	}
 	
 	public String toString() {
