@@ -46,9 +46,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	private static final int NUM_SECONDARY = 6;
 	
 	private String[] authors;
-	private boolean[] activeAuthors;
 	private String[] secondaryAuthors;
-	private boolean[] activeSecondaryAuthors;
 	private String year;
 	private String distinction;
 	private String title;
@@ -57,6 +55,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	private String place;
 	private String editorial;
 	private String series;
+	private String pages;
 	private String shortReference;
 	private int id;
 	private List<Integer> users;
@@ -69,16 +68,12 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public MiMusBibEntry(int id) {
 		/* Authors are set to "" and their flags to false */
 		authors = new String[NUM_AUTHORS];
-		activeAuthors = new boolean[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			authors[i] = "";
-			activeAuthors[i] = false;
 		}
 		secondaryAuthors = new String[NUM_SECONDARY];
-		activeSecondaryAuthors = new boolean[NUM_SECONDARY];
 		for (int i=0; i<NUM_SECONDARY; i++) {
 			secondaryAuthors[i] = "";
-			activeSecondaryAuthors[i] = false;
 		}
 		
 		year = "";
@@ -89,6 +84,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		place = "";
 		editorial = "";
 		series = "";
+		pages = "";
 		shortReference = "";
 		this.setId(id);
 		users = new ArrayList<>();
@@ -104,19 +100,14 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			String shortReference, int id, List<Integer> users) {
+			String pages, String shortReference, int id, List<Integer> users) {
 		/* Infers activeAuthors values from "" in <authors> */
-		activeAuthors = new boolean[NUM_AUTHORS];
 		this.authors = authors;
-		for (int i=0; i<NUM_AUTHORS; i++) {
-			activeAuthors[i] = (authors[i] != "");
-		}
-		activeSecondaryAuthors = new boolean[NUM_SECONDARY];
 		this.secondaryAuthors = secondaryAuthors;
-		for (int i=0; i<NUM_SECONDARY; i++) {
-			activeSecondaryAuthors[i] = (secondaryAuthors[i] != "");
+		System.out.println("Active authors:");
+		for (int i=0; i<authors.length; i++) {
+			System.out.println(String.valueOf("-" + authors[i] + "-" + authors[i].length()));
 		}
-		
 		this.year = year;
 		this.distinction = distinction;
 		this.title = title;
@@ -125,6 +116,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		this.place = place;
 		this.editorial = editorial;
 		this.series = series;
+		this.pages = pages;
 		this.shortReference = shortReference;
 		this.setId(id);
 		this.users = users;
@@ -133,19 +125,19 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			String shortReference, int id) {
+			String pages, String shortReference, int id) {
 		this(authors, secondaryAuthors, year, distinction, title, mainTitle,
-				volume, place, editorial, series, shortReference, id,
+				volume, place, editorial, series, pages, shortReference, id,
 				new ArrayList<>());
 	}
 	
 	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			int id, List<Integer> users) {
+			String pages, int id, List<Integer> users) {
 		this(authors, secondaryAuthors, year, distinction,
-				title, mainTitle, volume, place, editorial, series, "",
-				id, users);
+				title, mainTitle, volume, place, editorial, series, pages, 
+				"", id, users);
 		setShortReference(generateShortReference());
 	}
 	
@@ -170,7 +162,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 * 
 	 * <authorShort0> - <authorShort1> <year><distinction>
 	 * 
-	 * Where <authorShort1> only appears if it exists,
+	 * Where - <authorShort1> only appears if it exists,
 	 * and <distinction> only appears if specified.
 	 * 
 	 * Note that the specification says that no separation should appear
@@ -190,34 +182,34 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public String getFullReference() {
 		String str = "";
 		for (int i=0; i<NUM_AUTHORS; i++) {
-			str += getAuthor(i)!="" ? getAuthor(i) + "; " : "";
+			str += getAuthor(i).length()>0 ? getAuthor(i) + "; " : "";
 		}
 		if (str.length()>=2)
 			str = str.substring(0, str.length()-2) + ", ";
-		if (getYear() != "")
-			str += year + ". ";
-		if (getTitle() != "")
+		if (getYear().length()>0)
+			str += getYear() + getDistinction() + ". ";
+		if (getTitle().length()>0)
 			str += "\"" + getTitle() + "\", ";
-		if (getMainTitle() != "")
+		if (getMainTitle().length()>0)
 			str += getMainTitle() + ", ";
-		if (getVolume() != "")
+		if (getVolume().length()>0)
 			str += getVolume() + ", ";
 		for (int i=0; i<NUM_SECONDARY; i++) {
-			str += getSecondaryAuthor(i)!="" ? getSecondaryAuthor(i) + ", " : "";
+			str += getSecondaryAuthor(i).length()>0 ? getSecondaryAuthor(i) + ", " : "";
 		}
-		if (getPlace() != "")
+		if (getPlace().length()>0)
 			str += getPlace() + ", ";
-		if (getPlace() != "" && getEditorial() != "")
+		if (getPlace().length()>0 && getEditorial().length()>0)
 			str = str.substring(0, str.length()-2) + ": ";
-		if (getEditorial() != "")
+		if (getEditorial().length()>0)
 			str += getEditorial() + ", ";
-		if (getSeries() != "") {
+		if (getSeries().length()>0) {
 			if (str.endsWith(", "))
 				str = str.substring(0, str.length()-2);
 			str += " (" + getSeries() + "), ";
 		}
-		//if (getPages() != "")
-		//	str += "p. " + getPages();
+		if (getPages().length()>0)
+			str += "p. " + getPages() + ", ";
 		if (str.endsWith(", "))
 			str = str.substring(0, str.length()-2) + ".";
 		return str;
@@ -250,7 +242,6 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 */
 	public void setAuthor(int i, String author) {
 		authors[i] = author;
-		activeAuthors[i] = (author != "");
 	}
 	
 	/**
@@ -270,7 +261,6 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 */
 	public void setSecondaryAuthor(int i, String secondaryAuthor) {
 		secondaryAuthors[i] = secondaryAuthor;
-		activeAuthors[i] = (secondaryAuthor != "");
 	}
 	
 	/* Standard Getters and Setters */
@@ -329,6 +319,12 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	public void setSeries(String series) {
 		this.series = series;
 	}
+	public String getPages() {
+		return pages;
+	}
+	public void setPages(String pages) {
+		this.pages = pages;
+	}
 	public int getId() {
 		return id;
 	}
@@ -368,12 +364,14 @@ public class MiMusBibEntry extends Unit implements Persistable {
 			}
 		}
 		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
-				"", "", "", "", 0, new ArrayList<>());
+				"", "", "", "", "", 0, new ArrayList<>());
 	}
 	
 	public static String generateShortReference(String author0,
 			String author1, String year, String distinction) {
-		String str = author0 + " - " + author1;
+		String str = author0;
+		if (author1.length()>0)
+			str += " - " + author1;
 		str += " " + year + distinction;
 		return str;
 	}
@@ -405,6 +403,10 @@ public class MiMusBibEntry extends Unit implements Persistable {
 				.item(0).getTextContent();
 		String series = elem.getElementsByTagName("serie")
 				.item(0).getTextContent();
+		String pages = elem.getElementsByTagName("pagines")
+				.item(0).getTextContent();
+		String shortRef = elem.getElementsByTagName("referencia_abreujada")
+				.item(0).getTextContent();
 		int id = Integer.parseInt(elem.getElementsByTagName("id")
 				.item(0).getTextContent());
 		ArrayList<Integer> users = new ArrayList<>();
@@ -413,8 +415,8 @@ public class MiMusBibEntry extends Unit implements Persistable {
 			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
 		}
 		return new MiMusBibEntry(authors, secondaries, year, distinction, 
-				title, mainTitle, volume, place, editorial, series, id,
-				users);
+				title, mainTitle, volume, place, editorial, series, pages,
+				shortRef, id, users);
 	}
 	
 	/* Implementation of MiMusWritable */
@@ -458,6 +460,10 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		editorial.appendChild(doc.createTextNode(getEditorial()));
 		Element series = doc.createElement("serie");
 		series.appendChild(doc.createTextNode(getSeries()));
+		Element pages = doc.createElement("pagines");
+		pages.appendChild(doc.createTextNode(getPages()));
+		Element shortRef = doc.createElement("referencia_abreujada");
+		shortRef.appendChild(doc.createTextNode(getShortReference()));
 		Element id = doc.createElement("id");
 		id.appendChild(doc.createTextNode(String.valueOf(getId())));
 		
@@ -487,6 +493,8 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		elem.appendChild(place);
 		elem.appendChild(editorial);
 		elem.appendChild(series);
+		elem.appendChild(pages);
+		elem.appendChild(shortRef);
 		elem.appendChild(users);
 		return elem;
 	}

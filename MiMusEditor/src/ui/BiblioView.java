@@ -129,6 +129,11 @@ public class BiblioView extends ViewPart implements EventSubject {
 		Text textSeries = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSeries.setLayoutData(grid);
 		
+		Label labelPages = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelPages.setText("Pàgines:");
+		Text textPages = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textPages.setLayoutData(grid);
+		
 		Label labelShort = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelShort.setText("Referència abreujada:");
 		Text textShort = new Text(sectAdd.getParent(), TEXT_FLAGS);
@@ -156,23 +161,28 @@ public class BiblioView extends ViewPart implements EventSubject {
 			public void widgetSelected(SelectionEvent e) {		
 				String[] authors = new String[NUM_AUTHORS];
 				for (int i=0; i<NUM_AUTHORS; i++) {
-					authors[i] = textAuthors[i].getText();
+					System.out.println(i + " " + String.valueOf(textAuthors[i].getText()==""));
+					authors[i] = (textAuthors[i].getText().length()==0) ? "" : 
+						textAuthors[i].getText().trim();
 				}
 				String[] secondaries = new String[NUM_SECONDARY];
 				for (int i=0; i<NUM_SECONDARY; i++) {
-					secondaries[i] = textSecondaries[i].getText();
+					secondaries[i] = (textSecondaries[i].getText().length()==0) ? "" : 
+						textSecondaries[i].getText().trim();
 				}
+				
 				MiMusBibEntry newEntry = new MiMusBibEntry(
 						authors, secondaries, 
-						textYear.getText(), 
-						textDistinction.getText(), 
-						textTitle.getText(),
-						textMainTitle.getText(), 
-						textVolume.getText(), 
-						textPlace.getText(), 
-						textEditorial.getText(), 
-						textSeries.getText(),
-						textShort.getText(),
+						(textYear.getText().length()==0) ? "" : textYear.getText().trim(), 
+						(textDistinction.getText().length()==0) ? "" : textDistinction.getText().trim(), 
+						(textTitle.getText().length()==0) ? "" : textTitle.getText().trim(),
+						(textMainTitle.getText().length()==0) ? "" : textMainTitle.getText().trim(), 
+						(textVolume.getText().length()==0) ? "" : textVolume.getText().trim(), 
+						(textPlace.getText().length()==0) ? "" : textPlace.getText().trim(), 
+						(textEditorial.getText().length()==0) ? "" : textEditorial.getText().trim(), 
+						(textSeries.getText().length()==0) ? "" : textSeries.getText().trim(),
+						(textPages.getText().length()==0) ? "" : textPages.getText().trim(),
+						(textShort.getText().length()==0) ? "" : textShort.getText().trim(),
 						resources.getIncrementId());
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
@@ -200,6 +210,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 				textPlace.setText("");
 				textEditorial.setText("");
 				textSeries.setText("");
+				textPages.setText("");
 				textShort.setText("");
 			}
 		});
