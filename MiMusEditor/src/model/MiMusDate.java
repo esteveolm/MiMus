@@ -183,7 +183,7 @@ public class MiMusDate {
 		if (uDay1) {
 			str += "-";
 		} else if (hDay1) {
-			str += day1 + "?";
+			str += "[" + day1 + "]";
 		} else {
 			str += day1;
 		}
@@ -191,7 +191,7 @@ public class MiMusDate {
 		if (uMonth1) {
 			str += "-";
 		} else if (hMonth1) {
-			str += month1 + "?";
+			str += "[" + month1 + "]";
 		} else {
 			str += month1;
 		}
@@ -199,7 +199,7 @@ public class MiMusDate {
 		if (uYear1) {
 			str += "-";
 		} else if (hYear1) {
-			str += year1 + "?";
+			str += "[" + year1 + "]";
 		} else {
 			str += year1;
 		}
@@ -208,9 +208,9 @@ public class MiMusDate {
 		if (interval) {
 			str += " - ";
 			if (uDay2) {
-				str += "(??)";
+				str += "-";
 			} else if (hDay2) {
-				str += day2 + "?";
+				str += "[" + day2 + "]";
 			} else {
 				str += day2;
 			}
@@ -218,7 +218,7 @@ public class MiMusDate {
 			if (uMonth2) {
 				str += "-";
 			} else if (hMonth2) {
-				str += month2 + "?";
+				str += "[" + month2 + "]";
 			} else {
 				str += month2;
 			}
@@ -226,7 +226,7 @@ public class MiMusDate {
 			if (uYear2) {
 				str += "-";
 			} else if (hYear2) {
-				str += year2 + "?";
+				str += "[" + year2 + "]";
 			} else {
 				str += year2;
 			}
