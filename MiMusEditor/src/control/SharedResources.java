@@ -17,6 +17,7 @@ import model.Artista;
 import model.Casa;
 import model.EntityInstance;
 import model.Instrument;
+import model.Lloc;
 import model.MiMusBibEntry;
 import model.MiMusReference;
 import model.Ofici;
@@ -50,6 +51,12 @@ public final class SharedResources {
 	public static final String[] CLASSE = {"Sense especificar", "amb mànec", 
 			"sense mànec", "d'arc", "de tecla", "tipus flauta", "de llengüeta",
 			"de dipòsit d'aire", "tipus trompa"};
+	public static final String[] REGNE = {"Catalunya, principat de",
+			"València, regne de", "Aragó, regne de", "Mallorca, regne de",
+			"Sardenya, regne de"};
+	public static final String[] AREA = {"Corona d'Aragó", "Portugal", "Castella",
+			"Navarra", "França", "Anglaterra", "Escòcia", "Flandes", "Alemanya",
+			"Borgonya", "Itàlia", "Nàpols", "Sicília", "Xipre", "Altres"};
 	public static final String [] REF_TYPES = 
 		{"Edition", "Register", "Citation"};
 	
@@ -59,6 +66,7 @@ public final class SharedResources {
 	private List<Unit> cases;
 	private List<Unit> promotors;
 	private List<Unit> oficis;
+	private List<Unit> llocs;
 	private String repoPath;
 	private IProject corpusFolder;
 	private String corpusPath;
@@ -70,6 +78,7 @@ public final class SharedResources {
 	private String casaPath;
 	private String promotorPath;
 	private String oficiPath;
+	private String llocPath;
 	private String remote;
 	private Git git;
 	
@@ -125,12 +134,14 @@ public final class SharedResources {
 		IFile casaFile = entitiesFolder.getFile("cases.xml");
 		IFile promotorFile = entitiesFolder.getFile("promotors.xml");
 		IFile oficiFile = entitiesFolder.getFile("oficis.xml");
+		IFile llocFile = entitiesFolder.getFile("llocs.xml");
 		this.biblioPath = biblioFile.getLocation().toString();
 		this.setArtistaPath(artistaFile.getLocation().toString());
 		this.setInstrumentPath(instrumentFile.getLocation().toString());
 		this.setCasaPath(casaFile.getLocation().toString());
 		this.setPromotorPath(promotorFile.getLocation().toString());
 		this.setOficiPath(oficiFile.getLocation().toString());
+		this.setLlocPath(llocFile.getLocation().toString());
 		
 		IFolder txts = corpus.getFolder("txt");
 		this.setTxtPath(txts.getLocation().toString());
@@ -225,6 +236,14 @@ public final class SharedResources {
 	public void setOficis(List<Unit> oficis) {
 		this.oficis = oficis;
 	}
+	public List<Unit> getLlocs() {
+		if (llocs == null)
+			llocs = Lloc.read();
+		return llocs;
+	}
+	public void setLlocs(List<Unit> llocs) {
+		this.llocs = llocs;
+	}
 	public String getRepoPath() {
 		return repoPath;
 	}
@@ -291,6 +310,12 @@ public final class SharedResources {
 	public void setOficiPath(String oficiPath) {
 		this.oficiPath = oficiPath;
 	}
+	public String getLlocPath() {
+		return llocPath;
+	}
+	public void setLlocPath(String llocPath) {
+		this.llocPath = llocPath;
+	}
 	public String getRemote() {
 		return remote;
 	}
@@ -350,6 +375,9 @@ public final class SharedResources {
 			setUpdateId(i.getId());
 		}
 		for (Unit i : Ofici.read()) {
+			setUpdateId(i.getId());
+		}
+		for (Unit i : Lloc.read()) {
 			setUpdateId(i.getId());
 		}
 		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());

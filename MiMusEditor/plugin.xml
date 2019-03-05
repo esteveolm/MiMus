@@ -74,6 +74,14 @@
             name="Ofici View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.LlocView"
+            icon="icons/sample.png"
+            id="MiMusEditor.llocView"
+            name="Lloc View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

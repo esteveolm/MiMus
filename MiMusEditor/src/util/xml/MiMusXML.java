@@ -120,6 +120,11 @@ public class MiMusXML {
 				SharedResources.getInstance().getPromotorPath()));
 	}
 	
+	public static MiMusXML openLloc() {
+		return openCommon(new File(
+				SharedResources.getInstance().getLlocPath()));
+	}
+	
 	public static MiMusXML openOfici() {
 		return openCommon(new File(
 				SharedResources.getInstance().getOficiPath()));

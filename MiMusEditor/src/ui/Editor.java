@@ -186,6 +186,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Button addOfici = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addOfici.setLayoutData(gridData);
 		addOfici.setText("Add Ofici");
+		Button addLloc = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addLloc.setLayoutData(gridData);
+		addLloc.setText("Add Lloc");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -244,6 +247,10 @@ public class Editor extends EditorPart implements EventObserver {
 				SWT.PUSH | SWT.CENTER);
 		addTransOfici.setLayoutData(gridTrans);
 		addTransOfici.setText("Add Ofici");
+		Button addTransLloc = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransLloc.setLayoutData(gridTrans);
+		addTransLloc.setText("Add Lloc");
 		
 		Button removeTrans = new Button(sectTrans.getParent(), 
 				SWT.PUSH | SWT.CENTER);
@@ -347,6 +354,19 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Ofici";
+					}
+				};
+				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
+			}
+		});
+		addLloc.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new InstanceDialog(
+						resources.getLlocs(), parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "Lloc";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
@@ -466,6 +486,22 @@ public class Editor extends EditorPart implements EventObserver {
 				};
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
+						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
+			}
+		});
+		addTransLloc.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dialog = new TranscriptionDialog(
+						resources.getLlocs(), parent.getShell(), "") {
+					@Override
+					public String getDialogName() {
+						return "Lloc";
+					}
+				};
+				runTranscriptionDialog((TranscriptionDialog) dialog,
+						transcriptions, entityInstances,
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
 			}

@@ -118,7 +118,8 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 		List<Unit> cases = SharedResources.getInstance().getCases();
 		List<Unit> proms = SharedResources.getInstance().getPromotors();
 		List<Unit> oficis = SharedResources.getInstance().getOficis();
-		List<Unit> all = Stream.of(arts, insts, cases, proms, oficis)
+		List<Unit> llocs = SharedResources.getInstance().getLlocs();
+		List<Unit> all = Stream.of(arts, insts, cases, proms, oficis, llocs)
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
 		ArrayList<Unit> entries = new ArrayList<>();

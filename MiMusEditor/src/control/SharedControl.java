@@ -8,6 +8,7 @@ import ui.BiblioView;
 import ui.CasaView;
 import ui.Editor;
 import ui.InstrumentView;
+import ui.LlocView;
 import ui.OficiView;
 import ui.PromotorView;
 
@@ -39,6 +40,7 @@ public final class SharedControl {
 	private CasaView casaView;
 	private PromotorView promotorView;
 	private OficiView oficiView;
+	private LlocView llocView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -50,6 +52,7 @@ public final class SharedControl {
 		this.instrumentView = null;
 		this.casaView = null;
 		this.setPromotorView(null);
+		this.llocView = null;
 		this.editors = new ArrayList<>();
 	}
 	
@@ -200,6 +203,22 @@ public final class SharedControl {
 		this.oficiView = null;
 	}
 
+	public void setLlocView(LlocView llocView) {
+		this.llocView = llocView;
+		
+		/* Subscribe all Editors to LlocView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.llocView.attach(e);
+			}
+		}
+		System.out.println("Prepared LlocView for subscribers.");
+	}
+	
+	public void unsetLlocView() {
+		this.llocView = null;
+	}
+	
 	public List<Editor> getEditors() {
 		return editors;
 	}
@@ -233,6 +252,10 @@ public final class SharedControl {
 			promotorView.attach(editor);
 			System.out.println("Subscribed editor to PromotorView.");
 		}
+		if (llocView != null) {
+			llocView.attach(editor);
+			System.out.println("Subscribed editor to LlocView");
+		}
 	}
 	
 	/**
@@ -257,6 +280,9 @@ public final class SharedControl {
 		}
 		if (promotorView != null) {
 			promotorView.detach(editor);
+		}
+		if (llocView != null) {
+			llocView.detach(editor);
 		}
 	}
 }
