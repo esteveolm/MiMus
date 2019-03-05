@@ -45,10 +45,10 @@ import model.Unit;
  */
 public final class SharedResources {
 	
-	public static final String[] FAMILY = {"Cordòfon", "Aeròfon", 
-			"Idiòfon/Membranòfon", "Altres"};
-	public static final String[] CLASSE = {"amb mànec", "sense mànec",
-			"d'arc", "de tecla", "tipus flauta", "de llengüeta",
+	public static final String[] FAMILY = {"Sense especificar","Cordòfon", 
+			"Aeròfon", "Idiòfon/Membranòfon", "Altres"};
+	public static final String[] CLASSE = {"Sense especificar", "amb mànec", 
+			"sense mànec", "d'arc", "de tecla", "tipus flauta", "de llengüeta",
 			"de dipòsit d'aire", "tipus trompa"};
 	public static final String [] REF_TYPES = 
 		{"Edition", "Register", "Citation"};
