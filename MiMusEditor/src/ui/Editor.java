@@ -266,8 +266,9 @@ public class Editor extends EditorPart implements EventObserver {
 		String rawRefs = "Editions: " + docEntry.getEditions() +
 				"\nRegisters: " + docEntry.getRegisters() +
 				"\nCitations: " + docEntry.getCitations();
-		Label rawRefsLabel = toolkit.createLabel(sectRef.getParent(), rawRefs);
-		rawRefsLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Text rawRefsText = toolkit.createText(sectRef.getParent(), rawRefs, 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Table of references */
 		List<Unit> bibEntries = new ArrayList<>(resources.getBibEntries());
