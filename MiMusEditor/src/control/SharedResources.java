@@ -51,12 +51,13 @@ public final class SharedResources {
 	public static final String[] CLASSE = {"Sense especificar", "amb mànec", 
 			"sense mànec", "d'arc", "de tecla", "tipus flauta", "de llengüeta",
 			"de dipòsit d'aire", "tipus trompa"};
-	public static final String[] REGNE = {"Catalunya, principat de",
-			"València, regne de", "Aragó, regne de", "Mallorca, regne de",
-			"Sardenya, regne de"};
-	public static final String[] AREA = {"Corona d'Aragó", "Portugal", "Castella",
-			"Navarra", "França", "Anglaterra", "Escòcia", "Flandes", "Alemanya",
-			"Borgonya", "Itàlia", "Nàpols", "Sicília", "Xipre", "Altres"};
+	public static final String[] REGNE = {"Sense especificar", 
+			"Catalunya, principat de", "València, regne de", "Aragó, regne de", 
+			"Mallorca, regne de", "Sardenya, regne de"};
+	public static final String[] AREA = {"Sense especificar", "Corona d'Aragó", 
+			"Portugal", "Castella", "Navarra", "França", "Anglaterra", "Escòcia", 
+			"Flandes", "Alemanya", "Borgonya", "Itàlia", "Nàpols", "Sicília", 
+			"Xipre", "Altres"};
 	public static final String [] REF_TYPES = 
 		{"Edition", "Register", "Citation"};
 	
