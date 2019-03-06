@@ -229,8 +229,10 @@ public class MiMusEntry {
 		if (getPlace2() != null) {
 			str += "Lloc: de " + getPlace1() + 
 					" a " + getPlace2() + "\n";
-		} else {
+		} else if (getPlace1() != null) {
 			str += "Lloc: " + getPlace1() + "\n";
+		} else {
+			str += "Lloc: desconegut\n";
 		}
 		str += "Signatura A: " + getLibrary() + "\n";
 		if (getLibrary2().toString().length()>0) {
