@@ -149,9 +149,11 @@ public class MiMusXML {
 			Element root = newDoc.createElement("document");
 			newDoc.appendChild(root);
 			Element entities = newDoc.createElement("entities");
+			Element relations = newDoc.createElement("relations");
 			Element transcriptions = newDoc.createElement("transcriptions");
 			Element references = newDoc.createElement("references");
 			root.appendChild(entities);
+			root.appendChild(relations);
 			root.appendChild(transcriptions);
 			root.appendChild(references);
 			doc = newDoc;

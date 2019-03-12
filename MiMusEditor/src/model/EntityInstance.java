@@ -17,7 +17,6 @@ import util.xml.Persistable;
 
 public class EntityInstance extends ConcreteUnit implements Persistable {
 	
-	private int id;
 	private Entity itsEntity;
 	
 	public EntityInstance() {}
@@ -32,15 +31,9 @@ public class EntityInstance extends ConcreteUnit implements Persistable {
 	
 	public EntityInstance(Entity itsEntity, int id) {
 		this.itsEntity = itsEntity;
-		this.id = id;
+		this.setId(id);
 	}
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public Entity getItsEntity() {
 		return itsEntity;
 	}

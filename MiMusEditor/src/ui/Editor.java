@@ -38,10 +38,12 @@ import model.MiMusBibEntry;
 import model.MiMusEntry;
 import model.MiMusReference;
 import model.MiMusText;
+import model.Relation;
 import model.Transcription;
 import model.Unit;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
+import ui.table.RelationTableViewer;
 import ui.table.TranscriptionTableViewer;
 import util.LabelPrinter;
 import util.MiMusEntryReader;
@@ -62,10 +64,13 @@ public class Editor extends EditorPart implements EventObserver {
 	private StyledText transcriptionText;
 	private String docID;
 	private EntityTableViewer entityHelper;
+	private RelationTableViewer relationHelper;
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
 	private InstanceDialog dialog;
+	private RelationDialog relDialog;
 	private List<Unit> entityInstances;
+	private List<Unit> relations;
 	private List<Unit> transcriptions;
 	private List<Unit> references;
 	
@@ -194,6 +199,32 @@ public class Editor extends EditorPart implements EventObserver {
 		removeEnt.setLayoutData(gridData);
 		removeEnt.setText("Delete");
 
+		/* List of relations */
+		Section sectRel = toolkit.createSection(form.getBody(), PROP_TITLE);
+		sectRel.setText("Relations between Entities");
+		
+		/* Table of relations */
+		relationHelper = new RelationTableViewer(sectRel.getParent(), 
+				Relation.read(docIdStr),
+				styler);
+		TableViewer relationTV = relationHelper.createTableViewer();
+		relations = relationHelper.getRelations();
+		
+		/* Label of Relations */
+		Label relationLabel = toolkit.createLabel(form.getBody(), "");
+		relationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove relations */
+		Button addArtToOfi = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addArtToOfi.setLayoutData(gridData);
+		addArtToOfi.setText("Add Artista-Ofici Relation");
+		Button addPromToCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addPromToCasa.setLayoutData(gridData);
+		addPromToCasa.setText("Add Promotor-Casa Relation");
+		
+		Button removeRel = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		removeRel.setLayoutData(gridData);
+		removeRel.setText("Delete");
 		
 		/* TRANSCRIPTIONS PART */
 		/* Transcription section */
@@ -406,6 +437,50 @@ public class Editor extends EditorPart implements EventObserver {
 							+ entityInstances.size());
 					LabelPrinter.printInfo(regestLabel, 
 							"Entity deleted successfully.");
+				}
+			}
+		});
+		
+		/* Relation buttons */
+		relDialog = null;
+		addArtToOfi.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+						"artista", "ofici");
+				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
+			}
+		});
+		addPromToCasa.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+						"promotor", "casa");
+				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
+			}
+		});
+		removeRel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Relation rel = (Relation)
+						((IStructuredSelection) relationTV.getSelection())
+						.getFirstElement();
+				if (rel==null) {
+					System.out.println(
+							"Could not remove Relation because none was selected.");
+					LabelPrinter.printError(relationLabel, 
+							"You must select a relation to delete it.");
+				} else {
+					relations.remove(rel);
+					MiMusXML.openDoc(docIdStr).remove(rel).write();
+					relationTV.refresh();
+					relationHelper.packColumns();
+					System.out.println("Removing relation - " 
+							+ relations.size());
+					LabelPrinter.printInfo(relationLabel, 
+							"Relation deleted successfully.");
 				}
 			}
 		});
@@ -698,6 +773,39 @@ public class Editor extends EditorPart implements EventObserver {
 					+ " because no text was selected");
 			LabelPrinter.printError(label, 
 					"You must select a part of the text.");
+		}
+	}
+	
+	public void runRelationDialog(RelationDialog dialog,
+			List<Unit> relations, Label label) {
+		int dialogResult = dialog.open();
+		if (dialogResult == Window.OK) {
+			EntityInstance instance1 = (EntityInstance) dialog.getInstance1();
+			EntityInstance instance2 = (EntityInstance) dialog.getInstance2();
+			if (instance1 != null && instance2 != null) {
+				/* Two instances correctly selected, OK case */
+				Relation rel = new Relation(
+						instance1, instance2,
+						resources.getIncrementId());
+				relations.add(rel);
+				MiMusXML.openDoc(docIdStr).append(rel).write();
+				System.out.println("Adding selected Relation - " 
+						+ relations.size());
+				LabelPrinter.printInfo(label, 
+						"Relation added successfully.");
+			} else {
+				/* No instances selected by the user */
+				System.out.println("No Relation added - " 
+						+ relations.size());
+				LabelPrinter.printInfo(label, 
+						"Nothing was added. Must select two entities.");
+			}
+		} else {
+			/* Operation cancelled by the user */
+			System.out.println("No Relation added - " 
+					+ relations.size());
+			LabelPrinter.printInfo(label, 
+					"Nothing was added.");
 		}
 	}
 	
