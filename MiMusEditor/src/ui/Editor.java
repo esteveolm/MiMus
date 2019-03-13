@@ -417,12 +417,11 @@ public class Editor extends EditorPart implements EventObserver {
 							"Could not remove Entity because none was selected.");
 					LabelPrinter.printError(regestLabel, 
 							"You must select an entity to delete it.");
-//				} else if (relations.using(ent)) {
-//					System.out.println("Could not remove Entity because it is used in an existing Relation.");
-//					LabelPrinter.printError(regestLabel, "You must remove all relations where this entity is used before you can remove it.");
-//				} else if (lemmas.using(ent)) {
-//					System.out.println("Could not remove Entity because it is used in an existing Lemmatization.");
-//					LabelPrinter.printError(regestLabel, "You must remove all lemmas where this entity is used before you can remove it.");
+				} else if (Relation.containsEntity(relations, ent)) {
+					System.out.println(
+							"Could not remove Entity because being used by Relation.");
+					LabelPrinter.printError(regestLabel, 
+							"You must remove all relations using this entity before.");
 				} else if (Transcription.containsEntity(
 						transcriptions, ent)) {
 					System.out.println(

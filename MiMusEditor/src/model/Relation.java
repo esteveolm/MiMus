@@ -189,4 +189,18 @@ public class Relation extends ConcreteUnit implements Persistable {
 		}
 		return false;
 	}
+	
+	public static boolean containsEntity(List<Unit> relations, EntityInstance ent) {
+		for (Unit u: relations) {
+			if (u instanceof Relation) {
+				if (((Relation) u).getItsEntity1().getItsEntity()
+								.equals(ent.getItsEntity()) ||
+						((Relation) u).getItsEntity2().getItsEntity()
+								.equals(ent.getItsEntity())) {
+					return true;	
+				}
+			}
+		}
+		return false;
+	}
 }
