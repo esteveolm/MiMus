@@ -778,23 +778,33 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 	}
 	
-	public void runRelationDialog(RelationDialog dialog,
+	private void runRelationDialog(RelationDialog dialog,
 			List<Unit> relations, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
 			EntityInstance instance1 = (EntityInstance) dialog.getInstance1();
 			EntityInstance instance2 = (EntityInstance) dialog.getInstance2();
 			if (instance1 != null && instance2 != null) {
-				/* Two instances correctly selected, OK case */
+				/* Two instances correctly selected */
 				Relation rel = new Relation(
 						instance1, instance2, dialog.getRelType(),
 						resources.getIncrementId());
-				relations.add(rel);
-				MiMusXML.openDoc(docIdStr).append(rel).write();
-				System.out.println("Adding selected Relation - " 
-						+ relations.size());
-				LabelPrinter.printInfo(label, 
-						"Relation added successfully.");
+				if (Relation.containsRelation(relations, rel)) {
+					/* This Relation has been declared already */
+					System.out.println("No Relation added, already there - " 
+							+ relations.size());
+					LabelPrinter.printError(label, 
+							"Cannot add the same relation twice.");
+				} else {
+					/* OK case */
+					relations.add(rel);
+					MiMusXML.openDoc(docIdStr).append(rel).write();
+					System.out.println("Adding selected Relation - " 
+							+ relations.size());
+					LabelPrinter.printInfo(label, 
+							"Relation added successfully.");
+				}
+				
 			} else {
 				/* No instances selected by the user */
 				System.out.println("No Relation added - " 
