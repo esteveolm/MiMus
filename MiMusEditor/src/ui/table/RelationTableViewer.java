@@ -15,7 +15,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
-import model.EntityInstance;
 import model.Relation;
 import model.Unit;
 import util.TextStyler;
@@ -27,7 +26,7 @@ public class RelationTableViewer extends MiMusTableViewer {
 	public RelationTableViewer(Composite parent, List<Unit> initials, 
 			TextStyler styler) {
 		super(parent, styler);
-		String[] aux = {"Entitat A", "Entitat B"};
+		String[] aux = {"Tipus", "Entitat A", "Entitat B"};
 		columnNames = aux;
 		setRelations(new ArrayList<>(initials));
 	}
@@ -65,9 +64,11 @@ public class RelationTableViewer extends MiMusTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			Relation rel = (Relation) element;
 			switch (columnIndex) {
-			case 0:		// Entitat A
+			case 0:		// Tipus
+				return rel.getType();
+			case 1:		// Entitat A
 				return rel.getItsEntity1().getItsEntity().getLemma();
-			case 1:		// Entitat B
+			case 2:		// Entitat B
 				return rel.getItsEntity2().getItsEntity().getLemma();
 			default:	// Shouldn't reach here
 				return "";
@@ -80,10 +81,18 @@ public class RelationTableViewer extends MiMusTableViewer {
 		 * Compares relations alphanumerically, based on their entities names.
 		 */
 		public int compare(Viewer viewer, Object e1, Object e2) {
-			Relation ent1 = (Relation) e1;
-			Relation ent2 = (Relation) e2;
-			return ent1.getItsEntity1().getItsEntity().getLemma().compareTo(
-					ent2.getItsEntity1().getItsEntity().getLemma());
+			Relation rel1 = (Relation) e1;
+			Relation rel2 = (Relation) e2;
+			int c1 = rel1.getType().compareTo(rel2.getType());
+			if (c1==0) {
+				int c2 = rel1.getItsEntity1().getItsEntity().getLemma().compareTo(
+						rel2.getItsEntity1().getItsEntity().getLemma());
+				if (c2==0) 
+					return rel1.getItsEntity2().getItsEntity().getLemma().compareTo(
+							rel2.getItsEntity2().getItsEntity().getLemma());
+				return c2;
+			}
+			return c1;		
 		}
 	}
 	

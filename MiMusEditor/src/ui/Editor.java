@@ -175,7 +175,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Buttons to add/remove entities */
 		GridData gridData = new GridData();
-		gridData.widthHint = 100;
+		gridData.widthHint = 125;
 		Button addArt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addArt.setLayoutData(gridData);
 		addArt.setText("Add Artist");
@@ -215,15 +215,17 @@ public class Editor extends EditorPart implements EventObserver {
 		relationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Buttons to add/remove relations */
+		GridData gridRel = new GridData();
+		gridRel.widthHint = 225;
 		Button addArtToOfi = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addArtToOfi.setLayoutData(gridData);
+		addArtToOfi.setLayoutData(gridRel);
 		addArtToOfi.setText("Add Artista-Ofici Relation");
 		Button addPromToCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addPromToCasa.setLayoutData(gridData);
+		addPromToCasa.setLayoutData(gridRel);
 		addPromToCasa.setText("Add Promotor-Casa Relation");
 		
 		Button removeRel = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		removeRel.setLayoutData(gridData);
+		removeRel.setLayoutData(gridRel);
 		removeRel.setText("Delete");
 		
 		/* TRANSCRIPTIONS PART */
@@ -257,7 +259,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Buttons to add/remove transcription associations */
 		GridData gridTrans = new GridData();
-		gridTrans.widthHint = 100;
+		gridTrans.widthHint = 125;
 		Button addTransArt = new Button(sectTrans.getParent(), 
 				SWT.PUSH | SWT.CENTER);
 		addTransArt.setLayoutData(gridTrans);
@@ -785,7 +787,7 @@ public class Editor extends EditorPart implements EventObserver {
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected, OK case */
 				Relation rel = new Relation(
-						instance1, instance2,
+						instance1, instance2, dialog.getRelType(),
 						resources.getIncrementId());
 				relations.add(rel);
 				MiMusXML.openDoc(docIdStr).append(rel).write();

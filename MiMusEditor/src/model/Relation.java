@@ -15,6 +15,7 @@ public class Relation extends ConcreteUnit implements Persistable {
 
 	private EntityInstance itsEntity1;
 	private EntityInstance itsEntity2;
+	private String type;
 	
 	public Relation() {}
 
@@ -22,9 +23,10 @@ public class Relation extends ConcreteUnit implements Persistable {
 		super(itsConcepts);
 	}
 	
-	public Relation(EntityInstance ent1, EntityInstance ent2, int id) {
+	public Relation(EntityInstance ent1, EntityInstance ent2, String type, int id) {
 		this.itsEntity1 = ent1;
 		this.itsEntity2 = ent2;
+		this.type = type;
 		this.setId(id);
  	}
 
@@ -40,7 +42,13 @@ public class Relation extends ConcreteUnit implements Persistable {
 	public void setItsEntity2(EntityInstance itsEntity2) {
 		this.itsEntity2 = itsEntity2;
 	}
-	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return getItsEntity1().toString() + " - " + getItsEntity2().toString();
@@ -84,7 +92,9 @@ public class Relation extends ConcreteUnit implements Persistable {
 			int id = Integer.parseInt(
 					elem.getElementsByTagName("id")
 					.item(0).getTextContent());
-			return new Relation(ent1, ent2, id);
+			String type = elem.getElementsByTagName("type")
+					.item(0).getTextContent();
+			return new Relation(ent1, ent2, type, id);
 		}
 		return null;
 	}
@@ -98,11 +108,14 @@ public class Relation extends ConcreteUnit implements Persistable {
 		Element tagItsEntity2 = doc.createElement("entity2_id");
 		tagItsEntity2.appendChild(doc.createTextNode(
 				String.valueOf(getItsEntity2().getId())));
+		Element tagType = doc.createElement("type");
+		tagType.appendChild(doc.createTextNode(getType()));
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(
 				String.valueOf(getId())));
 		tagRelation.appendChild(tagItsEntity1);
 		tagRelation.appendChild(tagItsEntity2);
+		tagRelation.appendChild(tagType);
 		tagRelation.appendChild(tagId);
 		return tagRelation;
 	}
@@ -133,10 +146,12 @@ public class Relation extends ConcreteUnit implements Persistable {
 			Node node = nl.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element elem = (Element) node;
-				/* Retrieve all fields: id, entity1_id, entity2_id */
+				/* Retrieve all fields: id, type, entity1_id, entity2_id */
 				int id = Integer.parseInt(
 						elem.getElementsByTagName("id")
 						.item(0).getTextContent());
+				String type = elem.getElementsByTagName("type")
+						.item(0).getTextContent();
 				int ent1Id = Integer.parseInt(
 						elem.getElementsByTagName("entity1_id")
 						.item(0).getTextContent());
@@ -155,7 +170,7 @@ public class Relation extends ConcreteUnit implements Persistable {
 				}
 				if (ent1 != null && ent2 != null)
 					/* Should always hold true */
-					entries.add(new Relation(ent1, ent2, id));
+					entries.add(new Relation(ent1, ent2, type, id));
 			}
 		}
 		return entries;

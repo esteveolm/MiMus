@@ -161,4 +161,7 @@ public class RelationDialog extends Dialog {
 	public void setEntityType2(String entityType2) {
 		this.entityType2 = entityType2;
 	}
+	public String getRelType() {
+		return getEntityType1()+"-"+getEntityType2();
+	}
 }
