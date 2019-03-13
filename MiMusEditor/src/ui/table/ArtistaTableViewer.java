@@ -14,9 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-import control.SharedResources;
 import model.Artista;
-import model.Ofici;
 import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
@@ -25,7 +23,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
-				"Distintiu", "Gènere", "Religió", "Origen", "Ofici"};
+				"Distintiu", "Gènere", "Religió", "Origen"};
 		this.columnNames = aux;
 	}
 	
@@ -40,7 +38,6 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		editors[6] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[7] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[8] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[9] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 	
@@ -79,8 +76,6 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getReligio();
 			case 8:	// Origen (Text)
 				return art.getOrigen();
-			case 9:	// Ofici (ComboBox)
-				return art.getOfici().getLemma();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -118,13 +113,6 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			case 8:	// Origen (ComboBox)
 				art.setOrigen((String) value);
 				break;
-			case 9:	// Ofici (ComboBox)
-				Ofici ofici = (Ofici) Unit.findUnit(
-						SharedResources.getInstance().getOficis(),
-						(int) value);
-				if (ofici != null)
-					art.setOfici(ofici);
-				break;
 			default:	// Shouldn't reach here
 				break;
 			}
@@ -160,11 +148,6 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getReligioStr();
 			case 8:	// Origen (Text)
 				return art.getOrigen();
-			case 9:	// Ofici
-				Ofici ofici = art.getOfici();
-				if (ofici != null)
-					return ofici.getLemma();
-				return "";
 			default:	// Shouldn't reach here
 				return "";
 			}

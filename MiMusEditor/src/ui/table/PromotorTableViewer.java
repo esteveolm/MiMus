@@ -15,8 +15,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-import control.SharedResources;
-import model.Casa;
 import model.Promotor;
 import model.Unit;
 
@@ -28,7 +26,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = promotors;
 		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",
-				"Distintiu", "Gènere", "Casa"};
+				"Distintiu", "Gènere"};
 		this.columnNames = aux;
 	}
 
@@ -41,8 +39,6 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[5] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
-				SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[6] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		return editors;
 	}
@@ -77,8 +73,6 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getDistintiu();
 			case 5:		// Genere
 				return prom.getGenere();
-			case 6:		// Casa
-				return prom.getCasa();
 			default:
 				return "";
 			}
@@ -106,13 +100,6 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				break;
 			case 5:		// Genere
 				prom.setGenere((int) value);
-				break;
-			case 6:		// Casa
-				Casa casa = (Casa) Unit.findUnit(
-						SharedResources.getInstance().getCases(), 
-						(int) value);
-				if (casa != null)
-					prom.setCasa(casa);
 				break;
 			default:	// Shouldn't reach here
 				break;
@@ -143,8 +130,6 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getDistintiu();
 			case 5:		// Genere
 				return GENDERS[prom.getGenere()];
-			case 6:		// Casa
-				return (prom.getCasa()!=null ? prom.getCasa().getLemma() : "");
 			default:	// Shouldn't reach here
 				return "";
 			}

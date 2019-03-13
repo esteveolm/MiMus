@@ -15,7 +15,6 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
 import model.Artista;
-import model.Ofici;
 import model.Unit;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
@@ -25,7 +24,6 @@ public class ArtistaView extends DeclarativeView {
 	
 	private SharedResources resources;
 	private List<Unit> artists;
-	private Combo comboOfici;
 	
 	public ArtistaView() {
 		super();
@@ -35,8 +33,6 @@ public class ArtistaView extends DeclarativeView {
 		resources = SharedResources.getInstance();
 		//resources.globallySetUpdateId();
 		artists = resources.getArtistas();
-		
-		comboOfici = null;
 	}
 	
 	public String getViewName() {
@@ -108,18 +104,6 @@ public class ArtistaView extends DeclarativeView {
 		Text textOrigen = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textOrigen.setLayoutData(grid);
 		
-		/* Ofici: option field */
-		Label labelOfici = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelOfici.setText("Ofici:");
-		comboOfici = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		// XXX: find a better way to extract a list of attributes from any Unit
-		List<Unit> oficis = SharedResources.getInstance().getOficis();
-		String[] oficiNames = new String[oficis.size()];
-		for (int i=0; i<oficiNames.length; i++) {
-			oficiNames[i] = ((Ofici) oficis.get(i)).getLemma();
-		}
-		comboOfici.setItems(oficiNames);
-		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
@@ -134,7 +118,6 @@ public class ArtistaView extends DeclarativeView {
 				comboGenero.deselectAll();
 				comboReligion.deselectAll();
 				textOrigen.setText("");
-				comboOfici.deselectAll();
 			}
 		});
 		
@@ -166,12 +149,6 @@ public class ArtistaView extends DeclarativeView {
 					comboReligion.select(0);
 				}
 				
-				Ofici ofici = null;
-				if (oficis.size()>0 &&
-						comboOfici.getSelectionIndex()>=0) {
-					/* Only set Ofici if available */
-					ofici = (Ofici) oficis.get(comboOfici.getSelectionIndex());
-				}
 				Artista art = new Artista(
 						getResources().getIncrementId(),
 						textNombreCompleto.getText(), 
@@ -182,8 +159,7 @@ public class ArtistaView extends DeclarativeView {
 						textDistintiu.getText(),
 						comboGenero.getSelectionIndex(),
 						comboReligion.getSelectionIndex(),
-						textOrigen.getText(),
-						ofici);
+						textOrigen.getText());
 				artists.add(art);
 				System.out.println("Artist created successfully.");
 				LabelPrinter.printInfo(label, "Artist created successfully.");
@@ -242,13 +218,5 @@ public class ArtistaView extends DeclarativeView {
 	}
 
 	@Override
-	public void update() {
-		List<Unit> oficis = resources.getOficis();
-		System.out.println("Updating oficis: now there are " + oficis.size());
-		String[] oficiNames = new String[oficis.size()];
-		for (int i=0; i<oficiNames.length; i++) {
-			oficiNames[i] = ((Ofici) oficis.get(i)).getLemma();
-		}
-		comboOfici.setItems(oficiNames);
-	}
+	public void update() {}
 }

@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import control.SharedResources;
 import util.xml.MiMusXML;
 
 public class Promotor extends Entity {
@@ -18,12 +17,11 @@ public class Promotor extends Entity {
 	private String sobrenom;
 	private String distintiu;
 	private int genere;
-	private Casa casa;
 	
 	public Promotor() {}
 
 	public Promotor(int id, String nomComplet, String nom, String cognom,
-			String sobrenom, String distintiu, int genere, Casa casa) {
+			String sobrenom, String distintiu, int genere) {
 		super(id);
 		this.nomComplet = nomComplet;
 		this.nom = nom;
@@ -31,7 +29,6 @@ public class Promotor extends Entity {
 		this.sobrenom = sobrenom;
 		this.setDistintiu(distintiu);
 		this.genere = genere;
-		this.casa = casa;
 	}
 
 	@Override
@@ -49,26 +46,12 @@ public class Promotor extends Entity {
 		int genere = Integer.parseInt(
 				elem.getElementsByTagName("genere")
 				.item(0).getTextContent());
-		int casaId = -1;
-		try {
-			casaId = Integer.parseInt(
-					elem.getElementsByTagName("casa_id")
-					.item(0).getTextContent());
-		} catch (NumberFormatException e) {}
-				
 		int id = Integer.parseInt(
 				elem.getElementsByTagName("id")
 				.item(0).getTextContent());
 		
-		/* If Casa unspecified, its field in Promotor will be null */
-		if (casaId == -1)
-			return new Promotor(id, nomComplet, nom, cognom, sobrenom, 
-					distintiu, genere, null);
-		
-		Casa casa = (Casa) 
-				Unit.findUnit(SharedResources.getInstance().getCases(), casaId);
 		return new Promotor(id, nomComplet, nom, cognom, sobrenom, 
-				distintiu, genere, casa);
+				distintiu, genere);
 	}
 
 	@Override
@@ -86,10 +69,6 @@ public class Promotor extends Entity {
 		tagDistintiu.appendChild(doc.createTextNode(getDistintiu()));
 		Element tagGenere = doc.createElement("genere");
 		tagGenere.appendChild(doc.createTextNode(String.valueOf(getGenere())));
-		Element tagCasaId = doc.createElement("casa_id");
-		if (getCasa() != null)	/* Otherwise, leave it blank */
-			tagCasaId.appendChild(doc.createTextNode(
-					String.valueOf(getCasa().getId())));
 		Element tagId = doc.createElement("id");
 		tagId.appendChild(doc.createTextNode(String.valueOf(getId())));
 		tagEntry.appendChild(tagNomComplet);
@@ -98,7 +77,6 @@ public class Promotor extends Entity {
 		tagEntry.appendChild(tagSobrenom);
 		tagEntry.appendChild(tagDistintiu);
 		tagEntry.appendChild(tagGenere);
-		tagEntry.appendChild(tagCasaId);
 		tagEntry.appendChild(tagId);
 		return tagEntry;
 	}
@@ -174,11 +152,5 @@ public class Promotor extends Entity {
 	}
 	public void setGenere(int genere) {
 		this.genere = genere;
-	}
-	public Casa getCasa() {
-		return casa;
-	}
-	public void setCasa(Casa casa) {
-		this.casa = casa;
 	}
 }

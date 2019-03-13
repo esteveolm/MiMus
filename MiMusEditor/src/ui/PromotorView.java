@@ -13,7 +13,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
-import model.Casa;
 import model.Promotor;
 import model.Unit;
 import ui.table.PromotorTableViewer;
@@ -24,7 +23,6 @@ public class PromotorView extends DeclarativeView {
 	
 	private SharedResources resources;
 	private List<Unit> promotors;
-	private Combo comboCasa;
 	
 	public PromotorView() {
 		super();
@@ -33,8 +31,6 @@ public class PromotorView extends DeclarativeView {
 		/* Loads previously created artists if they exist */
 		resources = SharedResources.getInstance();
 		promotors = resources.getPromotors();
-		
-		comboCasa = null;
 	}
 	
 	@Override
@@ -90,18 +86,6 @@ public class PromotorView extends DeclarativeView {
 		Combo comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenere.setItems("No marcat", "Home", "Dona");
 		
-		/* Casa (combo) */
-		Label labelCasa = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelCasa.setText("Casa:");
-		comboCasa = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		// XXX: find a better way to extract a list of attributes from any Unit
-		List<Unit> cases = SharedResources.getInstance().getCases();
-		String[] casaNames = new String[cases.size()];
-		for (int i=0; i<casaNames.length; i++) {
-			casaNames[i] = ((Casa) cases.get(i)).getLemma();
-		}
-		comboCasa.setItems(casaNames);
-		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
@@ -113,7 +97,6 @@ public class PromotorView extends DeclarativeView {
 				textSobrenom.setText("");
 				textDistintiu.setText("");
 				comboGenere.deselectAll();
-				comboCasa.deselectAll();
 			}
 		});
 		
@@ -141,15 +124,6 @@ public class PromotorView extends DeclarativeView {
 				if (comboGenere.getSelectionIndex() == -1) {
 					comboGenere.select(0);
 				} 
-				if (comboCasa.getSelectionIndex() == -1) {
-					comboCasa.select(0);
-				}
-				Casa casa = null;
-				if (cases.size()>0 &&
-						comboCasa.getSelectionIndex()>=0) {
-					/* Only set Casa if available */
-					casa = (Casa) cases.get(comboCasa.getSelectionIndex());
-				}
 				Promotor prom = new Promotor(
 						getResources().getIncrementId(),
 						textNomComplet.getText(),
@@ -157,8 +131,7 @@ public class PromotorView extends DeclarativeView {
 						textCognom.getText(),
 						textSobrenom.getText(),
 						textDistintiu.getText(),
-						comboGenere.getSelectionIndex(),
-						casa);
+						comboGenere.getSelectionIndex());
 				promotors.add(prom);
 				System.out.println(getViewName() + " created successfully.");
 				LabelPrinter.printInfo(label, 
@@ -204,12 +177,5 @@ public class PromotorView extends DeclarativeView {
 	}
 
 	@Override
-	public void update() {
-		List<Unit> cases = resources.getCases();
-		String[] casaNames = new String[cases.size()];
-		for (int i=0; i<casaNames.length; i++) {
-			casaNames[i] = ((Casa) cases.get(i)).getLemma();
-		}
-		comboCasa.setItems(casaNames);
-	}
+	public void update() {}
 }
