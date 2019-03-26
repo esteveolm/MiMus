@@ -16,8 +16,12 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 public class MiMusEntry {
-	private final static String LANGS_PATH = "strings/languages.txt";
-	private final static String[] LANGS;
+	public final static String LANGS_PATH = "strings/languages.txt";
+	public final static String[] LANGS;
+	
+	public final static String MATERIES_PATH = "strings/languages.txt";
+	public final static String[] MATERIES;
+	
 
 	private int id;
 	private String numbering;
@@ -42,6 +46,7 @@ public class MiMusEntry {
 		IProject corpus = workspace.getProject("MiMusCorpus");
 		IFolder stringsFolder = corpus.getFolder("strings");
 		IFile langsFile = stringsFolder.getFile("languages");
+		IFile matFile = stringsFolder.getFile("materies");
 		
 		List<String> langLines = new ArrayList<>();
 		String langsPath = langsFile.getLocation().toString() + ".txt";
@@ -52,6 +57,16 @@ public class MiMusEntry {
 			System.out.println("Could not load language names from " + LANGS_PATH);
 		}
 		LANGS = langLines.stream().toArray(String[]::new);
+		
+		List<String> matLines = new ArrayList<>();
+		String matPath = matFile.getLocation().toString() + ".txt";
+		try (Stream<String> stream = Files.lines(Paths.get(matPath))) {
+			matLines = stream.collect(Collectors.toList());
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Could not load materies names from " + LANGS_PATH);
+		}
+		MATERIES = matLines.stream().toArray(String[]::new);
 	}
 	
 	public MiMusEntry() {

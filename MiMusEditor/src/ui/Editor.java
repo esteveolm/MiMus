@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -148,6 +149,11 @@ public class Editor extends EditorPart implements EventObserver {
 		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
 		
+		/* Llengua and materies */
+		Label labelLlengua = new Label(form.getBody(), SWT.VERTICAL);
+		labelLlengua.setText("Llengua:");
+		Combo comboLlengua = new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+		comboLlengua.setItems(MiMusEntry.LANGS);
 		
 		/* ENTITIES PART */
 		/* Regest text */
