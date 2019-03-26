@@ -48,17 +48,17 @@ public class LlocView extends DeclarativeView {
 		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		
-		/* Regne: option field */
-		Label labelRegne = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelRegne.setText("Regne:");
-		Combo comboRegne = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboRegne.setItems(SharedResources.REGNE);
-		
 		/* Area: option field */
 		Label labelArea = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelArea.setText("Àrea:");
 		Combo comboArea = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboArea.setItems(SharedResources.AREA);
+		
+		/* Regne: option field */
+		Label labelRegne = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelRegne.setText("Regne:");
+		Combo comboRegne = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboRegne.setItems(SharedResources.REGNE);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());

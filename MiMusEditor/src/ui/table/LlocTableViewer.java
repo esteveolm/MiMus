@@ -20,7 +20,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 	public LlocTableViewer(Composite parent, List<Unit> llocs) {
 		super(parent);
 		this.entities = llocs;
-		String[] aux = {"Nom Complet", "Regne", "Àrea"};
+		String[] aux = {"Nom Complet", "Àrea", "Regne"};
 		this.columnNames = aux;
 	}
 
@@ -52,10 +52,10 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 			switch (columnIndex) {
 			case 0:	// Nom Complet (Text)
 				return lloc.getNomComplet();
-			case 1:	// Regne (ComboBox)
-				return lloc.getRegneStr();
-			case 2:	// Area (ComboBox)
+			case 1:	// Area (ComboBox)
 				return lloc.getAreaStr();
+			case 2:	// Regne (ComboBox)
+				return lloc.getRegneStr();
 			default:	// Shouldn't reach here
 				return "";
 			}
