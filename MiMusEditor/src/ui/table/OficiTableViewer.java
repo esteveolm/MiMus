@@ -21,8 +21,8 @@ import model.Unit;
 
 public class OficiTableViewer extends DeclarativeTableViewer {
 
-	private static final String[] ESPECIALITATS = {"Sense especificar", "Instrument",
-				"Veu", "Dansa", "Artesà", "Malabars i altres"};
+	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 
+			"Instrument", "Veu", "Dansa", "Artesà", "Malabars i altres"};
 	
 	public OficiTableViewer(Composite parent, List<Unit> oficis) {
 		super(parent);

@@ -72,7 +72,7 @@ public class OficiView extends DeclarativeView {
 		labelEspecialitat.setText("Especialitat:");
 		Combo comboEspecialitat = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboEspecialitat.setLayoutData(grid);
-		comboEspecialitat.setItems("Sense especificar", "Instrument",
+		comboEspecialitat.setItems("-", "Sense especificar", "Instrument",
 				"Veu", "Dansa", "Artesà", "Malabars i altres");
 		
 		/* Instrument (combo) */
