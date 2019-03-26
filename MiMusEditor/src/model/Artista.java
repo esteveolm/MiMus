@@ -125,7 +125,7 @@ public class Artista extends Entity {
 	}
 	
 	public String toString() {
-		return getNomComplet();
+		return getLemma();
 	}
 
 	/* MiMusWritable implementation */
