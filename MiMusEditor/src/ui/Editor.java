@@ -8,13 +8,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -74,6 +79,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private List<Unit> relations;
 	private List<Unit> transcriptions;
 	private List<Unit> references;
+	private FormToolkit toolkit;
 	
 	public Editor() {
 		super();
@@ -129,6 +135,7 @@ public class Editor extends EditorPart implements EventObserver {
 	public void dispose() {
 		super.dispose();
 		control.removeEditor(this);
+		toolkit.dispose();
 	}
 	
 	@Override
@@ -136,7 +143,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Create XML schema if not present */
 		MiMusXML.openDoc(docIdStr).write();
 		
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
 		form.getBody().setLayout(new GridLayout());
@@ -149,11 +156,42 @@ public class Editor extends EditorPart implements EventObserver {
 		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
 		
-		/* Llengua and materies */
+		/* DOC METADATA PART */
+		/* Llengua: combo */
 		Label labelLlengua = new Label(form.getBody(), SWT.VERTICAL);
 		labelLlengua.setText("Llengua:");
 		Combo comboLlengua = new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboLlengua.setItems(MiMusEntry.LANGS);
+		
+		/* Materies: CheckBoxTableViewer */
+		class MateriesLabelProvider extends LabelProvider
+				implements ITableLabelProvider {
+		
+			@Override
+			public Image getColumnImage(Object element, int columnIndex) {
+				return null;
+			}
+		
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				return (String) element;
+			}
+			
+		}
+		
+		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(form.getBody(),
+				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		materiesTV.setContentProvider(new ArrayContentProvider());
+		materiesTV.setLabelProvider(new MateriesLabelProvider());
+		materiesTV.setInput(MiMusEntry.MATERIES);
+		
+		/* Button to save Llengua and Matèries to XML */
+		GridData gd = new GridData();
+		gd.widthHint = 250;
+		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		saveMeta.setLayoutData(gd);
+		saveMeta.setText("Save Llengua and Materies to XML");
+		// TODO: button add stuff to XML <-- change XML methods
 		
 		/* ENTITIES PART */
 		/* Regest text */
@@ -671,7 +709,6 @@ public class Editor extends EditorPart implements EventObserver {
 				}
 			}
 		});
-		toolkit.dispose();
 	}
 	
 	private void runDialog(InstanceDialog dialog, List<Unit> entities,
