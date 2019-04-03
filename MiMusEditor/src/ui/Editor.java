@@ -210,21 +210,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
 		saveMeta.setLayoutData(gd);
 		saveMeta.setText("Save Llengua and Materies to XML");
-		saveMeta.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				/* Recover items to save */
-				String llengua = 
-						comboLlengua.getItem(comboLlengua.getSelectionIndex());
-				Object[] materies = materiesTV.getCheckedElements();
-				String[] materiesStr = new String[materies.length];
-				for (int i=0; i<materies.length; i++) {
-					materiesStr[i] = (String) materies[i];
-				}
-				
-				/* Specific method to add llengua and materies to XML */
-				MiMusXML.openDoc(docIdStr).updateMeta(llengua, materiesStr).write();
-			}
-		});
+		
+		Label metaLabel = toolkit.createLabel(form.getBody(), "");
+		metaLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* ENTITIES PART */
 		/* Regest text */
@@ -300,7 +288,12 @@ public class Editor extends EditorPart implements EventObserver {
 		Button addPromToCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addPromToCasa.setLayoutData(gridRel);
 		addPromToCasa.setText("Add Promotor-Casa Relation");
-		
+		Button addArtToProm = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addArtToProm.setLayoutData(gridRel);
+		addArtToProm.setText("Add Servei Relation");
+		Button addArtToLloc = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addArtToLloc.setLayoutData(gridRel);
+		addArtToLloc.setText("Add Residencia Relation");
 		Button removeRel = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeRel.setLayoutData(gridRel);
 		removeRel.setText("Delete");
@@ -404,6 +397,29 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRef.setText("Delete");
 		
 		/* BUTTON LISTENERS */
+		saveMeta.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				/* Recover items to save */
+				int llenguaSel = comboLlengua.getSelectionIndex();
+				if (llenguaSel>=0) {
+					String llengua = comboLlengua.getItem(llenguaSel);
+					Object[] materies = materiesTV.getCheckedElements();
+					String[] materiesStr = new String[materies.length];
+					for (int i=0; i<materies.length; i++) {
+						materiesStr[i] = (String) materies[i];
+					}
+					MiMusXML.openDoc(docIdStr).updateMeta(llengua, materiesStr).write();
+					LabelPrinter.printInfo(metaLabel, 
+							"Llengua and materies added successfully");
+					System.out.println("Llengua and materies added successfully");
+				} else {
+					LabelPrinter.printError(metaLabel, 
+							"Llengua must be specified");
+					System.out.println("Llengua must be specified");
+				}
+			}
+		});
+
 		/* Entity buttons */
 		addArt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -535,6 +551,24 @@ public class Editor extends EditorPart implements EventObserver {
 			public void widgetSelected(SelectionEvent e) {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
 						"promotor", "casa");
+				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
+			}
+		});
+		addArtToProm.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+						"artista", "promotor");
+				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
+			}
+		});
+		addArtToLloc.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+						"artista", "lloc");
 				runRelationDialog(relDialog, relations, relationLabel);
 				relationTV.refresh();
 			}
