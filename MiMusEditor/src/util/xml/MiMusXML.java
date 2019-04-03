@@ -2,6 +2,8 @@ package util.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -198,6 +200,15 @@ public class MiMusXML {
 	public String readLlengua() {
 		Node llengua = doc.getElementsByTagName("llengua").item(0);
 		return llengua.getTextContent();
+	}
+	
+	public List<String> readMateries() {
+		ArrayList<String> materies = new ArrayList<>();
+		NodeList materiaNodes = doc.getElementsByTagName("materia");
+		for (int i=0; i<materiaNodes.getLength(); i++) {
+			materies.add(materiaNodes.item(i).getTextContent());
+		}
+		return materies;
 	}
 
 	public MiMusXML append(Persistable entry) {

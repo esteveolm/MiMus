@@ -193,7 +193,16 @@ public class Editor extends EditorPart implements EventObserver {
 		materiesTV.setInput(MiMusEntry.MATERIES);
 		
 		/* Set Materies if already defined */
-		
+		List<String> materies = MiMusXML.openDoc(docIdStr).readMateries();
+		System.out.println("Read " + materies.size());
+		for (int i=0; i<MiMusEntry.MATERIES.length; i++) {
+			String thisMat = MiMusEntry.MATERIES[i];
+			for (String mat : materies) {
+				if (mat.equals(thisMat)) {
+					materiesTV.setChecked(thisMat, true);
+				}
+			}
+		}
 		
 		/* Button to save Llengua and Matèries to XML */
 		GridData gd = new GridData();
