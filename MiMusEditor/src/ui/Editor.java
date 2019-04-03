@@ -163,10 +163,18 @@ public class Editor extends EditorPart implements EventObserver {
 		Combo comboLlengua = new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboLlengua.setItems(MiMusEntry.LANGS);
 		
+		/* Set Llengua if already defined */
+		String llengua = MiMusXML.openDoc(docIdStr).readLlengua();
+		for (int i=0; i<comboLlengua.getItems().length; i++) {
+			if (llengua.equals(comboLlengua.getItem(i))) {
+				comboLlengua.select(i);
+				break;
+			}
+		}
+		
 		/* Materies: CheckBoxTableViewer */
 		class MateriesLabelProvider extends LabelProvider
 				implements ITableLabelProvider {
-		
 			@Override
 			public Image getColumnImage(Object element, int columnIndex) {
 				return null;
@@ -176,7 +184,6 @@ public class Editor extends EditorPart implements EventObserver {
 			public String getColumnText(Object element, int columnIndex) {
 				return (String) element;
 			}
-			
 		}
 		
 		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(form.getBody(),
@@ -185,13 +192,30 @@ public class Editor extends EditorPart implements EventObserver {
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
 		materiesTV.setInput(MiMusEntry.MATERIES);
 		
+		/* Set Materies if already defined */
+		
+		
 		/* Button to save Llengua and Matèries to XML */
 		GridData gd = new GridData();
 		gd.widthHint = 250;
 		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
 		saveMeta.setLayoutData(gd);
 		saveMeta.setText("Save Llengua and Materies to XML");
-		// TODO: button add stuff to XML <-- change XML methods
+		saveMeta.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				/* Recover items to save */
+				String llengua = 
+						comboLlengua.getItem(comboLlengua.getSelectionIndex());
+				Object[] materies = materiesTV.getCheckedElements();
+				String[] materiesStr = new String[materies.length];
+				for (int i=0; i<materies.length; i++) {
+					materiesStr[i] = (String) materies[i];
+				}
+				
+				/* Specific method to add llengua and materies to XML */
+				MiMusXML.openDoc(docIdStr).updateMeta(llengua, materiesStr).write();
+			}
+		});
 		
 		/* ENTITIES PART */
 		/* Regest text */

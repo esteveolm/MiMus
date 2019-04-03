@@ -152,10 +152,14 @@ public class MiMusXML {
 			Element relations = newDoc.createElement("relations");
 			Element transcriptions = newDoc.createElement("transcriptions");
 			Element references = newDoc.createElement("references");
+			Element llengua = newDoc.createElement("llengua");
+			Element materies = newDoc.createElement("materies");
 			root.appendChild(entities);
 			root.appendChild(relations);
 			root.appendChild(transcriptions);
 			root.appendChild(references);
+			root.appendChild(llengua);
+			root.appendChild(materies);
 			doc = newDoc;
 			f = path;
 		} catch (ParserConfigurationException e) {
@@ -164,6 +168,38 @@ public class MiMusXML {
 		return new MiMusXML();
 	}
 	
+	public MiMusXML updateMeta(String llengua, String[] materies) {
+		/* Llengua in node <llengua> */
+		Node parentLlengua = doc.getElementsByTagName("llengua").item(0);
+		Node oldLlengua = parentLlengua.getFirstChild();
+		if (oldLlengua != null) {
+			/* Erase old <llengua> before updating if present */
+			parentLlengua.removeChild(oldLlengua);
+		}
+		parentLlengua.appendChild(doc.createTextNode(llengua));
+		
+		/* Erase old <materies> before updating and make anew */
+		Node oldMateries = doc.getElementsByTagName("materies").item(0);
+		Node root = doc.getElementsByTagName("document").item(0);
+		root.removeChild(oldMateries);
+		Element newMateries = doc.createElement("materies");
+		root.appendChild(newMateries);
+		
+		/* Add new <materia> for each selected */
+		for (String materia : materies) {
+			Node parentMateria = doc.createElement("materia");
+			parentMateria.appendChild(doc.createTextNode(materia));
+			newMateries.appendChild(parentMateria);
+		}
+		
+		return this;
+	}
+	
+	public String readLlengua() {
+		Node llengua = doc.getElementsByTagName("llengua").item(0);
+		return llengua.getTextContent();
+	}
+
 	public MiMusXML append(Persistable entry) {
 		System.out.println(entry.toString());
 		Node parent = doc.getElementsByTagName(
