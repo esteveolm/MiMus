@@ -82,6 +82,14 @@
             name="Lloc View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.DocumentsView"
+            icon="icons/sample.png"
+            id="MiMusEditor.documentsView"
+            name="Documents View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
