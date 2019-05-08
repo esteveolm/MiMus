@@ -15,3 +15,5 @@ Export-Package: control,
  model,
  ui,
  util
+Bundle-ClassPath: lib/mysql-connector-java-8.0.15.jar,
+ .

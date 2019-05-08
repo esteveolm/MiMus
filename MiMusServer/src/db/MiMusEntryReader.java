@@ -1,4 +1,4 @@
-package util;
+package db;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import model.MiMusDate;
-import model.Document;
+import model.MiMusEntry;
 import model.MiMusLibraryIdentifier;
 
 public class MiMusEntryReader {
@@ -28,7 +28,7 @@ public class MiMusEntryReader {
 		
 	}
 	
-	public Document read(String path) {
+	public MiMusEntry read(String path) {
 		/* Read lines of text file with Java 8 Streams */
 		List<String> lines = new ArrayList<>();
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
@@ -38,7 +38,7 @@ public class MiMusEntryReader {
 			System.out.println("Could not read MiMus document.");
 		}
 		
-		Document entry = new Document();
+		MiMusEntry entry = new MiMusEntry();
 		MiMusDate date = new MiMusDate();
 		MiMusLibraryIdentifier ident1 = new MiMusLibraryIdentifier();
 		MiMusLibraryIdentifier ident2 = new MiMusLibraryIdentifier();

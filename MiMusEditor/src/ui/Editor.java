@@ -41,7 +41,7 @@ import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
 import model.MiMusBibEntry;
-import model.MiMusEntry;
+import model.Document;
 import model.MiMusReference;
 import model.MiMusText;
 import model.Relation;
@@ -62,7 +62,7 @@ public class Editor extends EditorPart implements EventObserver {
 	protected String xmlPath;
 	private SharedResources resources;
 	private SharedControl control;
-	private MiMusEntry docEntry;
+	private Document docEntry;
 	private String docIdStr;
 	private MiMusText regest;
 	private MiMusText transcription;
@@ -161,7 +161,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Label labelLlengua = new Label(form.getBody(), SWT.VERTICAL);
 		labelLlengua.setText("Llengua:");
 		Combo comboLlengua = new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
-		comboLlengua.setItems(MiMusEntry.LANGS);
+		comboLlengua.setItems(Document.LANGS);
 		
 		/* Set Llengua if already defined */
 		String llengua = MiMusXML.openDoc(docIdStr).readLlengua();
@@ -190,13 +190,13 @@ public class Editor extends EditorPart implements EventObserver {
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
-		materiesTV.setInput(MiMusEntry.MATERIES);
+		materiesTV.setInput(Document.MATERIES);
 		
 		/* Set Materies if already defined */
 		List<String> materies = MiMusXML.openDoc(docIdStr).readMateries();
 		System.out.println("Read " + materies.size());
-		for (int i=0; i<MiMusEntry.MATERIES.length; i++) {
-			String thisMat = MiMusEntry.MATERIES[i];
+		for (int i=0; i<Document.MATERIES.length; i++) {
+			String thisMat = Document.MATERIES[i];
 			for (String mat : materies) {
 				if (mat.equals(thisMat)) {
 					materiesTV.setChecked(thisMat, true);

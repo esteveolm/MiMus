@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
 import model.MiMusBibEntry;
-import model.MiMusEntry;
+import model.Document;
 import model.MiMusReference;
 import model.Unit;
 import util.xml.MiMusXML;
@@ -30,10 +30,10 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private List<Unit> references;
 	private List<Unit> bibEntries;
-	private MiMusEntry docEntry;
+	private Document docEntry;
 	
 	public ReferenceTableViewer(Composite parent, List<Unit> references, 
-			List<Unit> bibEntries, MiMusEntry docEntry, SharedResources resources) {
+			List<Unit> bibEntries, Document docEntry, SharedResources resources) {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,12 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-
 public class MiMusEntry {
 	public final static String LANGS_PATH = "strings/languages.txt";
 	public final static String[] LANGS;
@@ -22,7 +17,6 @@ public class MiMusEntry {
 	public final static String MATERIES_PATH = "strings/languages.txt";
 	public final static String[] MATERIES;
 	
-
 	private int id;
 	private String numbering;
 	private MiMusDate date;
@@ -42,14 +36,11 @@ public class MiMusEntry {
 	/* Load languages array from file only once for all entries */
 	static {
 		/* Stream all lines and convert to array */
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFolder stringsFolder = corpus.getFolder("strings");
-		IFile langsFile = stringsFolder.getFile("languages");
-		IFile matFile = stringsFolder.getFile("materies");
+		File langsFile = new File("strings/languages/");
+		File matFile = new File("strings/materies/");
 		
 		List<String> langLines = new ArrayList<>();
-		String langsPath = langsFile.getLocation().toString() + ".txt";
+		String langsPath = langsFile.getAbsolutePath() + ".txt";
 		try (Stream<String> stream = Files.lines(Paths.get(langsPath))) {
 			langLines = stream.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -59,7 +50,7 @@ public class MiMusEntry {
 		LANGS = langLines.stream().toArray(String[]::new);
 		
 		List<String> matLines = new ArrayList<>();
-		String matPath = matFile.getLocation().toString() + ".txt";
+		String matPath = matFile.getAbsolutePath() + ".txt";
 		try (Stream<String> stream = Files.lines(Paths.get(matPath))) {
 			matLines = stream.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -147,8 +138,8 @@ public class MiMusEntry {
 		this.place2 = place2;
 	}
 	
-	public MiMusText getRegest() {
-		return new MiMusText(regest);
+	public String getRegest() {
+		return regest;
 	}
 	public String getRegestText() {
 		return regest;
@@ -194,8 +185,8 @@ public class MiMusEntry {
 		this.citations = citations;
 	}
 	
-	public MiMusText getTranscription() {
-		return new MiMusText(transcription);
+	public String getTranscription() {
+		return transcription;
 	}
 	public String getTranscriptionText() {
 		return transcription;
