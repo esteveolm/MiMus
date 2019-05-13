@@ -15,7 +15,7 @@ import util.xml.Persistable;
  * 
  * @author Javier Beltrán Jorba
  * 
- * A MiMusReference is an instance of a MiMusBibEntry in a
+ * A MiMusReference is an instance of a Bibliography in a
  * certain MiMusEntry document of the corpora. It specifies what
  * bibliography entry the reference is addressed at, as well as
  * the specific pages where the reference happens for such document.
@@ -23,19 +23,19 @@ import util.xml.Persistable;
  * The conceptual relations between these classes can be summarized as:
  * 
  * 1 <MiMusEntry> has several <MiMusReference>
- * 1 <MiMusReference> has 1 <MiMusBibEntry>
- * Hence, 1 <MiMusBibEntry> is indirectly linked to several <MiMusEntry>
+ * 1 <MiMusReference> has 1 <Bibliography>
+ * Hence, 1 <Bibliography> is indirectly linked to several <MiMusEntry>
  * 
  * This allows for definition of information specific to the <MiMusEntry>
- * for each appearance of the same <MiMusBibEntry>.
+ * for each appearance of the same <Bibliography>.
  * 
- * Its String representation is constructed from that from its MiMusBibEntry,
+ * Its String representation is constructed from that from its Bibliography,
  * just by attaching the pages field at the end of it.
  * 
  */
 public class MiMusReference extends ConcreteUnit implements Persistable {
 	
-	private MiMusBibEntry bibEntry;
+	private Bibliography bibEntry;
 	private String page;
 	private int type;
 	private int id;
@@ -46,7 +46,7 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 		super(allBiblio);
 	}
 	
-	public MiMusReference(MiMusBibEntry bibEntry, String page, int type, int id) {
+	public MiMusReference(Bibliography bibEntry, String page, int type, int id) {
 		this.bibEntry = bibEntry;
 		this.page = page;
 		this.setType(type);
@@ -59,10 +59,10 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 	
 	/* Getters and setters */
 	
-	public MiMusBibEntry getBibEntry() {
+	public Bibliography getBibEntry() {
 		return bibEntry;
 	}
-	public void setBibEntry(MiMusBibEntry bibEntry) {
+	public void setBibEntry(Bibliography bibEntry) {
 		this.bibEntry = bibEntry;
 	}
 	public String getPage() {
@@ -91,11 +91,11 @@ public class MiMusReference extends ConcreteUnit implements Persistable {
 		int bibId = Integer.parseInt(
 				elem.getElementsByTagName("biblio_id")
 				.item(0).getTextContent());
-		MiMusBibEntry biblio = null;
+		Bibliography biblio = null;
 		for (int i=0; i<getItsConcepts().size(); i++) {
 			Unit u = getItsConcepts().get(i);
-			if (u instanceof MiMusBibEntry) {
-				MiMusBibEntry thisBiblio = (MiMusBibEntry) u;
+			if (u instanceof Bibliography) {
+				Bibliography thisBiblio = (Bibliography) u;
 				if (thisBiblio.getId() == bibId) {
 					biblio = thisBiblio;
 					break;

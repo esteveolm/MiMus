@@ -15,18 +15,18 @@ import util.xml.MiMusXML;
  * 
  * @author Javier Beltrán Jorba
  * 
- * A MiMusBibEntry is a Bibliography Entry in the MiMus corpora.
+ * A Bibliography is a Bibliography Entry in the MiMus corpora.
  * MiMus documents have a bibliography associated in annotation,
  * which can also be explored and manipulated through the UI.
  * 
  * It is important to note that MiMusEntry documents are not directly
- * associated to MiMusBibEntry bibliography. Instead, they use
+ * associated to Bibliography bibliography. Instead, they use
  * MiMusReference, which is an instance of a Bibliography Entry
  * with information of that specific reference (in general, the pages
  * inside the bibliography where the reference happens to such particular
  * document).
  * 
- * A MiMusBibEntry has up to 4 main authors (see field <authors>), and
+ * A Bibliography has up to 4 main authors (see field <authors>), and
  * up to 6 main secondary authors (see field <secondaryAuthors>). Each
  * occupies a slot accessed through its index (starting by 0). It is
  * not necessary that the slots are sorted such that all authors are in the
@@ -36,7 +36,7 @@ import util.xml.MiMusXML;
  * TODO: guarantee sequentiality of authors.
  * 
  */
-public class MiMusBibEntry extends Unit implements Persistable {
+public class Bibliography extends Unit implements Persistable {
 	
 	/*
 	 * The number of authors and secondary authors is fixed and reflected
@@ -60,12 +60,12 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	private int id;
 	private List<Integer> users;
 	
-	public MiMusBibEntry() {}
+	public Bibliography() {}
 	
 	/**
 	 * Initializes a Bibliography Entry with no values filled.
 	 */
-	public MiMusBibEntry(int id) {
+	public Bibliography(int id) {
 		/* Authors are set to "" and their flags to false */
 		authors = new String[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
@@ -97,7 +97,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 * is used, as default values are not considered. If some fields may be 
 	 * left blank, use the incremental approach.
 	 */
-	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
+	public Bibliography(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
 			String pages, String shortReference, int id, List<Integer> users) {
@@ -122,7 +122,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		this.users = users;
 	}
 	
-	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
+	public Bibliography(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
 			String pages, String shortReference, int id) {
@@ -131,7 +131,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 				new ArrayList<>());
 	}
 	
-	public MiMusBibEntry(String[] authors, String[] secondaryAuthors,
+	public Bibliography(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
 			String pages, int id, List<Integer> users) {
@@ -351,7 +351,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 	 * can see this value and understand what this entry means
 	 * in the bibliography.
 	 */
-	public static MiMusBibEntry createUnknownEntry() {
+	public static Bibliography createUnknownEntry() {
 		String[] unknownAut = new String[NUM_AUTHORS];
 		String[] second = new String[NUM_SECONDARY];
 		for (int i=0; i<NUM_AUTHORS; i++) {
@@ -363,7 +363,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 				second[i] = "";
 			}
 		}
-		return new MiMusBibEntry(unknownAut, second, "", "", "", "",
+		return new Bibliography(unknownAut, second, "", "", "", "",
 				"", "", "", "", "", 0, new ArrayList<>());
 	}
 	
@@ -376,7 +376,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		return str;
 	}
 	
-	public MiMusBibEntry fromXMLElement(Element elem) {
+	public Bibliography fromXMLElement(Element elem) {
 		String[] authors = new String[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			authors[i] = elem.getElementsByTagName("autor"+(i+1))
@@ -414,7 +414,7 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		for (int i=0; i<nodesDoc.getLength(); i++) {
 			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
 		}
-		return new MiMusBibEntry(authors, secondaries, year, distinction, 
+		return new Bibliography(authors, secondaries, year, distinction, 
 				title, mainTitle, volume, place, editorial, series, pages,
 				shortRef, id, users);
 	}
@@ -514,15 +514,15 @@ public class MiMusBibEntry extends Unit implements Persistable {
 		return String.valueOf(id);
 	}
 	
-	public static ArrayList<MiMusBibEntry> read() {
-		ArrayList<MiMusBibEntry> entries = new ArrayList<>();
+	public static ArrayList<Bibliography> read() {
+		ArrayList<Bibliography> entries = new ArrayList<>();
 		Document doc = MiMusXML.openBiblio().getDoc();
 		NodeList nl = doc.getElementsByTagName("entry");
 		for (int i=0; i<nl.getLength(); i++) {
 			Node node = nl.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element elem = (Element) node;
-				entries.add(new MiMusBibEntry().fromXMLElement(elem));
+				entries.add(new Bibliography().fromXMLElement(elem));
 			}
 		}
 		return entries;

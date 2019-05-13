@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
-import model.MiMusBibEntry;
+import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
 import model.Unit;
@@ -76,7 +76,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	}
 
 	private String[] getBibEntriesText() {
-		List<MiMusBibEntry> entries = SharedResources.getInstance().getBibEntries();
+		List<Bibliography> entries = SharedResources.getInstance().getBibEntries();
 		String[] res = new String[entries.size()];
 		for (int i=0; i<entries.size(); i++) {
 			res[i] = entries.get(i).getShortReference();
@@ -133,8 +133,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				/* Checks user is actually modifying to a new entry */
 				if (valueIdx>-1) {
 					/* This document is no longer using the old bibEntry */
-					MiMusBibEntry reducedEntry = ref.getBibEntry();
-					MiMusBibEntry extendedEntry = SharedResources.getInstance()
+					Bibliography reducedEntry = ref.getBibEntry();
+					Bibliography extendedEntry = SharedResources.getInstance()
 							.getBibEntries().get(valueIdx);
 					if (extendedEntry.getId() != reducedEntry.getId()) {
 						/* Actually reduce entry's users */

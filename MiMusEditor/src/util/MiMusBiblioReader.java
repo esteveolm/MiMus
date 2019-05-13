@@ -22,15 +22,15 @@
 //import org.w3c.dom.NodeList;
 //import org.xml.sax.SAXException;
 //
-//import model.MiMusBibEntry;
+//import model.Bibliography;
 //
 //public class MiMusBiblioReader {
 //	
 //	private static final int NUM_AUTHORS = 4;
 //	private static final int NUM_SECONDARY = 6;
 //	
-//	public static ArrayList<MiMusBibEntry> read(String path) {
-//		ArrayList<MiMusBibEntry> entries = new ArrayList<>();
+//	public static ArrayList<Bibliography> read(String path) {
+//		ArrayList<Bibliography> entries = new ArrayList<>();
 //		Document doc = documentFromPath(path);
 //		if (doc != null) {
 //			/* Iterates <entry> nodes */
@@ -39,7 +39,7 @@
 //				Node node = nl.item(i);
 //				if (node.getNodeType() == Node.ELEMENT_NODE) {
 //					Element elem = (Element) node;
-//					MiMusBibEntry entry = entryFromXMLElement(elem);
+//					Bibliography entry = entryFromXMLElement(elem);
 //					if (!entries.contains(entry)) {
 //						entries.add(entry);
 //					}
@@ -71,7 +71,7 @@
 //		return null;
 //	}
 //	
-//	private static MiMusBibEntry entryFromXMLElement(Element elem) {
+//	private static Bibliography entryFromXMLElement(Element elem) {
 //		String[] authors = new String[NUM_AUTHORS];
 //		for (int i=0; i<NUM_AUTHORS; i++) {
 //			authors[i] = elem.getElementsByTagName("autor"+(i+1))
@@ -105,12 +105,12 @@
 //		for (int i=0; i<nodesDoc.getLength(); i++) {
 //			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
 //		}
-//		return new MiMusBibEntry(authors, secondaries, year, distinction, 
+//		return new Bibliography(authors, secondaries, year, distinction, 
 //				title, mainTitle, volume, place, editorial, series, id,
 //				users);
 //	}
 //	
-//	public static void appendEntry(String path, MiMusBibEntry entry) {
+//	public static void appendEntry(String path, Bibliography entry) {
 //		Document doc = documentFromPath(path);
 //		if (doc != null) {
 //			Node node = doc.getElementsByTagName("bibliography").item(0);
@@ -189,7 +189,7 @@
 //		}
 //	}
 //	
-//	public static void removeEntry(String path, MiMusBibEntry entry) {
+//	public static void removeEntry(String path, Bibliography entry) {
 //		Document doc = documentFromPath(path);
 //		if (doc != null) {
 //			/* Find id to remove */
@@ -212,7 +212,7 @@
 //		}
 //	}
 //	
-//	public static void appendUser(String path, MiMusBibEntry entry, String user) {
+//	public static void appendUser(String path, Bibliography entry, String user) {
 //		Document doc = documentFromPath(path);
 //		if (doc != null) {
 //			/* Find entry to append user, looking at entry id */
@@ -240,7 +240,7 @@
 //		}
 //	}
 //	
-//	public static void removeUser(String path, MiMusBibEntry entry, String user) {
+//	public static void removeUser(String path, Bibliography entry, String user) {
 //		Document doc = documentFromPath(path);
 //		if (doc != null) {
 //			/* Find entry to remove user, looking at entry id */

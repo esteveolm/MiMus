@@ -40,7 +40,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
-import model.MiMusBibEntry;
+import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
 import model.MiMusText;
@@ -58,8 +58,6 @@ import util.xml.MiMusXML;
 
 public class Editor extends EditorPart implements EventObserver {
 	
-	protected String txtPath;
-	protected String xmlPath;
 	private SharedResources resources;
 	private SharedControl control;
 	private Document docEntry;
@@ -89,38 +87,16 @@ public class Editor extends EditorPart implements EventObserver {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
-		docID = getEditorInput().getName()
-				.substring(0, getEditorInput().getName().indexOf('.'));
+		
+		docEntry = (Document) getEditorInput();
+		docID = docEntry.getNumbering();
 		System.out.println("Doc ID: " + docID);
 		resources = SharedResources.getInstance();
 		//resources.globallySetUpdateId();
 		control = SharedControl.getInstance();
 		control.addEditor(this);
 		
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFolder txtFolder = corpus.getFolder("txt");
-		IFolder xmlFolder = corpus.getFolder("xml");
-		txtPath = txtFolder.getLocation().toString();
-		xmlPath = xmlFolder.getLocation().toString();
-		
-		if (getEditorInput().getName().endsWith(".txt")) {
-			txtPath += "/" + getEditorInput().getName();
-			xmlPath += "/" + getEditorInput().getName().replace(".txt", ".xml");
-			System.out.println(xmlPath);
-			System.out.println(txtPath);
-		} else if (getEditorInput().getName().endsWith(".xml")) {
-			xmlPath += "/" + getEditorInput().getName();
-			txtPath += "/" + getEditorInput().getName().replace(".xml", ".txt");
-			System.out.println(xmlPath);
-			System.out.println(txtPath);
-		} else {
-			System.out.println("Error: incompatible input file.");
-			System.exit(1);
-		}
-		
 		/* Txt must always be present so the text can be loaded */
-		docEntry = new MiMusEntryReader().read(txtPath);
 		docIdStr = docEntry.getIdStr();
 		regest = docEntry.getRegest();
 		transcription = docEntry.getTranscription();
@@ -140,9 +116,6 @@ public class Editor extends EditorPart implements EventObserver {
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		/* Create XML schema if not present */
-		MiMusXML.openDoc(docIdStr).write();
-		
 		toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
@@ -164,7 +137,7 @@ public class Editor extends EditorPart implements EventObserver {
 		comboLlengua.setItems(Document.LANGS);
 		
 		/* Set Llengua if already defined */
-		String llengua = MiMusXML.openDoc(docIdStr).readLlengua();
+		String llengua = "";	//TODO: read from DB.
 		for (int i=0; i<comboLlengua.getItems().length; i++) {
 			if (llengua.equals(comboLlengua.getItem(i))) {
 				comboLlengua.select(i);
@@ -193,7 +166,7 @@ public class Editor extends EditorPart implements EventObserver {
 		materiesTV.setInput(Document.MATERIES);
 		
 		/* Set Materies if already defined */
-		List<String> materies = MiMusXML.openDoc(docIdStr).readMateries();
+		List<String> materies = new ArrayList<>();	// TODO: read from DB.
 		System.out.println("Read " + materies.size());
 		for (int i=0; i<Document.MATERIES.length; i++) {
 			String thisMat = Document.MATERIES[i];
@@ -734,7 +707,7 @@ public class Editor extends EditorPart implements EventObserver {
 				references.add(ref);
 				
 				/* Reflect document is user of entry, in model and xml */
-				MiMusBibEntry modifiedEntry = 
+				Bibliography modifiedEntry = 
 						SharedResources.getInstance().getBibEntries().get(0);
 				modifiedEntry.addUser(Integer.parseInt(docID));
 				MiMusXML.openBiblio().update(modifiedEntry).write();
@@ -764,7 +737,7 @@ public class Editor extends EditorPart implements EventObserver {
 					 * Reflect document is not user of entry anymore, 
 					 * in model and xml 
 					 */
-					MiMusBibEntry oldEntry = ref.getBibEntry();
+					Bibliography oldEntry = ref.getBibEntry();
 					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
 					MiMusXML.openBiblio().update(oldEntry).write();
 					MiMusXML.openDoc(docIdStr).remove(ref).write();

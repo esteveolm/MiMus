@@ -33,7 +33,7 @@ import control.EventObserver;
 import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
-import model.MiMusBibEntry;
+import model.Bibliography;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
 
@@ -142,7 +142,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 		btnGen.setText("Generate automatically");
 		btnGen.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				String generated = MiMusBibEntry.generateShortReference(
+				String generated = Bibliography.generateShortReference(
 						textAuthors[0].getText().replaceAll(",", "").split(" ")[0],
 						textAuthors[1].getText().replaceAll(",", "").split(" ")[0],
 						textYear.getText(), textDistinction.getText());
@@ -171,7 +171,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 						textSecondaries[i].getText().trim();
 				}
 				
-				MiMusBibEntry newEntry = new MiMusBibEntry(
+				Bibliography newEntry = new Bibliography(
 						authors, secondaries, 
 						(textYear.getText().length()==0) ? "" : textYear.getText().trim(), 
 						(textDistinction.getText().length()==0) ? "" : textDistinction.getText().trim(), 
@@ -243,7 +243,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 				StyleRange defaultStyle = new StyleRange(0, fullReference.getText().length(), null, null);
 				fullReference.setStyleRange(defaultStyle);
 				
-				MiMusBibEntry selectedEntry = (MiMusBibEntry) 
+				Bibliography selectedEntry = (Bibliography) 
 						lv.getStructuredSelection().getFirstElement();
 				
 				/* Null happens when nothing gets selected */
@@ -270,7 +270,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 		btnRemove.setText("Remove selected entry");
 		btnRemove.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				MiMusBibEntry selectedEntry = (MiMusBibEntry) 
+				Bibliography selectedEntry = (Bibliography) 
 						lv.getStructuredSelection().getFirstElement();
 				if (selectedEntry == null) {
 					System.out.println("Could not remove bibEntry because none was selected.");
@@ -339,7 +339,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 	class BiblioLabelProvider extends LabelProvider {
 		@Override
 		public String getText(Object element) {
-			return ((MiMusBibEntry)element).getShortReference();
+			return ((Bibliography)element).getShortReference();
 		}
 	}
 	

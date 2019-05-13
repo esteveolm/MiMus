@@ -14,8 +14,11 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
 
-public class Document extends Unit {
+public class Document extends Unit implements IEditorInput {
 	public final static String LANGS_PATH = "strings/languages.txt";
 	public final static String[] LANGS;
 	
@@ -256,5 +259,37 @@ public class Document extends Unit {
 		str += "Llengua: " + getLanguage() +
 				"\nMatèries: " + String.join(", ", getSubjects());
 		return str;
+	}
+
+	/* IEditorInput implementation */
+	
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		return true;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return ImageDescriptor.createFromFile(null, "icons/sample.png");
+	}
+
+	@Override
+	public String getName() {
+		return toString();
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		return toString();
 	}
 }
