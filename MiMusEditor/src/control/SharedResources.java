@@ -18,7 +18,7 @@ import model.Casa;
 import model.EntityInstance;
 import model.Instrument;
 import model.Lloc;
-import model.MiMusBibEntry;
+import model.Bibliography;
 import model.MiMusReference;
 import model.Ofici;
 import model.Promotor;
@@ -61,7 +61,7 @@ public final class SharedResources {
 	public static final String [] REF_TYPES = 
 		{"Edition", "Register", "Citation"};
 	
-	private List<MiMusBibEntry> bibEntries;
+	private List<Bibliography> bibEntries;
 	private List<Unit> artistas;
 	private List<Unit> instruments;
 	private List<Unit> cases;
@@ -188,13 +188,13 @@ public final class SharedResources {
 		throw new CloneNotSupportedException();
 	}
 	
-	public List<MiMusBibEntry> getBibEntries() {
+	public List<Bibliography> getBibEntries() {
 		if (bibEntries == null) {
-			bibEntries = MiMusBibEntry.read();
+			bibEntries = Bibliography.read();
 		}
 		return bibEntries;
 	}
-	public void setBibEntries(List<MiMusBibEntry> bibEntries) {
+	public void setBibEntries(List<Bibliography> bibEntries) {
 		this.bibEntries = bibEntries;
 	}
 	public List<Unit> getArtistas() {
@@ -381,7 +381,7 @@ public final class SharedResources {
 		for (Unit i : Lloc.read()) {
 			setUpdateId(i.getId());
 		}
-		List<Unit> biblio = new ArrayList<>(MiMusBibEntry.read());
+		List<Unit> biblio = new ArrayList<>(Bibliography.read());
 		for (Unit e : biblio) {
 			setUpdateId(e.getId());
 		}
