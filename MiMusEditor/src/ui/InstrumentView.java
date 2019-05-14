@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -16,6 +19,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import control.SharedResources;
 import model.Instrument;
 import model.Unit;
+import persistence.DaoNotImplementedException;
+import persistence.InstrumentDao;
 import ui.table.InstrumentTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -124,6 +129,20 @@ public class InstrumentView extends DeclarativeView {
 							comboClasse.getSelectionIndex(),
 							textPart.getText());
 					instruments.add(inst);
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new InstrumentDao(conn).insert(inst);
+						LabelPrinter.printInfo(label, "Instrument added successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not insert Instrument into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
 					System.out.println("Instrument created successfully.");
 					LabelPrinter.printInfo(label, "Instrument created successfully.");
 					MiMusXML.openInstrument().append(inst).write();
@@ -144,6 +163,20 @@ public class InstrumentView extends DeclarativeView {
 				} else {
 					instruments.remove(inst);
 					MiMusXML.openInstrument().remove(inst).write();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new InstrumentDao(conn).delete(inst);
+						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Instrument from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 					getTv().refresh();
 					notifyObservers();
 					System.out.println("Instrument removed successfully.");

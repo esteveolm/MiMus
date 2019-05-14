@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,6 +18,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import control.SharedResources;
 import model.Promotor;
 import model.Unit;
+import persistence.DaoNotImplementedException;
+import persistence.PromotorDao;
 import ui.table.PromotorTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -137,6 +142,20 @@ public class PromotorView extends DeclarativeView {
 				LabelPrinter.printInfo(label, 
 						getViewName() + " created successfully.");
 				MiMusXML.openPromotor().append(prom).write();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new PromotorDao(conn).insert(prom);
+					LabelPrinter.printInfo(label, "Promotor added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert Promotor into DB.");
+				} catch (DaoNotImplementedException e1) {
+					e1.printStackTrace();
+					System.out.println("Insert operation not implemented, this should never happen.");
+				}
 				getTv().refresh();
 				notifyObservers();
 				System.out.println(resources.getPromotors().size() + " PROMOTORS");
@@ -157,6 +176,20 @@ public class PromotorView extends DeclarativeView {
 				} else {
 					promotors.remove(prom);
 					MiMusXML.openPromotor().remove(prom).write();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new PromotorDao(conn).delete(prom);
+						LabelPrinter.printInfo(label, "Promotor deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Promotor from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 					getTv().refresh();
 					notifyObservers();
 					System.out.println(getViewName() + " removed successfully.");

@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -15,6 +18,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import control.SharedResources;
 import model.Casa;
 import model.Unit;
+import persistence.CasaDao;
+import persistence.DaoNotImplementedException;
 import ui.table.CasaTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -107,6 +112,20 @@ public class CasaView extends DeclarativeView {
 				System.out.println(getViewName() + " created successfully.");
 				LabelPrinter.printInfo(label, getViewName() + " created successfully.");
 				MiMusXML.openCasa().append(casa).write();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new CasaDao(conn).insert(casa);
+					LabelPrinter.printInfo(label, "Casa added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert Casa into DB.");
+				} catch (DaoNotImplementedException e1) {
+					e1.printStackTrace();
+					System.out.println("Insert operation not implemented, this should never happen.");
+				}
 				getTv().refresh();
 				notifyObservers();
 				System.out.println(resources.getArtistas().size() + " CASES");

@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -17,6 +20,8 @@ import control.SharedResources;
 import model.Instrument;
 import model.Ofici;
 import model.Unit;
+import persistence.DaoNotImplementedException;
+import persistence.OficiDao;
 import ui.table.OficiTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -138,6 +143,20 @@ public class OficiView extends DeclarativeView {
 				LabelPrinter.printInfo(label, 
 						getViewName() + " created successfully.");
 				MiMusXML.openOfici().append(ofici).write();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new OficiDao(conn).insert(ofici);
+					LabelPrinter.printInfo(label, "Ofici added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert Ofici into DB.");
+				} catch (DaoNotImplementedException e1) {
+					e1.printStackTrace();
+					System.out.println("Insert operation not implemented, this should never happen.");
+				}
 				getTv().refresh();
 				notifyObservers();
 				System.out.println(resources.getOficis().size() + " OFICIS");
@@ -158,6 +177,20 @@ public class OficiView extends DeclarativeView {
 				} else {
 					oficis.remove(ofici);
 					MiMusXML.openOfici().remove(ofici).write();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new OficiDao(conn).delete(ofici);
+						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Ofici from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 					getTv().refresh();
 					notifyObservers();
 					System.out.println(getViewName() + " removed successfully.");

@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -16,6 +19,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import control.SharedResources;
 import model.Artista;
 import model.Unit;
+import persistence.ArtistaDao;
+import persistence.DaoNotImplementedException;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -164,6 +169,20 @@ public class ArtistaView extends DeclarativeView {
 				System.out.println("Artist created successfully.");
 				LabelPrinter.printInfo(label, "Artist created successfully.");
 				MiMusXML.openArtista().append(art).write();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new ArtistaDao(conn).insert(art);
+					LabelPrinter.printInfo(label, "Artist added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert entry into DB.");
+				} catch (DaoNotImplementedException e1) {
+					e1.printStackTrace();
+					System.out.println("Insert operation not implemented, this should never happen.");
+				}
 				getTv().refresh();
 				notifyObservers();
 				System.out.println(resources.getArtistas().size() + " ARTISTS");
@@ -182,6 +201,20 @@ public class ArtistaView extends DeclarativeView {
 				} else {
 					artists.remove(art);
 					MiMusXML.openArtista().remove(art).write();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new ArtistaDao(conn).delete(art);
+						LabelPrinter.printInfo(label, "Artist deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Artist from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 					getTv().refresh();
 					notifyObservers();
 					System.out.println("Artist removed successfully.");

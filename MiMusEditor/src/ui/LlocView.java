@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -16,6 +19,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import control.SharedResources;
 import model.Lloc;
 import model.Unit;
+import persistence.DaoNotImplementedException;
+import persistence.LlocDao;
 import ui.table.LlocTableViewer;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
@@ -108,6 +113,20 @@ public class LlocView extends DeclarativeView {
 				System.out.println("Lloc created successfully.");
 				LabelPrinter.printInfo(label, "Lloc created successfully.");
 				MiMusXML.openLloc().append(lloc).write();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new LlocDao(conn).insert(lloc);
+					LabelPrinter.printInfo(label, "Lloc added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert Lloc into DB.");
+				} catch (DaoNotImplementedException e1) {
+					e1.printStackTrace();
+					System.out.println("Insert operation not implemented, this should never happen.");
+				}
 				getTv().refresh();
 				notifyObservers();
 				System.out.println(resources.getLlocs().size() + " LLOCS");
@@ -126,6 +145,20 @@ public class LlocView extends DeclarativeView {
 				} else {
 					llocs.remove(lloc);
 					MiMusXML.openLloc().remove(lloc).write();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new LlocDao(conn).delete(lloc);
+						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Lloc from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 					getTv().refresh();
 					notifyObservers();
 					System.out.println("Lloc removed successfully.");
