@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +11,6 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jgit.api.AddCommand;
-import org.eclipse.jgit.api.CommitCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PushCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -34,6 +32,7 @@ import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
 import model.Bibliography;
+import persistence.BibliographyDao;
 import util.LabelPrinter;
 import util.xml.MiMusXML;
 
@@ -215,14 +214,24 @@ public class BiblioView extends ViewPart implements EventSubject {
 			}
 		});
 		
-		/* List of existing entries */
+		/* List of existing entries from DB*/
 		Section sectList = toolkit.createSection(form.getBody(), PROP_TITLE);
 		sectList.setText("Declared entries");
 		lv = new ListViewer(sectList.getParent());
 		lv.setUseHashlookup(true);
 		lv.setContentProvider(new BiblioContentProvider());
 		lv.setLabelProvider(new BiblioLabelProvider());
-		lv.setInput(resources.getBibEntries());
+		
+		/* Load bibliography entries from DB */
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			lv.setInput(new BibliographyDao(conn).selectAll());
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load bibliography from DB.");
+		}
 		lv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Label of results */
@@ -290,32 +299,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 					System.out.println("BibEntry removed successfully.");
 					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
 					notifyObservers();
-				}
-			}
-		});
-		
-		Button btnPush = new Button(sectList.getParent(), BUTTON_FLAGS);
-		btnPush.setText("Remote");
-		btnPush.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Git git = resources.getGit();
-				if (git != null) {
-					AddCommand gitAdd = git.add();
-					gitAdd.addFilepattern(resources.getBiblioPath());
-					try {
-						gitAdd.call();
-						CommitCommand gitCommit = git.commit();
-						gitCommit.setMessage("Updating BiblioView");
-						gitCommit.call();
-						PushCommand gitPush = git.push();
-						gitPush.setRemote(resources.getRemote());
-						gitPush.call();
-					} catch (GitAPIException e1) {
-						e1.printStackTrace();
-					}
-					
-				} else {
-					System.out.println("Git adapter not working");
 				}
 			}
 		});

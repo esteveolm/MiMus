@@ -53,8 +53,6 @@ CREATE TABLE Bibliografia (
 	Autor2 varchar(100) NULL,
 	Autor3 varchar(100) NULL,
 	Autor4 varchar(100) NULL,
-	Autor5 varchar(100) NULL,
-	Autor6 varchar(100) NULL,
 	AutorSecondari1 varchar(100) NULL,
 	AutorSecondari2 varchar(100) NULL,
 	AutorSecondari3 varchar(100) NULL,

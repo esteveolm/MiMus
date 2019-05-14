@@ -189,23 +189,6 @@ public class ArtistaView extends DeclarativeView {
 				}
 			}
 		});
-		
-		Button btnLocal = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnLocal.setText("Save to local");
-		btnLocal.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-			}
-		});
-		Button btnRemote = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnRemote.setText("Save to remote");
-		btnRemote.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				pushToGit();
-			}
-		});
 	}
 	
 	/**

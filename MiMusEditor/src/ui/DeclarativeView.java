@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jgit.api.AddCommand;
-import org.eclipse.jgit.api.CommitCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PushCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -70,24 +65,6 @@ public abstract class DeclarativeView extends ViewPart
 		btnAdd.setText("Add " + getViewName());
 		btnClr = new Button(parent, BUTTON_FLAGS);
 		btnClr.setText("Clear fields");
-	}
-	
-	public void pushToGit() {
-		try {
-			Git git = getResources().getGit();
-			AddCommand add = git.add();
-			add.addFilepattern(getResources().getRepoPath()+getAddPattern());
-			add.call();
-			CommitCommand commit = git.commit();
-			commit.setMessage("Saving " + getAddPattern() + " to remote.");
-			commit.call();
-			PushCommand push = git.push();
-			push.setRemote(getResources().getRemote());
-			push.call();
-		} catch (GitAPIException e1) {
-			e1.printStackTrace();
-			System.out.println("File " + getAddPattern() + "could not be pushed.");
-		}
 	}
 	
 	@Override

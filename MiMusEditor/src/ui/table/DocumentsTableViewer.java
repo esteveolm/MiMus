@@ -1,6 +1,5 @@
 package ui.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -9,8 +8,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -24,7 +21,6 @@ public class DocumentsTableViewer {
 	private List<Document> documents;
 	
 	public DocumentsTableViewer(Composite parent, List<Document> documents) {
-		documents = new ArrayList<>(documents);
 		tv = new ListViewer(parent);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setInput(documents);

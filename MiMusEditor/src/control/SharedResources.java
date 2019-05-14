@@ -1,7 +1,6 @@
 package control;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import model.Artista;
 import model.Casa;
 import model.EntityInstance;
@@ -81,7 +77,6 @@ public final class SharedResources {
 	private String oficiPath;
 	private String llocPath;
 	private String remote;
-	private Git git;
 	
 	/* local + id make the identification of unique entities possible globally */
 	private int id;
@@ -104,28 +99,6 @@ public final class SharedResources {
 		IProject corpus = workspace.getProject("MiMusCorpus");
 		this.setCorpusFolder(corpus);
 		this.setCorpusPath(corpus.getLocation().toString());
-		
-		/* Set git adapter */
-		try {
-			/* Check if directory is a git repo already */
-			System.out.println(corpus.getLocation().toString());
-			if (!corpus.exists()) {
-				/* If not, clone it from github */
-				Git git = Git.cloneRepository()
-						.setURI(remote)
-						.setDirectory(new File(corpusPath))
-						.call();
-				this.git = git;
-				System.out.println("Cloned repo from remote as could not be found in local.");
-			} else {
-				this.git = Git.open(new File(corpusPath));
-				System.out.println("Opened existing repo.");
-			}
-		} catch (GitAPIException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		/* Once repo is functional, we can keep loading resources */
 		IFolder entitiesFolder = corpus.getFolder("entities");
@@ -322,12 +295,6 @@ public final class SharedResources {
 	}
 	public void setRemote(String remote) {
 		this.remote = remote;
-	}
-	public Git getGit() {
-		return git;
-	}
-	public void setGit(Git git) {
-		this.git = git;
 	}
 	public int getLocal() {
 		return local;

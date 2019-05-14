@@ -24,7 +24,7 @@ public class DocumentDao extends UnitDao<Document> {
 				"lib1Numero", "lib1Pagina", "lib2Arxiu", "lib2Serie", "lib2Subserie",
 				"lib2Subserie2", "lib2Numero", "lib2Pagina", "Edicions", "Registres",
 				"Citacions", "Transcripcio", "Notes", "Llengua", "Materies"};
-		String sql = "INSERT INTO Document (";
+		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
 		}

@@ -151,14 +151,6 @@ public class InstrumentView extends DeclarativeView {
 				}
 			}
 		});
-		Button btnRemote = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnRemote.setText("Save to remote");
-		btnRemote.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				pushToGit();
-			}
-		});
 	}
 	
 	/**
