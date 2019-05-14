@@ -113,6 +113,7 @@ CREATE TABLE Promotor (
 	cognom varchar(100) NULL,
 	sobrenom varchar(100) NULL,
 	distintiu varchar(100) NULL,
+	genere int(1) NULL,
 	FOREIGN KEY (ent_id)
 		REFERENCES Entity(id),
 	PRIMARY KEY (id)

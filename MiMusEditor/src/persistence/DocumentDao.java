@@ -29,7 +29,7 @@ public class DocumentDao extends UnitDao<Document> {
 			sql += insertColumns[i] + ", ";
 		}
 		sql += insertColumns[insertColumns.length-1] + ") VALUES (";
-		for (int i=0; i<40; i++) {
+		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += "?, ";
 		}
 		sql += "?)";

@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitDao<U> {
+import model.Unit;
+
+public abstract class UnitDao<U extends Unit> {
 	
 	private Connection conn;
 	
@@ -49,8 +51,12 @@ public abstract class UnitDao<U> {
 	public abstract void insert(U unit) 
 			throws SQLException, DaoNotImplementedException;
 	
-	public abstract void delete(U unit) 
-			throws SQLException, DaoNotImplementedException;
+	public void delete(U unit) throws SQLException, DaoNotImplementedException {
+		Statement stmt = getConnection().createStatement();
+		String sql = "DELETE FROM " + getTable() + 
+				" WHERE id=" + unit.getId();
+		stmt.executeUpdate(sql);
+	}
 	
 	protected abstract U make(ResultSet rs) throws SQLException;
 	

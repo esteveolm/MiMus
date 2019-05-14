@@ -33,8 +33,8 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Bibliography;
 import persistence.BibliographyDao;
+import persistence.DaoNotImplementedException;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class BiblioView extends ViewPart implements EventSubject {
 
@@ -185,10 +185,17 @@ public class BiblioView extends ViewPart implements EventSubject {
 						resources.getIncrementId());
 				resources.getBibEntries().add(newEntry);
 				lv.refresh();
-				MiMusXML.openBiblio().append(newEntry).write();
-				//MiMusBiblioReader.appendEntry(resources.getBiblioPath(), newEntry);
-				LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
-				notifyObservers();
+				try {
+					Connection conn = DriverManager.getConnection(
+							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+							"mimus01", "colinet19");
+					new BibliographyDao(conn).insert(newEntry);
+					LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
+					notifyObservers();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("Could not insert entry into DB.");
+				}
 			}
 		});
 		Button btnClear = new Button(sectAdd.getParent(), BUTTON_FLAGS);
@@ -294,11 +301,20 @@ public class BiblioView extends ViewPart implements EventSubject {
 					resources.getBibEntries().remove(selectedEntry);
 					lv.refresh();
 					fullReference.setText(""); /* Clear full reference */
-					MiMusXML.openBiblio().remove(selectedEntry).write();
-					//MiMusBiblioReader.removeEntry(resources.getBiblioPath(), selectedEntry);
-					System.out.println("BibEntry removed successfully.");
-					LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
-					notifyObservers();
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new BibliographyDao(conn).delete(selectedEntry);
+						System.out.println("BibEntry removed successfully.");
+						LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
+						notifyObservers();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						System.out.println("Could not delete Bibliography from DB.");
+					} catch (DaoNotImplementedException e1) {
+						System.out.println("Delete bibliography not implemented. This should never happen.");
+					}
 				}
 			}
 		});

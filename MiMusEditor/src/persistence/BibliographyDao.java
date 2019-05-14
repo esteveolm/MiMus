@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Bibliography;
@@ -15,7 +16,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 	}
 
 	@Override
-	public void insert(Bibliography unit) throws SQLException, DaoNotImplementedException {
+	public void insert(Bibliography unit) throws SQLException {
 		String[] insertColumns = {"Autor1", "Autor2", "Autor3", "Autor4", 
 				 "AutorSecondari1", "AutorSecondari2", "AutorSecondari3", 
 				 "AutorSecondari4", "AutorSecondari5", "AutorSecondari6", 
@@ -26,7 +27,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 			sql += insertColumns[i] + ", ";
 		}
 		sql += insertColumns[insertColumns.length-1] + ") VALUES (";
-		for (int i=0; i<40; i++) {
+		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += "?, ";
 		}
 		sql += "?)";
@@ -53,11 +54,6 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 		stmt.setString(20, unit.getShortReference());
 		
 		stmt.executeUpdate();
-	}
-
-	@Override
-	public void delete(Bibliography unit) throws DaoNotImplementedException {
-		throw new DaoNotImplementedException();
 	}
 	
 	protected Bibliography make(ResultSet rs) throws SQLException {
