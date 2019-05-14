@@ -93,6 +93,6 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 
 	@Override
 	public String getTable() {
-		return "Bibliography";
+		return "Bibliografia";
 	}
 }
