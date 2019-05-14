@@ -4,11 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 import model.Document;
 import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
@@ -17,31 +13,6 @@ public class DocumentDao extends UnitDao<Document> {
 
 	public DocumentDao(Connection conn) {
 		super(conn);
-	}
-
-	@Override
-	public List<Document> selectAll() throws SQLException {		
-		String sql = "SELECT * FROM Document";
-		Statement stmt = getConnection().createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-		
-		List<Document> docs = new ArrayList<>();
-		while (rs.next()) {
-			docs.add(makeDocument(rs));
-		}
-		return docs;
-	}
-
-	@Override
-	public Document selectOne(String... criteria) throws SQLException {
-		String sql = "SELECT * FROM Document LIMIT 1";
-		Statement stmt = getConnection().createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-		
-		while (rs.next()) {
-			return makeDocument(rs);
-		}
-		return null;
 	}
 
 	@Override
@@ -113,7 +84,7 @@ public class DocumentDao extends UnitDao<Document> {
 		throw new DaoNotImplementedException();
 	}
 
-	private Document makeDocument(ResultSet rs) throws SQLException {
+	protected Document make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
 		String numeracio = rs.getString("Numeracio");
 		int any = rs.getInt("Any");
@@ -214,5 +185,10 @@ public class DocumentDao extends UnitDao<Document> {
 		doc.setSubjects(Arrays.asList(materies.split("$")));
 		
 		return doc;
+	}
+
+	@Override
+	public String getTable() {
+		return "Document";
 	}
 }
