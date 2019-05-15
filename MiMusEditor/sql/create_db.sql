@@ -85,6 +85,7 @@ CREATE TABLE Referencia (
 
 CREATE TABLE Entity (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
+    ent_type varchar(100) NOT NULL,
 	PRIMARY KEY (id)
 );
 
@@ -98,8 +99,8 @@ CREATE TABLE Artista (
 	sobrenom varchar(100) NULL,
 	distintiu varchar(100) NULL,
 	genere int(1) NULL,
-	religion int(1) NULL,
-	origen int(1) NULL,
+	religio int(1) NULL,
+	origen varchar(100) NULL,
 	FOREIGN KEY (ent_id)
 		REFERENCES Entity(id),
 	PRIMARY KEY (id)
@@ -252,3 +253,5 @@ CREATE TABLE ResideixA (
 		REFERENCES Lloc(id),
 	PRIMARY KEY (id)
 );
+
+INSERT INTO Bibliografia (ReferenciaCurta) VALUES ("Desconegut");
