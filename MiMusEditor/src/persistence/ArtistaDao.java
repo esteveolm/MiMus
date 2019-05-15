@@ -51,10 +51,10 @@ public class ArtistaDao extends UnitDao<Artista> {
 		String distintiu = rs.getString("distintiu");
 		int genere = rs.getInt("genere");
 		int religio = rs.getInt("religio");
-		int origen = rs.getInt("origen");
+		String origen = rs.getString("origen");
 		
 		return new Artista(id, nomComplet, tractament, nom, cognom, sobrenom,
-				distintiu, genere, religio, String.valueOf(origen));
+				distintiu, genere, religio, origen);
 	}
 
 	@Override
