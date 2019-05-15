@@ -14,7 +14,7 @@ public class PromotorDao extends UnitDao<Promotor> {
 	}
 
 	@Override
-	public void insert(Promotor unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Promotor unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom_complet", "nom", "cognom", 
 				"sobrenom", "distintiu", "genere"};
 		String sql = "INSERT INTO " + getTable() + " (";
@@ -34,7 +34,7 @@ public class PromotorDao extends UnitDao<Promotor> {
 		stmt.setString(5, unit.getDistintiu());
 		stmt.setInt(6, unit.getGenere());
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override

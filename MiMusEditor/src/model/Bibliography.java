@@ -104,10 +104,6 @@ public class Bibliography extends Unit implements Persistable {
 		/* Infers activeAuthors values from "" in <authors> */
 		this.authors = authors;
 		this.secondaryAuthors = secondaryAuthors;
-		System.out.println("Active authors:");
-		for (int i=0; i<authors.length; i++) {
-			System.out.println(String.valueOf("-" + authors[i] + "-" + authors[i].length()));
-		}
 		this.year = year;
 		this.distinction = distinction;
 		this.title = title;
@@ -184,35 +180,39 @@ public class Bibliography extends Unit implements Persistable {
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			str += getAuthor(i).length()>0 ? getAuthor(i) + "; " : "";
 		}
-		if (str.length()>=2)
-			str = str.substring(0, str.length()-2) + ", ";
-		if (getYear().length()>0)
-			str += getYear() + getDistinction() + ". ";
-		if (getTitle().length()>0)
-			str += "\"" + getTitle() + "\", ";
-		if (getMainTitle().length()>0)
-			str += getMainTitle() + ", ";
-		if (getVolume().length()>0)
-			str += getVolume() + ", ";
-		for (int i=0; i<NUM_SECONDARY; i++) {
-			str += getSecondaryAuthor(i).length()>0 ? getSecondaryAuthor(i) + ", " : "";
-		}
-		if (getPlace().length()>0)
-			str += getPlace() + ", ";
-		if (getPlace().length()>0 && getEditorial().length()>0)
-			str = str.substring(0, str.length()-2) + ": ";
-		if (getEditorial().length()>0)
-			str += getEditorial() + ", ";
-		if (getSeries().length()>0) {
+		if (str.length()>0) {
+			if (str.length()>=2)
+				str = str.substring(0, str.length()-2) + ", ";
+			if (getYear().length()>0)
+				str += getYear() + getDistinction() + ". ";
+			if (getTitle().length()>0)
+				str += "\"" + getTitle() + "\", ";
+			if (getMainTitle().length()>0)
+				str += getMainTitle() + ", ";
+			if (getVolume().length()>0)
+				str += getVolume() + ", ";
+			for (int i=0; i<NUM_SECONDARY; i++) {
+				str += getSecondaryAuthor(i).length()>0 ? getSecondaryAuthor(i) + ", " : "";
+			}
+			if (getPlace().length()>0)
+				str += getPlace() + ", ";
+			if (getPlace().length()>0 && getEditorial().length()>0)
+				str = str.substring(0, str.length()-2) + ": ";
+			if (getEditorial().length()>0)
+				str += getEditorial() + ", ";
+			if (getSeries().length()>0) {
+				if (str.endsWith(", "))
+					str = str.substring(0, str.length()-2);
+				str += " (" + getSeries() + "), ";
+			}
+			if (getPages().length()>0)
+				str += "p. " + getPages() + ", ";
 			if (str.endsWith(", "))
-				str = str.substring(0, str.length()-2);
-			str += " (" + getSeries() + "), ";
+				str = str.substring(0, str.length()-2) + ".";
+			return str;
 		}
-		if (getPages().length()>0)
-			str += "p. " + getPages() + ", ";
-		if (str.endsWith(", "))
-			str = str.substring(0, str.length()-2) + ".";
-		return str;
+		/* If no authors, return short reference */
+		return getShortReference();
 	}
 	
 	/* Special Getters and Setters for accessing authors */

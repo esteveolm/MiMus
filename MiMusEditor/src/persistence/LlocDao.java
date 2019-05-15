@@ -14,7 +14,7 @@ public class LlocDao extends UnitDao<Lloc> {
 	}
 
 	@Override
-	public void insert(Lloc unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Lloc unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom_complet", "regne", "area"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
@@ -30,7 +30,7 @@ public class LlocDao extends UnitDao<Lloc> {
 		stmt.setInt(2, unit.getRegne());
 		stmt.setInt(3, unit.getArea());
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override

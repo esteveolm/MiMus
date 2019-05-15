@@ -14,7 +14,7 @@ public class CasaDao extends UnitDao<Casa> {
 	}
 
 	@Override
-	public void insert(Casa unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Casa unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom_complet", "titol", "cort"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
@@ -30,7 +30,7 @@ public class CasaDao extends UnitDao<Casa> {
 		stmt.setString(2, unit.getTitol());
 		stmt.setString(3, unit.getCort());
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override

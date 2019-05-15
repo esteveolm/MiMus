@@ -13,7 +13,7 @@ public class ArtistaDao extends UnitDao<Artista> {
 	}
 
 	@Override
-	public void insert(Artista unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Artista unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom_complet", "tractament", "nom", "cognom",
 				"sobrenom", "distintiu", "genere", "religio", "origen"};
 		String sql = "INSERT INTO " + getTable() + " (";
@@ -36,7 +36,7 @@ public class ArtistaDao extends UnitDao<Artista> {
 		stmt.setInt(8, unit.getGenere());
 		stmt.setString(9, unit.getOrigen());
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override

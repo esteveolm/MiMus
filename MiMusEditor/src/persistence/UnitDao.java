@@ -1,6 +1,7 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -48,8 +49,25 @@ public abstract class UnitDao<U extends Unit> {
 		return null;
 	}
 	
-	public abstract void insert(U unit) 
+	/**
+	 * Inserts a model object of type U into its corresponding DB as specified
+	 * by the DAO implementation. Returns the auto-incremental ID of the
+	 * inserted row in the table, if the data was successfully inserted, or
+	 * -1 otherwise.
+	 */
+	public abstract int insert(U unit) 
 			throws SQLException, DaoNotImplementedException;
+	
+	protected int executeGetId(PreparedStatement stmt) throws SQLException {
+		int success = stmt.executeUpdate();
+		if (success == 1) {
+			Statement selectStmt = getConnection().createStatement();
+			ResultSet id = selectStmt.executeQuery("SELECT LAST_INSERT_ID()");
+			id.next();
+			return id.getInt(1);
+		}
+		return -1;
+	}
 	
 	public void delete(U unit) throws SQLException, DaoNotImplementedException {
 		Statement stmt = getConnection().createStatement();

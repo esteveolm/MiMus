@@ -14,7 +14,7 @@ public class OficiDao extends UnitDao<Ofici> {
 	}
 
 	@Override
-	public void insert(Ofici unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Ofici unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom_complet", "terme", "especialitat",
 				"instrument_id"};
 		String sql = "INSERT INTO " + getTable() + " (";
@@ -31,7 +31,8 @@ public class OficiDao extends UnitDao<Ofici> {
 		stmt.setString(2, unit.getTerme());
 		stmt.setInt(3, unit.getEspecialitat());
 		stmt.setInt(4, unit.getInstrument().getId());
-		stmt.executeUpdate();
+		
+		return executeGetId(stmt);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class InstrumentDao extends UnitDao<Instrument> {
 	}
 
 	@Override
-	public void insert(Instrument unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Instrument unit) throws SQLException, DaoNotImplementedException {
 		String[] insertColumns = {"nom", "familia", "classe", "part"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
@@ -31,7 +31,7 @@ public class InstrumentDao extends UnitDao<Instrument> {
 		stmt.setInt(3, unit.getClasse());
 		stmt.setString(4, unit.getPart());
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override

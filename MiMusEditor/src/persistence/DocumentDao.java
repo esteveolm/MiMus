@@ -16,7 +16,7 @@ public class DocumentDao extends UnitDao<Document> {
 	}
 
 	@Override
-	public void insert(Document unit) throws SQLException {
+	public int insert(Document unit) throws SQLException {
 		String[] insertColumns = {"Numeracio", "Any", "Any2", "Mes", "Mes2",
 				"Dia", "Dia2", "hAny", "hAny2", "hMes", "hMes2", "hDia", "hDia2",
 				"dAny", "dAny2", "dMes", "dMes2", "dDia", "dDia2", "Lloc", "Lloc2",
@@ -76,7 +76,7 @@ public class DocumentDao extends UnitDao<Document> {
 		stmt.setString(40, unit.getLanguage());
 		stmt.setString(41, String.join("$", unit.getSubjects()));
 		
-		stmt.executeUpdate();
+		return executeGetId(stmt);
 	}
 
 	@Override
