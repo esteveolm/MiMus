@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Artista;
 
-public class ArtistaDao extends UnitDao<Artista> {
+public class ArtistaDao extends EntityDao<Artista> {
 
 	public ArtistaDao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
-	public int insert(Artista unit) throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"nom_complet", "tractament", "nom", "cognom",
-				"sobrenom", "distintiu", "genere", "religio", "origen"};
+	public int insertSpecificEntity(Artista unit, int entId) 
+			throws SQLException, DaoNotImplementedException {
+		String[] insertColumns = {"ent_id, nom_complet", "tractament", "nom", 
+				"cognom", "sobrenom", "distintiu", "genere", "religio", "origen"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -26,15 +27,16 @@ public class ArtistaDao extends UnitDao<Artista> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNomComplet());
-		stmt.setString(2, unit.getTractament());
-		stmt.setString(3, unit.getNom());
-		stmt.setString(4, unit.getCognom());
-		stmt.setString(5, unit.getSobrenom());
-		stmt.setString(6, unit.getDistintiu());
-		stmt.setInt(7, unit.getGenere());
+		stmt.setInt(1, entId);
+		stmt.setString(2, unit.getNomComplet());
+		stmt.setString(3, unit.getTractament());
+		stmt.setString(4, unit.getNom());
+		stmt.setString(5, unit.getCognom());
+		stmt.setString(6, unit.getSobrenom());
+		stmt.setString(7, unit.getDistintiu());
 		stmt.setInt(8, unit.getGenere());
-		stmt.setString(9, unit.getOrigen());
+		stmt.setInt(9, unit.getGenere());
+		stmt.setString(10, unit.getOrigen());
 		
 		return executeGetId(stmt);
 	}
@@ -42,7 +44,6 @@ public class ArtistaDao extends UnitDao<Artista> {
 	@Override
 	protected Artista make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int entId = rs.getInt("ent_id");	// TODO: EntityInstance
 		String nomComplet = rs.getString("nom_complet");
 		String tractament = rs.getString("tractament");
 		String nom = rs.getString("nom");

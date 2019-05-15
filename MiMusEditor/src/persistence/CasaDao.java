@@ -7,15 +7,16 @@ import java.sql.SQLException;
 
 import model.Casa;
 
-public class CasaDao extends UnitDao<Casa> {
+public class CasaDao extends EntityDao<Casa> {
 
 	public CasaDao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
-	public int insert(Casa unit) throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"nom_complet", "titol", "cort"};
+	public int insertSpecificEntity(Casa unit, int entId)
+			throws SQLException, DaoNotImplementedException {
+		String[] insertColumns = {"ent_id", "nom_complet", "titol", "cort"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -26,9 +27,10 @@ public class CasaDao extends UnitDao<Casa> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNomComplet());
-		stmt.setString(2, unit.getTitol());
-		stmt.setString(3, unit.getCort());
+		stmt.setInt(1, entId);
+		stmt.setString(2, unit.getNomComplet());
+		stmt.setString(3, unit.getTitol());
+		stmt.setString(4, unit.getCort());
 		
 		return executeGetId(stmt);
 	}
@@ -36,7 +38,6 @@ public class CasaDao extends UnitDao<Casa> {
 	@Override
 	protected Casa make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int entId = rs.getInt("ent_id");
 		String nomComplet = rs.getString("nom_complet");
 		String titol = rs.getString("titol");
 		String cort = rs.getString("cort");

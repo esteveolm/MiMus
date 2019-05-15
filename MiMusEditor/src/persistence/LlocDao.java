@@ -7,15 +7,16 @@ import java.sql.SQLException;
 
 import model.Lloc;
 
-public class LlocDao extends UnitDao<Lloc> {
+public class LlocDao extends EntityDao<Lloc> {
 
 	public LlocDao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
-	public int insert(Lloc unit) throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"nom_complet", "regne", "area"};
+	public int insertSpecificEntity(Lloc unit, int entId) 
+			throws SQLException, DaoNotImplementedException {
+		String[] insertColumns = {"ent_id", "nom_complet", "regne", "area"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -26,9 +27,10 @@ public class LlocDao extends UnitDao<Lloc> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNomComplet());
-		stmt.setInt(2, unit.getRegne());
-		stmt.setInt(3, unit.getArea());
+		stmt.setInt(1, entId);
+		stmt.setString(2, unit.getNomComplet());
+		stmt.setInt(3, unit.getRegne());
+		stmt.setInt(4, unit.getArea());
 		
 		return executeGetId(stmt);
 	}
@@ -36,7 +38,6 @@ public class LlocDao extends UnitDao<Lloc> {
 	@Override
 	protected Lloc make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int entId = rs.getInt("ent_id");
 		String nomComplet = rs.getString("nom_complet");
 		int regne = rs.getInt("regne");
 		int area = rs.getInt("area");

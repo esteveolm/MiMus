@@ -7,15 +7,16 @@ import java.sql.SQLException;
 
 import model.Ofici;
 
-public class OficiDao extends UnitDao<Ofici> {
+public class OficiDao extends EntityDao<Ofici> {
 
 	public OficiDao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
-	public int insert(Ofici unit) throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"nom_complet", "terme", "especialitat",
+	public int insertSpecificEntity(Ofici unit, int entId) 
+			throws SQLException, DaoNotImplementedException {
+		String[] insertColumns = {"ent_id", "nom_complet", "terme", "especialitat",
 				"instrument_id"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
@@ -27,10 +28,11 @@ public class OficiDao extends UnitDao<Ofici> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNomComplet());
-		stmt.setString(2, unit.getTerme());
-		stmt.setInt(3, unit.getEspecialitat());
-		stmt.setInt(4, unit.getInstrument().getId());
+		stmt.setInt(1, entId);
+		stmt.setString(2, unit.getNomComplet());
+		stmt.setString(3, unit.getTerme());
+		stmt.setInt(4, unit.getEspecialitat());
+		stmt.setInt(5, unit.getInstrument().getId());
 		
 		return executeGetId(stmt);
 	}
@@ -38,7 +40,6 @@ public class OficiDao extends UnitDao<Ofici> {
 	@Override
 	protected Ofici make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int entId = rs.getInt("ent_id");
 		String nomComplet = rs.getString("nom_complet");
 		String terme = rs.getString("terme");
 		int especialitat = rs.getInt("especialitat");

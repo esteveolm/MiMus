@@ -7,15 +7,16 @@ import java.sql.SQLException;
 
 import model.Instrument;
 
-public class InstrumentDao extends UnitDao<Instrument> {
+public class InstrumentDao extends EntityDao<Instrument> {
 
 	public InstrumentDao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
-	public int insert(Instrument unit) throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"nom", "familia", "classe", "part"};
+	public int insertSpecificEntity(Instrument unit, int entId) 
+			throws SQLException, DaoNotImplementedException {
+		String[] insertColumns = {"ent_id", "nom", "familia", "classe", "part"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -26,10 +27,11 @@ public class InstrumentDao extends UnitDao<Instrument> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNom());
-		stmt.setInt(2, unit.getFamily());
-		stmt.setInt(3, unit.getClasse());
-		stmt.setString(4, unit.getPart());
+		stmt.setInt(1, entId);
+		stmt.setString(2, unit.getNom());
+		stmt.setInt(3, unit.getFamily());
+		stmt.setInt(4, unit.getClasse());
+		stmt.setString(5, unit.getPart());
 		
 		return executeGetId(stmt);
 	}
@@ -37,7 +39,6 @@ public class InstrumentDao extends UnitDao<Instrument> {
 	@Override
 	protected Instrument make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int entId = rs.getInt("ent_id");
 		String nom = rs.getString("nom");
 		int familia = rs.getInt("familia");
 		int classe = rs.getInt("classe");
