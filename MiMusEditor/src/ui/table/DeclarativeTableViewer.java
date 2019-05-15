@@ -14,7 +14,7 @@ import model.Unit;
 
 public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 	
-	protected List<Unit> entities;
+	protected List<? extends Unit> entities;
 	
 	public DeclarativeTableViewer(Composite parent) {
 		super(parent);

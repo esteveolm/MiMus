@@ -15,27 +15,28 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Casa;
-import model.Unit;
 import persistence.CasaDao;
 import persistence.DaoNotImplementedException;
 import ui.table.CasaTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class CasaView extends DeclarativeView {
 
-	private SharedResources resources;
-	private List<Unit> cases;
+	private List<Casa> cases;
 	
 	public CasaView() {
 		super();
 		getControl().setCasaView(this);
-		
-		/* Loads previously created artists if they exist */
-		resources = SharedResources.getInstance();
-		cases = resources.getCases();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			cases = new CasaDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load cases from DB.");
+		}
 	}
 	
 	@Override
@@ -104,31 +105,33 @@ public class CasaView extends DeclarativeView {
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Casa casa = new Casa(getResources().getIncrementId(),
+				Casa casa = new Casa(0,
 						textNomComplet.getText(),
 						textTitol.getText(), 
 						textCort.getText());
-				cases.add(casa);
-				System.out.println(getViewName() + " created successfully.");
-				LabelPrinter.printInfo(label, getViewName() + " created successfully.");
-				MiMusXML.openCasa().append(casa).write();
+				
 				try {
 					Connection conn = DriverManager.getConnection(
 							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 							"mimus01", "colinet19");
-					new CasaDao(conn).insert(casa);
-					LabelPrinter.printInfo(label, "Casa added successfully.");
-					notifyObservers();
+					int id = new CasaDao(conn).insert(casa);
+					if (id>0) {
+						cases.clear();
+						cases.addAll(new CasaDao(conn).selectAll());
+						System.out.println(getViewName() + " created successfully.");
+						LabelPrinter.printInfo(label, getViewName() + " created successfully.");
+						notifyObservers();
+						getTv().refresh();
+					} else {
+						System.out.println("DAO: Could not insert Casa into DB.");
+					}
 				} catch (SQLException e2) {
 					e2.printStackTrace();
-					System.out.println("Could not insert Casa into DB.");
+					System.out.println("SQLException: Could not insert Casa into DB.");
 				} catch (DaoNotImplementedException e1) {
 					e1.printStackTrace();
 					System.out.println("Insert operation not implemented, this should never happen.");
 				}
-				getTv().refresh();
-				notifyObservers();
-				System.out.println(resources.getArtistas().size() + " CASES");
 			}
 		});
 		
@@ -142,12 +145,24 @@ public class CasaView extends DeclarativeView {
 					System.out.println("Could not remove " + getViewName() + " because none was selected.");
 					LabelPrinter.printError(label, "You must select a " + getViewName() + " in order to remove it.");
 				} else {
-					cases.remove(casa);
-					MiMusXML.openCasa().remove(casa).write();
-					getTv().refresh();
-					notifyObservers();
-					System.out.println(getViewName() + " removed successfully.");
-					LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
+					try {
+						Connection conn = DriverManager.getConnection(
+								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+								"mimus01", "colinet19");
+						new CasaDao(conn).delete(casa);
+						cases.clear();
+						cases.addAll(new CasaDao(conn).selectAll());
+						getTv().refresh();
+						notifyObservers();
+						System.out.println(getViewName() + " removed successfully.");
+						LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not delete Casa from DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Delete operation not implemented, this should never happen.");
+					}
 				}
 			}
 		});

@@ -13,11 +13,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import model.Lloc;
-import model.Unit;
 
 public class LlocTableViewer extends DeclarativeTableViewer {
 
-	public LlocTableViewer(Composite parent, List<Unit> llocs) {
+	public LlocTableViewer(Composite parent, List<Lloc> llocs) {
 		super(parent);
 		this.entities = llocs;
 		String[] aux = {"Nom Complet", "Àrea", "Regne"};

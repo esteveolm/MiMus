@@ -15,27 +15,29 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Promotor;
-import model.Unit;
 import persistence.DaoNotImplementedException;
 import persistence.PromotorDao;
 import ui.table.PromotorTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class PromotorView extends DeclarativeView {
 	
-	private SharedResources resources;
-	private List<Unit> promotors;
+	private List<Promotor> promotors;
 	
 	public PromotorView() {
 		super();
 		getControl().setPromotorView(this);
 		
-		/* Loads previously created artists if they exist */
-		resources = SharedResources.getInstance();
-		promotors = resources.getPromotors();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			promotors = new PromotorDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load promotors from DB.");
+		}
 	}
 	
 	@Override
@@ -137,28 +139,28 @@ public class PromotorView extends DeclarativeView {
 						textSobrenom.getText(),
 						textDistintiu.getText(),
 						comboGenere.getSelectionIndex());
-				promotors.add(prom);
-				System.out.println(getViewName() + " created successfully.");
-				LabelPrinter.printInfo(label, 
-						getViewName() + " created successfully.");
-				MiMusXML.openPromotor().append(prom).write();
 				try {
 					Connection conn = DriverManager.getConnection(
 							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 							"mimus01", "colinet19");
-					new PromotorDao(conn).insert(prom);
-					LabelPrinter.printInfo(label, "Promotor added successfully.");
-					notifyObservers();
+					int id = new PromotorDao(conn).insert(prom);
+					if (id > 0) {
+						promotors.clear();
+						promotors.addAll(new PromotorDao(conn).selectAll());
+						System.out.println("Promotor added successfully.");
+						LabelPrinter.printInfo(label, "Promotor added successfully.");
+						notifyObservers();
+						getTv().refresh();
+					} else {
+						System.out.println("DAO: Could not insert Promotor into DB.");
+					}
 				} catch (SQLException e2) {
 					e2.printStackTrace();
-					System.out.println("Could not insert Promotor into DB.");
+					System.out.println("SQLException: Could not insert Promotor into DB.");
 				} catch (DaoNotImplementedException e1) {
 					e1.printStackTrace();
 					System.out.println("Insert operation not implemented, this should never happen.");
 				}
-				getTv().refresh();
-				notifyObservers();
-				System.out.println(resources.getPromotors().size() + " PROMOTORS");
 			}
 		});
 		
@@ -174,27 +176,25 @@ public class PromotorView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select a " 
 							+ getViewName() + " in order to remove it.");
 				} else {
-					promotors.remove(prom);
-					MiMusXML.openPromotor().remove(prom).write();
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
 						new PromotorDao(conn).delete(prom);
-						LabelPrinter.printInfo(label, "Promotor deleted successfully.");
+						promotors.clear();
+						promotors.addAll(new PromotorDao(conn).selectAll());
+						System.out.println(getViewName() + " removed successfully.");
+						LabelPrinter.printInfo(label, getViewName() 
+								+ " removed successfully.");
 						notifyObservers();
+						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
 						System.out.println("Could not delete Promotor from DB.");
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Delete operation not implemented, this should never happen.");
-					}
-					getTv().refresh();
-					notifyObservers();
-					System.out.println(getViewName() + " removed successfully.");
-					LabelPrinter.printInfo(label, getViewName() 
-							+ " removed successfully.");
+					}					
 				}
 			}
 		});

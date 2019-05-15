@@ -15,11 +15,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.Casa;
-import model.Unit;
 
 public class CasaTableViewer extends DeclarativeTableViewer {
 
-	public CasaTableViewer(Composite parent, List<Unit> cases) {
+	public CasaTableViewer(Composite parent, List<Casa> cases) {
 		super(parent);
 		this.entities = cases;
 		String[] aux = {"Nom Complet", "Titol", "Cort"};

@@ -18,25 +18,28 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
 import model.Lloc;
-import model.Unit;
 import persistence.DaoNotImplementedException;
 import persistence.LlocDao;
 import ui.table.LlocTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class LlocView extends DeclarativeView {
 
-	private SharedResources resources;
-	private List<Unit> llocs;
+	private List<Lloc> llocs;
 	
 	public LlocView() {
 		super();
 		getControl().setLlocView(this);
 		
-		/* Loads previously created artists if they exist */
-		resources = SharedResources.getInstance();
-		llocs = resources.getLlocs();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			llocs = new LlocDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load llocs from DB.");
+		}
 	}
 	
 	@Override
@@ -109,17 +112,20 @@ public class LlocView extends DeclarativeView {
 						textNomComplet.getText(), 
 						comboRegne.getSelectionIndex(), 
 						comboArea.getSelectionIndex());
-				llocs.add(lloc);
-				System.out.println("Lloc created successfully.");
-				LabelPrinter.printInfo(label, "Lloc created successfully.");
-				MiMusXML.openLloc().append(lloc).write();
 				try {
 					Connection conn = DriverManager.getConnection(
 							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 							"mimus01", "colinet19");
-					new LlocDao(conn).insert(lloc);
-					LabelPrinter.printInfo(label, "Lloc added successfully.");
-					notifyObservers();
+					int id = new LlocDao(conn).insert(lloc);
+					if (id>0) {
+						llocs.clear();
+						llocs.addAll(new LlocDao(conn).selectAll());
+						LabelPrinter.printInfo(label, "Lloc added successfully.");
+						notifyObservers();
+						getTv().refresh();
+					} else {
+						System.out.println("DAO: Could not insert LLoc into DB.");
+					}
 				} catch (SQLException e2) {
 					e2.printStackTrace();
 					System.out.println("Could not insert Lloc into DB.");
@@ -127,9 +133,6 @@ public class LlocView extends DeclarativeView {
 					e1.printStackTrace();
 					System.out.println("Insert operation not implemented, this should never happen.");
 				}
-				getTv().refresh();
-				notifyObservers();
-				System.out.println(resources.getLlocs().size() + " LLOCS");
 			}
 		});
 		
@@ -143,14 +146,15 @@ public class LlocView extends DeclarativeView {
 					System.out.println("Could not remove Lloc because none was selected.");
 					LabelPrinter.printError(label, "You must select a Lloc in order to remove it.");
 				} else {
-					llocs.remove(lloc);
-					MiMusXML.openLloc().remove(lloc).write();
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
 						new LlocDao(conn).delete(lloc);
+						llocs.clear();
+						llocs.addAll(new LlocDao(conn).selectAll());
 						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
+						getTv().refresh();
 						notifyObservers();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -159,10 +163,6 @@ public class LlocView extends DeclarativeView {
 						e1.printStackTrace();
 						System.out.println("Delete operation not implemented, this should never happen.");
 					}
-					getTv().refresh();
-					notifyObservers();
-					System.out.println("Lloc removed successfully.");
-					LabelPrinter.printInfo(label, "Lloc removed successfully.");
 				}
 			}
 		});

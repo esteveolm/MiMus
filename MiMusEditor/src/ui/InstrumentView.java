@@ -18,26 +18,28 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import control.SharedResources;
 import model.Instrument;
-import model.Unit;
 import persistence.DaoNotImplementedException;
 import persistence.InstrumentDao;
 import ui.table.InstrumentTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class InstrumentView extends DeclarativeView {
 	
-	private SharedResources resources;
-	private List<Unit> instruments;
+	private List<Instrument> instruments;
 	
 	public InstrumentView() {
 		super();
 		getControl().setInstrumentView(this);
 		
-		/* Loads previously created instruments if they exist */
-		resources = SharedResources.getInstance();
-		//resources.globallySetUpdateId();
-		instruments = resources.getInstruments();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			instruments = new InstrumentDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load instruments from DB.");
+		}
 	}
 	
 	@Override
@@ -123,31 +125,33 @@ public class InstrumentView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must specify a classe to create an Instrument.");
 				} else {
 					Instrument inst = new Instrument(
-							getResources().getIncrementId(),
+							0,
 							textNom.getText(),
 							comboFamily.getSelectionIndex(),
 							comboClasse.getSelectionIndex(),
 							textPart.getText());
-					instruments.add(inst);
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
-						new InstrumentDao(conn).insert(inst);
-						LabelPrinter.printInfo(label, "Instrument added successfully.");
-						notifyObservers();
+						int id = new InstrumentDao(conn).insert(inst);
+						if (id>0) {
+							instruments.clear();
+							instruments.addAll(new InstrumentDao(conn).selectAll());
+							LabelPrinter.printInfo(label, "Instrument added successfully.");
+							notifyObservers();
+							getTv().refresh();
+
+						} else {
+							System.out.println("DAO: Could not insert Instrument into DB.");
+						}
 					} catch (SQLException e2) {
 						e2.printStackTrace();
-						System.out.println("Could not insert Instrument into DB.");
+						System.out.println("SQLException: Could not insert Instrument into DB.");
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
 					}
-					System.out.println("Instrument created successfully.");
-					LabelPrinter.printInfo(label, "Instrument created successfully.");
-					MiMusXML.openInstrument().append(inst).write();
-					getTv().refresh();
-					notifyObservers();
 				}
 			}
 		});
@@ -161,13 +165,13 @@ public class InstrumentView extends DeclarativeView {
 					System.out.println("Could not remove Instrument because none was selected.");
 					LabelPrinter.printError(label, "You must select an Instrument in order to remove it.");
 				} else {
-					instruments.remove(inst);
-					MiMusXML.openInstrument().remove(inst).write();
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
 						new InstrumentDao(conn).delete(inst);
+						instruments.clear();
+						instruments.addAll(new InstrumentDao(conn).selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
 						notifyObservers();
 					} catch (SQLException e2) {
@@ -180,7 +184,6 @@ public class InstrumentView extends DeclarativeView {
 					getTv().refresh();
 					notifyObservers();
 					System.out.println("Instrument removed successfully.");
-					LabelPrinter.printInfo(label, "Instrument removed successfully.");
 				}
 			}
 		});

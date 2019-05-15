@@ -17,11 +17,10 @@ import org.eclipse.swt.widgets.TableItem;
 
 import control.SharedResources;
 import model.Instrument;
-import model.Unit;
 
 public class InstrumentTableViewer extends DeclarativeTableViewer {
 
-	public InstrumentTableViewer(Composite parent, List<Unit> instruments) {
+	public InstrumentTableViewer(Composite parent, List<Instrument> instruments) {
 		super(parent);
 		this.entities = instruments;
 		String[] aux = {"Nom", "Família", "Classe", "Part"};

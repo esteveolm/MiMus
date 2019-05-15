@@ -24,7 +24,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 
 			"Instrument", "Veu", "Dansa", "Artesà", "Malabars i altres"};
 	
-	public OficiTableViewer(Composite parent, List<Unit> oficis) {
+	public OficiTableViewer(Composite parent, List<Ofici> oficis) {
 		super(parent);
 		this.entities = oficis;
 		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument"};

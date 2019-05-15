@@ -16,13 +16,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.Promotor;
-import model.Unit;
 
 public class PromotorTableViewer extends DeclarativeTableViewer {
 	
 	private static final String[] GENDERS = {"No marcat", "Home", "Dona"};
 	
-	public PromotorTableViewer(Composite parent, List<Unit> promotors) {
+	public PromotorTableViewer(Composite parent, List<Promotor> promotors) {
 		super(parent);
 		this.entities = promotors;
 		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",

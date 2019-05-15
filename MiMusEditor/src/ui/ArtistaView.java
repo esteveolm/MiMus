@@ -16,28 +16,28 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Artista;
-import model.Unit;
 import persistence.ArtistaDao;
 import persistence.DaoNotImplementedException;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class ArtistaView extends DeclarativeView {
 	
-	private SharedResources resources;
-	private List<Unit> artists;
+	private List<Artista> artists;
 	
 	public ArtistaView() {
 		super();
 		getControl().setArtistaView(this);
-		
-		/* Loads previously created artists if they exist */
-		resources = SharedResources.getInstance();
-		//resources.globallySetUpdateId();
-		artists = resources.getArtistas();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			artists = new ArtistaDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load artists from DB.");
+		}
 	}
 	
 	public String getViewName() {
@@ -155,7 +155,7 @@ public class ArtistaView extends DeclarativeView {
 				}
 				
 				Artista art = new Artista(
-						getResources().getIncrementId(),
+						0,
 						textNombreCompleto.getText(), 
 						textTratamiento.getText(), 
 						textNombre.getText(), 
@@ -165,27 +165,28 @@ public class ArtistaView extends DeclarativeView {
 						comboGenero.getSelectionIndex(),
 						comboReligion.getSelectionIndex(),
 						textOrigen.getText());
-				artists.add(art);
-				System.out.println("Artist created successfully.");
-				LabelPrinter.printInfo(label, "Artist created successfully.");
-				MiMusXML.openArtista().append(art).write();
 				try {
 					Connection conn = DriverManager.getConnection(
 							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 							"mimus01", "colinet19");
-					new ArtistaDao(conn).insert(art);
-					LabelPrinter.printInfo(label, "Artist added successfully.");
-					notifyObservers();
+					int id = new ArtistaDao(conn).insert(art);
+					if (id>0) {
+						artists.clear();
+						artists.addAll(new ArtistaDao(conn).selectAll());
+						System.out.println("Artist created successfully.");
+						LabelPrinter.printInfo(label, "Artist added successfully.");
+						notifyObservers();
+						getTv().refresh();
+					} else {
+						System.out.println("DAO: Could not insert Artist into DB.");
+					}
 				} catch (SQLException e2) {
 					e2.printStackTrace();
-					System.out.println("Could not insert entry into DB.");
+					System.out.println("SQLException: Could not insert Artist into DB.");
 				} catch (DaoNotImplementedException e1) {
 					e1.printStackTrace();
 					System.out.println("Insert operation not implemented, this should never happen.");
 				}
-				getTv().refresh();
-				notifyObservers();
-				System.out.println(resources.getArtistas().size() + " ARTISTS");
 			}
 		});
 		
@@ -199,15 +200,16 @@ public class ArtistaView extends DeclarativeView {
 					System.out.println("Could not remove Artist because none was selected.");
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
-					artists.remove(art);
-					MiMusXML.openArtista().remove(art).write();
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
 						new ArtistaDao(conn).delete(art);
+						artists.clear();
+						artists.addAll(new ArtistaDao(conn).selectAll());
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
 						notifyObservers();
+						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
 						System.out.println("Could not delete Artist from DB.");
@@ -215,10 +217,6 @@ public class ArtistaView extends DeclarativeView {
 						e1.printStackTrace();
 						System.out.println("Delete operation not implemented, this should never happen.");
 					}
-					getTv().refresh();
-					notifyObservers();
-					System.out.println("Artist removed successfully.");
-					LabelPrinter.printInfo(label, "Artist removed successfully.");
 				}
 			}
 		});

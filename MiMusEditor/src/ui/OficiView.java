@@ -21,26 +21,30 @@ import model.Instrument;
 import model.Ofici;
 import model.Unit;
 import persistence.DaoNotImplementedException;
+import persistence.InstrumentDao;
 import persistence.OficiDao;
 import ui.table.OficiTableViewer;
 import util.LabelPrinter;
-import util.xml.MiMusXML;
 
 public class OficiView extends DeclarativeView {
 
-	private SharedResources resources;
-	private List<Unit> oficis;
+	private List<Ofici> oficis;
 	private Combo comboInstrument;
 	
 	public OficiView() {
 		super();
 		getControl().setOficiView(this);
-		
-		/* Loads previously created artists if they exist */
-		resources = SharedResources.getInstance();
-		oficis = resources.getOficis();
-		
 		comboInstrument = null;
+		
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			oficis = new OficiDao(conn).selectAll();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not load oficis from DB.");
+		}
 	}
 	
 	@Override
@@ -133,23 +137,26 @@ public class OficiView extends DeclarativeView {
 				if (comboEspecialitat.getSelectionIndex()<0)
 					comboEspecialitat.select(0);
 				Ofici ofici = new Ofici(
-						getResources().getIncrementId(),
+						0,
 						textNomComplet.getText(),
 						textTerme.getText(),
 						comboEspecialitat.getSelectionIndex(),
 						inst);
-				oficis.add(ofici);
-				System.out.println(getViewName() + " created successfully.");
-				LabelPrinter.printInfo(label, 
-						getViewName() + " created successfully.");
-				MiMusXML.openOfici().append(ofici).write();
 				try {
 					Connection conn = DriverManager.getConnection(
 							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 							"mimus01", "colinet19");
-					new OficiDao(conn).insert(ofici);
-					LabelPrinter.printInfo(label, "Ofici added successfully.");
-					notifyObservers();
+					int id = new OficiDao(conn).insert(ofici);
+					if (id>0) {
+						oficis.clear();
+						oficis.addAll(new OficiDao(conn).selectAll());
+						System.out.println("Ofici created successfully.");
+						LabelPrinter.printInfo(label, "Ofici added successfully.");
+						notifyObservers();
+						getTv().refresh();
+					} else {
+						System.out.println("DAO: Could not insert Artist into DB.");
+					}					
 				} catch (SQLException e2) {
 					e2.printStackTrace();
 					System.out.println("Could not insert Ofici into DB.");
@@ -157,9 +164,6 @@ public class OficiView extends DeclarativeView {
 					e1.printStackTrace();
 					System.out.println("Insert operation not implemented, this should never happen.");
 				}
-				getTv().refresh();
-				notifyObservers();
-				System.out.println(resources.getOficis().size() + " OFICIS");
 			}
 		});
 		
@@ -175,13 +179,15 @@ public class OficiView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select a " 
 							+ getViewName() + " in order to remove it.");
 				} else {
-					oficis.remove(ofici);
-					MiMusXML.openOfici().remove(ofici).write();
 					try {
 						Connection conn = DriverManager.getConnection(
 								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 								"mimus01", "colinet19");
 						new OficiDao(conn).delete(ofici);
+						oficis.clear();
+						oficis.addAll(new OficiDao(conn).selectAll());
+						getTv().refresh();
+						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
 						notifyObservers();
 					} catch (SQLException e2) {
@@ -191,11 +197,6 @@ public class OficiView extends DeclarativeView {
 						e1.printStackTrace();
 						System.out.println("Delete operation not implemented, this should never happen.");
 					}
-					getTv().refresh();
-					notifyObservers();
-					System.out.println(getViewName() + " removed successfully.");
-					LabelPrinter.printInfo(label, getViewName() 
-							+ " removed successfully.");
 				}
 			}
 		});
@@ -213,11 +214,19 @@ public class OficiView extends DeclarativeView {
 	@Override
 	public void update() {
 		/* Re-read instruments and set Combo items again */
-		List<Unit> insts = resources.getInstruments();
-		String[] instNames = new String[insts.size()];
-		for (int i=0; i<instNames.length; i++) {
-			instNames[i] = ((Instrument) insts.get(i)).getLemma();
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+			List<Instrument> insts = new InstrumentDao(conn).selectAll();
+			String[] instNames = new String[insts.size()];
+			for (int i=0; i<instNames.length; i++) {
+				instNames[i] = ((Instrument) insts.get(i)).getLemma();
+			}
+			comboInstrument.setItems(instNames);
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			System.out.println("Could not select Instruments from DB.");
 		}
-		comboInstrument.setItems(instNames);
 	}
 }

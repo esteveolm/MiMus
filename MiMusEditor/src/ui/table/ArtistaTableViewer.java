@@ -15,11 +15,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
 import model.Artista;
-import model.Unit;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
 	
-	public ArtistaTableViewer(Composite parent, List<Unit> artists) {
+	public ArtistaTableViewer(Composite parent, List<Artista> artists) {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
