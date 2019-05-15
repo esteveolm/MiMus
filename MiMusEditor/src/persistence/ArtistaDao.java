@@ -22,7 +22,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 			sql += insertColumns[i] + ", ";
 		}
 		sql += insertColumns[insertColumns.length-1] + ") VALUES (";
-		for (int i=0; i<insertColumns.length-1; i++) {
+		for (int i=0; i<insertColumns.length; i++) {
 			sql += "?, ";
 		}
 		sql += "?)";
@@ -35,7 +35,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 		stmt.setString(6, unit.getSobrenom());
 		stmt.setString(7, unit.getDistintiu());
 		stmt.setInt(8, unit.getGenere());
-		stmt.setInt(9, unit.getGenere());
+		stmt.setInt(9, unit.getReligio());
 		stmt.setString(10, unit.getOrigen());
 		
 		return executeGetId(stmt);
