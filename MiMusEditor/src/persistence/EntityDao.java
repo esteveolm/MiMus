@@ -48,9 +48,5 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		Statement deleteStmt = getConnection().createStatement();
 		String deleteSql = "DELETE FROM Entity WHERE id=" + entId;
 		deleteStmt.executeUpdate(deleteSql);
-		
-		
 	}
-	
-
 }
