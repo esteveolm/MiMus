@@ -49,7 +49,6 @@ public class MiMusEntryReader {
 		int regestIdx = -1;
 		int transcriptionIdx = -1;
 		int notesIdx = -1;
-		String subjects = "";
 		for (int i=0; i<lines.size(); i++) {
 			if (lines.get(i).length()>=2) {		// Prevents from empty lines
 				String content = lines.get(i).substring(lines.get(i).indexOf(':')+1).trim();
@@ -145,7 +144,7 @@ public class MiMusEntryReader {
 								entry.setLanguage(content);
 								break;
 							case 28:
-								subjects = content;
+								entry.setSubjects(parseSubjects(content));
 								break;
 							}
 						} catch (NumberFormatException e) {
@@ -203,11 +202,6 @@ public class MiMusEntryReader {
 			notes.add(note);
 		}
 		entry.setNotes(notes);
-
-		/* Subjects separated by ; */
-		for (String sub: subjects.split(";")) {
-			entry.addSubject(sub.trim());
-		}
 		
 		/* Read ID from path */
 		String[] parts = path.split("/");
@@ -216,6 +210,17 @@ public class MiMusEntryReader {
 		
 		// TODO: empty fields. what to do
 		return entry;
+	}
+	
+	private List<String> parseSubjects(String subjects) {
+		List<String> parsed = new ArrayList<>();
+		for (String subject : subjects.split(";")) {
+			subject = subject.trim().toLowerCase();
+			if (subject.length()>0) {
+				parsed.add(subject);
+			}
+		}
+		return parsed;
 	}
 	
 }
