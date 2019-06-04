@@ -22,13 +22,9 @@ public class MateriaDao extends UnitDao<Materia> {
 
 	@Override
 	protected Materia make(ResultSet rs) throws SQLException {
-		String sql = "SELECT MateriaName FROM Materia";
-		Statement stmt = getConnection().createStatement();
-		ResultSet materiaRS = stmt.executeQuery(sql);
-		if (materiaRS.next()) {
-			return new Materia(materiaRS.getString(1));
-		}
-		throw new SQLException();
+		Materia mat = new Materia(rs.getString("MateriaName"));
+		mat.setId(rs.getInt("id"));
+		return mat;
 	}
 
 	@Override
@@ -39,6 +35,10 @@ public class MateriaDao extends UnitDao<Materia> {
 	public TreeMap<Integer, String> selectAllAsMap() throws SQLException {
 		TreeMap<Integer, String> map = new TreeMap<>();
 		List<Materia> materies = selectAll();
+		for (Materia m : materies) {
+			System.out.println(m.getId() + " " + m.getName());
+		}
+		System.out.println("List size: " + materies.size());
 		for (Materia mat : materies) {
 			map.put(mat.getId(), mat.getName());
 		}

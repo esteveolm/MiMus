@@ -35,6 +35,9 @@ public abstract class UnitDao<U extends Unit> {
 		while (rs.next()) {
 			elems.add(make(rs));
 		}
+		for (U u : elems) {
+			System.out.println(getTable() + " id: " + u.getId());
+		}
 		return elems;
 	}
 	

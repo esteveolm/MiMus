@@ -142,6 +142,7 @@ public class DocumentDao extends UnitDao<Document> {
 			/* Query to Materia and HasMateria tables */
 			MateriaDao matDao = new MateriaDao(getConnection());
 			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsMap();
+			System.out.println("TreeMap size: " + idsToMateries.size());
 			
 			sql = "SELECT materia_id FROM HasMateria WHERE document_id=" + id;
 			stmt = getConnection().createStatement();
@@ -151,6 +152,7 @@ public class DocumentDao extends UnitDao<Document> {
 			while (hasMateriaRS.next()) {
 				int materiaId = hasMateriaRS.getInt("materia_id");
 				materies.add(idsToMateries.get(materiaId));
+				System.out.println("Materia id: " + materiaId);
 			}
 						
 			Document doc = new Document();
@@ -208,7 +210,7 @@ public class DocumentDao extends UnitDao<Document> {
 			doc.setNotes(Arrays.asList(notes.split("$")));
 			doc.setLanguage(llengua);
 			doc.setSubjects(materies);
-			
+			System.out.println("Materies: " + doc.getSubjects().size());
 			return doc;
 		}
 		throw new SQLException();
