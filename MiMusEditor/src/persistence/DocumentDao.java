@@ -4,7 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.TreeMap;
+
 import model.Document;
 import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
@@ -125,66 +130,88 @@ public class DocumentDao extends UnitDao<Document> {
 		String citacions = rs.getString("Citacions");
 		String transcripcio = rs.getString("Transcripcio");
 		String notes = rs.getString("Notes");
-		String llengua = rs.getString("Llengua");
-		String materies = rs.getString("Materies");
-		
-		Document doc = new Document();
-		doc.setId(id);
-		doc.setNumbering(numeracio);
-		
-		MiMusDate date = new MiMusDate();
-		date.setInterval(any2>0 || mes2>0 || dia2>0);
-		date.setYear1(any);
-		date.setMonth1(mes);
-		date.setDay1(dia);
-		date.setYear2(any2);
-		date.setMonth2(mes2);
-		date.setDay2(dia2);
-		date.sethYear1(hany);
-		date.sethMonth1(hmes);
-		date.sethDay1(hdia);
-		date.sethYear2(hany2);
-		date.sethMonth2(hmes2);
-		date.sethDay2(hdia2);
-		date.setuYear1(dany);
-		date.setuMonth1(dmes);
-		date.setuDay1(ddia);
-		date.setuYear2(dany2);
-		date.setuMonth2(dmes2);
-		date.setuDay2(ddia2);
-		
-		doc.setDate(date);
-		doc.setPlace1(lloc);
-		doc.setPlace2(lloc2);
-		doc.setRegestText(regest);
-		
-		MiMusLibraryIdentifier library = new MiMusLibraryIdentifier();
-		library.setArchive(lib1Arxiu);
-		library.setSeries(lib1Serie);
-		library.setSubseries1(lib1Subserie);
-		library.setSubseries2(lib1Subserie2);
-		library.setNumber(lib1Numero);
-		library.setPage(lib1Pagina);
-		
-		MiMusLibraryIdentifier library2 = new MiMusLibraryIdentifier();
-		library2.setArchive(lib2Arxiu);
-		library2.setSeries(lib2Serie);
-		library2.setSubseries1(lib2Subserie);
-		library2.setSubseries2(lib2Subserie2);
-		library2.setNumber(lib2Numero);
-		library2.setPage(lib2Pagina);
-		
-		doc.setLibrary(library);
-		doc.setLibrary2(library2);
-		doc.setEditions(edicions);
-		doc.setRegisters(registres);
-		doc.setCitations(citacions);
-		doc.setTranscriptionText(transcripcio);
-		doc.setNotes(Arrays.asList(notes.split("$")));
-		doc.setLanguage(llengua);
-		doc.setSubjects(Arrays.asList(materies.split("$")));
-		
-		return doc;
+		int llenguaId = rs.getInt("llengua_id");
+
+		/* Query to Llengua table to get it from ID */
+		String sql = "SELECT LlenguaName FROM Llengua WHERE id=" + llenguaId;
+		Statement stmt = getConnection().createStatement();
+		ResultSet llenguaRS = stmt.executeQuery(sql);
+		if (llenguaRS.next()) {
+			String llengua = llenguaRS.getString("LlenguaName");
+			
+			/* Query to Materia and HasMateria tables */
+			MateriaDAO matDao = new MateriaDAO(getConnection());
+			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsMap();
+			
+			sql = "SELECT materia_id FROM HasMateria WHERE document_id=" + id;
+			stmt = getConnection().createStatement();
+			ResultSet hasMateriaRS = stmt.executeQuery(sql);
+			
+			List<String> materies = new ArrayList<>();
+			while (hasMateriaRS.next()) {
+				int materiaId = hasMateriaRS.getInt("materia_id");
+				materies.add(idsToMateries.get(materiaId));
+			}
+						
+			Document doc = new Document();
+			doc.setId(id);
+			doc.setNumbering(numeracio);
+			
+			MiMusDate date = new MiMusDate();
+			date.setInterval(any2>0 || mes2>0 || dia2>0);
+			date.setYear1(any);
+			date.setMonth1(mes);
+			date.setDay1(dia);
+			date.setYear2(any2);
+			date.setMonth2(mes2);
+			date.setDay2(dia2);
+			date.sethYear1(hany);
+			date.sethMonth1(hmes);
+			date.sethDay1(hdia);
+			date.sethYear2(hany2);
+			date.sethMonth2(hmes2);
+			date.sethDay2(hdia2);
+			date.setuYear1(dany);
+			date.setuMonth1(dmes);
+			date.setuDay1(ddia);
+			date.setuYear2(dany2);
+			date.setuMonth2(dmes2);
+			date.setuDay2(ddia2);
+			
+			doc.setDate(date);
+			doc.setPlace1(lloc);
+			doc.setPlace2(lloc2);
+			doc.setRegestText(regest);
+			
+			MiMusLibraryIdentifier library = new MiMusLibraryIdentifier();
+			library.setArchive(lib1Arxiu);
+			library.setSeries(lib1Serie);
+			library.setSubseries1(lib1Subserie);
+			library.setSubseries2(lib1Subserie2);
+			library.setNumber(lib1Numero);
+			library.setPage(lib1Pagina);
+			
+			MiMusLibraryIdentifier library2 = new MiMusLibraryIdentifier();
+			library2.setArchive(lib2Arxiu);
+			library2.setSeries(lib2Serie);
+			library2.setSubseries1(lib2Subserie);
+			library2.setSubseries2(lib2Subserie2);
+			library2.setNumber(lib2Numero);
+			library2.setPage(lib2Pagina);
+			
+			doc.setLibrary(library);
+			doc.setLibrary2(library2);
+			doc.setEditions(edicions);
+			doc.setRegisters(registres);
+			doc.setCitations(citacions);
+			doc.setTranscriptionText(transcripcio);
+			doc.setNotes(Arrays.asList(notes.split("$")));
+			doc.setLanguage(llengua);
+			doc.setSubjects(materies);
+			
+			return doc;
+		}
+		throw new SQLException();
 	}
 
 	@Override
