@@ -48,7 +48,6 @@ import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
 import ui.table.TranscriptionTableViewer;
 import util.LabelPrinter;
-import util.MiMusEntryReader;
 import util.TextStyler;
 import util.xml.MiMusXML;
 

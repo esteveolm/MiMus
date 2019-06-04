@@ -9,9 +9,9 @@ import java.util.TreeMap;
 
 import model.Materia;
 
-public class MateriaDAO extends UnitDao<Materia> {
+public class MateriaDao extends UnitDao<Materia> {
 
-	public MateriaDAO(Connection conn) {
+	public MateriaDao(Connection conn) {
 		super(conn);
 	}
 

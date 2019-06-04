@@ -140,7 +140,7 @@ public class DocumentDao extends UnitDao<Document> {
 			String llengua = llenguaRS.getString("LlenguaName");
 			
 			/* Query to Materia and HasMateria tables */
-			MateriaDAO matDao = new MateriaDAO(getConnection());
+			MateriaDao matDao = new MateriaDao(getConnection());
 			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsMap();
 			
 			sql = "SELECT materia_id FROM HasMateria WHERE document_id=" + id;
