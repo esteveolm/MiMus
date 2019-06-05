@@ -47,6 +47,7 @@ import model.MiMusText;
 import model.Relation;
 import model.Transcription;
 import model.Unit;
+import persistence.DocumentDao;
 import persistence.MateriaDao;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
@@ -184,14 +185,12 @@ public class Editor extends EditorPart implements EventObserver {
 		materiesTV.setInput(allMateries);
 		
 		/* Check those Materies already selected in Document */
-		List<String> materies = docEntry.getSubjects();
+		List<Materia> materies = docEntry.getSubjects();
 		System.out.println("Read " + materies.size());
 		for (int i=0; i<allMateries.size(); i++) {
 			Materia thisMat = allMateries.get(i);
-			for (String mat : materies) {
-				System.out.println("All: " + thisMat.getName() + " . Ours: " + mat);
-				if (mat.equals(thisMat.getName())) {
-					System.out.println("Yes");
+			for (Materia mat : materies) {
+				if (mat.getName().equals(thisMat.getName())) {
 					materiesTV.setChecked(thisMat, true);
 				}
 			}
@@ -393,18 +392,31 @@ public class Editor extends EditorPart implements EventObserver {
 		saveMeta.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				/* Recover items to save */
+				
 				int llenguaSel = comboLlengua.getSelectionIndex();
 				if (llenguaSel>=0) {
-					String llengua = comboLlengua.getItem(llenguaSel);
-					Object[] materies = materiesTV.getCheckedElements();
-					String[] materiesStr = new String[materies.length];
-					for (int i=0; i<materies.length; i++) {
-						materiesStr[i] = (String) materies[i];
+					/* Update llengua in model object*/
+					docEntry.setLanguage(llenguaSel);
+					
+					/* Update list of materies in model object */
+					Object[] checked = materiesTV.getCheckedElements();
+					List<Materia> newMateries = new ArrayList<>();
+					for (int i=0; i<checked.length; i++) {
+						newMateries.add((Materia) checked[i]);
 					}
-					// TODO: update Document (llengua_id) and HasMateria
-					LabelPrinter.printInfo(metaLabel, 
-							"Llengua and materies added successfully");
-					System.out.println("Llengua and materies added successfully");
+					docEntry.setSubjects(newMateries);
+					
+					/* Update in DB */
+					try {
+						new DocumentDao(getConnection()).update(docEntry);
+						LabelPrinter.printInfo(metaLabel, 
+								"Llengua and materies added successfully");
+						System.out.println("Llengua and materies added successfully");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						System.out.println("Could not update document in DB.");
+					}
+					
 				} else {
 					LabelPrinter.printError(metaLabel, 
 							"Llengua must be specified");
@@ -921,6 +933,10 @@ public class Editor extends EditorPart implements EventObserver {
 			LabelPrinter.printInfo(label, 
 					"Nothing was added.");
 		}
+	}
+	
+	public Connection getConnection() {
+		return conn;
 	}
 	
 	public List<Unit> getReferences() {

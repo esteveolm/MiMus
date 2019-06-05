@@ -52,4 +52,9 @@ public class OficiDao extends EntityDao<Ofici> {
 		return "Ofici";
 	}
 
+	@Override
+	public void update(Ofici unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

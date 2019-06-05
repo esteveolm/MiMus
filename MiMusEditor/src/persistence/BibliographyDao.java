@@ -94,4 +94,9 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 	public String getTable() {
 		return "Bibliografia";
 	}
+
+	@Override
+	public void update(Bibliography unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
 }

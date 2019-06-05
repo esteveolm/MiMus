@@ -79,6 +79,9 @@ public abstract class UnitDao<U extends Unit> {
 		stmt.executeUpdate(sql);
 	}
 	
+	public abstract void update(U unit) 
+			throws SQLException, DaoNotImplementedException;
+	
 	protected abstract U make(ResultSet rs) throws SQLException;
 	
 	public abstract String getTable();

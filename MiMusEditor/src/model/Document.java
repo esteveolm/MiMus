@@ -40,7 +40,7 @@ public class Document extends Unit implements IEditorInput {
 	private String transcription;
 	private List<String> notes;		// TODO: change to real Notes structure when we define it
 	private int langIdx;
-	private List<String> subjects;
+	private List<Materia> subjects;
 	
 	/* Load languages array from file only once for all entries */
 	static {
@@ -230,13 +230,13 @@ public class Document extends Unit implements IEditorInput {
 		setLanguage(langIdx);
 	}
 	
-	public List<String> getSubjects() {
+	public List<Materia> getSubjects() {
 		return subjects;
 	}
-	public void setSubjects(List<String> subjects) {
+	public void setSubjects(List<Materia> subjects) {
 		this.subjects = subjects;
 	}
-	public void addSubject(String subject) {
+	public void addSubject(Materia subject) {
 		this.subjects.add(subject);
 	}
 	
@@ -257,8 +257,11 @@ public class Document extends Unit implements IEditorInput {
 			str += "Signatura B: " + getLibrary2() + "\n";
 		}
 		str += "Llengua: " + getLanguage() +
-				"\nMatèries: " + String.join(", ", getSubjects());
-		return str;
+				"\nMatèries: ";
+		for (Materia mat: getSubjects()) {
+			str += mat.getName() + ", ";
+		}
+		return str.substring(0,str.length()-2);
 	}
 
 	/* IEditorInput implementation */

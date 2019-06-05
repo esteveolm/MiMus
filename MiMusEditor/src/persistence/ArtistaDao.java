@@ -63,4 +63,9 @@ public class ArtistaDao extends EntityDao<Artista> {
 		return "Artista";
 	}
 
+	@Override
+	public void update(Artista unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

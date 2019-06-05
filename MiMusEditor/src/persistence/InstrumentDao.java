@@ -51,4 +51,9 @@ public class InstrumentDao extends EntityDao<Instrument> {
 		return "Instrument";
 	}
 
+	@Override
+	public void update(Instrument unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

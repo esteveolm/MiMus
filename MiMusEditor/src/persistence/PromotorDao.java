@@ -58,4 +58,9 @@ public class PromotorDao extends EntityDao<Promotor> {
 		return "Promotor";
 	}
 
+	@Override
+	public void update(Promotor unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

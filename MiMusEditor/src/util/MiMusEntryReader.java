@@ -205,9 +205,9 @@ public class MiMusEntryReader {
 		entry.setNotes(notes);
 
 		/* Subjects separated by ; */
-		for (String sub: subjects.split(";")) {
-			entry.addSubject(sub.trim());
-		}
+//		for (String sub: subjects.split(";")) {
+//			entry.addSubject(sub.trim());
+//		}
 		
 		/* Read ID from path */
 		String[] parts = path.split("/");

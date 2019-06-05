@@ -49,4 +49,9 @@ public class CasaDao extends EntityDao<Casa> {
 		return "Casa";
 	}
 
+	@Override
+	public void update(Casa unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

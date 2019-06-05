@@ -49,4 +49,9 @@ public class LlocDao extends EntityDao<Lloc> {
 		return "Lloc";
 	}
 
+	@Override
+	public void update(Lloc unit) throws SQLException, DaoNotImplementedException {
+		throw new DaoNotImplementedException();
+	}
+
 }

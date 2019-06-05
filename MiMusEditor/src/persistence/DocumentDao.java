@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import model.Document;
+import model.Materia;
 import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
 
@@ -79,7 +80,6 @@ public class DocumentDao extends UnitDao<Document> {
 		stmt.setString(38, unit.getTranscriptionText());
 		stmt.setString(39, String.join("$", unit.getNotes()));
 		stmt.setString(40, unit.getLanguage());
-		stmt.setString(41, String.join("$", unit.getSubjects()));
 		
 		return executeGetId(stmt);
 	}
@@ -141,20 +141,22 @@ public class DocumentDao extends UnitDao<Document> {
 			
 			/* Query to Materia and HasMateria tables */
 			MateriaDao matDao = new MateriaDao(getConnection());
-			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsMap();
+			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsIdsToNames();
 			System.out.println("TreeMap size: " + idsToMateries.size());
 			
 			sql = "SELECT materia_id FROM HasMateria WHERE document_id=" + id;
 			stmt = getConnection().createStatement();
 			ResultSet hasMateriaRS = stmt.executeQuery(sql);
 			
-			List<String> materies = new ArrayList<>();
+			List<Materia> materies = new ArrayList<>();
 			while (hasMateriaRS.next()) {
 				int materiaId = hasMateriaRS.getInt("materia_id");
-				materies.add(idsToMateries.get(materiaId));
+				Materia newMat = new Materia(idsToMateries.get(materiaId));
+				newMat.setId(materiaId);
+				materies.add(newMat);
 				System.out.println("Materia: " + materiaId);
 			}
-						
+			
 			Document doc = new Document();
 			doc.setId(id);
 			doc.setNumbering(numeracio);
@@ -215,9 +217,54 @@ public class DocumentDao extends UnitDao<Document> {
 		}
 		throw new SQLException();
 	}
-
+	
+	@Override
+	public void update(Document unit) throws SQLException {
+		/* Get llengua_id from Llengua String */
+		String sql = "SELECT id FROM Llengua WHERE LlenguaName=?";
+		PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
+		llenguaStmt.setString(1, unit.getLanguage());
+		ResultSet llenguaRS = llenguaStmt.executeQuery();
+		if (llenguaRS.next()) {
+			int llenguaId = llenguaRS.getInt("id");
+			
+			sql = "UPDATE Document SET llengua_id=? WHERE id=?";
+			PreparedStatement stmt1 = getConnection().prepareStatement(sql);
+			stmt1.setInt(1, llenguaId);
+			stmt1.setInt(2, unit.getId());
+			int result1 = stmt1.executeUpdate();
+			if (result1 > 0) {
+				sql = "DELETE FROM HasMateria WHERE document_id=?";
+				PreparedStatement stmt2 = getConnection().prepareStatement(sql);
+				stmt2.setInt(1, unit.getId());
+				stmt2.executeUpdate();
+				
+				int result2 = 0;
+				for (Materia mat: unit.getSubjects()) {
+					sql = "INSERT INTO HasMateria (materia_id, document_id)"
+							+ " VALUES (?,?)";
+					PreparedStatement stmt3 = getConnection().prepareStatement(sql);
+					stmt3.setInt(1, mat.getId());
+					stmt3.setInt(2, unit.getId());
+					result2 += stmt3.executeUpdate();
+				}
+				if (result2 == unit.getSubjects().size()) {
+					System.out.println("Document updated correctly.");
+				} else {
+					System.out.println("Could not update Materies properly.");
+				}
+			} else {
+				System.out.println("Could not perform update; Llengua not updated.");
+			}
+		} else {
+			System.out.println("Could not perform update; Llengua not found.");
+		}
+	}
+	
 	@Override
 	public String getTable() {
 		return "Document";
 	}
+
+
 }
