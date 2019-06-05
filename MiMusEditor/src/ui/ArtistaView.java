@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,16 +23,12 @@ import util.LabelPrinter;
 public class ArtistaView extends DeclarativeView {
 	
 	private List<Artista> artists;
-	private Connection conn;
 	
 	public ArtistaView() {
 		super();
 		getControl().setArtistaView(this);
 		try {
-			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			artists = new ArtistaDao(conn).selectAll();
+			artists = new ArtistaDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load artists from DB.");
@@ -167,10 +161,10 @@ public class ArtistaView extends DeclarativeView {
 						comboReligion.getSelectionIndex(),
 						textOrigen.getText());
 				try {
-					int id = new ArtistaDao(conn).insert(art);
+					int id = new ArtistaDao(getConnection()).insert(art);
 					if (id>0) {
 						artists.clear();
-						artists.addAll(new ArtistaDao(conn).selectAll());
+						artists.addAll(new ArtistaDao(getConnection()).selectAll());
 						System.out.println("Artist created successfully.");
 						LabelPrinter.printInfo(label, "Artist added successfully.");
 						notifyObservers();
@@ -199,9 +193,9 @@ public class ArtistaView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
 					try {
-						new ArtistaDao(conn).delete(art);
+						new ArtistaDao(getConnection()).delete(art);
 						artists.clear();
-						artists.addAll(new ArtistaDao(conn).selectAll());
+						artists.addAll(new ArtistaDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
 						notifyObservers();
 						getTv().refresh();
@@ -228,8 +222,4 @@ public class ArtistaView extends DeclarativeView {
 
 	@Override
 	public void update() {}
-	
-	public Connection getConnection() {
-		return conn;
-	}
 }

@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public abstract class DeclarativeView extends ViewPart
 	final int COMBO_FLAGS = SWT.DROP_DOWN | SWT.READ_ONLY;
 	final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
 	
+	private Connection conn;
 	private SharedResources resources;
 	private SharedControl control;
 	private List<EventObserver> observers;
@@ -37,6 +41,15 @@ public abstract class DeclarativeView extends ViewPart
 		setObservers(new ArrayList<>());
 		setResources(SharedResources.getInstance());
 		setControl(SharedControl.getInstance());
+		
+		try {
+			setConnection(DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Could not load entities from DB.");
+		}
 	}
 
 	@Override
@@ -107,5 +120,11 @@ public abstract class DeclarativeView extends ViewPart
 	}
 	public void setTv(TableViewer tv) {
 		this.tv = tv;
+	}
+	public Connection getConnection() {
+		return conn;
+	}
+	public void setConnection(Connection conn) {
+		this.conn = conn;
 	}
 }

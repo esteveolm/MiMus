@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -29,10 +27,7 @@ public class CasaView extends DeclarativeView {
 		super();
 		getControl().setCasaView(this);
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			cases = new CasaDao(conn).selectAll();
+			cases = new CasaDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load cases from DB.");
@@ -111,13 +106,10 @@ public class CasaView extends DeclarativeView {
 						textCort.getText());
 				
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
-					int id = new CasaDao(conn).insert(casa);
+					int id = new CasaDao(getConnection()).insert(casa);
 					if (id>0) {
 						cases.clear();
-						cases.addAll(new CasaDao(conn).selectAll());
+						cases.addAll(new CasaDao(getConnection()).selectAll());
 						System.out.println(getViewName() + " created successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " created successfully.");
 						notifyObservers();
@@ -146,12 +138,9 @@ public class CasaView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select a " + getViewName() + " in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new CasaDao(conn).delete(casa);
+						new CasaDao(getConnection()).delete(casa);
 						cases.clear();
-						cases.addAll(new CasaDao(conn).selectAll());
+						cases.addAll(new CasaDao(getConnection()).selectAll());
 						getTv().refresh();
 						notifyObservers();
 						System.out.println(getViewName() + " removed successfully.");
