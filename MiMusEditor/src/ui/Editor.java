@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
+import model.Materia;
 import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
@@ -43,6 +47,7 @@ import model.MiMusText;
 import model.Relation;
 import model.Transcription;
 import model.Unit;
+import persistence.MateriaDao;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
@@ -55,6 +60,7 @@ public class Editor extends EditorPart implements EventObserver {
 	
 	private SharedResources resources;
 	private SharedControl control;
+	private Connection conn;
 	private Document docEntry;
 	private String docIdStr;
 	private MiMusText regest;
@@ -82,6 +88,14 @@ public class Editor extends EditorPart implements EventObserver {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
+		
+		try {
+			conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
+					"mimus01", "colinet19");
+		} catch (SQLException e) {
+			throw new PartInitException("Could not connect to SQL database");
+		}
 		
 		docEntry = (Document) getEditorInput();
 		docID = docEntry.getNumbering();
@@ -132,7 +146,7 @@ public class Editor extends EditorPart implements EventObserver {
 		comboLlengua.setItems(Document.LANGS);
 		
 		/* Set Llengua if already defined */
-		String llengua = "";	//TODO: read from DB.
+		String llengua = docEntry.getLanguage();
 		for (int i=0; i<comboLlengua.getItems().length; i++) {
 			if (llengua.equals(comboLlengua.getItem(i))) {
 				comboLlengua.select(i);
@@ -150,23 +164,34 @@ public class Editor extends EditorPart implements EventObserver {
 		
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
-				return (String) element;
+				return ((Materia) element).getName();
 			}
 		}
 		
+		/* Materies checkbox list */
 		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(form.getBody(),
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
-		materiesTV.setInput(Document.MATERIES);
 		
-		/* Set Materies if already defined */
-		List<String> materies = new ArrayList<>();	// TODO: read from DB.
+		/* The checkbox list is filled with the entries from Materies table on DB */
+		List<Materia> allMateries = new ArrayList<>();
+		try {
+			allMateries = new MateriaDao(conn).selectAll();
+		} catch (SQLException e1) {
+			System.out.println("Could not query DB to retrieve Materies");
+		}
+		materiesTV.setInput(allMateries);
+		
+		/* Check those Materies already selected in Document */
+		List<String> materies = docEntry.getSubjects();
 		System.out.println("Read " + materies.size());
-		for (int i=0; i<Document.MATERIES.length; i++) {
-			String thisMat = Document.MATERIES[i];
+		for (int i=0; i<allMateries.size(); i++) {
+			Materia thisMat = allMateries.get(i);
 			for (String mat : materies) {
-				if (mat.equals(thisMat)) {
+				System.out.println("All: " + thisMat.getName() + " . Ours: " + mat);
+				if (mat.equals(thisMat.getName())) {
+					System.out.println("Yes");
 					materiesTV.setChecked(thisMat, true);
 				}
 			}
@@ -376,7 +401,7 @@ public class Editor extends EditorPart implements EventObserver {
 					for (int i=0; i<materies.length; i++) {
 						materiesStr[i] = (String) materies[i];
 					}
-					MiMusXML.openDoc(docIdStr).updateMeta(llengua, materiesStr).write();
+					// TODO: update Document (llengua_id) and HasMateria
 					LabelPrinter.printInfo(metaLabel, 
 							"Llengua and materies added successfully");
 					System.out.println("Llengua and materies added successfully");

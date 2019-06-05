@@ -152,7 +152,7 @@ public class DocumentDao extends UnitDao<Document> {
 			while (hasMateriaRS.next()) {
 				int materiaId = hasMateriaRS.getInt("materia_id");
 				materies.add(idsToMateries.get(materiaId));
-				System.out.println("Materia id: " + materiaId);
+				System.out.println("Materia: " + materiaId);
 			}
 						
 			Document doc = new Document();
