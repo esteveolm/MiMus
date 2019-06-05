@@ -1,4 +1,5 @@
 GRANT UPDATE ON Mimus.Document TO mimus01@localhost;
+GRANT SELECT, INSERT, DELETE ON Mimus.HasMateria TO mimus01@localhost;
 GRANT SELECT, INSERT, DELETE ON Mimus.Entity TO mimus01@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON Mimus.Bibliografia TO mimus01@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON Mimus.Artista TO mimus01@localhost;
