@@ -16,7 +16,7 @@ public class PromotorDao extends EntityDao<Promotor> {
 	@Override
 	public int insertSpecificEntity(Promotor unit, int entId) 
 			throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"ent_id", "nom_complet", "nom", "cognom", 
+		String[] insertColumns = {"entity_id", "nom_complet", "nom", "cognom", 
 				"sobrenom", "distintiu", "genere"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {

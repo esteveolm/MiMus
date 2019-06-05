@@ -16,7 +16,7 @@ public class LlocDao extends EntityDao<Lloc> {
 	@Override
 	public int insertSpecificEntity(Lloc unit, int entId) 
 			throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"ent_id", "nom_complet", "regne", "area"};
+		String[] insertColumns = {"entity_id", "nom_complet", "regne", "area"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";

@@ -16,7 +16,7 @@ public class CasaDao extends EntityDao<Casa> {
 	@Override
 	public int insertSpecificEntity(Casa unit, int entId)
 			throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"ent_id", "nom_complet", "titol", "cort"};
+		String[] insertColumns = {"entity_id", "nom_complet", "titol", "cort"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";

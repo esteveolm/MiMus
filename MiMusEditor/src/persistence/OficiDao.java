@@ -16,7 +16,7 @@ public class OficiDao extends EntityDao<Ofici> {
 	@Override
 	public int insertSpecificEntity(Ofici unit, int entId) 
 			throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"ent_id", "nom_complet", "terme", "especialitat",
+		String[] insertColumns = {"entity_id", "nom_complet", "terme", "especialitat",
 				"instrument_id"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
@@ -32,7 +32,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		stmt.setString(2, unit.getNomComplet());
 		stmt.setString(3, unit.getTerme());
 		stmt.setInt(4, unit.getEspecialitat());
-		stmt.setInt(5, unit.getInstrument().getId());
+		stmt.setInt(5, 0);	// TODO: foreign key with Instrument
 		
 		return executeGetId(stmt);
 	}
