@@ -15,7 +15,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 	@Override
 	public int insertSpecificEntity(Artista unit, int entId) 
 			throws SQLException, DaoNotImplementedException {
-		String[] insertColumns = {"ent_id, nom_complet", "tractament", "nom", 
+		String[] insertColumns = {"entity_id, nom_complet", "tractament", "nom", 
 				"cognom", "sobrenom", "distintiu", "genere", "religio", "origen"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {

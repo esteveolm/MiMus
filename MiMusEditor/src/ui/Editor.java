@@ -201,7 +201,7 @@ public class Editor extends EditorPart implements EventObserver {
 		gd.widthHint = 250;
 		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
 		saveMeta.setLayoutData(gd);
-		saveMeta.setText("Save Llengua and Materies to XML");
+		saveMeta.setText("Save Llengua and Materies to DB");
 		
 		Label metaLabel = toolkit.createLabel(form.getBody(), "");
 		metaLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

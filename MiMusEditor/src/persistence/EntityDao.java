@@ -15,9 +15,10 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	}
 	
 	public int insert(E entity) throws SQLException, DaoNotImplementedException {
-		int entId = insertCommonEntity(entity);
-		if (entId > 0) {
-			return insertSpecificEntity(entity, entId);
+		int commonId = insertCommonEntity(entity);
+		if (commonId > 0) {
+			int specId = insertSpecificEntity(entity, commonId);
+			return updateCommonEntity(commonId, specId);
 		}
 		return -1;
 	}
@@ -26,20 +27,38 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 			throws SQLException, DaoNotImplementedException;
 	
 	public int insertCommonEntity(E entity) throws SQLException {
-		String sql = "INSERT INTO Entity (ent_type) VALUES (?)";
+		String sql = "SELECT id from EntityTypes WHERE EntityName=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, getTable());
+		ResultSet typeRS = stmt.executeQuery();
+		if (typeRS.next()) {
+			int typeId = typeRS.getInt(1);
+			
+			sql = "INSERT INTO Entity (entity_type_id, entity_id) VALUES (?,?)";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, typeId);
+			stmt.setInt(2, 0);	// Don't know entity_id yet, set it to 0
+			return executeGetId(stmt);
+		} 
+		return -1;
+	}
+	
+	public int updateCommonEntity(int commonId, int specId) throws SQLException {
+		String sql = "UPDATE Entity SET entity_id=? WHERE id=?";
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setInt(1, specId);
+		stmt.setInt(2, commonId);
 		return executeGetId(stmt);
 	}
 	
 	public void delete(E entity) throws SQLException, DaoNotImplementedException {
 		/* First find Entity ID */
 		Statement selectStmt = getConnection().createStatement();
-		String sql = "SELECT ent_id FROM " + getTable() + 
+		String sql = "SELECT entity_id FROM " + getTable() + 
 				" WHERE id=" + entity.getId();
 		ResultSet rs = selectStmt.executeQuery(sql);
 		rs.next();
-		int entId = rs.getInt("ent_id");
+		int entId = rs.getInt("entity_id");
 		
 		/* Then delete from specific table */
 		super.delete(entity);

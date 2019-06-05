@@ -25,12 +25,13 @@ import util.LabelPrinter;
 public class ArtistaView extends DeclarativeView {
 	
 	private List<Artista> artists;
+	private Connection conn;
 	
 	public ArtistaView() {
 		super();
 		getControl().setArtistaView(this);
 		try {
-			Connection conn = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 					"mimus01", "colinet19");
 			artists = new ArtistaDao(conn).selectAll();
@@ -166,9 +167,6 @@ public class ArtistaView extends DeclarativeView {
 						comboReligion.getSelectionIndex(),
 						textOrigen.getText());
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
 					int id = new ArtistaDao(conn).insert(art);
 					if (id>0) {
 						artists.clear();
@@ -201,9 +199,6 @@ public class ArtistaView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
 						new ArtistaDao(conn).delete(art);
 						artists.clear();
 						artists.addAll(new ArtistaDao(conn).selectAll());
@@ -233,4 +228,8 @@ public class ArtistaView extends DeclarativeView {
 
 	@Override
 	public void update() {}
+	
+	public Connection getConnection() {
+		return conn;
+	}
 }
