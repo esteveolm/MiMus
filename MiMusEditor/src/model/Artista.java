@@ -1,14 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import util.xml.MiMusXML;
-
 public class Artista extends Entity {
 	
 	private String nomComplet;
@@ -126,97 +117,5 @@ public class Artista extends Entity {
 	
 	public String toString() {
 		return getLemma();
-	}
-
-	/* MiMusWritable implementation */
-	
-	@Override
-	public Artista fromXMLElement(Element elem) {
-		String nombreCompleto = elem.getElementsByTagName("nombre_completo")
-				.item(0).getTextContent();
-		String tratamiento = elem.getElementsByTagName("tratamiento")
-				.item(0).getTextContent();
-		String nombre = elem.getElementsByTagName("nombre")
-				.item(0).getTextContent();
-		String apellido = elem.getElementsByTagName("apellido")
-				.item(0).getTextContent();
-		String sobrenombre = elem.getElementsByTagName("sobrenombre")
-				.item(0).getTextContent();
-		String distintiu = elem.getElementsByTagName("distintiu")
-				.item(0).getTextContent();
-		int genero = Integer.parseInt(
-				elem.getElementsByTagName("genero")
-				.item(0).getTextContent());
-		int religion = Integer.parseInt(
-				elem.getElementsByTagName("religion")
-				.item(0).getTextContent());
-		String origen = elem.getElementsByTagName("origen")
-				.item(0).getTextContent();
-		int id = Integer.parseInt(
-				elem.getElementsByTagName("id")
-				.item(0).getTextContent());
-		
-		return new Artista(id, nombreCompleto, tratamiento, nombre, apellido,
-				sobrenombre, distintiu, genero, religion, origen);
-	}
-	
-	@Override
-	public Element toXMLElement(Document doc) {
-		Element tagEntry = doc.createElement(getWritableName());
-		Element tagNombreCompleto = doc.createElement("nombre_completo");
-		tagNombreCompleto.appendChild(doc.createTextNode(getNomComplet()));
-		Element tagTratamiento = doc.createElement("tratamiento");
-		tagTratamiento.appendChild(doc.createTextNode(getTractament()));
-		Element tagNombre = doc.createElement("nombre");
-		tagNombre.appendChild(doc.createTextNode(getNom()));
-		Element tagApellido = doc.createElement("apellido");
-		tagApellido.appendChild(doc.createTextNode(getCognom()));
-		Element tagSobrenombre = doc.createElement("sobrenombre");
-		tagSobrenombre.appendChild(doc.createTextNode(getSobrenom()));
-		Element tagDistintiu = doc.createElement("distintiu");
-		tagDistintiu.appendChild(doc.createTextNode(getDistintiu()));
-		Element tagGenero = doc.createElement("genero");
-		tagGenero.appendChild(doc.createTextNode(String.valueOf(getGenere())));
-		Element tagReligion = doc.createElement("religion");
-		tagReligion.appendChild(doc.createTextNode(String.valueOf(getReligio())));
-		Element tagOrigen = doc.createElement("origen");
-		tagOrigen.appendChild(doc.createTextNode(getOrigen()));
-		Element tagID = doc.createElement("id");
-		tagID.appendChild(doc.createTextNode(String.valueOf(getId())));
-		tagEntry.appendChild(tagNombreCompleto);
-		tagEntry.appendChild(tagTratamiento);
-		tagEntry.appendChild(tagNombre);
-		tagEntry.appendChild(tagApellido);
-		tagEntry.appendChild(tagSobrenombre);
-		tagEntry.appendChild(tagDistintiu);
-		tagEntry.appendChild(tagGenero);
-		tagEntry.appendChild(tagReligion);
-		tagEntry.appendChild(tagOrigen);
-		tagEntry.appendChild(tagID);
-		return tagEntry;
-	}
-	
-	@Override
-	public String getWritableName() {
-		return "artista";
-	}
-	
-	@Override
-	public String getWritableCategory() {
-		return "artistas";
-	}
-	
-	public static ArrayList<Unit> read() {
-		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openArtista().getDoc();
-		NodeList nl = doc.getElementsByTagName("artista");
-		for (int i=0; i<nl.getLength(); i++) {
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-				entries.add(new Artista().fromXMLElement(elem));
-			}
-		}
-		return entries;
 	}
 }

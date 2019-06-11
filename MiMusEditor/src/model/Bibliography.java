@@ -3,14 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import util.xml.Persistable;
-import util.xml.MiMusXML;
-
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -36,7 +28,7 @@ import util.xml.MiMusXML;
  * TODO: guarantee sequentiality of authors.
  * 
  */
-public class Bibliography extends Unit implements Persistable {
+public class Bibliography extends Unit {
 	
 	/*
 	 * The number of authors and secondary authors is fixed and reflected
@@ -374,157 +366,5 @@ public class Bibliography extends Unit implements Persistable {
 			str += " - " + author1;
 		str += " " + year + distinction;
 		return str;
-	}
-	
-	public Bibliography fromXMLElement(Element elem) {
-		String[] authors = new String[NUM_AUTHORS];
-		for (int i=0; i<NUM_AUTHORS; i++) {
-			authors[i] = elem.getElementsByTagName("autor"+(i+1))
-					.item(0).getTextContent();
-		}
-		String[] secondaries = new String[NUM_SECONDARY];
-		for (int i=0; i<NUM_SECONDARY; i++) {
-			secondaries[i] = elem.getElementsByTagName("autor_secundari"+(i+1))
-					.item(0).getTextContent();
-		}
-		String year = elem.getElementsByTagName("any")
-				.item(0).getTextContent();
-		String distinction = elem.getElementsByTagName("distincio")
-				.item(0).getTextContent();
-		String title = elem.getElementsByTagName("titol")
-				.item(0).getTextContent();
-		String mainTitle = elem.getElementsByTagName("titol_principal")
-				.item(0).getTextContent();
-		String volume = elem.getElementsByTagName("volum")
-				.item(0).getTextContent();
-		String place = elem.getElementsByTagName("lloc")
-				.item(0).getTextContent();
-		String editorial = elem.getElementsByTagName("editorial")
-				.item(0).getTextContent();
-		String series = elem.getElementsByTagName("serie")
-				.item(0).getTextContent();
-		String pages = elem.getElementsByTagName("pagines")
-				.item(0).getTextContent();
-		String shortRef = elem.getElementsByTagName("referencia_abreujada")
-				.item(0).getTextContent();
-		int id = Integer.parseInt(elem.getElementsByTagName("id")
-				.item(0).getTextContent());
-		ArrayList<Integer> users = new ArrayList<>();
-		NodeList nodesDoc = elem.getElementsByTagName("usuari_id");
-		for (int i=0; i<nodesDoc.getLength(); i++) {
-			users.add(Integer.parseInt(nodesDoc.item(i).getTextContent()));
-		}
-		return new Bibliography(authors, secondaries, year, distinction, 
-				title, mainTitle, volume, place, editorial, series, pages,
-				shortRef, id, users);
-	}
-	
-	/* Implementation of MiMusWritable */
-	
-	@Override
-	public Element toXMLElement(Document doc) {
-		Element elem = doc.createElement("entry");
-		Element a1 = doc.createElement("autor1");
-		a1.appendChild(doc.createTextNode(getAuthor(0)));
-		Element a2 = doc.createElement("autor2");
-		a2.appendChild(doc.createTextNode(getAuthor(1)));
-		Element a3 = doc.createElement("autor3");
-		a3.appendChild(doc.createTextNode(getAuthor(2)));
-		Element a4 = doc.createElement("autor4");
-		a4.appendChild(doc.createTextNode(getAuthor(3)));
-		Element s1 = doc.createElement("autor_secundari1");
-		s1.appendChild(doc.createTextNode(getSecondaryAuthor(0)));
-		Element s2 = doc.createElement("autor_secundari2");
-		s2.appendChild(doc.createTextNode(getSecondaryAuthor(1)));
-		Element s3 = doc.createElement("autor_secundari3");
-		s3.appendChild(doc.createTextNode(getSecondaryAuthor(2)));
-		Element s4 = doc.createElement("autor_secundari4");
-		s4.appendChild(doc.createTextNode(getSecondaryAuthor(3)));
-		Element s5 = doc.createElement("autor_secundari5");
-		s5.appendChild(doc.createTextNode(getSecondaryAuthor(4)));
-		Element s6 = doc.createElement("autor_secundari6");
-		s6.appendChild(doc.createTextNode(getSecondaryAuthor(5)));
-		Element year = doc.createElement("any");
-		year.appendChild(doc.createTextNode(getYear()));
-		Element distinction = doc.createElement("distincio");
-		distinction.appendChild(doc.createTextNode(getDistinction()));
-		Element title = doc.createElement("titol");
-		title.appendChild(doc.createTextNode(getTitle()));
-		Element mainTitle = doc.createElement("titol_principal");
-		mainTitle.appendChild(doc.createTextNode(getMainTitle()));
-		Element volume = doc.createElement("volum");
-		volume.appendChild(doc.createTextNode(getVolume()));
-		Element place = doc.createElement("lloc");
-		place.appendChild(doc.createTextNode(getPlace()));
-		Element editorial = doc.createElement("editorial");
-		editorial.appendChild(doc.createTextNode(getEditorial()));
-		Element series = doc.createElement("serie");
-		series.appendChild(doc.createTextNode(getSeries()));
-		Element pages = doc.createElement("pagines");
-		pages.appendChild(doc.createTextNode(getPages()));
-		Element shortRef = doc.createElement("referencia_abreujada");
-		shortRef.appendChild(doc.createTextNode(getShortReference()));
-		Element id = doc.createElement("id");
-		id.appendChild(doc.createTextNode(String.valueOf(getId())));
-		
-		Element users = doc.createElement("usuaris");
-		for (int user: getUsers()) {
-			Element userId = doc.createElement("usuari_id");
-			userId.appendChild(doc.createTextNode(String.valueOf(user)));
-			users.appendChild(userId);
-		}
-		
-		elem.appendChild(id);
-		elem.appendChild(a1);
-		elem.appendChild(a2);
-		elem.appendChild(a3);
-		elem.appendChild(a4);
-		elem.appendChild(s1);
-		elem.appendChild(s2);
-		elem.appendChild(s3);
-		elem.appendChild(s4);
-		elem.appendChild(s5);
-		elem.appendChild(s6);
-		elem.appendChild(year);
-		elem.appendChild(distinction);
-		elem.appendChild(title);
-		elem.appendChild(mainTitle);
-		elem.appendChild(volume);
-		elem.appendChild(place);
-		elem.appendChild(editorial);
-		elem.appendChild(series);
-		elem.appendChild(pages);
-		elem.appendChild(shortRef);
-		elem.appendChild(users);
-		return elem;
-	}
-
-	@Override
-	public String getWritableName() {
-		return "entry";
-	}
-
-	@Override
-	public String getWritableCategory() {
-		return "bibliography";
-	}
-	
-	@Override
-	public String getWritableId() {
-		return String.valueOf(id);
-	}
-	
-	public static ArrayList<Bibliography> read() {
-		ArrayList<Bibliography> entries = new ArrayList<>();
-		Document doc = MiMusXML.openBiblio().getDoc();
-		NodeList nl = doc.getElementsByTagName("entry");
-		for (int i=0; i<nl.getLength(); i++) {
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-				entries.add(new Bibliography().fromXMLElement(elem));
-			}
-		}
-		return entries;
 	}
 }

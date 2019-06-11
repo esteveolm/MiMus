@@ -30,9 +30,6 @@ public class EntityInstance extends ConcreteUnit {
 	public void setItsEntity(Entity itsEntity) {
 		this.itsEntity = itsEntity;
 	}
-	public String getType() {
-		return itsEntity.getWritableName();
-	}
 	
 	public Document getItsDocument() {
 		return itsDocument;

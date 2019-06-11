@@ -65,7 +65,7 @@ public class EntityTableViewer extends MiMusTableViewer {
 			EntityInstance ent = (EntityInstance) element;
 			switch (columnIndex) {
 			case 0:	// Type
-				return ent.getType();
+				return ent.getItsEntity().getType();
 			case 1: // Entity
 				return ent.toString();
 			default:
@@ -84,7 +84,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			EntityInstance ent1 = (EntityInstance) e1;
 			EntityInstance ent2 = (EntityInstance) e2;
-			int byType = ent1.getType().compareTo(ent2.getType());
+			int byType = ent1.getItsEntity().getType()
+					.compareTo(ent2.getItsEntity().getType());
 			if (byType==0) {
 				return ent1.toString().compareTo(ent2.toString());
 			} else {

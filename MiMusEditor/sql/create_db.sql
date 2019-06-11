@@ -245,9 +245,9 @@ CREATE TABLE Lloc (
 
 CREATE TABLE EntityInstance (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-	ent_id bigint(20) NOT NULL,
+	entity_id bigint(20) NOT NULL,
 	document_id bigint(20) NOT NULL,
-	FOREIGN KEY (ent_id)
+	FOREIGN KEY (entity_id)
 		REFERENCES Entity(id),
 	FOREIGN KEY (document_id)
 		REFERENCES Document(id),

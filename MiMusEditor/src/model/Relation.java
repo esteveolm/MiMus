@@ -1,13 +1,8 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import util.xml.Persistable;
-
-public class Relation extends ConcreteUnit implements Persistable {
+public class Relation extends ConcreteUnit {
 
 	private EntityInstance itsEntity1;
 	private EntityInstance itsEntity2;
@@ -48,93 +43,6 @@ public class Relation extends ConcreteUnit implements Persistable {
 	@Override
 	public String toString() {
 		return getItsEntity1().toString() + " - " + getItsEntity2().toString();
-	}
-	
-	@Override
-	public Persistable fromXMLElement(Element elem) {
-		/* Find 1st EntityInstance with certain id from xml */
-		int ent1Id = Integer.parseInt(
-				elem.getElementsByTagName("entity1_id")
-				.item(0).getTextContent());
-		EntityInstance ent1 = null;
-		for (int i=0; i<getItsConcepts().size(); i++) {
-			Unit u = getItsConcepts().get(i);
-			if (u instanceof EntityInstance) {
-				EntityInstance thisEnt = ((EntityInstance) u);
-				if (thisEnt.getId() == ent1Id) {
-					ent1 = thisEnt;
-					break;
-				}
-			}
-		}
-		/* Find 2nd EntityInstance with certain id from xml */
-		int ent2Id = Integer.parseInt(
-				elem.getElementsByTagName("entity2_id")
-				.item(0).getTextContent());
-		EntityInstance ent2 = null;
-		for (int i=0; i<getItsConcepts().size(); i++) {
-			Unit u = getItsConcepts().get(i);
-			if (u instanceof EntityInstance) {
-				EntityInstance thisEnt = ((EntityInstance) u);
-				if (thisEnt.getId() == ent2Id) {
-					ent2 = thisEnt;
-					break;
-				}
-			}
-		}
-		
-		/* Create Relation object from references to Entities */
-		if (ent1 != null && ent2 != null) {
-			int id = Integer.parseInt(
-					elem.getElementsByTagName("id")
-					.item(0).getTextContent());
-			String type = elem.getElementsByTagName("type")
-					.item(0).getTextContent();
-			return new Relation(ent1, ent2, type, id);
-		}
-		return null;
-	}
-
-	@Override
-	public Element toXMLElement(Document doc) {
-		Element tagRelation = doc.createElement(getWritableName());
-		Element tagItsEntity1 = doc.createElement("entity1_id");
-		tagItsEntity1.appendChild(doc.createTextNode(
-				String.valueOf(getItsEntity1().getId())));
-		Element tagItsEntity2 = doc.createElement("entity2_id");
-		tagItsEntity2.appendChild(doc.createTextNode(
-				String.valueOf(getItsEntity2().getId())));
-		Element tagType = doc.createElement("type");
-		tagType.appendChild(doc.createTextNode(getType()));
-		Element tagId = doc.createElement("id");
-		tagId.appendChild(doc.createTextNode(
-				String.valueOf(getId())));
-		tagRelation.appendChild(tagItsEntity1);
-		tagRelation.appendChild(tagItsEntity2);
-		tagRelation.appendChild(tagType);
-		tagRelation.appendChild(tagId);
-		return tagRelation;
-	}
-
-	@Override
-	public String getWritableName() {
-		return "relation";
-	}
-
-	@Override
-	public String getWritableCategory() {
-		return "relations";
-	}
-
-	@Override
-	public String getWritableId() {
-		return String.valueOf(this.getId());
-	}
-	
-	public static List<Unit> read(String docIdStr) {
-		/* Retrieve EntityInstances at this document */
-		ArrayList<Unit> entries = new ArrayList<>();
-		return entries;
 	}
 	
 	public static boolean containsRelation(List<Unit> relations, Relation rel) {

@@ -55,10 +55,10 @@ public class RelationDialog extends Dialog {
 		List<EntityInstance> instances2 = new ArrayList<>();
 		for (int i=0; i<instances.size(); i++) {
 			EntityInstance thisInst = (EntityInstance)instances.get(i);
-			if (thisInst.getItsEntity().getWritableName()
+			if (thisInst.getItsEntity().getType()
 					.equals(entityType1))
 				instances1.add(thisInst);
-			if (thisInst.getItsEntity().getWritableName()
+			if (thisInst.getItsEntity().getType()
 					.equals(entityType2))
 				instances2.add(thisInst);
 		}

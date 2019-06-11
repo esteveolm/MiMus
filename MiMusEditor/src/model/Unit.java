@@ -14,7 +14,7 @@ public class Unit {
 		this.id = id;
 	}
 	
-	public static Unit findUnit(List<Unit> units, int id) {
+	public static Unit findById(List<? extends Unit> units, int id) {
 		for (Unit u : units) {
 			if (u.getId() == id) {
 				return u;

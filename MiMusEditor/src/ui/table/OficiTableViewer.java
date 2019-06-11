@@ -14,7 +14,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-import control.SharedResources;
 import model.Instrument;
 import model.Ofici;
 import model.Unit;
@@ -24,9 +23,13 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 
 			"Instrument", "Veu", "Dansa", "Artesà", "Malabars i altres"};
 	
-	public OficiTableViewer(Composite parent, List<Ofici> oficis) {
+	private List<Instrument> instruments;
+	
+	public OficiTableViewer(Composite parent, List<Ofici> oficis, 
+			List<Instrument> instruments) {
 		super(parent);
 		this.entities = oficis;
+		this.instruments = instruments;
 		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument"};
 		this.columnNames = aux;
 	}
@@ -47,7 +50,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 		tv.setLabelProvider(new OficiLabelProvider());
 		tv.setComparator(new OficiComparator());
 	}
-	
+
 	class OficiCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(Object element, String property) {
@@ -87,8 +90,8 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 				ofici.setEspecialitat((int) value);
 				break;
 			case 3:		// Instrument
-				Instrument inst = (Instrument) Unit.findUnit(
-						SharedResources.getInstance().getInstruments(), 
+				Instrument inst = (Instrument) Unit.findById(
+						instruments, 
 						(int) value);
 				if (inst != null)
 					ofici.setInstrument(inst);

@@ -1,5 +1,6 @@
 package ui.table;
 
+import java.sql.Connection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -24,16 +25,15 @@ import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
 import model.Unit;
-import util.xml.MiMusXML;
 
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
-	private List<Unit> references;
-	private List<Unit> bibEntries;
+	private List<MiMusReference> references;
+	private List<Bibliography> bibEntries;
 	private Document docEntry;
 	
-	public ReferenceTableViewer(Composite parent, List<Unit> references, 
-			List<Unit> bibEntries, Document docEntry, SharedResources resources) {
+	public ReferenceTableViewer(Composite parent, List<MiMusReference> references, 
+			List<Bibliography> bibEntries, Document docEntry, SharedResources resources) {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;
@@ -76,7 +76,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	}
 
 	private String[] getBibEntriesText() {
-		List<Bibliography> entries = SharedResources.getInstance().getBibEntries();
+		List<Bibliography> entries = getBibEntries();
 		String[] res = new String[entries.size()];
 		for (int i=0; i<entries.size(); i++) {
 			res[i] = entries.get(i).getShortReference();
@@ -197,16 +197,16 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		}
 	}
 	
-	public List<Unit> getReferences() {
+	public List<MiMusReference> getReferences() {
 		return references;
 	}
-	public void setReferences(List<Unit> references) {
+	public void setReferences(List<MiMusReference> references) {
 		this.references = references;
 	}
-	public List<Unit> getBibEntries() {
+	public List<Bibliography> getBibEntries() {
 		return bibEntries;
 	}
-	public void setBibEntries(List<Unit> bibEntries) {
+	public void setBibEntries(List<Bibliography> bibEntries) {
 		this.bibEntries = bibEntries;
 	}
 }

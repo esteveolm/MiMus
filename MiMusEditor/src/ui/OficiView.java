@@ -16,10 +16,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Instrument;
 import model.Ofici;
-import model.Unit;
 import persistence.DaoNotImplementedException;
 import persistence.InstrumentDao;
 import persistence.OficiDao;
@@ -29,7 +27,9 @@ import util.LabelPrinter;
 public class OficiView extends DeclarativeView {
 
 	private List<Ofici> oficis;
+	private List<Instrument> insts;
 	private Combo comboInstrument;
+	private Connection conn;
 	
 	public OficiView() {
 		super();
@@ -37,10 +37,11 @@ public class OficiView extends DeclarativeView {
 		comboInstrument = null;
 		
 		try {
-			Connection conn = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
 					"mimus01", "colinet19");
 			oficis = new OficiDao(conn).selectAll();
+			insts = new InstrumentDao(conn).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load oficis from DB.");
@@ -88,8 +89,6 @@ public class OficiView extends DeclarativeView {
 		Label labelInstrument = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelInstrument.setText("Instrument:");
 		comboInstrument = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		// XXX: find a better way to extract a list of attributes from any Unit
-		List<Unit> insts = SharedResources.getInstance().getInstruments();
 		String[] instNames = new String[insts.size()];
 		for (int i=0; i<instNames.length; i++) {
 			instNames[i] = ((Instrument) insts.get(i)).getLemma();
@@ -113,7 +112,7 @@ public class OficiView extends DeclarativeView {
 		sectTable.setText(getViewName() + "s created");
 		
 		OficiTableViewer oficiHelper = 
-				new OficiTableViewer(sectTable.getParent(), oficis);
+				new OficiTableViewer(sectTable.getParent(), oficis, insts);
 		setTv(oficiHelper.createTableViewer());
 		
 		/* Label for user feedback */

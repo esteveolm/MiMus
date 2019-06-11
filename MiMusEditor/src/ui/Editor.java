@@ -47,6 +47,7 @@ import model.MiMusText;
 import model.Relation;
 import model.Transcription;
 import model.Unit;
+import persistence.BibliographyDao;
 import persistence.DocumentDao;
 import persistence.InstanceDao;
 import persistence.MateriaDao;
@@ -367,11 +368,10 @@ public class Editor extends EditorPart implements EventObserver {
 		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Table of references */
-		List<Unit> bibEntries = new ArrayList<>(resources.getBibEntries());
+		List<Bibliography> bibEntries = new BibliographyDao(conn).selectAll();
+		List<MiMusReference> refs = new ArrayList<MiMusReference>(); // TODO: DAO
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), 
-				MiMusReference.read(docIdStr, bibEntries), 
-				bibEntries, docEntry, resources);
+				sectRef.getParent(), refs, bibEntries, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		references = referenceHelper.getReferences();
 		
@@ -741,7 +741,7 @@ public class Editor extends EditorPart implements EventObserver {
 						SharedResources.getInstance().getBibEntries().get(0),
 						"",
 						0, 
-						resources.getIncrementId());
+						0);
 				references.add(ref);
 				
 				/* Reflect document is user of entry, in model and xml */
@@ -867,7 +867,7 @@ public class Editor extends EditorPart implements EventObserver {
 						Transcription trans = new Transcription(
 								EntityInstance.getInstanceWithEntity(entities, ent),
 								selectedText, form, charCoords, 
-								resources.getIncrementId());
+								0);
 						transcriptions.add(trans);
 						MiMusXML.openDoc(docIdStr).append(trans).write();
 						System.out.println("Adding selected Transcription - " 
@@ -917,7 +917,7 @@ public class Editor extends EditorPart implements EventObserver {
 				/* Two instances correctly selected */
 				Relation rel = new Relation(
 						instance1, instance2, dialog.getRelType(),
-						resources.getIncrementId());
+						0);
 				if (Relation.containsRelation(relations, rel)) {
 					/* This Relation has been declared already */
 					System.out.println("No Relation added, already there - " 
