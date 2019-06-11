@@ -6,10 +6,6 @@ import java.util.List;
 import org.eclipse.swt.graphics.Point;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import util.xml.MiMusXML;
 import util.xml.Persistable;
 
 /**
@@ -179,16 +175,6 @@ public class Transcription extends ConcreteUnit
 	
 	public static List<Unit> read(String docIdStr, List<Unit> entityInstances) {
 		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openDoc(docIdStr).getDoc();
-		NodeList nl = doc.getElementsByTagName("transcription");
-		for (int i=0; i<nl.getLength(); i++) {
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-				entries.add(new Transcription(entityInstances)
-						.fromXMLElement(elem));
-			}
-		}
 		return entries;
 	}
 	

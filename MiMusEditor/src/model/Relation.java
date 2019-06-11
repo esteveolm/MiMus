@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import util.xml.MiMusXML;
 import util.xml.Persistable;
 
 public class Relation extends ConcreteUnit implements Persistable {
@@ -137,42 +133,7 @@ public class Relation extends ConcreteUnit implements Persistable {
 	
 	public static List<Unit> read(String docIdStr) {
 		/* Retrieve EntityInstances at this document */
-		List<Unit> instances = EntityInstance.read(docIdStr);
 		ArrayList<Unit> entries = new ArrayList<>();
-		Document doc = MiMusXML.openDoc(docIdStr).getDoc();
-		NodeList nl = doc.getElementsByTagName("relation");
-		for (int i=0; i<nl.getLength(); i++) {
-			/* Iterate all relations */
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-				/* Retrieve all fields: id, type, entity1_id, entity2_id */
-				int id = Integer.parseInt(
-						elem.getElementsByTagName("id")
-						.item(0).getTextContent());
-				String type = elem.getElementsByTagName("type")
-						.item(0).getTextContent();
-				int ent1Id = Integer.parseInt(
-						elem.getElementsByTagName("entity1_id")
-						.item(0).getTextContent());
-				int ent2Id = Integer.parseInt(
-						elem.getElementsByTagName("entity2_id")
-						.item(0).getTextContent());
-				EntityInstance ent1 = null;
-				EntityInstance ent2 = null;
-				for (int j=0; j<instances.size(); j++) {
-					/* Use entity ids to find the EntityInstance objects */
-					if (((EntityInstance) instances.get(j)).getId() == ent1Id) {
-						ent1 = (EntityInstance) instances.get(j);
-					} else if (((EntityInstance) instances.get(j)).getId() == ent2Id) {
-						ent2 = (EntityInstance) instances.get(j);
-					}
-				}
-				if (ent1 != null && ent2 != null)
-					/* Should always hold true */
-					entries.add(new Relation(ent1, ent2, type, id));
-			}
-		}
 		return entries;
 	}
 	

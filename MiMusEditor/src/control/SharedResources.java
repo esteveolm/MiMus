@@ -329,53 +329,6 @@ public final class SharedResources {
 	}
 	
 	public void globallySetUpdateId() {
-		System.out.println("Entering global setupdate");
-		for (Unit a : Artista.read()) {
-			setUpdateId(a.getId());
-		}
-		for (Unit i : Instrument.read()) {
-			setUpdateId(i.getId());
-		}
-		for (Unit i : Casa.read()) {
-			setUpdateId(i.getId());
-		}
-		for (Unit i : Promotor.read()) {
-			setUpdateId(i.getId());
-		}
-		for (Unit i : Ofici.read()) {
-			setUpdateId(i.getId());
-		}
-		for (Unit i : Lloc.read()) {
-			setUpdateId(i.getId());
-		}
-		List<Unit> biblio = new ArrayList<>(Bibliography.read());
-		for (Unit e : biblio) {
-			setUpdateId(e.getId());
-		}
-		File docs = new File(getXmlPath());
-		for (File f : docs.listFiles()) {
-			if (f.getName().endsWith(".xml")) {
-				try {
-					String num = f.getName().substring(0, 3);
-					Integer.parseInt(num);	// Catches exception if not a number
-					List<Unit> instances = 
-							EntityInstance.read(String.valueOf(num));
-					List<Unit> transcriptions = 
-							Transcription.read(String.valueOf(num), instances);
-					List<Unit> references = 
-							MiMusReference.read(String.valueOf(num), biblio);
-					for (Unit u : instances) {
-						setUpdateId(u.getId());
-					}
-					for (Unit u : transcriptions) {
-						setUpdateId(u.getId());
-					}
-					for (Unit u : references) {
-						setUpdateId(u.getId());
-					}
-				} catch (NumberFormatException e) {}
-			}
-		}
-		System.out.println("Updated ID is: "+ id);
+		
 	}
 }

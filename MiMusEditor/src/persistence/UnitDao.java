@@ -41,6 +41,16 @@ public abstract class UnitDao<U extends Unit> {
 		return elems;
 	}
 	
+	public U selectOne(int id) throws SQLException {
+		String sql = "SELECT * FROM " + getTable() + " WHERE id=" + id;
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		if (rs.next()) {
+			return make(rs);
+		}
+		throw new SQLException();
+	}
+	
 	public U selectOne(String... criteria) throws SQLException {
 		String sql = "SELECT * FROM " + getTable() + " LIMIT 1";
 		Statement stmt = getConnection().createStatement();
@@ -72,7 +82,7 @@ public abstract class UnitDao<U extends Unit> {
 		return -1;
 	}
 	
-	public void delete(U unit) throws SQLException, DaoNotImplementedException {
+	public void delete(U unit) throws SQLException {
 		Statement stmt = getConnection().createStatement();
 		String sql = "DELETE FROM " + getTable() + 
 				" WHERE id=" + unit.getId();

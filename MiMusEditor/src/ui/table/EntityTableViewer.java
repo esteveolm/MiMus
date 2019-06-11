@@ -23,7 +23,8 @@ public class EntityTableViewer extends MiMusTableViewer {
 
 	private List<Unit> entities;
 
-	public EntityTableViewer(Composite parent, List<Unit> initials, TextStyler styler, MiMusText text) {
+	public EntityTableViewer(Composite parent, 
+			List<EntityInstance> initials, TextStyler styler, MiMusText text) {
 		super(parent, styler);
 		String[] aux = {"Type", "Entity"};
 		columnNames = aux;

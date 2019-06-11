@@ -84,11 +84,6 @@ public class DocumentDao extends UnitDao<Document> {
 		return executeGetId(stmt);
 	}
 
-	@Override
-	public void delete(Document unit) throws DaoNotImplementedException {
-		throw new DaoNotImplementedException();
-	}
-
 	protected Document make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
 		String numeracio = rs.getString("Numeracio");

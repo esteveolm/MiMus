@@ -51,7 +51,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return executeGetId(stmt);
 	}
 	
-	public void delete(E entity) throws SQLException, DaoNotImplementedException {
+	public void delete(E entity) throws SQLException {
 		/* First find Entity ID */
 		Statement selectStmt = getConnection().createStatement();
 		String sql = "SELECT entity_id FROM " + getTable() + 

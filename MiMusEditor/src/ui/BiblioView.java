@@ -319,8 +319,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 						System.out.println("Could not delete Bibliography from DB.");
-					} catch (DaoNotImplementedException e1) {
-						System.out.println("Delete bibliography not implemented. This should never happen.");
 					}
 				}
 			}

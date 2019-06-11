@@ -148,9 +148,6 @@ public class CasaView extends DeclarativeView {
 					} catch (SQLException e2) {
 						e2.printStackTrace();
 						System.out.println("Could not delete Casa from DB.");
-					} catch (DaoNotImplementedException e1) {
-						e1.printStackTrace();
-						System.out.println("Delete operation not implemented, this should never happen.");
 					}
 				}
 			}

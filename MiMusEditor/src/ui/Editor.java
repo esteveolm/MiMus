@@ -48,6 +48,7 @@ import model.Relation;
 import model.Transcription;
 import model.Unit;
 import persistence.DocumentDao;
+import persistence.InstanceDao;
 import persistence.MateriaDao;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
@@ -221,7 +222,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Table of entities */
 		entityHelper = new EntityTableViewer(sectEnt.getParent(), 
-				EntityInstance.read(docIdStr),
+				new InstanceDao(conn).select(docEntry),
 				styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		entityInstances = entityHelper.getEntities();
@@ -527,15 +528,20 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printError(regestLabel, 
 							"You must remove all transcriptions using this entity before.");
 				} else {
-					System.out.println(ent);
-					entityInstances.remove(ent);
-					MiMusXML.openDoc(docIdStr).remove(ent).write();
-					entityTV.refresh();
-					entityHelper.packColumns();
-					System.out.println("Removing entity - " 
-							+ entityInstances.size());
-					LabelPrinter.printInfo(regestLabel, 
-							"Entity deleted successfully.");
+					try {
+						new InstanceDao(conn).delete(ent);
+						entityInstances.remove(ent);
+						entityTV.refresh();
+						entityHelper.packColumns();
+						System.out.println("Removing entity - " 
+								+ entityInstances.size());
+						LabelPrinter.printInfo(regestLabel, 
+								"Entity deleted successfully.");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						System.out.println("SQLException: could not delete Instance.");
+					}
+					
 				}
 			}
 		});
@@ -798,14 +804,23 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					/* OK case */
 					EntityInstance inst = new EntityInstance(
-							added,
-							resources.getIncrementId());
-					entities.add(inst);
-					MiMusXML.openDoc(docIdStr).append(inst).write();
-					System.out.println("Adding selected Entity - " 
-							+ entities.size());
-					LabelPrinter.printInfo(label, 
-							"Entity added successfully.");
+							added, docEntry);
+					try {
+						int id = new InstanceDao(conn).insert(inst);
+						if (id>0) {
+							inst.setId(id);
+							entities.add(inst);
+							System.out.println("Adding selected Entity - " 
+									+ entities.size());
+							LabelPrinter.printInfo(label, 
+									"Entity added successfully.");
+						} else {
+							System.out.println("DAO: could not insert Instance.");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+						System.out.println("SQLException: could not insert Instance.");
+					}
 				}
 			} else {
 				/* No entities declared, nothing could be selected */
