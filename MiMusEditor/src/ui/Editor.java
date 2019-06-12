@@ -90,7 +90,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private ReferenceTableViewer referenceHelper;
 	private InstanceDialog dialog;
 	private RelationDialog relDialog;
-	private List<Unit> entityInstances;
+	private List<EntityInstance> entityInstances;
 	private List<Relation> relations;
 	private List<Transcription> transcriptions;
 	private List<MiMusReference> references;
@@ -234,12 +234,18 @@ public class Editor extends EditorPart implements EventObserver {
 		sectEnt.setText("Entities at Regest");
 		
 		/* Table of entities */
+		entityInstances = new ArrayList<>();
+		try {
+			entityInstances = new InstanceDao(conn).select(docEntry);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			System.out.println("SQLException: could not retrieve instances.");
+		}
 		entityHelper = new EntityTableViewer(sectEnt.getParent(), 
-				new InstanceDao(conn).select(docEntry),
+				entityInstances,
 				styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		entityTV.refresh();
-		entityInstances = entityHelper.getEntities();
 		
 		/* Label of Regest entities */
 		Label regestLabel = toolkit.createLabel(form.getBody(), "");
@@ -553,6 +559,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		addLloc.addSelectionListener(new SelectionAdapter() {
@@ -621,32 +628,36 @@ public class Editor extends EditorPart implements EventObserver {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
-						"artista", "ofici");
+						"Artista", "Ofici");
 				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
 			}
 		});
 		addPromToCasa.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
-						"promotor", "casa");
+						"Promotor", "Casa");
 				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
 			}
 		});
 		addArtToProm.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
-						"artista", "promotor");
+						"Artista", "Promotor");
 				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
 			}
 		});
 		addArtToLloc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
-						"artista", "lloc");
+						"Artista", "Lloc");
 				runRelationDialog(relDialog, relations, relationLabel);
+				relationTV.refresh();
 			}
 		});
 		removeRel.addSelectionListener(new SelectionAdapter() {
@@ -671,6 +682,8 @@ public class Editor extends EditorPart implements EventObserver {
 								+ relations.size());
 						LabelPrinter.printInfo(relationLabel, 
 								"Relation deleted successfully.");
+						
+						relationTV.refresh();
 					} catch (SQLException e1) {
 						System.out.println("SQLException: could not delete relation.");
 					}
@@ -698,6 +711,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog) dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		addTransInst.addSelectionListener(new SelectionAdapter() {
@@ -719,6 +733,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		addTransCasa.addSelectionListener(new SelectionAdapter() {
@@ -762,6 +777,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		addTransOfici.addSelectionListener(new SelectionAdapter() {
@@ -783,6 +799,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		addTransLloc.addSelectionListener(new SelectionAdapter() {
@@ -804,6 +821,7 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog) dialog,
 						transcriptions, entityInstances,
 						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
 			}
 		});
 		removeTrans.addSelectionListener(new SelectionAdapter() {
@@ -832,6 +850,8 @@ public class Editor extends EditorPart implements EventObserver {
 								+ transcriptions.size());
 						LabelPrinter.printInfo(transcriptionLabel, 
 								"Transcription deleted successfully.");
+						
+						transcriptionTV.refresh();
 					} catch (SQLException e1) {
 						System.out.println("SQLException: could not delete trans.");
 					}
@@ -856,6 +876,8 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printInfo(referenceLabel, 
 							"Reference added successfully.");
 					System.out.println("Reference added successfully.");
+					
+					referenceTV.refresh();
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not add ref");
 				}
@@ -881,6 +903,8 @@ public class Editor extends EditorPart implements EventObserver {
 						LabelPrinter.printInfo(referenceLabel, 
 								"Reference deleted successfully.");
 						System.out.println("Removing Reference " + ref.toString());
+						
+						referenceTV.refresh();
 					} catch (SQLException e1) {
 						System.out.println("SQLException: could not delete ref");
 					}
@@ -889,7 +913,7 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 	}
 	
-	private void runDialog(InstanceDialog dialog, List<Unit> entities,
+	private void runDialog(InstanceDialog dialog, List<EntityInstance> entities,
 			Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
@@ -939,7 +963,7 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 	
 	private void runTranscriptionDialog(TranscriptionDialog dialog, 
-			List<Transcription> transcriptions, List<Unit> entities, 
+			List<Transcription> transcriptions, List<EntityInstance> entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();
 		if (charCoords.x!=charCoords.y) {
@@ -1026,12 +1050,17 @@ public class Editor extends EditorPart implements EventObserver {
 							"Cannot add the same relation twice.");
 				} else {
 					/* OK case */
-//					relations.add(rel);
-//					MiMusXML.openDoc(docIdStr).append(rel).write();
-//					System.out.println("Adding selected Relation - " 
-//							+ relations.size());
-//					LabelPrinter.printInfo(label, 
-//							"Relation added successfully.");
+					try {
+						new RelationDao(conn).insert(rel);
+						relations.add(rel);
+						
+						System.out.println("Adding selected Relation - " 
+								+ relations.size());
+						LabelPrinter.printInfo(label, 
+								"Relation added successfully.");
+					} catch (SQLException e) {
+						System.out.println("SQLException: could not add relation.");
+					}		
 				}
 				
 			} else {

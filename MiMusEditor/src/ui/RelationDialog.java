@@ -23,7 +23,7 @@ import util.LabelPrinter;
 public class RelationDialog extends Dialog {
 
 	protected ScrolledForm form;
-	private List<Unit> instances;
+	private List<EntityInstance> instances;
 	private int selection1;
 	private int selection2;
 	private Unit instance1;
@@ -31,7 +31,7 @@ public class RelationDialog extends Dialog {
 	private String entityType1;
 	private String entityType2;
 	
-	public RelationDialog(List<Unit> instances, Shell parentShell, 
+	public RelationDialog(List<EntityInstance> instances, Shell parentShell, 
 			String entityType1, String entityType2) {
 		super(parentShell);
 		form = null;
@@ -119,10 +119,10 @@ public class RelationDialog extends Dialog {
 		return composite;
 	}
 
-	public List<Unit> getInstances() {
+	public List<EntityInstance> getInstances() {
 		return instances;
 	}
-	public void setInstances(List<Unit> instances) {
+	public void setInstances(List<EntityInstance> instances) {
 		this.instances = instances;
 	}
 	public int getSelection1() {

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +56,15 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 		return "EntityInstance";
 	}
 	
-	public List<EntityInstance> select(Document doc) {
+	public List<EntityInstance> select(Document doc) throws SQLException {
 		List<EntityInstance> insts = new ArrayList<>();
-		// TODO: SELECT WHERE doc id
+		String sql = "SELECT * FROM EntityInstance WHERE document_id=" + doc.getId();
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while(rs.next()) {
+			insts.add(make(rs));
+		}
 		return insts;
 	}
 

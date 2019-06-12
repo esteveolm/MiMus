@@ -1,6 +1,5 @@
 package ui.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -16,19 +15,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 import model.EntityInstance;
 import model.MiMusText;
-import model.Unit;
 import util.TextStyler;
 
 public class EntityTableViewer extends MiMusTableViewer {
 
-	private List<Unit> entities;
+	private List<EntityInstance> entities;
 
 	public EntityTableViewer(Composite parent, 
 			List<EntityInstance> initials, TextStyler styler, MiMusText text) {
 		super(parent, styler);
 		String[] aux = {"Type", "Entity"};
 		columnNames = aux;
-		entities = new ArrayList<>(initials);
+		entities = initials;
+		System.out.println("Initial instances: " + initials.size());
 	}
 
 	@Override
@@ -96,11 +95,11 @@ public class EntityTableViewer extends MiMusTableViewer {
 	
 	/* Getters and setters */
 	
-	public List<Unit> getEntities() {
+	public List<EntityInstance> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(List<Unit> entities) {
+	public void setEntities(List<EntityInstance> entities) {
 		this.entities = entities;
 	}
 }

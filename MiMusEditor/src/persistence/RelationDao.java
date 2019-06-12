@@ -13,7 +13,7 @@ public class RelationDao extends UnitDao<Relation> {
 	}
 
 	@Override
-	public int insert(Relation unit) throws SQLException, DaoNotImplementedException {
+	public int insert(Relation unit) throws SQLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -47,23 +47,20 @@ public class EntityInstance extends ConcreteUnit {
 	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
 	 * to check if any equals <ent>.
 	 */
-	public static boolean containsEntity(List<Unit> list, Entity ent) {
-		for (Unit u: list) {
-			if (u instanceof EntityInstance) {
-				if (((EntityInstance) u).getItsEntity().equals(ent)) {
-					return true;
-				}
+	public static boolean containsEntity(List<EntityInstance> list, Entity ent) {
+		for (EntityInstance e: list) {
+			if (e.getItsEntity().equals(ent)) {
+				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static EntityInstance getInstanceWithEntity(List<Unit> list, Entity ent) {
-		for (Unit u: list) {
-			if (u instanceof EntityInstance) {
-				if (((EntityInstance) u).getItsEntity().equals(ent)) {
-					return (EntityInstance) u;
-				}
+	public static EntityInstance getInstanceWithEntity(List<EntityInstance> list, 
+			Entity ent) {
+		for (EntityInstance e: list) {
+			if (e.getItsEntity().equals(ent)) {
+				return e;
 			}
 		}
 		return null;

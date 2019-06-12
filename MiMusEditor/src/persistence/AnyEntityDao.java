@@ -37,7 +37,7 @@ public class AnyEntityDao extends UnitDao<Entity> {
 	public String selectType(int id) throws SQLException {
 		Statement selectStmt = getConnection().createStatement();
 		String sql = "SELECT EntityName FROM EntityTypes, Entity " + 
-				"WHERE Entity.id=" + id + " AND Entity.entity_type_id=EntityName.id";
+				"WHERE Entity.id=" + id + " AND Entity.entity_type_id=EntityTypes.id";
 		ResultSet rs = selectStmt.executeQuery(sql);
 		
 		if (rs.next()) {

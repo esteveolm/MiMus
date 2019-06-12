@@ -20,6 +20,6 @@ public abstract class Entity extends Unit {
 	}
 	
 	public String getType() {
-		return this.getClass().getName();
+		return this.getClass().getSimpleName();
 	}
 }
