@@ -132,33 +132,33 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				
 				/* Checks user is actually modifying to a new entry */
 				if (valueIdx>-1) {
-					/* This document is no longer using the old bibEntry */
-					Bibliography reducedEntry = ref.getBibEntry();
-					Bibliography extendedEntry = SharedResources.getInstance()
-							.getBibEntries().get(valueIdx);
-					if (extendedEntry.getId() != reducedEntry.getId()) {
-						/* Actually reduce entry's users */
-						reducedEntry.removeUser(new Integer(docEntry.getId()));
-						MiMusXML.openBiblio().update(reducedEntry).write();
-						
-						ref.setBibEntry(extendedEntry);
-						
-						/* Actually extend entry's users */
-						extendedEntry.addUser(new Integer(docEntry.getId()));
-						MiMusXML.openBiblio().update(extendedEntry).write();
-						MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
-					}
+//					/* This document is no longer using the old bibEntry */
+//					Bibliography reducedEntry = ref.getBibEntry();
+//					Bibliography extendedEntry = SharedResources.getInstance()
+//							.getBibEntries().get(valueIdx);
+//					if (extendedEntry.getId() != reducedEntry.getId()) {
+//						/* Actually reduce entry's users */
+//						reducedEntry.removeUser(new Integer(docEntry.getId()));
+//						MiMusXML.openBiblio().update(reducedEntry).write();
+//						
+//						ref.setBibEntry(extendedEntry);
+//						
+//						/* Actually extend entry's users */
+//						extendedEntry.addUser(new Integer(docEntry.getId()));
+//						MiMusXML.openBiblio().update(extendedEntry).write();
+//						MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
+//					}
 				}
 				break;
 			case 1:	// Page
 				/* Pass from the idx in the checkbox to the ID in the EntityList */
-				String page = (String) value;
-				ref.setPage(page);
-				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
-				break;
+//				String page = (String) value;
+//				ref.setPage(page);
+//				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
+//				break;
 			case 2:	// Reference Type
-				ref.setType((int) value);
-				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
+//				ref.setType((int) value);
+//				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
 			default:	// Should never reach here
 				break;
 			}

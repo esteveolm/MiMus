@@ -23,7 +23,7 @@ public class RelationTableViewer extends MiMusTableViewer {
 	
 	private List<Unit> relations;
 	
-	public RelationTableViewer(Composite parent, List<Unit> initials, 
+	public RelationTableViewer(Composite parent, List<Relation> initials, 
 			TextStyler styler) {
 		super(parent, styler);
 		String[] aux = {"Tipus", "Entitat A", "Entitat B"};

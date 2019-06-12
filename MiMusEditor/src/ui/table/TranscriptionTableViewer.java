@@ -16,13 +16,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
 import model.Transcription;
-import model.Unit;
 
 public class TranscriptionTableViewer extends MiMusTableViewer {
 	
-	private List<Unit> transcriptions;
+	private List<Transcription> transcriptions;
 	
-	public TranscriptionTableViewer(Composite parent, List<Unit> initials) {
+	public TranscriptionTableViewer(Composite parent, List<Transcription> initials) {
 		super(parent);
 		String[] cols = {"Selection", "Transcription", "Lemma"};
 		columnNames = cols;
@@ -93,10 +92,10 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		}
 	}
 
-	public List<Unit> getTranscriptions() {
+	public List<Transcription> getTranscriptions() {
 		return transcriptions;
 	}
-	public void setTranscriptions(List<Unit> transcriptions) {
+	public void setTranscriptions(List<Transcription> transcriptions) {
 		this.transcriptions = transcriptions;
 	}
 }

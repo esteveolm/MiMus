@@ -80,10 +80,10 @@ public class Transcription extends ConcreteUnit {
 		this.id = id;
 	}
 	
-	public static boolean containsEntity(List<Unit> list, EntityInstance ent) {
-		for (Unit t : list) {
-			if (t instanceof Transcription &&
-					((Transcription) t).getItsEntity().equals(ent)) {
+	public static boolean containsEntity(List<Transcription> list, 
+			EntityInstance ent) {
+		for (Transcription t : list) {
+			if (t.getItsEntity().equals(ent)) {
 				return true;
 			}
 		}

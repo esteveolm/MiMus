@@ -15,17 +15,18 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import model.Entity;
 import model.Unit;
 import util.LabelPrinter;
 
 public abstract class InstanceDialog extends Dialog {
 
 	protected ScrolledForm form;
-	private List<Unit> entities;
+	private List<? extends Entity> entities;
 	private int selection;
 	private Unit entity;
 	
-	public InstanceDialog(List<Unit> entities, Shell parentShell) {
+	public InstanceDialog(List<? extends Entity> entities, Shell parentShell) {
 		super(parentShell);
 		form = null;
 		this.entities = entities;
@@ -80,10 +81,10 @@ public abstract class InstanceDialog extends Dialog {
 		return composite;
 	}
 
-	public List<Unit> getEntities() {
+	public List<? extends Entity> getEntities() {
 		return entities;
 	}
-	public void setEntities(List<Unit> entities) {
+	public void setEntities(List<? extends Entity> entities) {
 		this.entities = entities;
 	}
 	public int getSelection() {

@@ -39,25 +39,39 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
+import model.Instrument;
+import model.Lloc;
 import model.Materia;
+import model.Artista;
 import model.Bibliography;
+import model.Casa;
 import model.Document;
 import model.MiMusReference;
 import model.MiMusText;
+import model.Ofici;
+import model.Promotor;
 import model.Relation;
 import model.Transcription;
 import model.Unit;
+import persistence.ArtistaDao;
 import persistence.BibliographyDao;
+import persistence.CasaDao;
 import persistence.DocumentDao;
 import persistence.InstanceDao;
+import persistence.InstrumentDao;
+import persistence.LlocDao;
 import persistence.MateriaDao;
+import persistence.OficiDao;
+import persistence.PromotorDao;
+import persistence.ReferenceDao;
+import persistence.RelationDao;
+import persistence.TranscriptionDao;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
 import ui.table.TranscriptionTableViewer;
 import util.LabelPrinter;
 import util.TextStyler;
-import util.xml.MiMusXML;
 
 public class Editor extends EditorPart implements EventObserver {
 	
@@ -67,7 +81,6 @@ public class Editor extends EditorPart implements EventObserver {
 	private Document docEntry;
 	private String docIdStr;
 	private MiMusText regest;
-	private MiMusText transcription;
 	private StyledText regestText;
 	private StyledText transcriptionText;
 	private String docID;
@@ -78,9 +91,9 @@ public class Editor extends EditorPart implements EventObserver {
 	private InstanceDialog dialog;
 	private RelationDialog relDialog;
 	private List<Unit> entityInstances;
-	private List<Unit> relations;
-	private List<Unit> transcriptions;
-	private List<Unit> references;
+	private List<Relation> relations;
+	private List<Transcription> transcriptions;
+	private List<MiMusReference> references;
 	private FormToolkit toolkit;
 	
 	public Editor() {
@@ -111,7 +124,6 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Txt must always be present so the text can be loaded */
 		docIdStr = docEntry.getIdStr();
 		regest = docEntry.getRegest();
-		transcription = docEntry.getTranscription();
 		
 		this.setPartName("Doc. " + docIdStr);
 	}
@@ -226,6 +238,7 @@ public class Editor extends EditorPart implements EventObserver {
 				new InstanceDao(conn).select(docEntry),
 				styler, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
+		entityTV.refresh();
 		entityInstances = entityHelper.getEntities();
 		
 		/* Label of Regest entities */
@@ -263,11 +276,17 @@ public class Editor extends EditorPart implements EventObserver {
 		sectRel.setText("Relations between Entities");
 		
 		/* Table of relations */
+		relations = new ArrayList<>();
+		try {
+			relations = new RelationDao(conn).selectAll();
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve relations.");
+		}
 		relationHelper = new RelationTableViewer(sectRel.getParent(), 
-				Relation.read(docIdStr),
+				relations,
 				styler);
 		TableViewer relationTV = relationHelper.createTableViewer();
-		relations = relationHelper.getRelations();
+		relationTV.refresh();
 		
 		/* Label of Relations */
 		Label relationLabel = toolkit.createLabel(form.getBody(), "");
@@ -306,10 +325,16 @@ public class Editor extends EditorPart implements EventObserver {
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 
 		/* Transcription entities and its table */
+		transcriptions = new ArrayList<>();
+		try {
+			transcriptions = new TranscriptionDao(conn).selectAll();
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve transcriptions.");
+		}
 		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent(),
-				Transcription.read(docIdStr, entityInstances));
+				transcriptions);
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
-		transcriptions = transcriptionHelper.getTranscriptions();
+		transcriptionTV.refresh();
 		
 		/* Paint transcriptions */
 		for (Unit u: transcriptions) {
@@ -367,13 +392,23 @@ public class Editor extends EditorPart implements EventObserver {
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Table of references */
-		List<Bibliography> bibEntries = new BibliographyDao(conn).selectAll();
-		List<MiMusReference> refs = new ArrayList<MiMusReference>(); // TODO: DAO
+		/* Table of references. Requires bibliography and references */
+		List<Bibliography> bibEntries = new ArrayList<>();
+		try {
+			bibEntries = new BibliographyDao(conn).selectAll();
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve bibliography.");
+		}
+		references = new ArrayList<>();
+		try {
+			references = new ReferenceDao(conn).selectAll();
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve references.");
+		}
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), refs, bibEntries, docEntry, resources);
+				sectRef.getParent(), references, bibEntries, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
-		references = referenceHelper.getReferences();
+		referenceTV.refresh();
 		
 		/* Label of references */
 		Label referenceLabel = toolkit.createLabel(sectRef.getParent(), "");
@@ -429,81 +464,110 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Entity buttons */
 		addArt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println(resources.getArtistas().size() + "ARTISTS");
+				List<Artista> artists = new ArrayList<>();
+				try {
+					artists = new ArtistaDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve Artists");
+				}
 				InstanceDialog dialog = new InstanceDialog(
-						resources.getArtistas(), parent.getShell()) {
+						artists, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Artista";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		addInst.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				List<Instrument> instruments = new ArrayList<>();
+				try {
+					instruments = new InstrumentDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve instruments");
+				}
 				dialog = new InstanceDialog(
-						resources.getInstruments(), parent.getShell()) {
+						instruments, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		addCasa.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				List<Casa> cases = new ArrayList<>();
+				try {
+					cases = new CasaDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve cases");
+				}
 				dialog = new InstanceDialog(
-						resources.getCases(), parent.getShell()) {
+						cases, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Casa";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		addProm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				List<Promotor> proms = new ArrayList<>();
+				try {
+					proms = new PromotorDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve proms");
+				}
 				dialog = new InstanceDialog(
-						resources.getPromotors(), parent.getShell()) {
+						proms, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Promotor";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		addOfici.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				List<Ofici> oficis = new ArrayList<>();
+				try {
+					oficis = new OficiDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve oficis");
+				}
 				dialog = new InstanceDialog(
-						resources.getOficis(), parent.getShell()) {
+						oficis, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Ofici";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		addLloc.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				List<Lloc> llocs = new ArrayList<>();
+				try {
+					llocs = new LlocDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve llocs");
+				}
 				dialog = new InstanceDialog(
-						resources.getLlocs(), parent.getShell()) {
+						llocs, parent.getShell()) {
 					@Override
 					public String getDialogName() {
 						return "Lloc";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
-				entityTV.refresh();
 			}
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
@@ -531,7 +595,6 @@ public class Editor extends EditorPart implements EventObserver {
 					try {
 						new InstanceDao(conn).delete(ent);
 						entityInstances.remove(ent);
-						entityTV.refresh();
 						entityHelper.packColumns();
 						System.out.println("Removing entity - " 
 								+ entityInstances.size());
@@ -554,7 +617,6 @@ public class Editor extends EditorPart implements EventObserver {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
 						"artista", "ofici");
 				runRelationDialog(relDialog, relations, relationLabel);
-				relationTV.refresh();
 			}
 		});
 		addPromToCasa.addSelectionListener(new SelectionAdapter() {
@@ -563,7 +625,6 @@ public class Editor extends EditorPart implements EventObserver {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
 						"promotor", "casa");
 				runRelationDialog(relDialog, relations, relationLabel);
-				relationTV.refresh();
 			}
 		});
 		addArtToProm.addSelectionListener(new SelectionAdapter() {
@@ -572,7 +633,6 @@ public class Editor extends EditorPart implements EventObserver {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
 						"artista", "promotor");
 				runRelationDialog(relDialog, relations, relationLabel);
-				relationTV.refresh();
 			}
 		});
 		addArtToLloc.addSelectionListener(new SelectionAdapter() {
@@ -581,7 +641,6 @@ public class Editor extends EditorPart implements EventObserver {
 				relDialog = new RelationDialog(entityInstances, parent.getShell(),
 						"artista", "lloc");
 				runRelationDialog(relDialog, relations, relationLabel);
-				relationTV.refresh();
 			}
 		});
 		removeRel.addSelectionListener(new SelectionAdapter() {
@@ -591,19 +650,24 @@ public class Editor extends EditorPart implements EventObserver {
 						((IStructuredSelection) relationTV.getSelection())
 						.getFirstElement();
 				if (rel==null) {
+					/* No relation was selected before pressing Delete */
 					System.out.println(
 							"Could not remove Relation because none was selected.");
 					LabelPrinter.printError(relationLabel, 
 							"You must select a relation to delete it.");
 				} else {
-					relations.remove(rel);
-					MiMusXML.openDoc(docIdStr).remove(rel).write();
-					relationTV.refresh();
-					relationHelper.packColumns();
-					System.out.println("Removing relation - " 
-							+ relations.size());
-					LabelPrinter.printInfo(relationLabel, 
-							"Relation deleted successfully.");
+					try {
+						/* OK case */
+						new RelationDao(conn).delete(rel);
+						relations.remove(rel);
+						relationHelper.packColumns();
+						System.out.println("Removing relation - " 
+								+ relations.size());
+						LabelPrinter.printInfo(relationLabel, 
+								"Relation deleted successfully.");
+					} catch (SQLException e1) {
+						System.out.println("SQLException: could not delete relation.");
+					}
 				}
 			}
 		});
@@ -612,8 +676,14 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Artista> artists = new ArrayList<>();
+				try {
+					artists = new ArtistaDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve Artists");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getArtistas(), parent.getShell(), "") {
+						artists, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Artista";
@@ -622,14 +692,19 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog) dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
 			}
 		});
 		addTransInst.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Instrument> instruments = new ArrayList<>();
+				try {
+					instruments = new InstrumentDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve instruments");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getInstruments(), parent.getShell(), "") {
+						instruments, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
@@ -638,14 +713,19 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
 			}
 		});
 		addTransCasa.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Casa> cases = new ArrayList<>();
+				try {
+					cases = new CasaDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve cases");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getCases(), parent.getShell(), "") {
+						cases, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Casa";
@@ -660,8 +740,14 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransProm.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Promotor> proms = new ArrayList<>();
+				try {
+					proms = new PromotorDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve proms");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getPromotors(), parent.getShell(), "") {
+						proms, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Promotor";
@@ -670,14 +756,19 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
 			}
 		});
 		addTransOfici.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Ofici> oficis = new ArrayList<>();
+				try {
+					oficis = new OficiDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve oficis");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getOficis(), parent.getShell(), "") {
+						oficis, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Ofici";
@@ -686,14 +777,19 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog)dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
 			}
 		});
 		addTransLloc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Lloc> llocs = new ArrayList<>();
+				try {
+					llocs = new LlocDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve llocs");
+				}
 				dialog = new TranscriptionDialog(
-						resources.getLlocs(), parent.getShell(), "") {
+						llocs, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Lloc";
@@ -702,7 +798,6 @@ public class Editor extends EditorPart implements EventObserver {
 				runTranscriptionDialog((TranscriptionDialog) dialog,
 						transcriptions, entityInstances,
 						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
 			}
 		});
 		removeTrans.addSelectionListener(new SelectionAdapter() {
@@ -712,23 +807,28 @@ public class Editor extends EditorPart implements EventObserver {
 						((IStructuredSelection) transcriptionTV.getSelection())
 							.getFirstElement();
 				if (trans==null) {
+					/* No transcription was selected before pressing Delete */
 					System.out.println(
 							"Could not remove Transcription because none was selected.");
 					LabelPrinter.printError(transcriptionLabel, 
 							"You must select a transcription to delete it.");
 				} else {
-					/* Undo colour in text */
-					Point charCoords = trans.getCoords();
-					transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
-					
-					/* Remove transcription */
-					transcriptions.remove(trans);
-					MiMusXML.openDoc(docIdStr).remove(trans).write();
-					transcriptionTV.refresh();
-					System.out.println("Removing lemma - " 
-							+ transcriptions.size());
-					LabelPrinter.printInfo(transcriptionLabel, 
-							"Transcription deleted successfully.");
+					/* OK case */
+					try {
+						new TranscriptionDao(conn).delete(trans);
+						transcriptions.remove(trans);
+
+						/* Undo colour in text */
+						Point charCoords = trans.getCoords();
+						transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
+						
+						System.out.println("Removing lemma - " 
+								+ transcriptions.size());
+						LabelPrinter.printInfo(transcriptionLabel, 
+								"Transcription deleted successfully.");
+					} catch (SQLException e1) {
+						System.out.println("SQLException: could not delete trans.");
+					}
 				}
 			}
 		});
@@ -737,24 +837,23 @@ public class Editor extends EditorPart implements EventObserver {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MiMusReference ref = new MiMusReference(
-						SharedResources.getInstance().getBibEntries().get(0),
-						"",
-						0, 
-						0);
-				references.add(ref);
+				try {
+					Bibliography bib0 = new BibliographyDao(conn).selectOne();
+					MiMusReference ref = new MiMusReference(
+							bib0,
+							"",
+							0, 
+							0);
+					references.add(ref);
+					new ReferenceDao(conn).insert(ref);
+					
+					LabelPrinter.printInfo(referenceLabel, 
+							"Reference added successfully.");
+					System.out.println("Reference added successfully.");
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not add ref");
+				}
 				
-				/* Reflect document is user of entry, in model and xml */
-				Bibliography modifiedEntry = 
-						SharedResources.getInstance().getBibEntries().get(0);
-				modifiedEntry.addUser(Integer.parseInt(docID));
-				MiMusXML.openBiblio().update(modifiedEntry).write();
-				MiMusXML.openDoc(docIdStr).append(ref).write();
-				referenceTV.refresh();
-				
-				LabelPrinter.printInfo(referenceLabel, 
-						"Reference added successfully.");
-				System.out.println("Reference added successfully.");
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -769,21 +868,16 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printError(referenceLabel, 
 							"You must select a reference to delete it.");
 				} else {
-					references.remove(ref);
-					
-					/* 
-					 * Reflect document is not user of entry anymore, 
-					 * in model and xml 
-					 */
-					Bibliography oldEntry = ref.getBibEntry();
-					oldEntry.removeUser(new Integer(Integer.parseInt(docID)));
-					MiMusXML.openBiblio().update(oldEntry).write();
-					MiMusXML.openDoc(docIdStr).remove(ref).write();
-					referenceTV.refresh();
-					
-					LabelPrinter.printInfo(referenceLabel, 
-							"Reference deleted successfully.");
-					System.out.println("Removing Reference " + ref.toString());
+					try {
+						new ReferenceDao(conn).delete(ref);
+						references.remove(ref);
+						
+						LabelPrinter.printInfo(referenceLabel, 
+								"Reference deleted successfully.");
+						System.out.println("Removing Reference " + ref.toString());
+					} catch (SQLException e1) {
+						System.out.println("SQLException: could not delete ref");
+					}
 				}
 			}
 		});
@@ -839,7 +933,7 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 	
 	private void runTranscriptionDialog(TranscriptionDialog dialog, 
-			List<Unit> transcriptions, List<Unit> entities, 
+			List<Transcription> transcriptions, List<Unit> entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();
 		if (charCoords.x!=charCoords.y) {
@@ -864,17 +958,17 @@ public class Editor extends EditorPart implements EventObserver {
 						form = dialog.getSelectedText();
 					if (EntityInstance.containsEntity(entities, ent)) {
 						/* Selected entity has been marked in this document */
-						Transcription trans = new Transcription(
-								EntityInstance.getInstanceWithEntity(entities, ent),
-								selectedText, form, charCoords, 
-								0);
-						transcriptions.add(trans);
-						MiMusXML.openDoc(docIdStr).append(trans).write();
-						System.out.println("Adding selected Transcription - " 
-								+ transcriptions.size());
-						LabelPrinter.printInfo(label, 
-								"Lemma added successfully.");
-						styler.addUpdate(charCoords.x, charCoords.y);
+//						Transcription trans = new Transcription(
+//								EntityInstance.getInstanceWithEntity(entities, ent),
+//								selectedText, form, charCoords, 
+//								0);
+//						transcriptions.add(trans);
+//						MiMusXML.openDoc(docIdStr).append(trans).write();
+//						System.out.println("Adding selected Transcription - " 
+//								+ transcriptions.size());
+//						LabelPrinter.printInfo(label, 
+//								"Lemma added successfully.");
+//						styler.addUpdate(charCoords.x, charCoords.y);
 					} else {
 						/* Entity not in document, don't add transcription */
 						System.out.println(
@@ -908,7 +1002,7 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 	
 	private void runRelationDialog(RelationDialog dialog,
-			List<Unit> relations, Label label) {
+			List<Relation> relations, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
 			EntityInstance instance1 = (EntityInstance) dialog.getInstance1();
@@ -926,12 +1020,12 @@ public class Editor extends EditorPart implements EventObserver {
 							"Cannot add the same relation twice.");
 				} else {
 					/* OK case */
-					relations.add(rel);
-					MiMusXML.openDoc(docIdStr).append(rel).write();
-					System.out.println("Adding selected Relation - " 
-							+ relations.size());
-					LabelPrinter.printInfo(label, 
-							"Relation added successfully.");
+//					relations.add(rel);
+//					MiMusXML.openDoc(docIdStr).append(rel).write();
+//					System.out.println("Adding selected Relation - " 
+//							+ relations.size());
+//					LabelPrinter.printInfo(label, 
+//							"Relation added successfully.");
 				}
 				
 			} else {
@@ -952,10 +1046,6 @@ public class Editor extends EditorPart implements EventObserver {
 	
 	public Connection getConnection() {
 		return conn;
-	}
-	
-	public List<Unit> getReferences() {
-		return referenceHelper.getReferences();
 	}
 	
 	/* Following methods shouldn't be touched */

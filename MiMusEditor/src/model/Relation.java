@@ -45,29 +45,25 @@ public class Relation extends ConcreteUnit {
 		return getItsEntity1().toString() + " - " + getItsEntity2().toString();
 	}
 	
-	public static boolean containsRelation(List<Unit> relations, Relation rel) {
-		for (Unit u: relations) {
-			if (u instanceof Relation) {
-				if (((Relation) u).getItsEntity1().getItsEntity().equals(
-						rel.getItsEntity1().getItsEntity()) &&
-						((Relation) u).getItsEntity2().getItsEntity().equals(
-								rel.getItsEntity2().getItsEntity())) {
-					return true;
-				}
+	public static boolean containsRelation(List<Relation> relations, Relation rel) {
+		for (Relation r: relations) {
+			if (r.getItsEntity1().getItsEntity().equals(
+					rel.getItsEntity1().getItsEntity()) &&
+					(r.getItsEntity2().getItsEntity().equals(
+							rel.getItsEntity2().getItsEntity()))) {
+				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static boolean containsEntity(List<Unit> relations, EntityInstance ent) {
-		for (Unit u: relations) {
-			if (u instanceof Relation) {
-				if (((Relation) u).getItsEntity1().getItsEntity()
-								.equals(ent.getItsEntity()) ||
-						((Relation) u).getItsEntity2().getItsEntity()
-								.equals(ent.getItsEntity())) {
-					return true;	
-				}
+	public static boolean containsEntity(List<Relation> relations, EntityInstance ent) {
+		for (Relation r: relations) {
+			if (r.getItsEntity1().getItsEntity()
+							.equals(ent.getItsEntity()) ||
+					(r.getItsEntity2().getItsEntity()
+							.equals(ent.getItsEntity()))) {
+				return true;	
 			}
 		}
 		return false;

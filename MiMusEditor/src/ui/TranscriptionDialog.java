@@ -11,14 +11,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import model.Unit;
+import model.Entity;
 
 public abstract class TranscriptionDialog extends InstanceDialog {
 	
 	private String selectedText;
 	private String transcription;
 	
-	public TranscriptionDialog(List<Unit> entities, 
+	public TranscriptionDialog(List<? extends Entity> entities, 
 			Shell parentShell, String selectedText) {
 		super(entities, parentShell);
 		this.setSelectedText(selectedText);
