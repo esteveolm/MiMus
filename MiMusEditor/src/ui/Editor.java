@@ -478,6 +478,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		addInst.addSelectionListener(new SelectionAdapter() {
@@ -514,6 +515,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		addProm.addSelectionListener(new SelectionAdapter() {
@@ -532,6 +534,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		addOfici.addSelectionListener(new SelectionAdapter() {
@@ -568,6 +571,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
@@ -600,6 +604,8 @@ public class Editor extends EditorPart implements EventObserver {
 								+ entityInstances.size());
 						LabelPrinter.printInfo(regestLabel, 
 								"Entity deleted successfully.");
+						
+						entityTV.refresh();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 						System.out.println("SQLException: could not delete Instance.");
