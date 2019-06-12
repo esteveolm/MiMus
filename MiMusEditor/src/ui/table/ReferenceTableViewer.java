@@ -24,7 +24,6 @@ import control.SharedResources;
 import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
-import model.Unit;
 
 public class ReferenceTableViewer extends MiMusTableViewer {
 	

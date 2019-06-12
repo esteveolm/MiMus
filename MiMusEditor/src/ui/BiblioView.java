@@ -32,7 +32,6 @@ import control.EventSubject;
 import control.SharedControl;
 import model.Bibliography;
 import persistence.BibliographyDao;
-import persistence.DaoNotImplementedException;
 import util.LabelPrinter;
 
 public class BiblioView extends ViewPart implements EventSubject {

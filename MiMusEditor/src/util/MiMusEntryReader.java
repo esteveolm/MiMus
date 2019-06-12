@@ -49,7 +49,6 @@ public class MiMusEntryReader {
 		int regestIdx = -1;
 		int transcriptionIdx = -1;
 		int notesIdx = -1;
-		String subjects = "";
 		for (int i=0; i<lines.size(); i++) {
 			if (lines.get(i).length()>=2) {		// Prevents from empty lines
 				String content = lines.get(i).substring(lines.get(i).indexOf(':')+1).trim();
@@ -145,7 +144,6 @@ public class MiMusEntryReader {
 								entry.setLanguage(content);
 								break;
 							case 28:
-								subjects = content;
 								break;
 							}
 						} catch (NumberFormatException e) {
