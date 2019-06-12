@@ -53,6 +53,7 @@ public abstract class UnitDao<U extends Unit> {
 	
 	public U selectOne(int id) throws SQLException {
 		String sql = "SELECT * FROM " + getTable() + " WHERE id=" + id;
+		System.out.println("SQL: " + sql);
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		if (rs.next()) {

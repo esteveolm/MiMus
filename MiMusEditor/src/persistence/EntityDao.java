@@ -14,6 +14,17 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		super(conn);
 	}
 	
+	public E selectOne(int id) throws SQLException {
+		String sql = "SELECT * FROM " + getTable() + " WHERE entity_id=" + id;
+		System.out.println("SQL: " + sql);
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		if (rs.next()) {
+			return make(rs);
+		}
+		throw new SQLException();
+	}
+	
 	public int insert(E entity) throws SQLException, DaoNotImplementedException {
 		int commonId = insertCommonEntity(entity);
 		if (commonId > 0) {

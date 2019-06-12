@@ -44,6 +44,7 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 		/* To access appropriate DAO we first need to get the type of entity */
 		AnyEntityDao anyDao = new AnyEntityDao(getConnection());
 		String typeName = anyDao.selectType(entityId);
+		System.out.println("Type: " + typeName);
 		EntityDao<? extends Entity> specificDao = anyDao.getDao(typeName);
 		Entity ent = specificDao.selectOne(entityId);
 		
