@@ -8,14 +8,9 @@ public class Lloc extends Entity {
 	private int regne;
 	private int area;
 	
-	public Lloc() {}
-	
-	public Lloc(int id) {
-		this(id, "", 0, 0);
-	}
-	
-	public Lloc(int id, String nomComplet, int regne, int area) {
+	public Lloc(int id, int specId, String nomComplet, int regne, int area) {
 		this.setId(id);
+		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.regne = regne;
 		this.area = area;

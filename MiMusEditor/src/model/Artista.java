@@ -12,16 +12,11 @@ public class Artista extends Entity {
 	private int religio;
 	private String origen;
 	
-	public Artista() {}
-
-	public Artista(int id) {
-		this(id, "", "", "", "", "", "", 0, 0, "");
-	}
-	
-	public Artista(int id, String nomComplet, String tractament,
+	public Artista(int id, int specId, String nomComplet, String tractament,
 			String nom, String cognom, String sobrenom, String distintiu,
 			int genere, int religio, String origen) {
 		this.setId(id);
+		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.tractament = tractament;
 		this.nom = nom;

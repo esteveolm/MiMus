@@ -6,10 +6,9 @@ public class Casa extends Entity {
 	private String titol;
 	private String cort;
 	
-	public Casa() {}
-	
-	public Casa(int id, String nomComplet, String titol, String cort) {
-		super(id);
+	public Casa(int id, int specId, String nomComplet, String titol, String cort) {
+		this.setId(id);
+		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.titol = titol;
 		this.cort = cort;

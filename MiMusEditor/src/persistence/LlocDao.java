@@ -37,11 +37,13 @@ public class LlocDao extends EntityDao<Lloc> {
 
 	@Override
 	protected Lloc make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nomComplet = rs.getString("nom_complet");
 		int regne = rs.getInt("regne");
 		int area = rs.getInt("area");
-		return new Lloc(id, nomComplet, regne, area);
+		
+		return new Lloc(id, specId, nomComplet, regne, area);
 	}
 
 	@Override

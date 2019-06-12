@@ -136,7 +136,7 @@ public class OficiView extends DeclarativeView {
 				if (comboEspecialitat.getSelectionIndex()<0)
 					comboEspecialitat.select(0);
 				Ofici ofici = new Ofici(
-						0,
+						0, 0,
 						textNomComplet.getText(),
 						textTerme.getText(),
 						comboEspecialitat.getSelectionIndex(),

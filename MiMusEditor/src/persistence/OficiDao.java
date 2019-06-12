@@ -39,12 +39,14 @@ public class OficiDao extends EntityDao<Ofici> {
 
 	@Override
 	protected Ofici make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nomComplet = rs.getString("nom_complet");
 		String terme = rs.getString("terme");
 		int especialitat = rs.getInt("especialitat");
 		int instrumentId = rs.getInt("instrument_id");
-		return new Ofici(id, nomComplet, terme, especialitat, null);
+		
+		return new Ofici(id, specId, nomComplet, terme, especialitat, null);
 	}
 
 	@Override

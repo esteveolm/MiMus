@@ -125,7 +125,7 @@ public class InstrumentView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must specify a classe to create an Instrument.");
 				} else {
 					Instrument inst = new Instrument(
-							0,
+							0, 0,
 							textNom.getText(),
 							comboFamily.getSelectionIndex(),
 							comboClasse.getSelectionIndex(),

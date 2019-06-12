@@ -132,7 +132,7 @@ public class PromotorView extends DeclarativeView {
 					comboGenere.select(0);
 				} 
 				Promotor prom = new Promotor(
-						0,
+						0, 0,
 						textNomComplet.getText(),
 						textNom.getText(),
 						textCognom.getText(),

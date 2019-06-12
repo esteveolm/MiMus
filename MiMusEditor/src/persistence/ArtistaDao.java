@@ -43,7 +43,8 @@ public class ArtistaDao extends EntityDao<Artista> {
 
 	@Override
 	protected Artista make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nomComplet = rs.getString("nom_complet");
 		String tractament = rs.getString("tractament");
 		String nom = rs.getString("nom");
@@ -54,7 +55,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 		int religio = rs.getInt("religio");
 		String origen = rs.getString("origen");
 		
-		return new Artista(id, nomComplet, tractament, nom, cognom, sobrenom,
+		return new Artista(id, specId, nomComplet, tractament, nom, cognom, sobrenom,
 				distintiu, genere, religio, origen);
 	}
 

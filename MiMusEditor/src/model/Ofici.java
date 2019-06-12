@@ -6,12 +6,11 @@ public class Ofici extends Entity {
 	private String terme;
 	private int especialitat;
 	private Instrument instrument;
-	
-	public Ofici() {}
-	
-	public Ofici(int id, String nomComplet, String terme, 
+
+	public Ofici(int id, int specId, String nomComplet, String terme, 
 			int especialitat, Instrument instrument) {
-		super(id);
+		this.setId(id);
+		this.setSpecificId(specId);
 		this.setNomComplet(nomComplet);
 		this.terme = terme;
 		this.especialitat = especialitat;

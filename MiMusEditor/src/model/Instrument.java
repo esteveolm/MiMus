@@ -7,14 +7,10 @@ public class Instrument extends Entity {
 	private int classe;
 	private String part;
 	
-	public Instrument() {}
-	
-	public Instrument(int id) {
-		this(id, "", 0, 0, "");
-	}
-	
-	public Instrument(int id, String nom, int family, int classe, String part) {
-		super(id);
+	public Instrument(int id, int specId, String nom, 
+			int family, int classe, String part) {
+		this.setId(id);
+		this.setSpecificId(specId);
 		this.nom = nom;
 		this.family = family;
 		this.classe = classe;

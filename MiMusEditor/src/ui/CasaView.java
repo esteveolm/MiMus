@@ -100,7 +100,7 @@ public class CasaView extends DeclarativeView {
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Casa casa = new Casa(0,
+				Casa casa = new Casa(0, 0,
 						textNomComplet.getText(),
 						textTitol.getText(), 
 						textCort.getText());

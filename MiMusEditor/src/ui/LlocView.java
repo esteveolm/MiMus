@@ -108,7 +108,7 @@ public class LlocView extends DeclarativeView {
 				}
 				
 				Lloc lloc = new Lloc(
-						0,
+						0, 0,
 						textNomComplet.getText(), 
 						comboRegne.getSelectionIndex(), 
 						comboArea.getSelectionIndex());

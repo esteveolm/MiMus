@@ -150,7 +150,7 @@ public class ArtistaView extends DeclarativeView {
 				}
 				
 				Artista art = new Artista(
-						0,
+						0, 0,
 						textNombreCompleto.getText(), 
 						textTratamiento.getText(), 
 						textNombre.getText(), 

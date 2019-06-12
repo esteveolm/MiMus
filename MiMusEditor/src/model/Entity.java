@@ -2,21 +2,15 @@ package model;
 
 public abstract class Entity extends Unit {
 	
-	private int id;
-	
-	public Entity() {}
-	
-	public Entity(int id) {
-		this.setId(id);
-	}
+	private int specificId;
 
 	public abstract String getLemma();
 	
-	public int getId() {
-		return id;
+	public int getSpecificId() {
+		return specificId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setSpecificId(int specificId) {
+		this.specificId = specificId;
 	}
 	
 	public String getType() {

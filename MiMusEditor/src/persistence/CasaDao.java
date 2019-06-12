@@ -37,11 +37,13 @@ public class CasaDao extends EntityDao<Casa> {
 
 	@Override
 	protected Casa make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nomComplet = rs.getString("nom_complet");
 		String titol = rs.getString("titol");
 		String cort = rs.getString("cort");
-		return new Casa(id, nomComplet, titol, cort);
+		
+		return new Casa(id, specId, nomComplet, titol, cort);
 	}
 
 	@Override

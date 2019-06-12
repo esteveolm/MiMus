@@ -38,12 +38,14 @@ public class InstrumentDao extends EntityDao<Instrument> {
 
 	@Override
 	protected Instrument make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nom = rs.getString("nom");
 		int familia = rs.getInt("familia");
 		int classe = rs.getInt("classe");
 		String part = rs.getString("part");
-		return new Instrument(id, nom, familia, classe, part);
+		
+		return new Instrument(id, specId, nom, familia, classe, part);
 	}
 
 	@Override

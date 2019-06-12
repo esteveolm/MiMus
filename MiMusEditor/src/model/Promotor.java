@@ -8,12 +8,11 @@ public class Promotor extends Entity {
 	private String sobrenom;
 	private String distintiu;
 	private int genere;
-	
-	public Promotor() {}
 
-	public Promotor(int id, String nomComplet, String nom, String cognom,
+	public Promotor(int id, int specId, String nomComplet, String nom, String cognom,
 			String sobrenom, String distintiu, int genere) {
-		super(id);
+		this.setId(id);
+		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.nom = nom;
 		this.cognom = cognom;

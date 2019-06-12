@@ -41,7 +41,8 @@ public class PromotorDao extends EntityDao<Promotor> {
 
 	@Override
 	protected Promotor make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
+		int id = rs.getInt("entity_id");
+		int specId = rs.getInt("id");
 		String nomComplet = rs.getString("nom_complet");
 		String nom = rs.getString("nom");
 		String cognom = rs.getString("cognom");
@@ -49,7 +50,7 @@ public class PromotorDao extends EntityDao<Promotor> {
 		String distintiu = rs.getString("distintiu");
 		int genere = rs.getInt("genere");
 		
-		return new Promotor(id, nomComplet, nom, cognom, sobrenom, 
+		return new Promotor(id, specId, nomComplet, nom, cognom, sobrenom, 
 				distintiu, genere);
 	}
 
