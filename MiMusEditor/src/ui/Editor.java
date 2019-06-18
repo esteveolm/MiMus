@@ -66,6 +66,9 @@ import persistence.PromotorDao;
 import persistence.ReferenceDao;
 import persistence.RelationDao;
 import persistence.TranscriptionDao;
+import ui.dialog.InstanceDialog;
+import ui.dialog.RelationDialog;
+import ui.dialog.TranscriptionDialog;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
@@ -88,8 +91,6 @@ public class Editor extends EditorPart implements EventObserver {
 	private RelationTableViewer relationHelper;
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
-	private InstanceDialog dialog;
-	private RelationDialog relDialog;
 	private List<EntityInstance> entityInstances;
 	private List<Relation> relations;
 	private List<Transcription> transcriptions;
@@ -471,12 +472,13 @@ public class Editor extends EditorPart implements EventObserver {
 		addArt.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				List<Artista> artists = new ArrayList<>();
+				
 				try {
 					artists = new ArtistaDao(conn).selectAll();
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve Artists");
 				}
-				InstanceDialog dialog = new InstanceDialog(
+				InstanceDialog<Artista> dialog = new InstanceDialog<Artista>(
 						artists, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -495,7 +497,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve instruments");
 				}
-				dialog = new InstanceDialog(
+				InstanceDialog<Instrument> dialog = new InstanceDialog<Instrument>(
 						instruments, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -513,7 +515,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve cases");
 				}
-				dialog = new InstanceDialog(
+				InstanceDialog<Casa> dialog = new InstanceDialog<Casa>(
 						cases, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -532,7 +534,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve proms");
 				}
-				dialog = new InstanceDialog(
+				InstanceDialog<Promotor> dialog = new InstanceDialog<Promotor>(
 						proms, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -551,7 +553,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve oficis");
 				}
-				dialog = new InstanceDialog(
+				InstanceDialog<Ofici> dialog = new InstanceDialog<Ofici>(
 						oficis, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -570,7 +572,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} catch (SQLException e1) {
 					System.out.println("SQLException: could not retrieve llocs");
 				}
-				dialog = new InstanceDialog(
+				InstanceDialog<Lloc> dialog = new InstanceDialog<Lloc>(
 						llocs, parent.getShell()) {
 					@Override
 					public String getDialogName() {
@@ -623,11 +625,11 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 		
 		/* Relation buttons */
-		relDialog = null;
 		addArtToOfi.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+				RelationDialog relDialog = 
+						new RelationDialog(entityInstances, parent.getShell(),
 						"Artista", "Ofici");
 				runRelationDialog(relDialog, relations, relationLabel);
 				relationTV.refresh();
@@ -636,7 +638,8 @@ public class Editor extends EditorPart implements EventObserver {
 		addPromToCasa.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+				RelationDialog relDialog = 
+						new RelationDialog(entityInstances, parent.getShell(),
 						"Promotor", "Casa");
 				runRelationDialog(relDialog, relations, relationLabel);
 				relationTV.refresh();
@@ -645,7 +648,8 @@ public class Editor extends EditorPart implements EventObserver {
 		addArtToProm.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+				RelationDialog relDialog = 
+						new RelationDialog(entityInstances, parent.getShell(),
 						"Artista", "Promotor");
 				runRelationDialog(relDialog, relations, relationLabel);
 				relationTV.refresh();
@@ -654,7 +658,8 @@ public class Editor extends EditorPart implements EventObserver {
 		addArtToLloc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				relDialog = new RelationDialog(entityInstances, parent.getShell(),
+				RelationDialog relDialog = 
+						new RelationDialog(entityInstances, parent.getShell(),
 						"Artista", "Lloc");
 				runRelationDialog(relDialog, relations, relationLabel);
 				relationTV.refresh();
@@ -695,20 +700,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Artista> artists = new ArrayList<>();
-				try {
-					artists = new ArtistaDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve Artists");
-				}
-				dialog = new TranscriptionDialog(
-						artists, parent.getShell(), "") {
+				TranscriptionDialog<Artista> dialog = 
+						new TranscriptionDialog<Artista>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Artista";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog) dialog, 
+				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -717,20 +717,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransInst.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Instrument> instruments = new ArrayList<>();
-				try {
-					instruments = new InstrumentDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve instruments");
-				}
-				dialog = new TranscriptionDialog(
-						instruments, parent.getShell(), "") {
+				TranscriptionDialog<Instrument> dialog = 
+						new TranscriptionDialog<Instrument>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Instrument";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog)dialog, 
+				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -739,20 +734,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransCasa.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Casa> cases = new ArrayList<>();
-				try {
-					cases = new CasaDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve cases");
-				}
-				dialog = new TranscriptionDialog(
-						cases, parent.getShell(), "") {
+				TranscriptionDialog<Casa> dialog = 
+						new TranscriptionDialog<Casa>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Casa";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog)dialog, 
+				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -761,20 +751,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransProm.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Promotor> proms = new ArrayList<>();
-				try {
-					proms = new PromotorDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve proms");
-				}
-				dialog = new TranscriptionDialog(
-						proms, parent.getShell(), "") {
+				TranscriptionDialog<Promotor> dialog = 
+						new TranscriptionDialog<Promotor>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Promotor";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog)dialog, 
+				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -783,20 +768,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransOfici.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Ofici> oficis = new ArrayList<>();
-				try {
-					oficis = new OficiDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve oficis");
-				}
-				dialog = new TranscriptionDialog(
-						oficis, parent.getShell(), "") {
+				TranscriptionDialog<Ofici> dialog = 
+						new TranscriptionDialog<Ofici>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Ofici";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog)dialog, 
+				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -805,20 +785,15 @@ public class Editor extends EditorPart implements EventObserver {
 		addTransLloc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<Lloc> llocs = new ArrayList<>();
-				try {
-					llocs = new LlocDao(conn).selectAll();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not retrieve llocs");
-				}
-				dialog = new TranscriptionDialog(
-						llocs, parent.getShell(), "") {
+				TranscriptionDialog<Lloc> dialog = 
+						new TranscriptionDialog<Lloc>(
+						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
 						return "Lloc";
 					}
 				};
-				runTranscriptionDialog((TranscriptionDialog) dialog,
+				runTranscriptionDialog(dialog,
 						transcriptions, entityInstances,
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
@@ -913,11 +888,11 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 	}
 	
-	private void runDialog(InstanceDialog dialog, List<EntityInstance> entities,
-			Label label) {
+	private void runDialog(InstanceDialog<? extends Entity> dialog, 
+			List<EntityInstance> entities, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
-			Entity added = (Entity) dialog.getEntity();
+			Entity added = dialog.getUnit();
 			if (added != null) {
 				if (EntityInstance.containsEntity(entities, added)) {
 					/* Trying to add entity already added */
@@ -962,7 +937,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 	}
 	
-	private void runTranscriptionDialog(TranscriptionDialog dialog, 
+	private void runTranscriptionDialog(TranscriptionDialog<? extends Entity> dialog, 
 			List<Transcription> transcriptions, List<EntityInstance> entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();
@@ -981,33 +956,23 @@ public class Editor extends EditorPart implements EventObserver {
 				int selection = dialog.getSelection();
 				if (selection>=0) {
 					/* User actually selected something */
-					Entity ent = (Entity) dialog.getEntity();
+					EntityInstance ent = dialog.getUnit();
 					String form = dialog.getTranscription();
 					if (form=="")
 						/* User did not add a form, use selection directly */
 						form = dialog.getSelectedText();
-					if (EntityInstance.containsEntity(entities, ent)) {
-						/* Selected entity has been marked in this document */
-//						Transcription trans = new Transcription(
-//								EntityInstance.getInstanceWithEntity(entities, ent),
-//								selectedText, form, charCoords, 
-//								0);
-//						transcriptions.add(trans);
-//						MiMusXML.openDoc(docIdStr).append(trans).write();
-//						System.out.println("Adding selected Transcription - " 
-//								+ transcriptions.size());
-//						LabelPrinter.printInfo(label, 
-//								"Lemma added successfully.");
-//						styler.addUpdate(charCoords.x, charCoords.y);
-					} else {
-						/* Entity not in document, don't add transcription */
-						System.out.println(
-								"Entity of Transcription not in document - "
-								+ transcriptions.size());
-						LabelPrinter.printError(label, 
-								"Entity selected must have been marked in"
-								+ " this document.");
-					}
+//					/* Selected entity has been marked in this document */
+//					Transcription trans = new Transcription(
+//							EntityInstance.getInstanceWithEntity(entities, ent),
+//							selectedText, form, charCoords, 
+//							0);
+//					transcriptions.add(trans);
+//					MiMusXML.openDoc(docIdStr).append(trans).write();
+//					System.out.println("Adding selected Transcription - " 
+//							+ transcriptions.size());
+//					LabelPrinter.printInfo(label, 
+//							"Lemma added successfully.");
+//					styler.addUpdate(charCoords.x, charCoords.y);
 				} else {
 					/* User pressed OK but selected nothing */
 					System.out.println("No Transcription added - " 
@@ -1035,8 +1000,8 @@ public class Editor extends EditorPart implements EventObserver {
 			List<Relation> relations, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
-			EntityInstance instance1 = (EntityInstance) dialog.getInstance1();
-			EntityInstance instance2 = (EntityInstance) dialog.getInstance2();
+			EntityInstance instance1 = dialog.getUnit();
+			EntityInstance instance2 = dialog.getUnit2();
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected */
 				Relation rel = new Relation(

@@ -1,9 +1,8 @@
-package ui;
+package ui.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,25 +16,18 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import model.EntityInstance;
-import model.Unit;
 import util.LabelPrinter;
 
-public class RelationDialog extends Dialog {
+public class RelationDialog extends EditorDialog<EntityInstance> {
 
-	protected ScrolledForm form;
-	private List<EntityInstance> instances;
-	private int selection1;
 	private int selection2;
-	private Unit instance1;
-	private Unit instance2;
+	private EntityInstance unit2;
 	private String entityType1;
 	private String entityType2;
 	
 	public RelationDialog(List<EntityInstance> instances, Shell parentShell, 
 			String entityType1, String entityType2) {
-		super(parentShell);
-		form = null;
-		this.instances = instances;
+		super(instances, parentShell);
 		this.entityType1 = entityType1;
 		this.entityType2 = entityType2;
 		
@@ -46,15 +38,15 @@ public class RelationDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
-		form = toolkit.createScrolledForm(composite);
+		ScrolledForm form = toolkit.createScrolledForm(composite);
 		form.setText("Select " + getEntityType1() + " and " + getEntityType2());
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Create lists of entities only with specified types */
 		List<EntityInstance> instances1 = new ArrayList<>();
 		List<EntityInstance> instances2 = new ArrayList<>();
-		for (int i=0; i<instances.size(); i++) {
-			EntityInstance thisInst = (EntityInstance)instances.get(i);
+		for (int i=0; i<getUnits().size(); i++) {
+			EntityInstance thisInst = getUnits().get(i);
 			if (thisInst.getItsEntity().getType()
 					.equals(entityType1))
 				instances1.add(thisInst);
@@ -82,30 +74,30 @@ public class RelationDialog extends Dialog {
 		combo2.select(0);
 		
 		/* Initialize stored values */
-		this.setSelection1(0);
+		this.setSelection(0);
 		if (instances1.size()==0) {
-			this.setInstance1(null);
+			this.setUnit(null);
 		} else {
-			this.setInstance1(instances1.get(0));
+			this.setUnit(instances1.get(0));
 		}
 		this.setSelection2(0);
 		if (instances2.size()==0) {
-			this.setInstance2(null);
+			this.setUnit2(null);
 		} else {
-			this.setInstance2(instances2.get(0));
+			this.setUnit2(instances2.get(0));
 		}
 		
 		/* Updates variable that stores selected artist index */
 		combo1.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				RelationDialog.this.setSelection1(combo1.getSelectionIndex());
-				RelationDialog.this.setInstance1(instances1.get(getSelection1()));
+				RelationDialog.this.setSelection(combo1.getSelectionIndex());
+				RelationDialog.this.setUnit(instances1.get(getSelection()));
 			}
 		});
 		combo2.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				RelationDialog.this.setSelection2(combo2.getSelectionIndex());
-				RelationDialog.this.setInstance2(instances2.get(getSelection2()));
+				RelationDialog.this.setUnit2(instances2.get(getSelection2()));
 			}
 		});
 		
@@ -118,36 +110,23 @@ public class RelationDialog extends Dialog {
 		
 		return composite;
 	}
+	
+	@Override
+	public String getDialogName() {
+		return "Relation";
+	}
 
-	public List<EntityInstance> getInstances() {
-		return instances;
-	}
-	public void setInstances(List<EntityInstance> instances) {
-		this.instances = instances;
-	}
-	public int getSelection1() {
-		return selection1;
-	}
-	public void setSelection1(int selection1) {
-		this.selection1 = selection1;
-	}
 	public int getSelection2() {
 		return selection2;
 	}
 	public void setSelection2(int selection2) {
 		this.selection2 = selection2;
 	}
-	public Unit getInstance1() {
-		return instance1;
+	public EntityInstance getUnit2() {
+		return unit2;
 	}
-	public void setInstance1(Unit instance1) {
-		this.instance1 = instance1;
-	}
-	public Unit getInstance2() {
-		return instance2;
-	}
-	public void setInstance2(Unit instance2) {
-		this.instance2 = instance2;
+	public void setUnit2(EntityInstance unit2) {
+		this.unit2 = unit2;
 	}
 	public String getEntityType1() {
 		return entityType1;

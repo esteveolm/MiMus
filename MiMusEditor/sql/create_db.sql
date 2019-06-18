@@ -257,11 +257,8 @@ CREATE TABLE EntityInstance (
 CREATE TABLE Transcription (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_instance_id bigint(20) NOT NULL,
-	document_id bigint(20) NOT NULL,
 	FOREIGN KEY (entity_instance_id)
 		REFERENCES EntityInstance(id),
-	FOREIGN KEY (document_id)
-		REFERENCES Document(id),
 	PRIMARY KEY (id)
 );
 

@@ -1,4 +1,4 @@
-package ui;
+package ui.dialog;
 
 import java.util.List;
 
@@ -15,88 +15,97 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-import model.Entity;
 import model.Unit;
-import util.LabelPrinter;
 
-public abstract class InstanceDialog extends Dialog {
+public abstract class EditorDialog<U extends Unit> extends Dialog {
 
-	protected ScrolledForm form;
-	private List<? extends Entity> entities;
+	/* Model attributes */
+	private List<U> units;
 	private int selection;
-	private Unit entity;
+	private U unit;
 	
-	public InstanceDialog(List<? extends Entity> entities, Shell parentShell) {
+	/* UI attributes */
+	private Label label;
+
+	protected EditorDialog(List<U> units, Shell parentShell) {
 		super(parentShell);
-		form = null;
-		this.entities = entities;
-		System.out.println("Entities of type " + getDialogName() 
-				+ " available: " + this.entities.size());
+		this.units = units;
+		this.selection = 0;
+		this.unit = null;
 		
-		/* Dialog window will block Editor until closed */
-		this.setBlockOnOpen(true);
+		this.label = null;
 	}
 	
-	public abstract String getDialogName();
-	
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
-		form = toolkit.createScrolledForm(composite);
+		ScrolledForm form = toolkit.createScrolledForm(composite);
 		form.setText("Select " + getDialogName());
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Create combo with artist string representations as values */
+		List<U> units = getUnits();
 		Combo combo = new Combo(form.getBody(), SWT.SINGLE | SWT.WRAP);
-		String[] artistNames = new String[entities.size()];
-		for (int i=0; i<entities.size(); i++) {
-			artistNames[i] = entities.get(i).toString();
+		String[] artistNames = new String[units.size()];
+		for (int i=0; i<units.size(); i++) {
+			artistNames[i] = units.get(i).toString();
 		}
 		combo.setItems(artistNames);
 		combo.select(0);
 		
 		/* Initialize stored values */
 		this.setSelection(0);
-		if (entities.size()==0) {
-			this.setEntity(null);
+		if (units.size()==0) {
+			this.setUnit(null);
 		} else {
-			this.setEntity(entities.get(0));
+			this.setUnit(units.get(0));
 		}
 		
 		/* Updates variable that stores selected artist index */
 		combo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				InstanceDialog.this.setSelection(combo.getSelectionIndex());
-				InstanceDialog.this.setEntity(entities.get(getSelection()));
+				EditorDialog.this.setSelection(combo.getSelectionIndex());
+				EditorDialog.this.setUnit(units.get(getSelection()));
 			}
 		});
 		
-		Label label = new Label(form.getBody(), SWT.VERTICAL);
+		label = new Label(form.getBody(), SWT.VERTICAL);
 		label.setText("");
-		if (entities.size()==0) {
-			LabelPrinter.printError(label, "You cannot add any " 
-					+ getDialogName() + " because none was declared yet.");
-		}
-		
 		return composite;
 	}
+	
+	public abstract String getDialogName();
 
-	public List<? extends Entity> getEntities() {
-		return entities;
+	public List<U> getUnits() {
+		return units;
 	}
-	public void setEntities(List<? extends Entity> entities) {
-		this.entities = entities;
+
+	public void setUnits(List<U> units) {
+		this.units = units;
 	}
+	
 	public int getSelection() {
 		return selection;
 	}
+	
 	public void setSelection(int selection) {
 		this.selection = selection;
 	}
-	public Unit getEntity() {
-		return entity;
+	
+	public U getUnit() {
+		return unit;
 	}
-	public void setEntity(Unit entity) {
-		this.entity = entity;
+	
+	public void setUnit(U unit) {
+		this.unit = unit;
+	}
+	
+	public Label getLabel() {
+		return label;
+	}
+
+	public void setLabel(Label label) {
+		this.label = label;
 	}
 }
