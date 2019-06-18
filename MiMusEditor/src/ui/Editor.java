@@ -344,8 +344,7 @@ public class Editor extends EditorPart implements EventObserver {
 		transcriptionTV.refresh();
 		
 		/* Paint transcriptions */
-		for (Unit u: transcriptions) {
-			Transcription t = (Transcription) u;
+		for (Transcription t: transcriptions) {
 			transcriptionStyler.addUpdate(t.getCoords().x, t.getCoords().y);
 		}
 		
@@ -505,6 +504,7 @@ public class Editor extends EditorPart implements EventObserver {
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
 			}
 		});
 		addCasa.addSelectionListener(new SelectionAdapter() {
@@ -956,23 +956,33 @@ public class Editor extends EditorPart implements EventObserver {
 				int selection = dialog.getSelection();
 				if (selection>=0) {
 					/* User actually selected something */
-					EntityInstance ent = dialog.getUnit();
+					EntityInstance inst = dialog.getUnit();
+					System.out.println("Selected instance with ID: " + inst.getId() +
+							" and type of entity: " + inst.getItsEntity().getType());
 					String form = dialog.getTranscription();
-					if (form=="")
+					if (form=="") {
 						/* User did not add a form, use selection directly */
 						form = dialog.getSelectedText();
-//					/* Selected entity has been marked in this document */
-//					Transcription trans = new Transcription(
-//							EntityInstance.getInstanceWithEntity(entities, ent),
-//							selectedText, form, charCoords, 
-//							0);
-//					transcriptions.add(trans);
-//					MiMusXML.openDoc(docIdStr).append(trans).write();
-//					System.out.println("Adding selected Transcription - " 
-//							+ transcriptions.size());
-//					LabelPrinter.printInfo(label, 
-//							"Lemma added successfully.");
-//					styler.addUpdate(charCoords.x, charCoords.y);
+					}
+					/* Selected entity has been marked in this document */
+					Transcription trans = new Transcription(
+							inst, selectedText, form, charCoords);
+					try {
+						int id = new TranscriptionDao(conn).insert(trans);
+						if (id>0) {
+							/* OK case */
+							trans.setId(id);
+							transcriptions.add(trans);
+							LabelPrinter.printInfo(label, 
+									"Lemma added successfully.");
+							styler.addUpdate(charCoords.x, charCoords.y);
+						} else {
+							System.out.println("DAO: could not insert transcription.");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+						System.out.println("SQLException: could not insert transcription.");
+					}
 				} else {
 					/* User pressed OK but selected nothing */
 					System.out.println("No Transcription added - " 

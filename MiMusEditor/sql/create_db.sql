@@ -257,6 +257,10 @@ CREATE TABLE EntityInstance (
 CREATE TABLE Transcription (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_instance_id bigint(20) NOT NULL,
+    selected_text varchar(200) NOT NULL,
+    form varchar(200) NOT NULL,
+    coords_from int(4) NOT NULL,
+    coords_to int(4) NOT NULL,
 	FOREIGN KEY (entity_instance_id)
 		REFERENCES EntityInstance(id),
 	PRIMARY KEY (id)

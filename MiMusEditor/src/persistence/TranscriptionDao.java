@@ -1,9 +1,13 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.eclipse.swt.graphics.Point;
+
+import model.EntityInstance;
 import model.Transcription;
 
 public class TranscriptionDao extends UnitDao<Transcription> {
@@ -13,9 +17,17 @@ public class TranscriptionDao extends UnitDao<Transcription> {
 	}
 
 	@Override
-	public int insert(Transcription unit) throws SQLException, DaoNotImplementedException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insert(Transcription unit) throws SQLException {
+		String sql = "INSERT INTO Transcription "
+				+ "(entity_instance_id, selected_text, form, coords_from, coords_to)"
+				+ "VALUES (?,?,?,?,?)";
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setInt(1, unit.getItsEntity().getId());
+		stmt.setString(2, unit.getSelectedText());
+		stmt.setString(3, unit.getForm());
+		stmt.setInt(4, unit.getCoords().x);
+		stmt.setInt(5, unit.getCoords().y);
+		return executeGetId(stmt);
 	}
 
 	@Override
@@ -26,8 +38,15 @@ public class TranscriptionDao extends UnitDao<Transcription> {
 
 	@Override
 	protected Transcription make(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		int id = rs.getInt("id");
+		int instanceID = rs.getInt("entity_instance_id");
+		String selectedText = rs.getString("selected_text");
+		String form = rs.getString("form");
+		Point coords = new Point(rs.getInt("coords_from"), rs.getInt("coords_to"));
+		
+		EntityInstance instance = 
+				new InstanceDao(getConnection()).selectOne(instanceID);
+		return new Transcription(instance, selectedText, form, coords, id);
 	}
 
 	@Override

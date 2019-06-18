@@ -1,19 +1,16 @@
 package ui.dialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-
 import model.Entity;
 import model.EntityInstance;
 
@@ -30,28 +27,30 @@ public abstract class TranscriptionDialog<T extends Entity>
 		this.setTranscription("");
 	}
 	
+	@Override
+	public List<EntityInstance> getUnitsUsed() {
+		List<EntityInstance> used = new ArrayList<>();
+		for (EntityInstance inst: getUnits()) {
+			if (inst.getItsEntity().getType().equals(getDialogName())) {
+				/* Only entities of the type specified to this dialog are used */
+				used.add(inst);
+			}
+		}
+		return used;
+	}
+	
 	protected Control createDialogArea(Composite parent) {
-		/* Inherits ComboBox Entity selection from parent InstanceDialog */
 		Composite composite = (Composite) super.createDialogArea(parent);
-		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm form = toolkit.createScrolledForm(composite);
-		form.setText("Select " + getDialogName());
-		form.getBody().setLayout(new GridLayout());
 		
-		List<EntityInstance> instances = getUnits();
-		Label labelSelection = new Label(form.getBody(), SWT.SINGLE);
-		labelSelection.setText("Selection is: " + selectedText);
-		Label labelForm = new Label(form.getBody(), SWT.SINGLE);
+		Label labelForm = new Label(getForm().getBody(), SWT.SINGLE);
 		labelForm.setText("New form: ");
-		Text textForm = new Text(form.getBody(), SWT.SINGLE);
+		Text textForm = new Text(getForm().getBody(), SWT.SINGLE);
 		textForm.setText("");
 		textForm.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				/* Stores text introduced by user */
 				TranscriptionDialog.this.setTranscription(textForm.getText());
-				TranscriptionDialog.this.setUnit(
-						instances.get(getSelection()));
 			}
 			
 		});

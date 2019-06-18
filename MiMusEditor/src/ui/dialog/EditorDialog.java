@@ -25,6 +25,7 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 	private U unit;
 	
 	/* UI attributes */
+	private ScrolledForm form;
 	private Label label;
 
 	protected EditorDialog(List<U> units, Shell parentShell) {
@@ -33,19 +34,23 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		this.selection = 0;
 		this.unit = null;
 		
+		this.form = null;
 		this.label = null;
+		
+		/* Dialog window will block Editor until closed */
+		this.setBlockOnOpen(true);
 	}
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm form = toolkit.createScrolledForm(composite);
+		form = toolkit.createScrolledForm(composite);
 		form.setText("Select " + getDialogName());
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Create combo with artist string representations as values */
-		List<U> units = getUnits();
+		List<U> units = getUnitsUsed();
 		Combo combo = new Combo(form.getBody(), SWT.SINGLE | SWT.WRAP);
 		String[] artistNames = new String[units.size()];
 		for (int i=0; i<units.size(); i++) {
@@ -75,6 +80,8 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		return composite;
 	}
 	
+	public abstract List<U> getUnitsUsed();
+	
 	public abstract String getDialogName();
 
 	public List<U> getUnits() {
@@ -101,6 +108,14 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		this.unit = unit;
 	}
 	
+	public ScrolledForm getForm() {
+		return form;
+	}
+
+	public void setForm(ScrolledForm form) {
+		this.form = form;
+	}
+
 	public Label getLabel() {
 		return label;
 	}

@@ -20,7 +20,6 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 
 	@Override
 	public int insert(EntityInstance unit) throws SQLException {
-		System.out.println(unit.getItsEntity().getId() + " " + unit.getItsDocument().getId());
 		String sql = "INSERT INTO EntityInstance (entity_id, document_id)"
 				+ "VALUES (?,?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -49,6 +48,8 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 		Entity ent = specificDao.selectOne(entityId);
 		
 		Document doc = new DocumentDao(getConnection()).selectOne(documentId);
+		System.out.println("Recovered instance with type: " + typeName + 
+				" Inst ID: " + id + " Doc ID: " + doc.getId() + " Ent ID: " + ent.getId());
 		return new EntityInstance(ent, doc, id);
 	}
 

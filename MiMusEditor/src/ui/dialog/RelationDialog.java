@@ -30,9 +30,6 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 		super(instances, parentShell);
 		this.entityType1 = entityType1;
 		this.entityType2 = entityType2;
-		
-		/* Dialog window will block Editor until closed */
-		this.setBlockOnOpen(true);
 	}
 	
 	protected Control createDialogArea(Composite parent) {
@@ -142,5 +139,10 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 	}
 	public String getRelType() {
 		return getEntityType1()+"-"+getEntityType2();
+	}
+
+	@Override
+	public List<EntityInstance> getUnitsUsed() {
+		return getUnitsUsed();
 	}
 }

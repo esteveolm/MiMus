@@ -32,6 +32,11 @@ public class Transcription extends ConcreteUnit {
 	}
 	
 	public Transcription(EntityInstance itsEntity, String selectedText, 
+			String form, Point coords) {
+		this(itsEntity, selectedText, form, coords, 0);
+	}
+	
+	public Transcription(EntityInstance itsEntity, String selectedText, 
 			String form, int id) {
 		this(itsEntity, selectedText, form, null, id);
 	}
