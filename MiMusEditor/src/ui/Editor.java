@@ -52,7 +52,6 @@ import model.Ofici;
 import model.Promotor;
 import model.Relation;
 import model.Transcription;
-import model.Unit;
 import persistence.ArtistaDao;
 import persistence.BibliographyDao;
 import persistence.CasaDao;
@@ -334,7 +333,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Transcription entities and its table */
 		transcriptions = new ArrayList<>();
 		try {
-			transcriptions = new TranscriptionDao(conn).selectAll();
+			transcriptions = new TranscriptionDao(conn).select(docEntry);
 		} catch (SQLException e) {
 			System.out.println("SQLException: could not retrieve transcriptions.");
 		}
@@ -816,7 +815,8 @@ public class Editor extends EditorPart implements EventObserver {
 					try {
 						new TranscriptionDao(conn).delete(trans);
 						transcriptions.remove(trans);
-
+						transcriptionHelper.packColumns();
+						
 						/* Undo colour in text */
 						Point charCoords = trans.getCoords();
 						transcriptionStyler.deleteUpdate(charCoords.x, charCoords.y);
@@ -828,7 +828,6 @@ public class Editor extends EditorPart implements EventObserver {
 						
 						transcriptionTV.refresh();
 					} catch (SQLException e1) {
-						e1.printStackTrace();
 						System.out.println("SQLException: could not delete trans.");
 					}
 				}

@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
 
+import model.Document;
 import model.EntityInstance;
 import model.Transcription;
 
@@ -52,6 +56,20 @@ public class TranscriptionDao extends UnitDao<Transcription> {
 	@Override
 	public String getTable() {
 		return "Transcription";
+	}
+
+	public List<Transcription> select(Document doc) throws SQLException {
+		List<Transcription> transcriptions = new ArrayList<>();
+		String sql = "SELECT * FROM Transcription, EntityInstance "
+				+ "WHERE Transcription.entity_instance_id=EntityInstance.id "
+				+ "AND EntityInstance.document_id=" + doc.getId();
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while(rs.next()) {
+			transcriptions.add(make(rs));
+		}
+		return transcriptions;
 	}
 
 }

@@ -1,6 +1,5 @@
 package ui.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -25,7 +24,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		super(parent);
 		String[] cols = {"Selection", "Transcription", "Lemma"};
 		columnNames = cols;
-		transcriptions = new ArrayList<>(initials);
+		transcriptions = initials;
 	}
 
 	@Override
