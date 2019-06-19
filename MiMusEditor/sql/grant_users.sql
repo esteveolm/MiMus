@@ -9,3 +9,4 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON Mimus.Lloc TO mimus01@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON Mimus.Ofici TO mimus01@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE ON Mimus.Promotor TO mimus01@localhost;
 GRANT SELECT, INSERT, DELETE ON Mimus.EntityInstance TO mimus01@localhost;
+GRANT SELECT, INSERT, DELETE ON Mimus.Transcription TO mimus01@localhost;

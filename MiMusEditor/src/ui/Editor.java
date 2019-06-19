@@ -828,6 +828,7 @@ public class Editor extends EditorPart implements EventObserver {
 						
 						transcriptionTV.refresh();
 					} catch (SQLException e1) {
+						e1.printStackTrace();
 						System.out.println("SQLException: could not delete trans.");
 					}
 				}
