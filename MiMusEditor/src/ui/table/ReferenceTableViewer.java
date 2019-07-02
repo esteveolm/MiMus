@@ -1,12 +1,10 @@
 package ui.table;
 
-import java.sql.Connection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -18,8 +16,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-
 import control.SharedResources;
 import model.Bibliography;
 import model.Document;
@@ -29,14 +25,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private List<MiMusReference> references;
 	private List<Bibliography> bibEntries;
-	private Document docEntry;
 	
 	public ReferenceTableViewer(Composite parent, List<MiMusReference> references, 
 			List<Bibliography> bibEntries, Document docEntry, SharedResources resources) {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;
-		this.docEntry = docEntry;
 		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
 		columnNames = aux;
 	}
@@ -60,7 +54,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				SharedResources.REF_TYPES, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
-		tv.setCellModifier(new ReferenceCellModifier());
 		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setLabelProvider(new ReferenceLabelProvider());
 		tv.setInput(references);
@@ -97,74 +90,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		tv.refresh();
 	}
 	
-	class ReferenceCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(Object element, String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(Object element, String property) {
-			int colIdx = getColumnNames().indexOf(property);
-			MiMusReference ref = (MiMusReference) element;
-			System.out.println(ref.toString());
-			switch(colIdx) {
-			case 0:	// BibEntry
-				return ref.getBibEntry().getId();
-			case 1: // Page
-				return ref.getPage();
-			case 2:	// Reference Type
-				return ref.getType();
-			default:	// Should never reach here
-				return 0;
-			}
-		}
-
-		@Override
-		public void modify(Object element, String property, Object value) {
-			int colIdx = getColumnNames().indexOf(property);
-			MiMusReference ref = (MiMusReference) ((TableItem) element).getData();
-			System.out.println("Modify " + ref.toString());
-			switch (colIdx) {
-			case 0:	// BibEntry
-				int valueIdx = (int) value;
-				
-				/* Checks user is actually modifying to a new entry */
-				if (valueIdx>-1) {
-//					/* This document is no longer using the old bibEntry */
-//					Bibliography reducedEntry = ref.getBibEntry();
-//					Bibliography extendedEntry = SharedResources.getInstance()
-//							.getBibEntries().get(valueIdx);
-//					if (extendedEntry.getId() != reducedEntry.getId()) {
-//						/* Actually reduce entry's users */
-//						reducedEntry.removeUser(new Integer(docEntry.getId()));
-//						MiMusXML.openBiblio().update(reducedEntry).write();
-//						
-//						ref.setBibEntry(extendedEntry);
-//						
-//						/* Actually extend entry's users */
-//						extendedEntry.addUser(new Integer(docEntry.getId()));
-//						MiMusXML.openBiblio().update(extendedEntry).write();
-//						MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
-//					}
-				}
-				break;
-			case 1:	// Page
-				/* Pass from the idx in the checkbox to the ID in the EntityList */
-//				String page = (String) value;
-//				ref.setPage(page);
-//				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
-//				break;
-			case 2:	// Reference Type
-//				ref.setType((int) value);
-//				MiMusXML.openDoc(docEntry.getIdStr()).update(ref).write();
-			default:	// Should never reach here
-				break;
-			}
-			tv.refresh();
-		}
-	}
-	
 	class ReferenceLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -176,7 +101,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			MiMusReference ref = (MiMusReference) element;
 			switch (columnIndex) {
 			case 0:	// BibEntry as a short reference
-				return ref.getBibEntry().getShortReference();
+				return ref.getItsBiblio().getShortReference();
 			case 1: // Page
 				return ref.getPage();
 			case 2:	// Reference Type
@@ -191,8 +116,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			MiMusReference ref1 = (MiMusReference) e1;
 			MiMusReference ref2 = (MiMusReference) e2;
-			return ref1.getBibEntry().getYear()
-					.compareTo(ref2.getBibEntry().getYear());
+			return ref1.getItsBiblio().getYear()
+					.compareTo(ref2.getItsBiblio().getYear());
 		}
 	}
 	

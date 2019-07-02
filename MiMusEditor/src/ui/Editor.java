@@ -66,6 +66,7 @@ import persistence.ReferenceDao;
 import persistence.RelationDao;
 import persistence.TranscriptionDao;
 import ui.dialog.InstanceDialog;
+import ui.dialog.ReferenceDialog;
 import ui.dialog.RelationDialog;
 import ui.dialog.TranscriptionDialog;
 import ui.table.EntityTableViewer;
@@ -93,6 +94,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private List<EntityInstance> entityInstances;
 	private List<Relation> relations;
 	private List<Transcription> transcriptions;
+	private List<Bibliography> bibliography;
 	private List<MiMusReference> references;
 	private FormToolkit toolkit;
 	
@@ -398,20 +400,21 @@ public class Editor extends EditorPart implements EventObserver {
 		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Table of references. Requires bibliography and references */
-		List<Bibliography> bibEntries = new ArrayList<>();
+		bibliography = new ArrayList<>();
 		try {
-			bibEntries = new BibliographyDao(conn).selectAll();
+			bibliography = new BibliographyDao(conn).selectAll();
 		} catch (SQLException e) {
 			System.out.println("SQLException: could not retrieve bibliography.");
 		}
 		references = new ArrayList<>();
 		try {
-			references = new ReferenceDao(conn).selectAll();
+			references = new ReferenceDao(conn).select(docEntry);
 		} catch (SQLException e) {
 			System.out.println("SQLException: could not retrieve references.");
+			e.printStackTrace();
 		}
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), references, bibEntries, docEntry, resources);
+				sectRef.getParent(), references, bibliography, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		referenceTV.refresh();
 		
@@ -838,25 +841,12 @@ public class Editor extends EditorPart implements EventObserver {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					Bibliography bib0 = new BibliographyDao(conn).selectOne();
-					MiMusReference ref = new MiMusReference(
-							bib0,
-							"",
-							0, 
-							0);
-					references.add(ref);
-					new ReferenceDao(conn).insert(ref);
-					
-					LabelPrinter.printInfo(referenceLabel, 
-							"Reference added successfully.");
-					System.out.println("Reference added successfully.");
-					
-					referenceTV.refresh();
-				} catch (SQLException e1) {
-					System.out.println("SQLException: could not add ref");
-				}
-				
+				ReferenceDialog dialog = 
+						new ReferenceDialog(bibliography,
+						parent.getShell()) {
+				};
+				runReferenceDialog(dialog,bibliography, referenceLabel);
+				referenceTV.refresh();
 			}
 		});
 		removeRef.addSelectionListener(new SelectionAdapter() {
@@ -1049,6 +1039,58 @@ public class Editor extends EditorPart implements EventObserver {
 			/* Operation cancelled by the user */
 			System.out.println("No Relation added - " 
 					+ relations.size());
+			LabelPrinter.printInfo(label, 
+					"Nothing was added.");
+		}
+	}
+	
+	private void runReferenceDialog(ReferenceDialog dialog,
+			List<Bibliography> bibliography, Label label) {
+		int dialogResult = dialog.open();
+		if (dialogResult == Window.OK) {
+			Bibliography added = dialog.getUnit();
+			if (added != null) {
+				if (MiMusReference.containsBibliography(references, added)) {
+					/* Trying to add bibliography already added */
+					System.out.println("No Reference added - "
+							+ bibliography.size());
+					LabelPrinter.printError(label, 
+							"Cannot add the same reference twice.");
+				} else {
+					int type = dialog.getType();
+					String pages = dialog.getPages();
+					MiMusReference ref = new MiMusReference(added, docEntry,
+							pages, type, 0);
+					
+					try {
+						int id = new ReferenceDao(conn).insert(ref);
+						if (id>0) {
+							/* OK case */
+							ref.setId(id);
+							references.add(ref);
+							
+							System.out.println("Adding selected Reference - " 
+									+ references.size());
+							LabelPrinter.printInfo(label, 
+									"Reference added successfully.");
+						} else {
+							System.out.println("DAO: could not insert reference");
+						}
+					} catch (SQLException e) {
+						System.out.println("SQLException: could not insert reference");
+					}
+				}
+			} else {
+				/* No bibliography declared, nothing could be selected */
+				System.out.println("No Reference added - " 
+						+ references.size());
+				LabelPrinter.printInfo(label, 
+						"Nothing was added. Must declare any first.");
+			}
+		} else {
+			/* Operation cancelled by the user */
+			System.out.println("No Reference added - " 
+					+ references.size());
 			LabelPrinter.printInfo(label, 
 					"Nothing was added.");
 		}

@@ -1,9 +1,15 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import model.Bibliography;
+import model.Document;
 import model.MiMusReference;
 
 public class ReferenceDao extends UnitDao<MiMusReference> {
@@ -14,25 +20,51 @@ public class ReferenceDao extends UnitDao<MiMusReference> {
 
 	@Override
 	public int insert(MiMusReference unit) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "INSERT INTO Referencia "
+				+ "(id, RefType, Pages, document_id, bibliografia_id) "
+				+ "VALUES (?,?,?,?,?)";
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setInt(1, unit.getId());
+		stmt.setInt(2, unit.getType());
+		stmt.setString(3, unit.getPage());
+		stmt.setInt(4, unit.getItsDocument().getId());
+		stmt.setInt(5, unit.getItsBiblio().getId());
+		return executeGetId(stmt);
 	}
 
 	@Override
 	public void update(MiMusReference unit) throws SQLException, DaoNotImplementedException {
-		// TODO Auto-generated method stub
-
+		throw new DaoNotImplementedException();
 	}
 
 	@Override
 	protected MiMusReference make(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		int id = rs.getInt("id");
+		int type = rs.getInt("RefType");
+		String pages = rs.getString("Pages");
+		int biblioId = rs.getInt("bibliografia_id");
+		Bibliography biblio = new BibliographyDao(getConnection())
+				.selectOne(biblioId);
+		int docId = rs.getInt("document_id");
+		Document doc = new DocumentDao(getConnection()).selectOne(docId);
+		return new MiMusReference(biblio, doc, pages, type, id);
 	}
 
 	@Override
 	public String getTable() {
 		return "Referencia";
+	}
+
+	public List<MiMusReference> select(Document doc) throws SQLException {
+		List<MiMusReference> references = new ArrayList<>();
+		String sql = "SELECT * FROM Referencia WHERE document_id=" + doc.getId();
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while(rs.next()) {
+			references.add(make(rs));
+		}
+		return references;
 	}
 
 }

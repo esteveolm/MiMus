@@ -133,6 +133,8 @@ CREATE TABLE Bibliografia (
 
 CREATE TABLE Referencia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
+    RefType varchar(20) NOT NULL,
+    Pages varchar(100) NULL,
 	document_id bigint(20) NOT NULL,
 	bibliografia_id bigint(20) NOT NULL,
 	FOREIGN KEY (document_id)

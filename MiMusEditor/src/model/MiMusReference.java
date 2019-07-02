@@ -26,7 +26,8 @@ import java.util.List;
  */
 public class MiMusReference extends ConcreteUnit {
 	
-	private Bibliography bibEntry;
+	private Bibliography itsBiblio;
+	private Document itsDocument;
 	private String page;
 	private int type;
 	private int id;
@@ -37,24 +38,32 @@ public class MiMusReference extends ConcreteUnit {
 		super(allBiblio);
 	}
 	
-	public MiMusReference(Bibliography bibEntry, String page, int type, int id) {
-		this.bibEntry = bibEntry;
+	public MiMusReference(Bibliography itsBiblio, Document itsDocument,
+			String page, int type, int id) {
+		this.itsBiblio = itsBiblio;
+		this.itsDocument = itsDocument;
 		this.page = page;
 		this.setType(type);
 		this.setId(id);
 	}
 	
 	public String toString() {
-		return bibEntry.toString() + ", p. " + page + ".";
+		return itsBiblio.toString() + ", p. " + page + ".";
 	}
 	
 	/* Getters and setters */
 	
-	public Bibliography getBibEntry() {
-		return bibEntry;
+	public Bibliography getItsBiblio() {
+		return itsBiblio;
 	}
-	public void setBibEntry(Bibliography bibEntry) {
-		this.bibEntry = bibEntry;
+	public void setItsBiblio(Bibliography itsBiblio) {
+		this.itsBiblio = itsBiblio;
+	}
+	public Document getItsDocument() {
+		return itsDocument;
+	}
+	public void setItsDocument(Document itsDocument) {
+		this.itsDocument = itsDocument;
 	}
 	public String getPage() {
 		return page;
@@ -73,5 +82,15 @@ public class MiMusReference extends ConcreteUnit {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public static boolean containsBibliography(List<MiMusReference> references, 
+			Bibliography biblio) {
+		for (MiMusReference ref: references) {
+			if (ref.getItsBiblio().equals(biblio)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
