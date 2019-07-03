@@ -4,9 +4,13 @@ import java.util.List;
 
 public class Relation extends ConcreteUnit {
 
+	public static final String[] TYPES = 
+			{"TeOfici", "TeCasa", "ServeixA", "ResideixA", "Moviment"};
+	
 	private EntityInstance itsEntity1;
 	private EntityInstance itsEntity2;
 	private String type;
+	private Document doc;
 	
 	public Relation() {}
 
@@ -14,10 +18,12 @@ public class Relation extends ConcreteUnit {
 		super(itsConcepts);
 	}
 	
-	public Relation(EntityInstance ent1, EntityInstance ent2, String type, int id) {
+	public Relation(Document doc,EntityInstance ent1, EntityInstance ent2, 
+			String type, int id) {
 		this.itsEntity1 = ent1;
 		this.itsEntity2 = ent2;
 		this.type = type;
+		this.doc = doc;
 		this.setId(id);
  	}
 
@@ -38,6 +44,12 @@ public class Relation extends ConcreteUnit {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public Document getDoc() {
+		return doc;
+	}
+	public void setDoc(Document doc) {
+		this.doc = doc;
 	}
 
 	@Override

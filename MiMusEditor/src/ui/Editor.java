@@ -52,6 +52,7 @@ import model.Ofici;
 import model.Promotor;
 import model.Relation;
 import model.Transcription;
+import persistence.AnyRelationDao;
 import persistence.ArtistaDao;
 import persistence.BibliographyDao;
 import persistence.CasaDao;
@@ -286,7 +287,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Table of relations */
 		relations = new ArrayList<>();
 		try {
-			relations = new RelationDao(conn).selectAll();
+			relations = new AnyRelationDao(conn).selectAll();
 		} catch (SQLException e) {
 			System.out.println("SQLException: could not retrieve relations.");
 		}
@@ -682,7 +683,7 @@ public class Editor extends EditorPart implements EventObserver {
 				} else {
 					try {
 						/* OK case */
-						new RelationDao(conn).delete(rel);
+						new AnyRelationDao(conn).delete(rel);
 						relations.remove(rel);
 						relationHelper.packColumns();
 						System.out.println("Removing relation - " 
@@ -1004,7 +1005,7 @@ public class Editor extends EditorPart implements EventObserver {
 			EntityInstance instance2 = dialog.getUnit2();
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected */
-				Relation rel = new Relation(
+				Relation rel = new Relation(docEntry,
 						instance1, instance2, dialog.getRelType(),
 						0);
 				if (Relation.containsRelation(relations, rel)) {
@@ -1015,17 +1016,18 @@ public class Editor extends EditorPart implements EventObserver {
 							"Cannot add the same relation twice.");
 				} else {
 					/* OK case */
-					try {
-						new RelationDao(conn).insert(rel);
+//					try {
+						// TODO: Specific DAO depending on relation type
+						//new RelationDao(conn).insert(rel);
 						relations.add(rel);
 						
 						System.out.println("Adding selected Relation - " 
 								+ relations.size());
 						LabelPrinter.printInfo(label, 
 								"Relation added successfully.");
-					} catch (SQLException e) {
-						System.out.println("SQLException: could not add relation.");
-					}		
+//					} catch (SQLException e) {
+//						System.out.println("SQLException: could not add relation.");
+//					}		
 				}
 				
 			} else {
