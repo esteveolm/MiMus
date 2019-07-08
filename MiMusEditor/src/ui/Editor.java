@@ -65,6 +65,10 @@ import persistence.OficiDao;
 import persistence.PromotorDao;
 import persistence.ReferenceDao;
 import persistence.RelationDao;
+import persistence.ResideixADao;
+import persistence.ServeixADao;
+import persistence.TeCasaDao;
+import persistence.TeOficiDao;
 import persistence.TranscriptionDao;
 import ui.dialog.InstanceDialog;
 import ui.dialog.ReferenceDialog;
@@ -1001,7 +1005,7 @@ public class Editor extends EditorPart implements EventObserver {
 			List<Relation> relations, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
-			EntityInstance instance1 = dialog.getUnit();
+			EntityInstance instance1 = dialog.getUnit1();
 			EntityInstance instance2 = dialog.getUnit2();
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected */
@@ -1016,18 +1020,41 @@ public class Editor extends EditorPart implements EventObserver {
 							"Cannot add the same relation twice.");
 				} else {
 					/* OK case */
-//					try {
-						// TODO: Specific DAO depending on relation type
-						//new RelationDao(conn).insert(rel);
-						relations.add(rel);
+					try {
+						String type1 = dialog.getEntityType1();
+						String type2 = dialog.getEntityType2();
+						RelationDao dao = null;
+						if (type1.equals("Artista") && type2.equals("Ofici")) {
+							dao = new TeOficiDao(conn);
+						} else if (type1.equals("Promotor") && type2.equals("Casa")) {
+							dao = new TeCasaDao(conn);
+						} else if (type1.equals("Artista") && type2.equals("Promotor")) {
+							dao = new ServeixADao(conn);
+						} else if (type1.equals("Artista") && type2.equals("Lloc")) {
+							dao = new ResideixADao(conn);
+						}
 						
-						System.out.println("Adding selected Relation - " 
-								+ relations.size());
-						LabelPrinter.printInfo(label, 
-								"Relation added successfully.");
-//					} catch (SQLException e) {
-//						System.out.println("SQLException: could not add relation.");
-//					}		
+						if (dao != null) {
+							int id = dao.insert(rel);
+							if (id>0) {
+								rel.setId(id);
+								relations.add(rel);
+								
+								System.out.println("Adding selected Relation - " 
+										+ relations.size());
+								LabelPrinter.printInfo(label, 
+										"Relation added successfully.");
+							} else {
+								System.out.println("DAO: could not add relation.");
+							}
+							
+						} else {
+							System.out.println("Error: unknown relation in dialog.");
+						}
+					} catch (SQLException e) {
+						System.out.println("SQLException: could not add relation.");
+						e.printStackTrace();
+					}		
 				}
 				
 			} else {

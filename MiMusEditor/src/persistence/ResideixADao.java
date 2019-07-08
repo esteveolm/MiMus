@@ -2,15 +2,15 @@ package persistence;
 
 import java.sql.Connection;
 
-public class ResideixA extends RelationDao {
+public class ResideixADao extends RelationDao {
 
-	public ResideixA(Connection conn) {
+	public ResideixADao(Connection conn) {
 		super(conn);
 	}
 
 	@Override
 	public String getTable() {
-		return "ResideixA";
+		return "ResideixADao";
 	}
 
 	@Override

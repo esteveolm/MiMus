@@ -10,7 +10,7 @@ public class ServeixADao extends RelationDao {
 
 	@Override
 	public String getTable() {
-		return "serveixA";
+		return "ServeixA";
 	}
 
 	@Override

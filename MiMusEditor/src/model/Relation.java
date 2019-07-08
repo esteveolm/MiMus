@@ -5,7 +5,7 @@ import java.util.List;
 public class Relation extends ConcreteUnit {
 
 	public static final String[] TYPES = 
-			{"TeOfici", "TeCasa", "ServeixA", "ResideixA", "Moviment"};
+			{"TeOfici", "TeCasa", "ServeixA", "ResideixADao", "Moviment"};
 	
 	private EntityInstance itsEntity1;
 	private EntityInstance itsEntity2;

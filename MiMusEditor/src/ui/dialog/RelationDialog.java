@@ -3,6 +3,7 @@ package ui.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,25 +19,34 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import model.EntityInstance;
 import util.LabelPrinter;
 
-public class RelationDialog extends EditorDialog<EntityInstance> {
+public class RelationDialog extends Dialog {
 
+	private List<EntityInstance> units;
+	private int selection1;
 	private int selection2;
+	private EntityInstance unit1;
 	private EntityInstance unit2;
 	private String entityType1;
 	private String entityType2;
 	
 	public RelationDialog(List<EntityInstance> instances, Shell parentShell, 
 			String entityType1, String entityType2) {
-		super(instances, parentShell);
+		super(parentShell);
+		this.units = instances;
+		this.selection1 = 0;
+		this.selection2 = 0;
+		this.unit1 = null;
+		this.unit2 = null;
 		this.entityType1 = entityType1;
-		this.entityType2 = entityType2;
+		this.entityType2 = entityType2;		
 	}
 	
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(composite);
-		form.setText("Select " + getEntityType1() + " and " + getEntityType2());
+		form.setText("Select Instances for Relation");
 		form.getBody().setLayout(new GridLayout());
 		
 		/* Create lists of entities only with specified types */
@@ -71,11 +81,11 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 		combo2.select(0);
 		
 		/* Initialize stored values */
-		this.setSelection(0);
+		this.setSelection1(0);
 		if (instances1.size()==0) {
-			this.setUnit(null);
+			this.setUnit1(null);
 		} else {
-			this.setUnit(instances1.get(0));
+			this.setUnit1(instances1.get(0));
 		}
 		this.setSelection2(0);
 		if (instances2.size()==0) {
@@ -87,8 +97,8 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 		/* Updates variable that stores selected artist index */
 		combo1.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				RelationDialog.this.setSelection(combo1.getSelectionIndex());
-				RelationDialog.this.setUnit(instances1.get(getSelection()));
+				RelationDialog.this.setSelection1(combo1.getSelectionIndex());
+				RelationDialog.this.setUnit1(instances1.get(getSelection1()));
 			}
 		});
 		combo2.addSelectionListener(new SelectionAdapter() {
@@ -107,17 +117,31 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 		
 		return composite;
 	}
-	
-	@Override
-	public String getDialogName() {
-		return "Relation";
-	}
 
+	
+	public List<EntityInstance> getUnits() {
+		return units;
+	}
+	public void setUnits(List<EntityInstance> units) {
+		this.units = units;
+	}
+	public int getSelection1() {
+		return selection1;
+	}
+	public void setSelection1(int selection1) {
+		this.selection1 = selection1;
+	}
 	public int getSelection2() {
 		return selection2;
 	}
 	public void setSelection2(int selection2) {
 		this.selection2 = selection2;
+	}
+	public EntityInstance getUnit1() {
+		return unit1;
+	}
+	public void setUnit1(EntityInstance unit1) {
+		this.unit1 = unit1;
 	}
 	public EntityInstance getUnit2() {
 		return unit2;
@@ -139,10 +163,5 @@ public class RelationDialog extends EditorDialog<EntityInstance> {
 	}
 	public String getRelType() {
 		return getEntityType1()+"-"+getEntityType2();
-	}
-
-	@Override
-	public List<EntityInstance> getUnitsUsed() {
-		return getUnitsUsed();
 	}
 }

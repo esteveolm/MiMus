@@ -77,6 +77,7 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		
 		label = new Label(form.getBody(), SWT.VERTICAL);
 		label.setText("");
+		
 		return composite;
 	}
 	

@@ -1,6 +1,7 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,8 +20,12 @@ public abstract class RelationDao extends UnitDao<Relation> {
 
 	@Override
 	public int insert(Relation unit) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "INSERT INTO " + getTable() + " " + entitiesToSQL() + 
+				" VALUES " + countsToSQL(); 
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setInt(1, unit.getItsEntity1().getId());
+		stmt.setInt(2, unit.getItsEntity2().getId());
+		return executeGetId(stmt);
 	}
 
 	@Override
@@ -67,4 +72,26 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	public abstract int countEntities();
 	
 	public abstract String[] getEntities();
+	
+	private String entitiesToSQL() {
+		String sql = "(";
+		for (String s: getEntities()) {
+			sql += s + ",";
+		}
+		if (sql.length()>1) {
+			sql = sql.substring(0, sql.length()-1);
+		}
+		return sql + ")";
+	}
+	
+	private String countsToSQL() {
+		String sql = "(";
+		for (int i=0; i<getEntities().length; i++) {
+			sql += "?,";
+		}
+		if (sql.length()>1) {
+			sql = sql.substring(0, sql.length()-1);
+		}
+		return sql + ")";
+	}
 }
