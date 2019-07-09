@@ -57,4 +57,15 @@ public class AnyEntityDao extends UnitDao<Entity> {
 		return map.get(type);
 	}
 
+	public EntityDao<? extends Entity> getDaoByKey(String key) {
+		HashMap<String, EntityDao<? extends Entity>> map = new HashMap<>();
+		map.put("artista_id", new ArtistaDao(getConnection()));
+		map.put("ofici_id", new OficiDao(getConnection()));
+		map.put("promotor_id", new PromotorDao(getConnection()));
+		map.put("casa_id", new CasaDao(getConnection()));
+		map.put("instrument_id", new InstrumentDao(getConnection()));
+		map.put("lloc_id", new LlocDao(getConnection()));
+		return map.get(key);
+	}
+
 }

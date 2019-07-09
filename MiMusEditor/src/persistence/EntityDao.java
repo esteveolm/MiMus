@@ -15,7 +15,12 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	}
 	
 	public E selectOne(int id) throws SQLException {
-		String sql = "SELECT * FROM " + getTable() + " WHERE entity_id=" + id;
+		return selectOne(id, false);
+	}
+	
+	public E selectOne(int id, boolean specific) throws SQLException {
+		String key = specific ? "id" : "entity_id";
+		String sql = "SELECT * FROM " + getTable() + " WHERE " + key + "=" + id;
 		System.out.println("SQL: " + sql);
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
@@ -34,8 +39,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return -1;
 	}
 	
-	public abstract int insertSpecificEntity(E entity, int entId)
-			throws SQLException, DaoNotImplementedException;
+	public abstract int insertSpecificEntity(E entity, int entId) throws SQLException;
 	
 	public int insertCommonEntity(E entity) throws SQLException {
 		String sql = "SELECT id from EntityTypes WHERE EntityName=?";
@@ -62,6 +66,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return executeGetId(stmt);
 	}
 	
+	@Override
 	public void delete(E entity) throws SQLException {
 		/* First find Entity ID */
 		Statement selectStmt = getConnection().createStatement();

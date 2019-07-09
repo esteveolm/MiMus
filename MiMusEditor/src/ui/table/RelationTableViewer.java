@@ -67,9 +67,9 @@ public class RelationTableViewer extends MiMusTableViewer {
 			case 0:		// Tipus
 				return rel.getType();
 			case 1:		// Entitat A
-				return rel.getItsEntity1().getItsEntity().getLemma();
+				return rel.getItsEntity1().getLemma();
 			case 2:		// Entitat B
-				return rel.getItsEntity2().getItsEntity().getLemma();
+				return rel.getItsEntity2().getLemma();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -85,11 +85,11 @@ public class RelationTableViewer extends MiMusTableViewer {
 			Relation rel2 = (Relation) e2;
 			int c1 = rel1.getType().compareTo(rel2.getType());
 			if (c1==0) {
-				int c2 = rel1.getItsEntity1().getItsEntity().getLemma().compareTo(
-						rel2.getItsEntity1().getItsEntity().getLemma());
+				int c2 = rel1.getItsEntity1().getLemma().compareTo(
+						rel2.getItsEntity1().getLemma());
 				if (c2==0) 
-					return rel1.getItsEntity2().getItsEntity().getLemma().compareTo(
-							rel2.getItsEntity2().getItsEntity().getLemma());
+					return rel1.getItsEntity2().getLemma().compareTo(
+							rel2.getItsEntity2().getLemma());
 				return c2;
 			}
 			return c1;		

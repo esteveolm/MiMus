@@ -13,8 +13,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 	}
 
 	@Override
-	public int insertSpecificEntity(Artista unit, int entId) 
-			throws SQLException, DaoNotImplementedException {
+	public int insertSpecificEntity(Artista unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id, nom_complet", "tractament", "nom", 
 				"cognom", "sobrenom", "distintiu", "genere", "religio", "origen"};
 		String sql = "INSERT INTO " + getTable() + " (";

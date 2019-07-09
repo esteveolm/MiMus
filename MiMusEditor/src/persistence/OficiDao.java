@@ -14,8 +14,7 @@ public class OficiDao extends EntityDao<Ofici> {
 	}
 
 	@Override
-	public int insertSpecificEntity(Ofici unit, int entId) 
-			throws SQLException, DaoNotImplementedException {
+	public int insertSpecificEntity(Ofici unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom_complet", "terme", "especialitat",
 				"instrument_id"};
 		String sql = "INSERT INTO " + getTable() + " (";

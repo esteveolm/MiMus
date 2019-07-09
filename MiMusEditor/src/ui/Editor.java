@@ -291,8 +291,9 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Table of relations */
 		relations = new ArrayList<>();
 		try {
-			relations = new AnyRelationDao(conn).selectAll();
+			relations = new AnyRelationDao(conn).select(docEntry);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("SQLException: could not retrieve relations.");
 		}
 		relationHelper = new RelationTableViewer(sectRel.getParent(), 
@@ -698,6 +699,7 @@ public class Editor extends EditorPart implements EventObserver {
 						relationTV.refresh();
 					} catch (SQLException e1) {
 						System.out.println("SQLException: could not delete relation.");
+						e1.printStackTrace();
 					}
 				}
 			}
@@ -1005,8 +1007,8 @@ public class Editor extends EditorPart implements EventObserver {
 			List<Relation> relations, Label label) {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
-			EntityInstance instance1 = dialog.getUnit1();
-			EntityInstance instance2 = dialog.getUnit2();
+			Entity instance1 = dialog.getUnit1();
+			Entity instance2 = dialog.getUnit2();
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected */
 				Relation rel = new Relation(docEntry,
@@ -1047,7 +1049,6 @@ public class Editor extends EditorPart implements EventObserver {
 							} else {
 								System.out.println("DAO: could not add relation.");
 							}
-							
 						} else {
 							System.out.println("Error: unknown relation in dialog.");
 						}

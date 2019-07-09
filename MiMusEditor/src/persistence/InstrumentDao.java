@@ -14,8 +14,7 @@ public class InstrumentDao extends EntityDao<Instrument> {
 	}
 
 	@Override
-	public int insertSpecificEntity(Instrument unit, int entId) 
-			throws SQLException, DaoNotImplementedException {
+	public int insertSpecificEntity(Instrument unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom", "familia", "classe", "part"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {

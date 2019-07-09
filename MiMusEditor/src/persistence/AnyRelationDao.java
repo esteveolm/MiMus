@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import model.Document;
-import model.EntityInstance;
+import model.Entity;
 import model.Relation;
 
 public class AnyRelationDao extends UnitDao<Relation> {
@@ -16,11 +17,22 @@ public class AnyRelationDao extends UnitDao<Relation> {
 	public AnyRelationDao(Connection conn) {
 		super(conn);
 	}
+	
+	public List<Relation> select(Document doc) throws SQLException {
+		List<Relation> rels = new ArrayList<>();
+		String sql = "SELECT * FROM Relation WHERE document_id=" + doc.getId();
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while(rs.next()) {
+			rels.add(make(rs));
+		}
+		return rels;
+	}
 
 	@Override
-	public int insert(Relation unit) throws SQLException, DaoNotImplementedException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insert(Relation unit) throws DaoNotImplementedException {
+		throw new DaoNotImplementedException();
 	}
 
 	@Override
@@ -36,14 +48,14 @@ public class AnyRelationDao extends UnitDao<Relation> {
 		Statement stmtType = getConnection().createStatement();
 		ResultSet rsType = stmtType.executeQuery(sqlType);
 		if (rsType.next()) {
-			String type = rsType.getString("EntityName");
+			String type = rsType.getString("RelationName");
 			
 			int docId = rs.getInt("document_id");
 			Document doc = new DocumentDao(getConnection()).selectOne(docId);
 			
 			HashMap<Integer, RelationDao> typeToDao = getDaoDict();
 			RelationDao specificDao = typeToDao.get(typeId);
-			List<EntityInstance> ents = specificDao.getEntities(id);
+			List<Entity> ents = specificDao.getEntities(id);
 			return new Relation(doc, ents.get(0), ents.get(1), type, id);
 		}
 		throw new SQLException();
@@ -52,6 +64,10 @@ public class AnyRelationDao extends UnitDao<Relation> {
 	private HashMap<Integer, RelationDao> getDaoDict() {
 		HashMap<Integer, RelationDao> dict = new HashMap<>();
 		dict.put(1, new TeOficiDao(getConnection()));
+		dict.put(2, new TeCasaDao(getConnection()));
+		dict.put(3, new ServeixADao(getConnection()));
+		dict.put(4, new ResideixADao(getConnection()));
+		dict.put(5, new MovimentDao(getConnection()));
 		return dict;
 	}
 

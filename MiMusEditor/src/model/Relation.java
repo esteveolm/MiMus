@@ -7,8 +7,8 @@ public class Relation extends ConcreteUnit {
 	public static final String[] TYPES = 
 			{"TeOfici", "TeCasa", "ServeixA", "ResideixADao", "Moviment"};
 	
-	private EntityInstance itsEntity1;
-	private EntityInstance itsEntity2;
+	private Entity itsEntity1;
+	private Entity itsEntity2;
 	private String type;
 	private Document doc;
 	
@@ -18,7 +18,7 @@ public class Relation extends ConcreteUnit {
 		super(itsConcepts);
 	}
 	
-	public Relation(Document doc,EntityInstance ent1, EntityInstance ent2, 
+	public Relation(Document doc, Entity ent1, Entity ent2, 
 			String type, int id) {
 		this.itsEntity1 = ent1;
 		this.itsEntity2 = ent2;
@@ -27,16 +27,16 @@ public class Relation extends ConcreteUnit {
 		this.setId(id);
  	}
 
-	public EntityInstance getItsEntity1() {
+	public Entity getItsEntity1() {
 		return itsEntity1;
 	}
-	public void setItsEntity1(EntityInstance itsEntity1) {
+	public void setItsEntity1(Entity itsEntity1) {
 		this.itsEntity1 = itsEntity1;
 	}
-	public EntityInstance getItsEntity2() {
+	public Entity getItsEntity2() {
 		return itsEntity2;
 	}
-	public void setItsEntity2(EntityInstance itsEntity2) {
+	public void setItsEntity2(Entity itsEntity2) {
 		this.itsEntity2 = itsEntity2;
 	}
 	public String getType() {
@@ -59,22 +59,19 @@ public class Relation extends ConcreteUnit {
 	
 	public static boolean containsRelation(List<Relation> relations, Relation rel) {
 		for (Relation r: relations) {
-			if (r.getItsEntity1().getItsEntity().equals(
-					rel.getItsEntity1().getItsEntity()) &&
-					(r.getItsEntity2().getItsEntity().equals(
-							rel.getItsEntity2().getItsEntity()))) {
+			if (r.getItsEntity1().equals(rel.getItsEntity1()) &&
+					(r.getItsEntity2().equals(rel.getItsEntity2()))) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static boolean containsEntity(List<Relation> relations, EntityInstance ent) {
+	public static boolean containsEntity(List<Relation> relations, 
+			EntityInstance ent) {
 		for (Relation r: relations) {
-			if (r.getItsEntity1().getItsEntity()
-							.equals(ent.getItsEntity()) ||
-					(r.getItsEntity2().getItsEntity()
-							.equals(ent.getItsEntity()))) {
+			if (r.getItsEntity1().equals(ent.getItsEntity()) ||
+					(r.getItsEntity2().equals(ent.getItsEntity()))) {
 				return true;	
 			}
 		}
