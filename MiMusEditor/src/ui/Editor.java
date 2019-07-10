@@ -39,6 +39,7 @@ import control.SharedControl;
 import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
+import model.GenereLiterari;
 import model.Instrument;
 import model.Lloc;
 import model.Materia;
@@ -57,6 +58,7 @@ import persistence.ArtistaDao;
 import persistence.BibliographyDao;
 import persistence.CasaDao;
 import persistence.DocumentDao;
+import persistence.GenereLiterariDao;
 import persistence.InstanceDao;
 import persistence.InstrumentDao;
 import persistence.LlocDao;
@@ -279,6 +281,9 @@ public class Editor extends EditorPart implements EventObserver {
 		Button addLloc = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		addLloc.setLayoutData(gridData);
 		addLloc.setText("Add Lloc");
+		Button addGenere = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
+		addGenere.setLayoutData(gridData);
+		addGenere.setText("Add Genere");
 		
 		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(gridData);
@@ -386,6 +391,10 @@ public class Editor extends EditorPart implements EventObserver {
 				SWT.PUSH | SWT.CENTER);
 		addTransLloc.setLayoutData(gridTrans);
 		addTransLloc.setText("Add Lloc");
+		Button addTransGen = new Button(sectTrans.getParent(), 
+				SWT.PUSH | SWT.CENTER);
+		addTransGen.setLayoutData(gridTrans);
+		addTransGen.setText("Add Genere");
 		
 		Button removeTrans = new Button(sectTrans.getParent(), 
 				SWT.PUSH | SWT.CENTER);
@@ -585,6 +594,26 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Lloc";
+					}
+				};
+				runDialog(dialog, entityInstances, regestLabel);
+				entityTV.refresh();
+			}
+		});
+		addGenere.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				List<GenereLiterari> generes = new ArrayList<>();
+				try {
+					generes = new GenereLiterariDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve generes");
+				}
+				InstanceDialog<GenereLiterari> dialog = 
+						new InstanceDialog<GenereLiterari>(
+								generes, parent.getShell()) {
+					@Override
+					public String getDialogName() {
+						return "GenereLiterari";
 					}
 				};
 				runDialog(dialog, entityInstances, regestLabel);
@@ -800,6 +829,23 @@ public class Editor extends EditorPart implements EventObserver {
 					@Override
 					public String getDialogName() {
 						return "Lloc";
+					}
+				};
+				runTranscriptionDialog(dialog,
+						transcriptions, entityInstances,
+						transcriptionLabel, transcriptionStyler);
+				transcriptionTV.refresh();
+			}
+		});
+		addTransGen.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TranscriptionDialog<GenereLiterari> dialog = 
+						new TranscriptionDialog<GenereLiterari>(
+						entityInstances, parent.getShell(), "") {
+					@Override
+					public String getDialogName() {
+						return "GenereLiterari";
 					}
 				};
 				runTranscriptionDialog(dialog,
@@ -1156,7 +1202,7 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Refresh all table viewers */
 		entityHelper.refresh();
 		transcriptionHelper.refresh();
-		//relationHelper.refresh();
+		relationHelper.refresh();
 		referenceHelper.refresh();
 	}
 }

@@ -32,6 +32,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	
 	public int insert(E entity) throws SQLException, DaoNotImplementedException {
 		int commonId = insertCommonEntity(entity);
+		System.out.println("Common ID Of gen: " + commonId);
 		if (commonId > 0) {
 			int specId = insertSpecificEntity(entity, commonId);
 			return updateCommonEntity(commonId, specId);

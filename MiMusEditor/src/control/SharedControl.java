@@ -7,6 +7,7 @@ import ui.ArtistaView;
 import ui.BiblioView;
 import ui.CasaView;
 import ui.Editor;
+import ui.GenereLiterariView;
 import ui.InstrumentView;
 import ui.LlocView;
 import ui.OficiView;
@@ -41,6 +42,7 @@ public final class SharedControl {
 	private PromotorView promotorView;
 	private OficiView oficiView;
 	private LlocView llocView;
+	private GenereLiterariView genereView;
 	private List<Editor> editors;
 	
 	/* Singleton instance of SharedResources */
@@ -218,7 +220,23 @@ public final class SharedControl {
 	public void unsetLlocView() {
 		this.llocView = null;
 	}
+
+	public void setGenereView(GenereLiterariView genereView) {
+		this.genereView = genereView;
+		
+		/* Subscribe all Editors to GenereView */
+		if (editors != null) {
+			for (Editor e: editors) {
+				this.genereView.attach(e);
+			}
+		}
+		System.out.println("Prepared GenereLiterariView for subscribers.");
+	}
 	
+	public void unsetGenereView() {
+		this.genereView = null;
+	}
+
 	public List<Editor> getEditors() {
 		return editors;
 	}
@@ -256,6 +274,10 @@ public final class SharedControl {
 			llocView.attach(editor);
 			System.out.println("Subscribed editor to LlocView");
 		}
+		if (genereView != null) {
+			genereView.attach(editor);
+			System.out.println("Subscribed editor to GenereLiterariView");
+		}
 	}
 	
 	/**
@@ -283,6 +305,9 @@ public final class SharedControl {
 		}
 		if (llocView != null) {
 			llocView.detach(editor);
+		}
+		if (genereView != null) {
+			genereView.detach(editor);
 		}
 	}
 }

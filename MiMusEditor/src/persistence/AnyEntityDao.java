@@ -54,6 +54,7 @@ public class AnyEntityDao extends UnitDao<Entity> {
 		map.put("Casa", new CasaDao(getConnection()));
 		map.put("Instrument", new InstrumentDao(getConnection()));
 		map.put("Lloc", new LlocDao(getConnection()));
+		map.put("GenereLiterari", new GenereLiterariDao(getConnection()));
 		return map.get(type);
 	}
 
@@ -65,6 +66,7 @@ public class AnyEntityDao extends UnitDao<Entity> {
 		map.put("casa_id", new CasaDao(getConnection()));
 		map.put("instrument_id", new InstrumentDao(getConnection()));
 		map.put("lloc_id", new LlocDao(getConnection()));
+		map.put("genere_id", new GenereLiterariDao(getConnection()));
 		return map.get(key);
 	}
 

@@ -29,9 +29,8 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 	}
 
 	@Override
-	public void update(EntityInstance unit) throws SQLException, DaoNotImplementedException {
-		// TODO Auto-generated method stub
-		
+	public void update(EntityInstance unit) throws DaoNotImplementedException {
+		throw new DaoNotImplementedException();
 	}
 
 	@Override

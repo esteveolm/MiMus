@@ -156,6 +156,7 @@ INSERT INTO EntityTypes (EntityName) VALUES ("Ofici");
 INSERT INTO EntityTypes (EntityName) VALUES ("Casa");
 INSERT INTO EntityTypes (EntityName) VALUES ("Instrument");
 INSERT INTO EntityTypes (EntityName) VALUES ("Lloc");
+INSERT INTO EntityTypes (EntityName) VALUES ("GenereLiterari");
 
 CREATE TABLE Entity (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -241,6 +242,18 @@ CREATE TABLE Lloc (
 	regne int(1) NULL,
 	area int(1) NULL,
 	FOREIGN KEY (entity_id)
+		REFERENCES Entity(id),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE GenereLiterari (
+	id bigint(20) NOT NULL AUTO_INCREMENT,
+    entity_id bigint(20) NOT NULL,
+    nom_complet varchar(100) NULL,
+    nom_frances varchar(100) NULL,
+    nom_occita varchar(100) NULL,
+    definicio varchar(100) NULL,
+    FOREIGN KEY (entity_id)
 		REFERENCES Entity(id),
 	PRIMARY KEY (id)
 );

@@ -90,6 +90,14 @@
             name="Documents View"
             restorable="true">
       </view>
+      <view
+            category="MiMusEditor.mimus"
+            class="ui.GenereLiterariView"
+            icon="icons/sample.png"
+            id="MiMusEditor.genereView"
+            name="Genere Literari View"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
