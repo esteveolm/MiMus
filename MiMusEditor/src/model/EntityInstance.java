@@ -3,16 +3,12 @@ package model;
 import java.util.List;
 import model.Document;
 
-public class EntityInstance extends ConcreteUnit {
+public class EntityInstance extends Unit {
 	
 	private Entity itsEntity;
 	private Document itsDocument;
 	
 	public EntityInstance() {}
-	
-	public EntityInstance(List<Unit> allEntities) {
-		super(allEntities);
-	}
 	
 	public EntityInstance(Entity itsEntity, Document itsDocument) {
 		this(itsEntity, itsDocument, 0);

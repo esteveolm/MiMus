@@ -24,7 +24,7 @@ import java.util.List;
  * just by attaching the pages field at the end of it.
  * 
  */
-public class MiMusReference extends ConcreteUnit {
+public class MiMusReference extends Unit {
 	
 	private Bibliography itsBiblio;
 	private Document itsDocument;
@@ -33,10 +33,6 @@ public class MiMusReference extends ConcreteUnit {
 	private int id;
 	
 	public MiMusReference() {}
-	
-	public MiMusReference(List<Unit> allBiblio) {
-		super(allBiblio);
-	}
 	
 	public MiMusReference(Bibliography itsBiblio, Document itsDocument,
 			String page, int type, int id) {

@@ -65,35 +65,22 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	
 	@Override
 	protected Relation make(ResultSet rs) throws SQLException {
-		int id = rs.getInt("id");
-		int relationTypeId = rs.getInt("relation_type_id");
-		String type = Relation.TYPES[relationTypeId];
-		int documentId = rs.getInt("document_id");
-		Document doc = new DocumentDao(getConnection()).selectOne(documentId);
-		
-		Entity ent1 = getEntity(1, id);
-		Entity ent2 = getEntity(2, id);
-		
-		return new Relation(doc, ent1, ent2, type, id);
+		return null;
 	}
 	
 	@Override
 	public void delete(Relation relation) throws SQLException {
-		/* First find Relation ID */
-		Statement selectStmt = getConnection().createStatement();
-		String sql = "SELECT relation_id FROM " + getTable() + 
-				" WHERE id=" + relation.getId();
-		ResultSet rs = selectStmt.executeQuery(sql);
-		rs.next();
-		int relId = rs.getInt("relation_id");
+		/* 1st delete from specific table */
+		Statement stmt1 = getConnection().createStatement();
+		String sql1 = "DELETE FROM " + getTable() + 
+				" WHERE id=" + relation.getSpecificId();
+		System.out.println("SQL Specific: " + sql1);
+		stmt1.executeUpdate(sql1);
 		
-		/* Then delete from specific table */
-		super.delete(relation);
-		
-		/* Finally, delete from Relation table using ID recovered */
-		Statement deleteStmt = getConnection().createStatement();
-		String deleteSql = "DELETE FROM Relation WHERE id=" + relId;
-		deleteStmt.executeUpdate(deleteSql);
+		/* Then, delete from Relation  table using ID recovered */
+		Statement stmt2 = getConnection().createStatement();
+		String sql2 = "DELETE FROM Relation WHERE id=" + relation.getId();
+		stmt2.executeUpdate(sql2);
 	}
 
 	@Override

@@ -68,20 +68,15 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	
 	@Override
 	public void delete(E entity) throws SQLException {
-		/* First find Entity ID */
-		Statement selectStmt = getConnection().createStatement();
-		String sql = "SELECT entity_id FROM " + getTable() + 
-				" WHERE id=" + entity.getId();
-		ResultSet rs = selectStmt.executeQuery(sql);
-		rs.next();
-		int entId = rs.getInt("entity_id");
+		/* 1st delete from specific table */
+		Statement stmt1 = getConnection().createStatement();
+		String sql1 = "DELETE FROM " + getTable() + 
+				" WHERE id=" + entity.getSpecificId();
+		stmt1.executeUpdate(sql1);
 		
-		/* Then delete from specific table */
-		super.delete(entity);
-		
-		/* Finally, delete from Entity table using ID recovered */
-		Statement deleteStmt = getConnection().createStatement();
-		String deleteSql = "DELETE FROM Entity WHERE id=" + entId;
-		deleteStmt.executeUpdate(deleteSql);
+		/* Then, delete from Entity table using ID recovered */
+		Statement stmt2 = getConnection().createStatement();
+		String sql2 = "DELETE FROM Entity WHERE id=" + entity.getId();
+		stmt2.executeUpdate(sql2);
 	}
 }

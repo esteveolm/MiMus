@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,10 +40,20 @@ public class AnyRelationDao extends UnitDao<Relation> {
 	public void update(Relation unit) throws DaoNotImplementedException {
 		throw new DaoNotImplementedException();
 	}
+	
+	@Override
+	public void delete(Relation unit) throws SQLException {
+		/* Choose specific DAO based on type of Relation */
+		int typeId = Arrays.asList(Relation.TYPES).indexOf(unit.getType())+1;
+		RelationDao dao = getDaoDict().get(typeId);
+		
+		dao.delete(unit);
+	}
 
 	@Override
 	protected Relation make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
+		int specId = rs.getInt("relation_id");
 		int typeId = rs.getInt("relation_type_id");
 		String sqlType = "SELECT * FROM RelationTypes WHERE id=" + typeId;
 		Statement stmtType = getConnection().createStatement();
@@ -56,7 +67,7 @@ public class AnyRelationDao extends UnitDao<Relation> {
 			HashMap<Integer, RelationDao> typeToDao = getDaoDict();
 			RelationDao specificDao = typeToDao.get(typeId);
 			List<Entity> ents = specificDao.getEntities(id);
-			return new Relation(doc, ents.get(0), ents.get(1), type, id);
+			return new Relation(doc, ents.get(0), ents.get(1), type, id, specId);
 		}
 		throw new SQLException();
 	}

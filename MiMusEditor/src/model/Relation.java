@@ -2,10 +2,10 @@ package model;
 
 import java.util.List;
 
-public class Relation extends ConcreteUnit {
+public class Relation extends HierarchicalUnit {
 
 	public static final String[] TYPES = 
-			{"TeOfici", "TeCasa", "ServeixA", "ResideixADao", "Moviment"};
+			{"TeOfici", "TeCasa", "ServeixA", "ResideixA", "Moviment"};
 	
 	private Entity itsEntity1;
 	private Entity itsEntity2;
@@ -14,17 +14,14 @@ public class Relation extends ConcreteUnit {
 	
 	public Relation() {}
 
-	public Relation(List<Unit> itsConcepts) {
-		super(itsConcepts);
-	}
-	
 	public Relation(Document doc, Entity ent1, Entity ent2, 
-			String type, int id) {
+			String type, int id, int specId) {
 		this.itsEntity1 = ent1;
 		this.itsEntity2 = ent2;
 		this.type = type;
 		this.doc = doc;
 		this.setId(id);
+		this.setSpecificId(specId);
  	}
 
 	public Entity getItsEntity1() {

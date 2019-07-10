@@ -11,17 +11,13 @@ import org.eclipse.swt.graphics.Point;
  * @author Javier Beltrán Jorba
  *
  */
-public class Transcription extends ConcreteUnit {
+public class Transcription extends Unit {
 	
 	private EntityInstance itsEntity;
 	private String selectedText;
 	private String form;
 	private Point coords;
 	private int id;
-	
-	public Transcription(List<Unit> allEntities) {
-		super(allEntities);
-	}
 	
 	public Transcription() {
 		this(null, "", "", null, 0);

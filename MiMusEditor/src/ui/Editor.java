@@ -1013,7 +1013,7 @@ public class Editor extends EditorPart implements EventObserver {
 				/* Two instances correctly selected */
 				Relation rel = new Relation(docEntry,
 						instance1, instance2, dialog.getRelType(),
-						0);
+						0, 0);
 				if (Relation.containsRelation(relations, rel)) {
 					/* This Relation has been declared already */
 					System.out.println("No Relation added, already there - " 
