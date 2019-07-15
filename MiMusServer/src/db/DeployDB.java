@@ -1,12 +1,16 @@
 package db;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import model.MiMusEntry;
 
@@ -14,17 +18,27 @@ public class DeployDB {
 
 	public static void main(String[] args) {
 		try {
+			Properties prop = new Properties();
+			InputStream is = null;
+			
+			try {
+				is = new FileInputStream("config.properties");
+				prop.load(is);
+			} catch(IOException e) {
+				System.out.println(e.toString());
+			}
+			
 			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
+					"jdbc:mysql://161.116.21.174:3306/Mimus"
+					+ "?useUnicode=true&characterEncoding=UTF-8"
+					+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
+					prop.getProperty("admin.user"), prop.getProperty("admin.pass"));
 			MiMusEntryReader reader = new MiMusEntryReader();
 			File txtPath = new File("txt/");
 			for (File f: txtPath.listFiles()) {
 				String fName = f.getName();
 				if (fName.endsWith(".txt")) {
 					try {
-						int fNum = Integer.parseInt(
-								fName.substring(0, fName.lastIndexOf('.')-1));
 						MiMusEntry entry = reader.read(f.getAbsolutePath());
 						if (insertEntry(entry, conn)) {
 							System.out.println("Inserted " + fName);

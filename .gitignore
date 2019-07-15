@@ -2,3 +2,5 @@
 .recommenders/
 MiMusEditor/bin/
 MiMusQuery/bin/
+MiMusServer/bin/
+MiMusServer/.gitignore
