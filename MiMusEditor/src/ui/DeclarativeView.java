@@ -1,11 +1,9 @@
 package ui;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,6 +17,7 @@ import control.EventObserver;
 import control.EventSubject;
 import control.SharedControl;
 import control.SharedResources;
+import util.DBUtils;
 
 public abstract class DeclarativeView extends ViewPart 
 		implements EventSubject, EventObserver {
@@ -41,11 +40,9 @@ public abstract class DeclarativeView extends ViewPart
 		setObservers(new ArrayList<>());
 		setResources(SharedResources.getInstance());
 		setControl(SharedControl.getInstance());
-		
+
 		try {
-			setConnection(DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19"));
+			setConnection(DBUtils.connect());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Could not load entities from DB.");

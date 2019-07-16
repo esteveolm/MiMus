@@ -1,11 +1,9 @@
 package ui;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -80,6 +78,7 @@ import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
 import ui.table.TranscriptionTableViewer;
+import util.DBUtils;
 import util.LabelPrinter;
 import util.TextStyler;
 
@@ -115,9 +114,7 @@ public class Editor extends EditorPart implements EventObserver {
 		setInput(input);
 		
 		try {
-			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
+			conn = DBUtils.connect();
 		} catch (SQLException e) {
 			throw new PartInitException("Could not connect to SQL database");
 		}

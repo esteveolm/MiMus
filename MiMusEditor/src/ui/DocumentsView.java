@@ -1,11 +1,9 @@
 package ui;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -15,6 +13,7 @@ import control.SharedResources;
 import model.Document;
 import persistence.DocumentDao;
 import ui.table.DocumentsTableViewer;
+import util.DBUtils;
 
 public class DocumentsView extends ViewPart {
 	
@@ -37,9 +36,7 @@ public class DocumentsView extends ViewPart {
 		List<Document> documents = new ArrayList<>();
 		
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
+			Connection conn = DBUtils.connect();
 			documents = new DocumentDao(conn).selectAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
