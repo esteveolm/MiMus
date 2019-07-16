@@ -69,15 +69,29 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	
 	@Override
 	public void delete(E entity) throws SQLException {
-		/* 1st delete from specific table */
-		Statement stmt1 = getConnection().createStatement();
-		String sql1 = "DELETE FROM " + getTable() + 
-				" WHERE id=" + entity.getSpecificId();
-		stmt1.executeUpdate(sql1);
+		/* Delete is a two-step operation, we do it in transactional mode */
+		getConnection().setAutoCommit(false);
 		
-		/* Then, delete from Entity table using ID recovered */
-		Statement stmt2 = getConnection().createStatement();
-		String sql2 = "DELETE FROM Entity WHERE id=" + entity.getId();
-		stmt2.executeUpdate(sql2);
+		try {
+			/* 1st delete from specific table */
+			Statement stmt1 = getConnection().createStatement();
+			String sql1 = "DELETE FROM " + getTable() + 
+					" WHERE id=" + entity.getSpecificId();
+			stmt1.executeUpdate(sql1);
+			
+			/* Then, delete from Entity table using ID recovered */
+			Statement stmt2 = getConnection().createStatement();
+			String sql2 = "DELETE FROM Entity WHERE id=" + entity.getId();
+			stmt2.executeUpdate(sql2);
+			
+			getConnection().commit();
+		} catch (SQLException e) {
+			/* If any step fails, rollback and throw exception to UI */
+			getConnection().rollback();
+			throw e;
+		}
+		
+		/* Finish transactional mode */
+		getConnection().setAutoCommit(true);
 	}
 }
