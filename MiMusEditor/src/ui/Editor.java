@@ -2,6 +2,7 @@ package ui;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -649,8 +650,12 @@ public class Editor extends EditorPart implements EventObserver {
 								"Entity deleted successfully.");
 						
 						entityTV.refresh();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(regestLabel, 
+								"Cannot delete Entity Instance in use.");
+						System.out.println("Could not delete: entity in use.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
 						System.out.println("SQLException: could not delete Instance.");
 					}
 					
