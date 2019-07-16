@@ -16,12 +16,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class DBUtils {
 	
 	public static Connection connect() throws SQLException {
-		System.out.println(System.getProperty("user.dir"));
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
 		IProject corpus = workspace.getProject("MiMusCorpus");
 		IFile file = corpus.getFile("config.properties");
 		String path = file.getLocation().toString();
-		System.out.println(path);
 		
 		Properties prop = new Properties();
 		InputStream is = null;

@@ -3,6 +3,7 @@ package ui;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -174,6 +175,9 @@ public class InstrumentView extends DeclarativeView {
 						instruments.addAll(new InstrumentDao(conn).selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
 						notifyObservers();
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(label, "Cannot delete Entity in use.");
+						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
 						e2.printStackTrace();
 						System.out.println("Could not delete Instrument from DB.");

@@ -3,6 +3,7 @@ package ui;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -315,6 +316,9 @@ public class BiblioView extends ViewPart implements EventSubject {
 						notifyObservers();
 						lv.refresh();
 						fullReference.setText(""); /* Clear full reference */
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(labelList, "Cannot delete Entity in use.");
+						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 						System.out.println("Could not delete Bibliography from DB.");

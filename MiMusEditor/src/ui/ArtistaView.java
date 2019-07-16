@@ -1,6 +1,7 @@
 package ui;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -199,6 +200,9 @@ public class ArtistaView extends DeclarativeView {
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
 						notifyObservers();
 						getTv().refresh();
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(label, "Cannot delete Entity in use.");
+						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
 						e2.printStackTrace();
 						System.out.println("Could not delete Artist from DB.");
