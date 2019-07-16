@@ -215,11 +215,15 @@ public class DocumentDao extends UnitDao<Document> {
 	
 	@Override
 	public void update(Document unit) throws SQLException {
+		/* We use transactional mode because the update happens in stages */
+		getConnection().setAutoCommit(false);
+		
 		/* Get llengua_id from Llengua String */
 		String sql = "SELECT id FROM Llengua WHERE LlenguaName=?";
 		PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
 		llenguaStmt.setString(1, unit.getLanguage());
 		ResultSet llenguaRS = llenguaStmt.executeQuery();
+		boolean ok = false;
 		if (llenguaRS.next()) {
 			int llenguaId = llenguaRS.getInt("id");
 			
@@ -244,7 +248,9 @@ public class DocumentDao extends UnitDao<Document> {
 					result2 += stmt3.executeUpdate();
 				}
 				if (result2 == unit.getSubjects().size()) {
+					getConnection().commit();
 					System.out.println("Document updated correctly.");
+					ok = true;
 				} else {
 					System.out.println("Could not update Materies properly.");
 				}
@@ -254,6 +260,11 @@ public class DocumentDao extends UnitDao<Document> {
 		} else {
 			System.out.println("Could not perform update; Llengua not found.");
 		}
+		if (!ok) {
+			/* If didn't finish properly, rollback */
+			getConnection().rollback();
+		}
+		getConnection().setAutoCommit(true);
 	}
 	
 	@Override

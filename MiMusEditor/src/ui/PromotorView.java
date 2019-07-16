@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -31,10 +29,7 @@ public class PromotorView extends DeclarativeView {
 		getControl().setPromotorView(this);
 		
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			promotors = new PromotorDao(conn).selectAll();
+			promotors = new PromotorDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load promotors from DB.");
@@ -141,13 +136,10 @@ public class PromotorView extends DeclarativeView {
 						textDistintiu.getText(),
 						comboGenere.getSelectionIndex());
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
-					int id = new PromotorDao(conn).insert(prom);
+					int id = new PromotorDao(getConnection()).insert(prom);
 					if (id > 0) {
 						promotors.clear();
-						promotors.addAll(new PromotorDao(conn).selectAll());
+						promotors.addAll(new PromotorDao(getConnection()).selectAll());
 						System.out.println("Promotor added successfully.");
 						LabelPrinter.printInfo(label, "Promotor added successfully.");
 						notifyObservers();
@@ -178,12 +170,9 @@ public class PromotorView extends DeclarativeView {
 							+ getViewName() + " in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new PromotorDao(conn).delete(prom);
+						new PromotorDao(getConnection()).delete(prom);
 						promotors.clear();
-						promotors.addAll(new PromotorDao(conn).selectAll());
+						promotors.addAll(new PromotorDao(getConnection()).selectAll());
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() 
 								+ " removed successfully.");

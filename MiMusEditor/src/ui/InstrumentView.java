@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -33,10 +31,7 @@ public class InstrumentView extends DeclarativeView {
 		getControl().setInstrumentView(this);
 		
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			instruments = new InstrumentDao(conn).selectAll();
+			instruments = new InstrumentDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load instruments from DB.");
@@ -132,13 +127,10 @@ public class InstrumentView extends DeclarativeView {
 							comboClasse.getSelectionIndex(),
 							textPart.getText());
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						int id = new InstrumentDao(conn).insert(inst);
+						int id = new InstrumentDao(getConnection()).insert(inst);
 						if (id>0) {
 							instruments.clear();
-							instruments.addAll(new InstrumentDao(conn).selectAll());
+							instruments.addAll(new InstrumentDao(getConnection()).selectAll());
 							LabelPrinter.printInfo(label, "Instrument added successfully.");
 							notifyObservers();
 							getTv().refresh();
@@ -167,12 +159,9 @@ public class InstrumentView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select an Instrument in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new InstrumentDao(conn).delete(inst);
+						new InstrumentDao(getConnection()).delete(inst);
 						instruments.clear();
-						instruments.addAll(new InstrumentDao(conn).selectAll());
+						instruments.addAll(new InstrumentDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
 						notifyObservers();
 					} catch (SQLIntegrityConstraintViolationException e1) {

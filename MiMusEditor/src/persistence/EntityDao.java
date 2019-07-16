@@ -31,12 +31,24 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	}
 	
 	public int insert(E entity) throws SQLException, DaoNotImplementedException {
+		/* Insert is 2-step, make it transactional */
+		getConnection().setAutoCommit(false);
+		
 		int commonId = insertCommonEntity(entity);
 		System.out.println("Common ID Of gen: " + commonId);
 		if (commonId > 0) {
 			int specId = insertSpecificEntity(entity, commonId);
-			return updateCommonEntity(commonId, specId);
+			int result = updateCommonEntity(commonId, specId);
+			if (result>0) {
+				/* If insert succeeded, commit and leave transactional mode */
+				getConnection().commit();
+				getConnection().setAutoCommit(true);
+				return result;
+			}
 		}
+		/* If anything failed, rollback and leave transactional mode */
+		getConnection().rollback();
+		getConnection().setAutoCommit(true);
 		return -1;
 	}
 	

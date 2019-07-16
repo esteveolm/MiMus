@@ -19,11 +19,23 @@ public abstract class RelationDao extends UnitDao<Relation> {
 
 	@Override
 	public int insert(Relation unit) throws SQLException {
+		/* Insert is 2-step, make it transactional */
+		getConnection().setAutoCommit(false);
+		
 		int commonId = insertCommonRelation(unit);
 		if (commonId > 0) {
 			int specId = insertSpecificRelation(unit, commonId);
-			return updateCommonRelation(commonId, specId);
+			int result = updateCommonRelation(commonId, specId);
+			if (result > 0) {
+				/* If insert succeeded, commit and leave transactional mode */
+				getConnection().commit();
+				getConnection().setAutoCommit(true);
+				return result;
+			}
 		}
+		/* If anything failed, rollback and leave transactional mode */
+		getConnection().rollback();
+		getConnection().setAutoCommit(true);
 		return -1;
 	}
 
@@ -69,17 +81,31 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	
 	@Override
 	public void delete(Relation relation) throws SQLException {
-		/* 1st delete from specific table */
-		Statement stmt1 = getConnection().createStatement();
-		String sql1 = "DELETE FROM " + getTable() + 
-				" WHERE id=" + relation.getSpecificId();
-		System.out.println("SQL Specific: " + sql1);
-		stmt1.executeUpdate(sql1);
+		/* Delete is a two-step operation, we do it in transactional mode */
+		getConnection().setAutoCommit(false);
 		
-		/* Then, delete from Relation  table using ID recovered */
-		Statement stmt2 = getConnection().createStatement();
-		String sql2 = "DELETE FROM Relation WHERE id=" + relation.getId();
-		stmt2.executeUpdate(sql2);
+		try {
+			/* 1st delete from specific table */
+			Statement stmt1 = getConnection().createStatement();
+			String sql1 = "DELETE FROM " + getTable() + 
+					" WHERE id=" + relation.getSpecificId();
+			System.out.println("SQL Specific: " + sql1);
+			stmt1.executeUpdate(sql1);
+			
+			/* Then, delete from Relation  table using ID recovered */
+			Statement stmt2 = getConnection().createStatement();
+			String sql2 = "DELETE FROM Relation WHERE id=" + relation.getId();
+			stmt2.executeUpdate(sql2);
+			
+			getConnection().commit();
+		} catch (SQLException e) {
+			/* If any step fails, rollback and throw exception to UI */
+			getConnection().rollback();
+			throw e;
+		}
+		
+		/* Finish transactional mode */
+		getConnection().setAutoCommit(true);
 	}
 
 	@Override

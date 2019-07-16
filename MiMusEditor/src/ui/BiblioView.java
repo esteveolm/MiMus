@@ -1,7 +1,6 @@
 package ui;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import control.EventSubject;
 import control.SharedControl;
 import model.Bibliography;
 import persistence.BibliographyDao;
+import util.DBUtils;
 import util.LabelPrinter;
 
 public class BiblioView extends ViewPart implements EventSubject {
@@ -43,6 +43,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 	private List<Bibliography> bibliography;
 	private SharedControl control;
 	private List<EventObserver> observers;
+	private Connection conn;
 	
 	public BiblioView() {
 		super();
@@ -50,6 +51,12 @@ public class BiblioView extends ViewPart implements EventSubject {
 		bibliography = new ArrayList<>();
 		control = SharedControl.getInstance();
 		control.setBiblioView(this);
+		try {
+			setConnection(DBUtils.connect());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Could not load biblio from DB.");
+		}
 	}
 	
 	@Override
@@ -182,14 +189,11 @@ public class BiblioView extends ViewPart implements EventSubject {
 						(textShort.getText().length()==0) ? "" : textShort.getText().trim(),
 						0);
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
-					int id = new BibliographyDao(conn).insert(newEntry);
+					int id = new BibliographyDao(getConnection()).insert(newEntry);
 					if (id>0) {
 						newEntry.setId(id);
 						bibliography.clear();
-						bibliography.addAll(new BibliographyDao(conn).selectAll());
+						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
 						notifyObservers();
 						lv.refresh();
@@ -235,10 +239,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 		
 		/* Load bibliography entries from DB */
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			bibliography = new BibliographyDao(conn).selectAll();
+			bibliography = new BibliographyDao(getConnection()).selectAll();
 			System.out.println("Bibliography length: " + bibliography.size());
 			lv.setInput(bibliography);
 		} catch (SQLException e2) {
@@ -305,12 +306,9 @@ public class BiblioView extends ViewPart implements EventSubject {
 					LabelPrinter.printError(labelList, "You cannot delete the default bibliography entry.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new BibliographyDao(conn).delete(selectedEntry);
+						new BibliographyDao(getConnection()).delete(selectedEntry);
 						bibliography.clear();
-						bibliography.addAll(new BibliographyDao(conn).selectAll());
+						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
 						System.out.println("BibEntry removed successfully.");
 						LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
 						notifyObservers();
@@ -370,5 +368,13 @@ public class BiblioView extends ViewPart implements EventSubject {
 	@Override
 	public List<EventObserver> getObservers() {
 		return observers;
+	}
+
+	public Connection getConnection() {
+		return conn;
+	}
+
+	public void setConnection(Connection conn) {
+		this.conn = conn;
 	}
 }

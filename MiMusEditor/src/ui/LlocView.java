@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -33,10 +31,7 @@ public class LlocView extends DeclarativeView {
 		getControl().setLlocView(this);
 		
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			llocs = new LlocDao(conn).selectAll();
+			llocs = new LlocDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load llocs from DB.");
@@ -114,13 +109,10 @@ public class LlocView extends DeclarativeView {
 						comboRegne.getSelectionIndex(), 
 						comboArea.getSelectionIndex());
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
-					int id = new LlocDao(conn).insert(lloc);
+					int id = new LlocDao(getConnection()).insert(lloc);
 					if (id>0) {
 						llocs.clear();
-						llocs.addAll(new LlocDao(conn).selectAll());
+						llocs.addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc added successfully.");
 						notifyObservers();
 						getTv().refresh();
@@ -148,12 +140,9 @@ public class LlocView extends DeclarativeView {
 					LabelPrinter.printError(label, "You must select a Lloc in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new LlocDao(conn).delete(lloc);
+						new LlocDao(getConnection()).delete(lloc);
 						llocs.clear();
-						llocs.addAll(new LlocDao(conn).selectAll());
+						llocs.addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
 						getTv().refresh();
 						notifyObservers();

@@ -1,7 +1,5 @@
 package ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -30,7 +28,6 @@ public class OficiView extends DeclarativeView {
 	private List<Ofici> oficis;
 	private List<Instrument> insts;
 	private Combo comboInstrument;
-	private Connection conn;
 	
 	public OficiView() {
 		super();
@@ -38,11 +35,8 @@ public class OficiView extends DeclarativeView {
 		comboInstrument = null;
 		
 		try {
-			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			oficis = new OficiDao(conn).selectAll();
-			insts = new InstrumentDao(conn).selectAll();
+			oficis = new OficiDao(getConnection()).selectAll();
+			insts = new InstrumentDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load oficis from DB.");
@@ -143,13 +137,10 @@ public class OficiView extends DeclarativeView {
 						comboEspecialitat.getSelectionIndex(),
 						inst);
 				try {
-					Connection conn = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-							"mimus01", "colinet19");
-					int id = new OficiDao(conn).insert(ofici);
+					int id = new OficiDao(getConnection()).insert(ofici);
 					if (id>0) {
 						oficis.clear();
-						oficis.addAll(new OficiDao(conn).selectAll());
+						oficis.addAll(new OficiDao(getConnection()).selectAll());
 						System.out.println("Ofici created successfully.");
 						LabelPrinter.printInfo(label, "Ofici added successfully.");
 						notifyObservers();
@@ -180,12 +171,9 @@ public class OficiView extends DeclarativeView {
 							+ getViewName() + " in order to remove it.");
 				} else {
 					try {
-						Connection conn = DriverManager.getConnection(
-								"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-								"mimus01", "colinet19");
-						new OficiDao(conn).delete(ofici);
+						new OficiDao(getConnection()).delete(ofici);
 						oficis.clear();
-						oficis.addAll(new OficiDao(conn).selectAll());
+						oficis.addAll(new OficiDao(getConnection()).selectAll());
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
@@ -215,10 +203,7 @@ public class OficiView extends DeclarativeView {
 	public void update() {
 		/* Re-read instruments and set Combo items again */
 		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/Mimus?serverTimezone=UTC", 
-					"mimus01", "colinet19");
-			List<Instrument> insts = new InstrumentDao(conn).selectAll();
+			List<Instrument> insts = new InstrumentDao(getConnection()).selectAll();
 			String[] instNames = new String[insts.size()];
 			for (int i=0; i<instNames.length; i++) {
 				instNames[i] = ((Instrument) insts.get(i)).getLemma();
