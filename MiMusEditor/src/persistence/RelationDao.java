@@ -16,7 +16,7 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	public RelationDao(Connection conn) {
 		super(conn);
 	}
-
+	
 	@Override
 	public int insert(Relation unit) throws SQLException {
 		/* Insert is 2-step, make it transactional */
@@ -89,23 +89,31 @@ public abstract class RelationDao extends UnitDao<Relation> {
 			Statement stmt1 = getConnection().createStatement();
 			String sql1 = "DELETE FROM " + getTable() + 
 					" WHERE id=" + relation.getSpecificId();
-			System.out.println("SQL Specific: " + sql1);
 			stmt1.executeUpdate(sql1);
+			System.out.println("DelRel: SQL Specific: " + sql1);
 			
 			/* Then, delete from Relation  table using ID recovered */
 			Statement stmt2 = getConnection().createStatement();
 			String sql2 = "DELETE FROM Relation WHERE id=" + relation.getId();
 			stmt2.executeUpdate(sql2);
+			System.out.println("DelRel: SQL cOMMON: " + sql2);
 			
 			getConnection().commit();
+			System.out.println("commited.");
+			
+			/* Finish transactional mode */
+			getConnection().setAutoCommit(true);
 		} catch (SQLException e) {
 			/* If any step fails, rollback and throw exception to UI */
 			getConnection().rollback();
+			System.out.println("rollbacked.");
+			
+			/* Finish transactional mode */
+			getConnection().setAutoCommit(true);
 			throw e;
 		}
 		
-		/* Finish transactional mode */
-		getConnection().setAutoCommit(true);
+		
 	}
 
 	@Override

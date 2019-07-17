@@ -1060,7 +1060,7 @@ public class Editor extends EditorPart implements EventObserver {
 			if (instance1 != null && instance2 != null) {
 				/* Two instances correctly selected */
 				Relation rel = new Relation(docEntry,
-						instance1, instance2, dialog.getRelType(),
+						instance1, instance2, "",
 						0, 0);
 				if (Relation.containsRelation(relations, rel)) {
 					/* This Relation has been declared already */
@@ -1085,10 +1085,13 @@ public class Editor extends EditorPart implements EventObserver {
 						}
 						
 						if (dao != null) {
+							dialog.setRelType(dao.getTable());
+							rel.setType(dialog.getRelType());
 							int id = dao.insert(rel);
 							if (id>0) {
-								rel.setId(id);
-								relations.add(rel);
+								relations.clear();
+								relations.addAll(new AnyRelationDao(getConnection())
+										.select(docEntry));
 								
 								System.out.println("Adding selected Relation - " 
 										+ relations.size());

@@ -29,6 +29,7 @@ public class RelationDialog extends Dialog {
 	private Entity unit2;
 	private String entityType1;
 	private String entityType2;
+	private String relType;
 	
 	public RelationDialog(List<EntityInstance> instances, Shell parentShell, 
 			String entityType1, String entityType2) {
@@ -40,6 +41,7 @@ public class RelationDialog extends Dialog {
 		this.unit2 = null;
 		this.entityType1 = entityType1;
 		this.entityType2 = entityType2;		
+		this.relType = "";
 	}
 	
 	private List<Entity> getEntitiesFromInstances(List<EntityInstance> instances) {
@@ -169,6 +171,9 @@ public class RelationDialog extends Dialog {
 		this.entityType2 = entityType2;
 	}
 	public String getRelType() {
-		return getEntityType1()+"-"+getEntityType2();
+		return relType;
+	}
+	public void setRelType(String relType) {
+		this.relType = relType;
 	}
 }

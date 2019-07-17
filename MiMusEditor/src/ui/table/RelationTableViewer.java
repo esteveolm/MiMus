@@ -1,6 +1,5 @@
 package ui.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -16,19 +15,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
 import model.Relation;
-import model.Unit;
 import util.TextStyler;
 
 public class RelationTableViewer extends MiMusTableViewer {
 	
-	private List<Unit> relations;
+	private List<Relation> relations;
 	
 	public RelationTableViewer(Composite parent, List<Relation> initials, 
 			TextStyler styler) {
 		super(parent, styler);
 		String[] aux = {"Tipus", "Entitat A", "Entitat B"};
 		columnNames = aux;
-		setRelations(new ArrayList<>(initials));
+		relations = initials;
 	}
 
 	@Override
@@ -96,10 +94,10 @@ public class RelationTableViewer extends MiMusTableViewer {
 		}
 	}
 	
-	public List<Unit> getRelations() {
+	public List<Relation> getRelations() {
 		return relations;
 	}
-	public void setRelations(List<Unit> relations) {
+	public void setRelations(List<Relation> relations) {
 		this.relations = relations;
 	}
 }
