@@ -32,7 +32,13 @@ public class OficiDao extends EntityDao<Ofici> {
 		stmt.setString(2, unit.getNomComplet());
 		stmt.setString(3, unit.getTerme());
 		stmt.setInt(4, unit.getEspecialitat());
-		stmt.setInt(5, unit.getInstrument().getSpecificId());
+		
+		/* Instrument is a foreign key that can be null if not specified */
+		if (unit.getInstrument() != null) {
+			stmt.setInt(5, unit.getInstrument().getSpecificId());
+		} else {
+			stmt.setNull(5, java.sql.Types.BIGINT);
+		}
 		
 		return executeGetId(stmt);
 	}
@@ -46,9 +52,14 @@ public class OficiDao extends EntityDao<Ofici> {
 		int especialitat = rs.getInt("especialitat");
 		int instrumentId = rs.getInt("instrument_id");
 		
-		/* Instrument foreign key uses specific key, not generic entity key */
-		Instrument inst = 
-				new InstrumentDao(getConnection()).selectOne(instrumentId, true);
+		/* 
+		 * Instrument foreign key uses specific key, not generic entity key. 
+		 * If not present, id retrieved as 0 and should be null on model.
+		 * */
+		Instrument inst = null;
+		if (instrumentId>0) {
+			inst = new InstrumentDao(getConnection()).selectOne(instrumentId, true);
+		}
 		return new Ofici(id, specId, nomComplet, terme, especialitat, inst);
 	}
 
