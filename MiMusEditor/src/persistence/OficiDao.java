@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import model.Instrument;
 import model.Ofici;
 
 public class OficiDao extends EntityDao<Ofici> {
@@ -31,7 +32,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		stmt.setString(2, unit.getNomComplet());
 		stmt.setString(3, unit.getTerme());
 		stmt.setInt(4, unit.getEspecialitat());
-		stmt.setInt(5, 0);	// TODO: foreign key with Instrument
+		stmt.setInt(5, unit.getInstrument().getSpecificId());
 		
 		return executeGetId(stmt);
 	}
@@ -45,7 +46,10 @@ public class OficiDao extends EntityDao<Ofici> {
 		int especialitat = rs.getInt("especialitat");
 		int instrumentId = rs.getInt("instrument_id");
 		
-		return new Ofici(id, specId, nomComplet, terme, especialitat, null);
+		/* Instrument foreign key uses specific key, not generic entity key */
+		Instrument inst = 
+				new InstrumentDao(getConnection()).selectOne(instrumentId, true);
+		return new Ofici(id, specId, nomComplet, terme, especialitat, inst);
 	}
 
 	@Override
