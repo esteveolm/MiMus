@@ -56,7 +56,7 @@ public abstract class UnitDao<U extends Unit> {
 		if (rs.next()) {
 			return make(rs);
 		}
-		throw new SQLException();
+		return null;
 	}
 	
 	public U selectOne(String... criteria) throws SQLException {

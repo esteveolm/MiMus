@@ -266,6 +266,7 @@ CREATE TABLE EntityInstance (
 		REFERENCES Entity(id),
 	FOREIGN KEY (document_id)
 		REFERENCES Document(id),
+	UNIQUE (entity_id),
 	PRIMARY KEY (id)
 );
 
@@ -316,6 +317,7 @@ CREATE TABLE TeOfici (
 		REFERENCES Artista(id),
 	FOREIGN KEY (ofici_id)
 		REFERENCES Ofici(id),
+	UNIQUE (artista_id, ofici_id),
 	PRIMARY KEY (id)
 );
 
@@ -330,6 +332,7 @@ CREATE TABLE TeCasa (
 		REFERENCES Promotor(id),
 	FOREIGN KEY (casa_id)
 		REFERENCES Casa(id),
+	UNIQUE (promotor_id, casa_id),
 	PRIMARY KEY (id)
 );
 
@@ -344,6 +347,7 @@ CREATE TABLE ServeixA (
 		REFERENCES Artista(id),
 	FOREIGN KEY (promotor_id)
 		REFERENCES Promotor(id),
+	UNIQUE (artista_id, promotor_id),
 	PRIMARY KEY (id)
 );
 
@@ -358,6 +362,7 @@ CREATE TABLE ResideixA (
 		REFERENCES Artista(id),
 	FOREIGN KEY (lloc_id)
 		REFERENCES Lloc(id),
+	UNIQUE (artista_id, lloc_id),
 	PRIMARY KEY (id)
 );
 
@@ -381,6 +386,11 @@ CREATE TABLE Moviment (
 		REFERENCES Entity(id),
 	FOREIGN KEY (destino_id)
 		REFERENCES Entity(id),
+	UNIQUE (artista_id, 
+		origen_type_id, 
+        origen_id, 
+		destino_type_id, 
+        destino_id),
 	PRIMARY KEY (id)
 );
 

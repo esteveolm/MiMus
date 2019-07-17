@@ -939,32 +939,29 @@ public class Editor extends EditorPart implements EventObserver {
 		if (dialogResult == Window.OK) {
 			Entity added = dialog.getUnit();
 			if (added != null) {
-				if (EntityInstance.containsEntity(entities, added)) {
-					/* Trying to add entity already added */
-					System.out.println("No Entity added - "
-							+ entities.size());
+				EntityInstance inst = new EntityInstance(
+						added, docEntry);
+				try {
+					int id = new InstanceDao(conn).insert(inst);
+					if (id>0) {
+						/* OK case */
+						inst.setId(id);
+						entities.add(inst);
+						System.out.println("Adding selected Entity - " 
+								+ entities.size());
+						LabelPrinter.printInfo(label, 
+								"Entity added successfully.");
+					} else {
+						System.out.println("DAO: could not insert Instance.");
+					}
+				} catch (SQLIntegrityConstraintViolationException e1) {
+					/* Unique constraint violated when inserting same entity */
+					System.out.println("Cannot insert same Instance twice.");
 					LabelPrinter.printError(label, 
 							"Cannot add the same entity twice.");
-				} else {
-					/* OK case */
-					EntityInstance inst = new EntityInstance(
-							added, docEntry);
-					try {
-						int id = new InstanceDao(conn).insert(inst);
-						if (id>0) {
-							inst.setId(id);
-							entities.add(inst);
-							System.out.println("Adding selected Entity - " 
-									+ entities.size());
-							LabelPrinter.printInfo(label, 
-									"Entity added successfully.");
-						} else {
-							System.out.println("DAO: could not insert Instance.");
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-						System.out.println("SQLException: could not insert Instance.");
-					}
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("SQLException: could not insert Instance.");
 				}
 			} else {
 				/* No entities declared, nothing could be selected */
@@ -1087,25 +1084,34 @@ public class Editor extends EditorPart implements EventObserver {
 						if (dao != null) {
 							dialog.setRelType(dao.getTable());
 							rel.setType(dialog.getRelType());
-							int id = dao.insert(rel);
-							if (id>0) {
-								relations.clear();
-								relations.addAll(new AnyRelationDao(getConnection())
-										.select(docEntry));
-								
-								System.out.println("Adding selected Relation - " 
-										+ relations.size());
-								LabelPrinter.printInfo(label, 
-										"Relation added successfully.");
-							} else {
-								System.out.println("DAO: could not add relation.");
+							try {
+								int id = dao.insert(rel);
+								if (id>0) {
+									/* OK case */
+									relations.clear();
+									relations.addAll(new AnyRelationDao(getConnection())
+											.select(docEntry));
+									
+									System.out.println("Adding selected Relation - " 
+											+ relations.size());
+									LabelPrinter.printInfo(label, 
+											"Relation added successfully.");
+								} else {
+									System.out.println("DAO: could not add relation.");
+								}
+							} catch (SQLIntegrityConstraintViolationException e1) {
+								/* Unique constraint violated */
+								System.out.println(
+										"Cannot add the same relation twice.");
+								LabelPrinter.printError(label, 
+										"Cannot add the same relation twice.");
 							}
 						} else {
 							System.out.println("Error: unknown relation in dialog.");
 						}
-					} catch (SQLException e) {
+					} catch (SQLException e2) {
 						System.out.println("SQLException: could not add relation.");
-						e.printStackTrace();
+						e2.printStackTrace();
 					}		
 				}
 				
