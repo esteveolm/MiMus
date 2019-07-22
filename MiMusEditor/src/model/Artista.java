@@ -11,10 +11,11 @@ public class Artista extends Entity {
 	private int genere;
 	private int religio;
 	private String origen;
+	private String observacions;
 	
 	public Artista(int id, int specId, String nomComplet, String tractament,
 			String nom, String cognom, String sobrenom, String distintiu,
-			int genere, int religio, String origen) {
+			int genere, int religio, String origen, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
@@ -26,6 +27,7 @@ public class Artista extends Entity {
 		this.genere = genere;
 		this.religio = religio;
 		this.origen = origen;
+		this.observacions = observacions;
 	}
 	
 	/* Getters and setters */
@@ -100,6 +102,12 @@ public class Artista extends Entity {
 	}
 	public void setOrigen(String origen) {
 		this.origen = origen;
+	}
+	public String getObservacions() {
+		return observacions;
+	}
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
 	}
 
 	@Override

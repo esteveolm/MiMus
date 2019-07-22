@@ -25,7 +25,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = promotors;
 		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",
-				"Distintiu", "Gènere"};
+				"Distintiu", "Gènere", "Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -39,6 +39,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[5] = new ComboBoxCellEditor(tv.getTable(), GENDERS, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[6] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -72,6 +73,8 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getDistintiu();
 			case 5:		// Genere
 				return prom.getGenere();
+			case 6:		// Observacions
+				return prom.getObservacions();
 			default:
 				return "";
 			}
@@ -100,6 +103,8 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			case 5:		// Genere
 				prom.setGenere((int) value);
 				break;
+			case 6:		// Observacions
+				prom.setObservacions((String) value);
 			default:	// Shouldn't reach here
 				break;
 			}
@@ -129,6 +134,8 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 				return prom.getDistintiu();
 			case 5:		// Genere
 				return GENDERS[prom.getGenere()];
+			case 6:		// Observacions
+				return prom.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

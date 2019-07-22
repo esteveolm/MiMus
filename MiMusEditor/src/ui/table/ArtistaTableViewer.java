@@ -22,7 +22,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		super(parent);
 		this.entities = artists;
 		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
-				"Distintiu", "Gènere", "Religió", "Origen"};
+				"Distintiu", "Gènere", "Religió", "Origen", "Observacions"};
 		this.columnNames = aux;
 	}
 	
@@ -37,6 +37,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		editors[6] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[7] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[8] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[9] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 	
@@ -75,6 +76,8 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getReligio();
 			case 8:	// Origen (Text)
 				return art.getOrigen();
+			case 9:	// Observacions (Text)
+				return art.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}
@@ -112,6 +115,8 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			case 8:	// Origen (ComboBox)
 				art.setOrigen((String) value);
 				break;
+			case 9:	// Observacions (Text)
+				art.setObservacions((String) value);
 			default:	// Shouldn't reach here
 				break;
 			}
@@ -147,6 +152,8 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 				return art.getReligioStr();
 			case 8:	// Origen (Text)
 				return art.getOrigen();
+			case 9:	// Observacions (Text)
+				return art.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

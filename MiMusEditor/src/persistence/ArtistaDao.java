@@ -15,7 +15,8 @@ public class ArtistaDao extends EntityDao<Artista> {
 	@Override
 	public int insertSpecificEntity(Artista unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom_complet", "tractament", "nom", 
-				"cognom", "sobrenom", "distintiu", "genere", "religio", "origen"};
+				"cognom", "sobrenom", "distintiu", "genere", "religio", "origen",
+				"observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -36,6 +37,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 		stmt.setInt(8, unit.getGenere());
 		stmt.setInt(9, unit.getReligio());
 		stmt.setString(10, unit.getOrigen());
+		stmt.setString(11, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -53,9 +55,10 @@ public class ArtistaDao extends EntityDao<Artista> {
 		int genere = rs.getInt("genere");
 		int religio = rs.getInt("religio");
 		String origen = rs.getString("origen");
+		String observacions = rs.getString("observacions");
 		
 		return new Artista(id, specId, nomComplet, tractament, nom, cognom, sobrenom,
-				distintiu, genere, religio, origen);
+				distintiu, genere, religio, origen, observacions);
 	}
 
 	@Override

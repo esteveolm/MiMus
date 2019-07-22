@@ -105,6 +105,12 @@ public class ArtistaView extends DeclarativeView {
 		Text textOrigen = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textOrigen.setLayoutData(grid);
 		
+		/* Observacions: text field */
+		Label labelObs = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelObs.setText("Observacions:");
+		Text textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textObs.setLayoutData(grid);
+		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
@@ -119,6 +125,7 @@ public class ArtistaView extends DeclarativeView {
 				comboGenero.deselectAll();
 				comboReligion.deselectAll();
 				textOrigen.setText("");
+				textObs.setText("");
 			}
 		});
 		
@@ -160,7 +167,8 @@ public class ArtistaView extends DeclarativeView {
 						textDistintiu.getText(),
 						comboGenero.getSelectionIndex(),
 						comboReligion.getSelectionIndex(),
-						textOrigen.getText());
+						textOrigen.getText(),
+						textObs.getText());
 				try {
 					int id = new ArtistaDao(getConnection()).insert(art);
 					if (id>0) {

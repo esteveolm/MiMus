@@ -8,9 +8,10 @@ public class Promotor extends Entity {
 	private String sobrenom;
 	private String distintiu;
 	private int genere;
+	private String observacions;
 
 	public Promotor(int id, int specId, String nomComplet, String nom, String cognom,
-			String sobrenom, String distintiu, int genere) {
+			String sobrenom, String distintiu, int genere, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
@@ -19,6 +20,7 @@ public class Promotor extends Entity {
 		this.sobrenom = sobrenom;
 		this.setDistintiu(distintiu);
 		this.genere = genere;
+		this.observacions = observacions;
 	}
 	
 	@Override
@@ -69,5 +71,11 @@ public class Promotor extends Entity {
 	}
 	public void setGenere(int genere) {
 		this.genere = genere;
+	}
+	public String getObservacions() {
+		return observacions;
+	}
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
 	}
 }

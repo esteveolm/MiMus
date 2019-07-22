@@ -16,7 +16,7 @@ public class PromotorDao extends EntityDao<Promotor> {
 	@Override
 	public int insertSpecificEntity(Promotor unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom_complet", "nom", "cognom", 
-				"sobrenom", "distintiu", "genere"};
+				"sobrenom", "distintiu", "genere", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -34,6 +34,7 @@ public class PromotorDao extends EntityDao<Promotor> {
 		stmt.setString(5, unit.getSobrenom());
 		stmt.setString(6, unit.getDistintiu());
 		stmt.setInt(7, unit.getGenere());
+		stmt.setString(8, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -48,9 +49,10 @@ public class PromotorDao extends EntityDao<Promotor> {
 		String sobrenom = rs.getString("sobrenom");
 		String distintiu = rs.getString("distintiu");
 		int genere = rs.getInt("genere");
+		String observacions = rs.getString("observacions");
 		
 		return new Promotor(id, specId, nomComplet, nom, cognom, sobrenom, 
-				distintiu, genere);
+				distintiu, genere, observacions);
 	}
 
 	@Override

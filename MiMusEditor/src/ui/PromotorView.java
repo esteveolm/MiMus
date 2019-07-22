@@ -89,6 +89,12 @@ public class PromotorView extends DeclarativeView {
 		Combo comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenere.setItems("No marcat", "Home", "Dona");
 		
+		/* Observacions: text field */
+		Label labelObs = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		labelObs.setText("Observacions:");
+		Text textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textObs.setLayoutData(grid);
+		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		btnClr.addSelectionListener(new SelectionAdapter() {
@@ -100,6 +106,7 @@ public class PromotorView extends DeclarativeView {
 				textSobrenom.setText("");
 				textDistintiu.setText("");
 				comboGenere.deselectAll();
+				textObs.setText("");
 			}
 		});
 		
@@ -134,7 +141,8 @@ public class PromotorView extends DeclarativeView {
 						textCognom.getText(),
 						textSobrenom.getText(),
 						textDistintiu.getText(),
-						comboGenere.getSelectionIndex());
+						comboGenere.getSelectionIndex(),
+						textObs.getText());
 				try {
 					int id = new PromotorDao(getConnection()).insert(prom);
 					if (id > 0) {
