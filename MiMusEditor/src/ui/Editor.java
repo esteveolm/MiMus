@@ -152,6 +152,31 @@ public class Editor extends EditorPart implements EventObserver {
 		form.setText("Annotation");
 		form.getBody().setLayout(new GridLayout());
 		
+		/* State of annotation and revision: combos */
+		Label labelStateAnnot = new Label(form.getBody(), SWT.VERTICAL);
+		labelStateAnnot.setText("Estat de l'anotació:");
+		Combo comboStateAnnot = 
+				new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+		comboStateAnnot.setItems(Document.STATES_ANNOT);
+		comboStateAnnot.select(docEntry.getStateAnnotIdx());
+		
+		Label labelStateRev = new Label(form.getBody(), SWT.VERTICAL);
+		labelStateRev.setText("Estat de la revisió:");
+		Combo comboStateRev = 
+				new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+		comboStateRev.setItems(Document.STATES_REV);
+		comboStateRev.select(docEntry.getStateRevIdx());
+		
+		/* Button to save state */
+		GridData gd = new GridData();
+		gd.widthHint = 250;
+		Button saveState = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		saveState.setLayoutData(gd);
+		saveState.setText("Save state to DB");
+		
+		Label stateLabel = toolkit.createLabel(form.getBody(), "");
+		stateLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		/* Read-only data */
 		Text readOnlyText = new Text(form.getBody(), 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
@@ -159,6 +184,7 @@ public class Editor extends EditorPart implements EventObserver {
 		readOnlyText.setText(readOnlyStr);
 		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
+		
 		
 		/* DOC METADATA PART */
 		/* Llengua: combo */
@@ -217,8 +243,8 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		}
 		
-		/* Button to save Llengua and Matèries to XML */
-		GridData gd = new GridData();
+		/* Button to save Llengua and Matèries to SQL */
+		gd = new GridData();
 		gd.widthHint = 250;
 		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
 		saveMeta.setLayoutData(gd);
@@ -446,6 +472,27 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRef.setText("Delete");
 		
 		/* BUTTON LISTENERS */
+		saveState.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				int annotSel = comboStateAnnot.getSelectionIndex();
+				int revSel = comboStateRev.getSelectionIndex();
+				
+				/* Update on model */
+				docEntry.setStateAnnotIdx(annotSel);
+				docEntry.setStateRevIdx(revSel);
+				
+				/* Update on DB */
+				try {
+					new DocumentDao(getConnection()).update(docEntry);
+					LabelPrinter.printInfo(stateLabel, 
+							"State updated successfully");
+					System.out.println("State updated successfully");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					System.out.println("Could not update document in DB.");
+				}
+			}
+		});
 		saveMeta.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				/* Recover items to save */

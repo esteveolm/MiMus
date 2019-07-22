@@ -29,7 +29,8 @@ public class DocumentDao extends UnitDao<Document> {
 				"Regest", "lib1Arxiu", "lib1Serie", "lib1Subserie", "lib1Subserie2",
 				"lib1Numero", "lib1Pagina", "lib2Arxiu", "lib2Serie", "lib2Subserie",
 				"lib2Subserie2", "lib2Numero", "lib2Pagina", "Edicions", "Registres",
-				"Citacions", "Transcripcio", "Notes", "Llengua", "Materies"};
+				"Citacions", "Transcripcio", "Notes", "Llengua", "Materies", 
+				"StateAnnot", "StateRev"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -80,6 +81,8 @@ public class DocumentDao extends UnitDao<Document> {
 		stmt.setString(38, unit.getTranscriptionText());
 		stmt.setString(39, String.join("$", unit.getNotes()));
 		stmt.setString(40, unit.getLanguage());
+		stmt.setInt(41, unit.getStateAnnotIdx());
+		stmt.setInt(42, unit.getStateRevIdx());
 		
 		return executeGetId(stmt);
 	}
@@ -126,6 +129,8 @@ public class DocumentDao extends UnitDao<Document> {
 		String transcripcio = rs.getString("Transcripcio");
 		String notes = rs.getString("Notes");
 		int llenguaId = rs.getInt("llengua_id");
+		int stateAnnot = rs.getInt("StateAnnot");
+		int stateRev = rs.getInt("StateRev");
 
 		/* Query to Llengua table to get it from ID */
 		String sql = "SELECT LlenguaName FROM Llengua WHERE id=" + llenguaId;
@@ -207,6 +212,8 @@ public class DocumentDao extends UnitDao<Document> {
 			doc.setNotes(Arrays.asList(notes.split("$")));
 			doc.setLanguage(llengua);
 			doc.setSubjects(materies);
+			doc.setStateAnnotIdx(stateAnnot);
+			doc.setStateRevIdx(stateRev);
 			System.out.println("Materies: " + doc.getSubjects().size());
 			return doc;
 		}
@@ -218,47 +225,60 @@ public class DocumentDao extends UnitDao<Document> {
 		/* We use transactional mode because the update happens in stages */
 		getConnection().setAutoCommit(false);
 		
-		/* Get llengua_id from Llengua String */
-		String sql = "SELECT id FROM Llengua WHERE LlenguaName=?";
-		PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
-		llenguaStmt.setString(1, unit.getLanguage());
-		ResultSet llenguaRS = llenguaStmt.executeQuery();
+		/* First update state */
+		int stateAnnot = unit.getStateAnnotIdx();
+		int stateRev = unit.getStateRevIdx();
+		String sql = "UPDATE Document SET StateAnnot=?, StateRev=? WHERE id=?";
+		PreparedStatement stateStmt = getConnection().prepareStatement(sql);
+		stateStmt.setInt(1, stateAnnot);
+		stateStmt.setInt(2, stateRev);
+		stateStmt.setInt(3, unit.getId());
+		int stateRS = stateStmt.executeUpdate();
 		boolean ok = false;
-		if (llenguaRS.next()) {
-			int llenguaId = llenguaRS.getInt("id");
-			
-			sql = "UPDATE Document SET llengua_id=? WHERE id=?";
-			PreparedStatement stmt1 = getConnection().prepareStatement(sql);
-			stmt1.setInt(1, llenguaId);
-			stmt1.setInt(2, unit.getId());
-			int result1 = stmt1.executeUpdate();
-			if (result1 > 0) {
-				sql = "DELETE FROM HasMateria WHERE document_id=?";
-				PreparedStatement stmt2 = getConnection().prepareStatement(sql);
-				stmt2.setInt(1, unit.getId());
-				stmt2.executeUpdate();
+		if (stateRS > 0) {
+			/* Get llengua_id from Llengua String */
+			sql = "SELECT id FROM Llengua WHERE LlenguaName=?";
+			PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
+			llenguaStmt.setString(1, unit.getLanguage());
+			ResultSet llenguaRS = llenguaStmt.executeQuery();
+			if (llenguaRS.next()) {
+				int llenguaId = llenguaRS.getInt("id");
 				
-				int result2 = 0;
-				for (Materia mat: unit.getSubjects()) {
-					sql = "INSERT INTO HasMateria (materia_id, document_id)"
-							+ " VALUES (?,?)";
-					PreparedStatement stmt3 = getConnection().prepareStatement(sql);
-					stmt3.setInt(1, mat.getId());
-					stmt3.setInt(2, unit.getId());
-					result2 += stmt3.executeUpdate();
-				}
-				if (result2 == unit.getSubjects().size()) {
-					getConnection().commit();
-					System.out.println("Document updated correctly.");
-					ok = true;
+				sql = "UPDATE Document SET llengua_id=? WHERE id=?";
+				PreparedStatement stmt1 = getConnection().prepareStatement(sql);
+				stmt1.setInt(1, llenguaId);
+				stmt1.setInt(2, unit.getId());
+				int result1 = stmt1.executeUpdate();
+				if (result1 > 0) {
+					sql = "DELETE FROM HasMateria WHERE document_id=?";
+					PreparedStatement stmt2 = getConnection().prepareStatement(sql);
+					stmt2.setInt(1, unit.getId());
+					stmt2.executeUpdate();
+					
+					int result2 = 0;
+					for (Materia mat: unit.getSubjects()) {
+						sql = "INSERT INTO HasMateria (materia_id, document_id)"
+								+ " VALUES (?,?)";
+						PreparedStatement stmt3 = getConnection().prepareStatement(sql);
+						stmt3.setInt(1, mat.getId());
+						stmt3.setInt(2, unit.getId());
+						result2 += stmt3.executeUpdate();
+					}
+					if (result2 == unit.getSubjects().size()) {
+						getConnection().commit();
+						System.out.println("Document updated correctly.");
+						ok = true;
+					} else {
+						System.out.println("Could not update Materies properly.");
+					}
 				} else {
-					System.out.println("Could not update Materies properly.");
+					System.out.println("Could not perform update; Llengua not updated.");
 				}
 			} else {
-				System.out.println("Could not perform update; Llengua not updated.");
+				System.out.println("Could not perform update; Llengua not found.");
 			}
 		} else {
-			System.out.println("Could not perform update; Llengua not found.");
+			System.out.println("Could not perform update due to State.");
 		}
 		if (!ok) {
 			/* If didn't finish properly, rollback */

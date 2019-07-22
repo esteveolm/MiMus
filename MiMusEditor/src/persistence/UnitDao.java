@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Document;
+import model.Entity;
 import model.Unit;
 
 public abstract class UnitDao<U extends Unit> {
@@ -97,10 +99,10 @@ public abstract class UnitDao<U extends Unit> {
 		stmt.executeUpdate(sql);
 	}
 	
-	public abstract void update(U unit) 
-			throws SQLException, DaoNotImplementedException;
-	
 	protected abstract U make(ResultSet rs) throws SQLException;
 	
 	public abstract String getTable();
+
+	public abstract void update(U unit) 
+			throws SQLException, DaoNotImplementedException;
 }

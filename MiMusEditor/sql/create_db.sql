@@ -54,6 +54,8 @@ CREATE TABLE Document (
 	Transcripcio text NULL,
 	Notes varchar(1024) NULL,
 	llengua_id bigint(20) NOT NULL,
+    StateAnnot int(1) NOT NULL,
+    StateRev int(1) NOT NULL,
     FOREIGN KEY (llengua_id)
 		REFERENCES Llengua(id),
 	PRIMARY KEY (id)
@@ -179,6 +181,7 @@ CREATE TABLE Artista (
 	genere int(1) NULL,
 	religio int(1) NULL,
 	origen varchar(100) NULL,
+    observacions varchar(1024) NULL,
 	FOREIGN KEY (entity_id)
 		REFERENCES Entity(id),
 	PRIMARY KEY (id)
@@ -193,6 +196,7 @@ CREATE TABLE Promotor (
 	sobrenom varchar(100) NULL,
 	distintiu varchar(100) NULL,
 	genere int(1) NULL,
+    observacions varchar(1024) NULL,
 	FOREIGN KEY (entity_id)
 		REFERENCES Entity(id),
 	PRIMARY KEY (id)

@@ -25,6 +25,9 @@ public class Document extends Unit implements IEditorInput {
 	public final static String MATERIES_PATH = "strings/languages.txt";
 	public final static String[] MATERIES;
 	
+	public final static String[] STATES_ANNOT = {"-", "En procés", "Per revisar"};
+	public final static String[] STATES_REV = {"-", "En procés", "Revisat"};
+	
 
 	private int id;
 	private String numbering;
@@ -41,6 +44,8 @@ public class Document extends Unit implements IEditorInput {
 	private List<String> notes;		// TODO: change to real Notes structure when we define it
 	private int langIdx;
 	private List<Materia> subjects;
+	private int stateAnnotIdx;
+	private int stateRevIdx;
 	
 	/* Load languages array from file only once for all entries */
 	static {
@@ -88,6 +93,8 @@ public class Document extends Unit implements IEditorInput {
 		this.notes = new ArrayList<>();
 		this.langIdx = -1;
 		this.subjects = new ArrayList<>();
+		this.stateAnnotIdx = -1;
+		this.stateAnnotIdx = -1;
 	}
 	
 	public Document(String regest, String body) {
@@ -239,7 +246,25 @@ public class Document extends Unit implements IEditorInput {
 	public void addSubject(Materia subject) {
 		this.subjects.add(subject);
 	}
-	
+	public int getStateAnnotIdx() {
+		return stateAnnotIdx;
+	}
+	public String getStateAnnotStr() {
+		return STATES_ANNOT[stateAnnotIdx];
+	}
+	public void setStateAnnotIdx(int stateAnnotIdx) {
+		this.stateAnnotIdx = stateAnnotIdx;
+	}
+	public int getStateRevIdx() {
+		return stateRevIdx;
+	}
+	public String getStateRevStr() {
+		return STATES_REV[stateRevIdx];
+	}
+	public void setStateRevIdx(int stateRevIdx) {
+		this.stateRevIdx = stateRevIdx;
+	}
+
 	public String getReadOnlyText() {
 		String str = "Doc ID: " + getIdStr() + 
 				"\nNumeració antiga: " + getNumbering() +

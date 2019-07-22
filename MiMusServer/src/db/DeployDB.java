@@ -82,10 +82,11 @@ public class DeployDB {
 						+ "lib1Pagina, lib2Arxiu, lib2Serie, lib2Subserie, "
 						+ "lib2Subserie2, lib2Numero, lib2Pagina, "
 						+ "Edicions, Registres,"
-						+ "Citacions, Transcripcio, Notes, llengua_id) "
+						+ "Citacions, Transcripcio, Notes, llengua_id,"
+						+ "StateAnnot, StateRev) "
 						+ "VALUES "
 						+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"
-						+ "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+						+ "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 						);
 				stmt.setString(1, entry.getNumbering());
 				stmt.setInt(2, entry.getDate().getYear1());
@@ -127,6 +128,8 @@ public class DeployDB {
 				stmt.setString(38, entry.getTranscription());
 				stmt.setString(39, "");	// XXX: Notes
 				stmt.setInt(40, llenguaId);
+				stmt.setInt(41, 0);
+				stmt.setInt(42, 0);
 				int documentResult = stmt.executeUpdate();
 				
 				if (documentResult > 0) {
