@@ -37,7 +37,7 @@ public class CasaView extends DeclarativeView {
 	
 	@Override
 	public String getViewName() {
-		return "Casa";
+		return "casa";
 	}
 	
 	@Override

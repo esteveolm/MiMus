@@ -23,14 +23,15 @@ public class DocumentDao extends UnitDao<Document> {
 
 	@Override
 	public int insert(Document unit) throws SQLException {
-		String[] insertColumns = {"Numeracio", "Any", "Any2", "Mes", "Mes2",
-				"Dia", "Dia2", "hAny", "hAny2", "hMes", "hMes2", "hDia", "hDia2",
-				"dAny", "dAny2", "dMes", "dMes2", "dDia", "dDia2", "Lloc", "Lloc2",
-				"Regest", "lib1Arxiu", "lib1Serie", "lib1Subserie", "lib1Subserie2",
-				"lib1Numero", "lib1Pagina", "lib2Arxiu", "lib2Serie", "lib2Subserie",
-				"lib2Subserie2", "lib2Numero", "lib2Pagina", "Edicions", "Registres",
-				"Citacions", "Transcripcio", "Notes", "Llengua", "Materies", 
-				"StateAnnot", "StateRev"};
+		String[] insertColumns = {"numeracio", "any1", "any2", "mes1", "mes2",
+				"dia1", "dia2", "h_any1", "h_any2", "h_mes1", "h_mes2", "h_dia1",
+				"h_dia2","d_any1", "d_any2", "d_mes1", "d_mes2", "d_dia1",
+				"d_dia2", "lloc1", "Lloc2","regest", "lib1_arxiu", "lib1_serie", 
+				"lib1_subserie", "lib1_subserie2","lib1_numero", "lib1_pagina", 
+				"lib2_arxiu", "lib2_serie", "lib2_subserie", "lib2_subserie2", 
+				"lib2_numero", "lib2_pagina", "edicions", "registres",
+				"citacions", "transcripcio", "notes", "llengua", "materies", 
+				"state_annot", "state_rev"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -89,62 +90,62 @@ public class DocumentDao extends UnitDao<Document> {
 
 	protected Document make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		String numeracio = rs.getString("Numeracio");
-		int any = rs.getInt("Any");
-		int any2 = rs.getInt("Any2");
-		int mes = rs.getInt("Mes");
-		int mes2 = rs.getInt("Mes2");
-		int dia = rs.getInt("Dia");
-		int dia2 = rs.getInt("Dia2");
-		boolean hany = rs.getBoolean("hAny");
-		boolean hany2 = rs.getBoolean("hAny2");
-		boolean hmes = rs.getBoolean("hMes");
-		boolean hmes2 = rs.getBoolean("hMes2");
-		boolean hdia = rs.getBoolean("hDia");
-		boolean hdia2 = rs.getBoolean("hDia2");
-		boolean dany = rs.getBoolean("dAny");
-		boolean dany2 = rs.getBoolean("dAny2");
-		boolean dmes = rs.getBoolean("dMes");
-		boolean dmes2 = rs.getBoolean("dMes2");
-		boolean ddia = rs.getBoolean("dDia");
-		boolean ddia2 = rs.getBoolean("dDia2");
-		String lloc = rs.getString("Lloc");
-		String lloc2 = rs.getString("Lloc2");
-		String regest = rs.getString("Regest");
-		String lib1Arxiu = rs.getString("lib1Arxiu");
-		String lib1Serie = rs.getString("lib1Serie");
-		String lib1Subserie = rs.getString("lib1Subserie");
-		String lib1Subserie2 = rs.getString("lib1Subserie2");
-		String lib1Numero = rs.getString("lib1Numero");
-		String lib1Pagina = rs.getString("lib1Pagina");
-		String lib2Arxiu = rs.getString("lib2Arxiu");
-		String lib2Serie = rs.getString("lib2Serie");
-		String lib2Subserie = rs.getString("lib2Subserie");
-		String lib2Subserie2 = rs.getString("lib2Subserie2");
-		String lib2Numero = rs.getString("lib2Numero");
-		String lib2Pagina = rs.getString("lib2Pagina");
-		String edicions = rs.getString("Edicions");
-		String registres = rs.getString("Registres");
-		String citacions = rs.getString("Citacions");
-		String transcripcio = rs.getString("Transcripcio");
-		String notes = rs.getString("Notes");
+		String numeracio = rs.getString("numeracio");
+		int any = rs.getInt("any1");
+		int any2 = rs.getInt("any2");
+		int mes = rs.getInt("mes1");
+		int mes2 = rs.getInt("mes1");
+		int dia = rs.getInt("dia1");
+		int dia2 = rs.getInt("dia2");
+		boolean hany = rs.getBoolean("h_any1");
+		boolean hany2 = rs.getBoolean("h_any2");
+		boolean hmes = rs.getBoolean("h_mes1");
+		boolean hmes2 = rs.getBoolean("h_mes2");
+		boolean hdia = rs.getBoolean("h_dia1");
+		boolean hdia2 = rs.getBoolean("h_dia2");
+		boolean dany = rs.getBoolean("d_any1");
+		boolean dany2 = rs.getBoolean("d_any2");
+		boolean dmes = rs.getBoolean("d_mes1");
+		boolean dmes2 = rs.getBoolean("d_mes2");
+		boolean ddia = rs.getBoolean("d_dia1");
+		boolean ddia2 = rs.getBoolean("d_dia2");
+		String lloc = rs.getString("lloc1");
+		String lloc2 = rs.getString("lloc2");
+		String regest = rs.getString("regest");
+		String lib1Arxiu = rs.getString("lib1_arxiu");
+		String lib1Serie = rs.getString("lib1_serie");
+		String lib1Subserie = rs.getString("lib1_subserie");
+		String lib1Subserie2 = rs.getString("lib1_subserie2");
+		String lib1Numero = rs.getString("lib1_numero");
+		String lib1Pagina = rs.getString("lib1_pagina");
+		String lib2Arxiu = rs.getString("lib2_arxiu");
+		String lib2Serie = rs.getString("lib2_serie");
+		String lib2Subserie = rs.getString("lib2_subserie");
+		String lib2Subserie2 = rs.getString("lib2_subserie2");
+		String lib2Numero = rs.getString("lib2_numero");
+		String lib2Pagina = rs.getString("lib2_pagina");
+		String edicions = rs.getString("edicions");
+		String registres = rs.getString("registres");
+		String citacions = rs.getString("citacions");
+		String transcripcio = rs.getString("transcripcio");
+		String notes = rs.getString("notes");
 		int llenguaId = rs.getInt("llengua_id");
-		int stateAnnot = rs.getInt("StateAnnot");
-		int stateRev = rs.getInt("StateRev");
+		int stateAnnot = rs.getInt("state_annot");
+		int stateRev = rs.getInt("state_rev");
 
 		/* Query to Llengua table to get it from ID */
-		String sql = "SELECT LlenguaName FROM Llengua WHERE id=" + llenguaId;
+		String sql = "SELECT llengua_name FROM llengua WHERE id=" + llenguaId;
 		Statement stmt = getConnection().createStatement();
 		ResultSet llenguaRS = stmt.executeQuery(sql);
 		if (llenguaRS.next()) {
-			String llengua = llenguaRS.getString("LlenguaName");
+			String llengua = llenguaRS.getString("llengua_name");
 			
 			/* Query to Materia and HasMateria tables */
 			MateriaDao matDao = new MateriaDao(getConnection());
 			TreeMap<Integer,String> idsToMateries = matDao.selectAllAsIdsToNames();
 			System.out.println("TreeMap size: " + idsToMateries.size());
 			
-			sql = "SELECT materia_id FROM HasMateria WHERE document_id=" + id;
+			sql = "SELECT materia_id FROM has_materia WHERE document_id=" + id;
 			stmt = getConnection().createStatement();
 			ResultSet hasMateriaRS = stmt.executeQuery(sql);
 			
@@ -228,7 +229,7 @@ public class DocumentDao extends UnitDao<Document> {
 		/* First update state */
 		int stateAnnot = unit.getStateAnnotIdx();
 		int stateRev = unit.getStateRevIdx();
-		String sql = "UPDATE Document SET StateAnnot=?, StateRev=? WHERE id=?";
+		String sql = "UPDATE document SET state_annot=?, state_rev=? WHERE id=?";
 		PreparedStatement stateStmt = getConnection().prepareStatement(sql);
 		stateStmt.setInt(1, stateAnnot);
 		stateStmt.setInt(2, stateRev);
@@ -237,27 +238,27 @@ public class DocumentDao extends UnitDao<Document> {
 		boolean ok = false;
 		if (stateRS > 0) {
 			/* Get llengua_id from Llengua String */
-			sql = "SELECT id FROM Llengua WHERE LlenguaName=?";
+			sql = "SELECT id FROM llengua WHERE llengua_name=?";
 			PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
 			llenguaStmt.setString(1, unit.getLanguage());
 			ResultSet llenguaRS = llenguaStmt.executeQuery();
 			if (llenguaRS.next()) {
 				int llenguaId = llenguaRS.getInt("id");
 				
-				sql = "UPDATE Document SET llengua_id=? WHERE id=?";
+				sql = "UPDATE document SET llengua_id=? WHERE id=?";
 				PreparedStatement stmt1 = getConnection().prepareStatement(sql);
 				stmt1.setInt(1, llenguaId);
 				stmt1.setInt(2, unit.getId());
 				int result1 = stmt1.executeUpdate();
 				if (result1 > 0) {
-					sql = "DELETE FROM HasMateria WHERE document_id=?";
+					sql = "DELETE FROM has_materia WHERE document_id=?";
 					PreparedStatement stmt2 = getConnection().prepareStatement(sql);
 					stmt2.setInt(1, unit.getId());
 					stmt2.executeUpdate();
 					
 					int result2 = 0;
 					for (Materia mat: unit.getSubjects()) {
-						sql = "INSERT INTO HasMateria (materia_id, document_id)"
+						sql = "INSERT INTO has_materia (materia_id, document_id)"
 								+ " VALUES (?,?)";
 						PreparedStatement stmt3 = getConnection().prepareStatement(sql);
 						stmt3.setInt(1, mat.getId());
@@ -289,7 +290,7 @@ public class DocumentDao extends UnitDao<Document> {
 	
 	@Override
 	public String getTable() {
-		return "Document";
+		return "document";
 	}
 
 

@@ -40,7 +40,7 @@ public class TeOficiDao extends RelationDao {
 
 	@Override
 	public String getTable() {
-		return "TeOfici";
+		return "te_ofici";
 	}
 
 	@Override

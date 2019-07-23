@@ -35,7 +35,7 @@ public class TeCasaDao extends RelationDao {
 
 	@Override
 	public String getTable() {
-		return "TeCasa";
+		return "te_casa";
 	}
 
 	@Override

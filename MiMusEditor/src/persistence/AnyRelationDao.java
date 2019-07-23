@@ -21,7 +21,7 @@ public class AnyRelationDao extends UnitDao<Relation> {
 	
 	public List<Relation> select(Document doc) throws SQLException {
 		List<Relation> rels = new ArrayList<>();
-		String sql = "SELECT * FROM Relation WHERE document_id=" + doc.getId();
+		String sql = "SELECT * FROM relation WHERE document_id=" + doc.getId();
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		
@@ -55,11 +55,11 @@ public class AnyRelationDao extends UnitDao<Relation> {
 		int id = rs.getInt("id");
 		int specId = rs.getInt("relation_id");
 		int typeId = rs.getInt("relation_type_id");
-		String sqlType = "SELECT * FROM RelationTypes WHERE id=" + typeId;
+		String sqlType = "SELECT * FROM relation_types WHERE id=" + typeId;
 		Statement stmtType = getConnection().createStatement();
 		ResultSet rsType = stmtType.executeQuery(sqlType);
 		if (rsType.next()) {
-			String type = rsType.getString("RelationName");
+			String type = rsType.getString("relation_name");
 			
 			int docId = rs.getInt("document_id");
 			Document doc = new DocumentDao(getConnection()).selectOne(docId);
@@ -84,6 +84,6 @@ public class AnyRelationDao extends UnitDao<Relation> {
 
 	@Override
 	public String getTable() {
-		return "Relation";
+		return "relation";
 	}
 }

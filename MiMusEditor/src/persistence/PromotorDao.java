@@ -57,7 +57,7 @@ public class PromotorDao extends EntityDao<Promotor> {
 
 	@Override
 	public String getTable() {
-		return "Promotor";
+		return "promotor";
 	}
 
 	@Override

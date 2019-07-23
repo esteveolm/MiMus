@@ -1,176 +1,177 @@
-CREATE SCHEMA Mimus;
-USE Mimus;
+CREATE SCHEMA mimus;
+USE mimus;
+ALTER SCHEMA mimus  DEFAULT CHARACTER SET utf8mb4  DEFAULT COLLATE utf8mb4_general_ci;
 
-CREATE TABLE Llengua (
+CREATE TABLE llengua (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    LlenguaName varchar(100) NOT NULL,
+    llengua_name varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO Llengua (LlenguaName) VALUES ("llatí");
-INSERT INTO Llengua (LlenguaName) VALUES ("català");
-INSERT INTO Llengua (LlenguaName) VALUES ("castellà");
-INSERT INTO Llengua (LlenguaName) VALUES ("aragonès/castellà");
+INSERT INTO llengua (llengua_name) VALUES ("llatí");
+INSERT INTO llengua (llengua_name) VALUES ("català");
+INSERT INTO llengua (llengua_name) VALUES ("castellà");
+INSERT INTO llengua (llengua_name) VALUES ("aragonès/castellà");
 
-CREATE TABLE Document (
+CREATE TABLE document (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-	Numeracio varchar(20) NOT NULL,
-	Any int(4) NOT NULL,
-	Any2 int(4) NULL,
-	Mes int(2) NULL,
-	Mes2 int(2) NULL,
-	Dia int(2) NULL,
-	Dia2 bit NULL,
-	hAny bit NULL,
-	hAny2 bit NULL,
-	hMes bit NULL,
-	hMes2 bit NULL,
-	hDia bit NULL,
-	hDia2 bit NULL,
-	dAny bit NULL,
-	dAny2 bit NULL,
-	dMes bit NULL,
-	dMes2 bit NULL,
-	dDia bit NULL,
-	dDia2 bit NULL,
-	Lloc varchar(100) NULL,
-	Lloc2 varchar(100) NULL,
-	Regest varchar(1024) NULL,
-	lib1Arxiu varchar(100) NULL,
-	lib1Serie varchar(100) NULL,
-	lib1Subserie varchar(100) NULL,
-	lib1Subserie2 varchar(100) NULL,
-	lib1Numero varchar(100) NULL,
-	lib1Pagina varchar(100) NULL,
-	lib2Arxiu varchar(100) NULL,
-	lib2Serie varchar(100) NULL,
-	lib2Subserie varchar(100) NULL,
-	lib2Subserie2 varchar(100) NULL,
-	lib2Numero varchar(100) NULL,
-	lib2Pagina varchar(100) NULL,
-	Edicions varchar(100) NULL,
-	Registres varchar(100) NULL,
-	Citacions varchar(100) NULL,
-	Transcripcio text NULL,
-	Notes varchar(1024) NULL,
+	numeracio varchar(20) NOT NULL,
+	any1 int(4) NOT NULL,
+	any2 int(4) NULL,
+	mes1 int(2) NULL,
+	mes2 int(2) NULL,
+	dia1 int(2) NULL,
+	dia2 bit NULL,
+	h_any1 bit NULL,
+	h_any2 bit NULL,
+	h_mes1 bit NULL,
+	h_mes2 bit NULL,
+	h_dia1 bit NULL,
+	h_dia2 bit NULL,
+	d_any1 bit NULL,
+	d_any2 bit NULL,
+	d_mes1 bit NULL,
+	d_mes2 bit NULL,
+	d_dia1 bit NULL,
+	d_dia2 bit NULL,
+	lloc1 varchar(100) NULL,
+	lloc2 varchar(100) NULL,
+	regest varchar(1024) NULL,
+	lib1_arxiu varchar(100) NULL,
+	lib1_serie varchar(100) NULL,
+	lib1_subserie varchar(100) NULL,
+	lib1_subserie2 varchar(100) NULL,
+	lib1_numero varchar(100) NULL,
+	lib1_pagina varchar(100) NULL,
+	lib2_arxiu varchar(100) NULL,
+	lib2_serie varchar(100) NULL,
+	lib2_subserie varchar(100) NULL,
+	lib2_subserie2 varchar(100) NULL,
+	lib2_numero varchar(100) NULL,
+	lib2_pagina varchar(100) NULL,
+	edicions varchar(100) NULL,
+	registres varchar(100) NULL,
+	citacions varchar(100) NULL,
+	transcripcio text NULL,
+	notes varchar(1024) NULL,
 	llengua_id bigint(20) NOT NULL,
-    StateAnnot int(1) NOT NULL,
-    StateRev int(1) NOT NULL,
+    state_annot int(1) NOT NULL,
+    state_rev int(1) NOT NULL,
     FOREIGN KEY (llengua_id)
-		REFERENCES Llengua(id),
+		REFERENCES llengua(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Materia (
+CREATE TABLE materia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    MateriaName varchar(100) NOT NULL,
+    materia_name varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO Materia (MateriaName) VALUES ("actuació / performance");
-INSERT INTO Materia (MateriaName) VALUES ("ambaixada / missatgeria");
-INSERT INTO Materia (MateriaName) VALUES ("artista visitant");
-INSERT INTO Materia (MateriaName) VALUES ("capella reial");
-INSERT INTO Materia (MateriaName) VALUES ("celebracions");
-INSERT INTO Materia (MateriaName) VALUES ("companyies");
-INSERT INTO Materia (MateriaName) VALUES ("compravenda");
-INSERT INTO Materia (MateriaName) VALUES ("compra d’instruments");
-INSERT INTO Materia (MateriaName) VALUES ("concessió de rendes");
-INSERT INTO Materia (MateriaName) VALUES ("donació (immobles)");
-INSERT INTO Materia (MateriaName) VALUES ("donació graciosa");
-INSERT INTO Materia (MateriaName) VALUES ("enfranquiment");
-INSERT INTO Materia (MateriaName) VALUES ("escoles");
-INSERT INTO Materia (MateriaName) VALUES ("família");
-INSERT INTO Materia (MateriaName) VALUES ("guiatge / salconduit");
-INSERT INTO Materia (MateriaName) VALUES ("itinerància");
-INSERT INTO Materia (MateriaName) VALUES ("justícia");
-INSERT INTO Materia (MateriaName) VALUES ("legislació");
-INSERT INTO Materia (MateriaName) VALUES ("llibres i manuscrits");
-INSERT INTO Materia (MateriaName) VALUES ("manuscrit");
-INSERT INTO Materia (MateriaName) VALUES ("moviment d’artistes");
-INSERT INTO Materia (MateriaName) VALUES ("pagament");
-INSERT INTO Materia (MateriaName) VALUES ("pagament (de cavalcadura)");
-INSERT INTO Materia (MateriaName) VALUES ("pagament (de despeses)");
-INSERT INTO Materia (MateriaName) VALUES ("pagament (de salari)");
-INSERT INTO Materia (MateriaName) VALUES ("pagament (de vestit)");
-INSERT INTO Materia (MateriaName) VALUES ("patrimoni");
-INSERT INTO Materia (MateriaName) VALUES ("petició d’artistes");
-INSERT INTO Materia (MateriaName) VALUES ("protecció");
-INSERT INTO Materia (MateriaName) VALUES ("recomanació d’artistes");
+INSERT INTO materia (materia_name) VALUES ("actuació / performance");
+INSERT INTO materia (materia_name) VALUES ("ambaixada / missatgeria");
+INSERT INTO materia (materia_name) VALUES ("artista visitant");
+INSERT INTO materia (materia_name) VALUES ("capella reial");
+INSERT INTO materia (materia_name) VALUES ("celebracions");
+INSERT INTO materia (materia_name) VALUES ("companyies");
+INSERT INTO materia (materia_name) VALUES ("compravenda");
+INSERT INTO materia (materia_name) VALUES ("compra d’instruments");
+INSERT INTO materia (materia_name) VALUES ("concessió de rendes");
+INSERT INTO materia (materia_name) VALUES ("donació (immobles)");
+INSERT INTO materia (materia_name) VALUES ("donació graciosa");
+INSERT INTO materia (materia_name) VALUES ("enfranquiment");
+INSERT INTO materia (materia_name) VALUES ("escoles");
+INSERT INTO materia (materia_name) VALUES ("família");
+INSERT INTO materia (materia_name) VALUES ("guiatge / salconduit");
+INSERT INTO materia (materia_name) VALUES ("itinerància");
+INSERT INTO materia (materia_name) VALUES ("justícia");
+INSERT INTO materia (materia_name) VALUES ("legislació");
+INSERT INTO materia (materia_name) VALUES ("llibres i manuscrits");
+INSERT INTO materia (materia_name) VALUES ("manuscrit");
+INSERT INTO materia (materia_name) VALUES ("moviment d’artistes");
+INSERT INTO materia (materia_name) VALUES ("pagament");
+INSERT INTO materia (materia_name) VALUES ("pagament (de cavalcadura)");
+INSERT INTO materia (materia_name) VALUES ("pagament (de despeses)");
+INSERT INTO materia (materia_name) VALUES ("pagament (de salari)");
+INSERT INTO materia (materia_name) VALUES ("pagament (de vestit)");
+INSERT INTO materia (materia_name) VALUES ("patrimoni");
+INSERT INTO materia (materia_name) VALUES ("petició d’artistes");
+INSERT INTO materia (materia_name) VALUES ("protecció");
+INSERT INTO materia (materia_name) VALUES ("recomanació d’artistes");
 
-CREATE TABLE HasMateria (
+CREATE TABLE has_materia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     document_id bigint(20) NOT NULL,
     materia_id bigint(20) NOT NULL,
     FOREIGN KEY (document_id)
-		REFERENCES Document(id),
+		REFERENCES document(id),
 	FOREIGN KEY (materia_id)
-		REFERENCES Materia(id),
+		REFERENCES materia(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Bibliografia (
+CREATE TABLE bibliografia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-	Autor1 varchar(100) NULL,
-	Autor2 varchar(100) NULL,
-	Autor3 varchar(100) NULL,
-	Autor4 varchar(100) NULL,
-	AutorSecondari1 varchar(100) NULL,
-	AutorSecondari2 varchar(100) NULL,
-	AutorSecondari3 varchar(100) NULL,
-	AutorSecondari4 varchar(100) NULL,
-	AutorSecondari5 varchar(100) NULL,
-	AutorSecondari6 varchar(100) NULL,
-	Any int(4) NULL,
-	Distincio varchar(1) NULL,
-	Titol varchar(100) NULL,
-	TitolPrincipal varchar(100) NULL,
-	Volum varchar(100) NULL,
-	Lloc varchar(100) NULL,
-	Editorial varchar(100) NULL,
-	Serie varchar(100) NULL,
-	Pagines varchar(100) NULL,
-	ReferenciaCurta varchar(1024) NULL,
+	autor1 varchar(100) NULL,
+	autor2 varchar(100) NULL,
+	autor3 varchar(100) NULL,
+	autor4 varchar(100) NULL,
+	autor_secondari1 varchar(100) NULL,
+	autor_secondari2 varchar(100) NULL,
+	autor_secondari3 varchar(100) NULL,
+	autor_secondari4 varchar(100) NULL,
+	autor_secondari5 varchar(100) NULL,
+	autor_secondari6 varchar(100) NULL,
+	any_ int(4) NULL,
+	distincio varchar(1) NULL,
+	titol varchar(100) NULL,
+	titol_principal varchar(100) NULL,
+	volum varchar(100) NULL,
+	lloc varchar(100) NULL,
+	editorial varchar(100) NULL,
+	serie varchar(100) NULL,
+	pagines varchar(100) NULL,
+	referencia_curta varchar(1024) NULL,
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Referencia (
+CREATE TABLE referencia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    RefType varchar(20) NOT NULL,
-    Pages varchar(100) NULL,
+    ref_type varchar(20) NOT NULL,
+    pages varchar(100) NULL,
 	document_id bigint(20) NOT NULL,
 	bibliografia_id bigint(20) NOT NULL,
 	FOREIGN KEY (document_id)
-		REFERENCES Document(id),
+		REFERENCES document(id),
 	FOREIGN KEY (bibliografia_id)
-		REFERENCES Bibliografia(id),
+		REFERENCES bibliografia(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE EntityTypes (
+CREATE TABLE entity_types (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    EntityName varchar(100) NOT NULL,
+    entity_name varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO EntityTypes (EntityName) VALUES ("Artista");
-INSERT INTO EntityTypes (EntityName) VALUES ("Promotor");
-INSERT INTO EntityTypes (EntityName) VALUES ("Ofici");
-INSERT INTO EntityTypes (EntityName) VALUES ("Casa");
-INSERT INTO EntityTypes (EntityName) VALUES ("Instrument");
-INSERT INTO EntityTypes (EntityName) VALUES ("Lloc");
-INSERT INTO EntityTypes (EntityName) VALUES ("GenereLiterari");
+INSERT INTO entity_types (entity_name) VALUES ("artista");
+INSERT INTO entity_types (entity_name) VALUES ("promotor");
+INSERT INTO entity_types (entity_name) VALUES ("ofici");
+INSERT INTO entity_types (entity_name) VALUES ("casa");
+INSERT INTO entity_types (entity_name) VALUES ("instrument");
+INSERT INTO entity_types (entity_name) VALUES ("lloc");
+INSERT INTO entity_types (entity_name) VALUES ("genere_literari");
 
-CREATE TABLE Entity (
+CREATE TABLE entity (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     entity_type_id bigint(20) NOT NULL,
     entity_id bigint(20) NOT NULL,
     FOREIGN KEY (entity_type_id)
-		REFERENCES EntityTypes(id),
+		REFERENCES entity_types(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Artista (
+CREATE TABLE artista (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom_complet varchar(100) NULL,
@@ -184,11 +185,11 @@ CREATE TABLE Artista (
 	origen varchar(100) NULL,
     observacions varchar(1024) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Promotor (
+CREATE TABLE promotor (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom_complet varchar(100) NULL,
@@ -199,11 +200,11 @@ CREATE TABLE Promotor (
 	genere int(1) NULL,
     observacions varchar(1024) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Instrument (
+CREATE TABLE instrument (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom varchar(100) NULL,
@@ -211,11 +212,11 @@ CREATE TABLE Instrument (
 	classe int(1) NULL,
 	part varchar(100) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Ofici (
+CREATE TABLE ofici (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom_complet varchar(100) NULL,
@@ -223,35 +224,35 @@ CREATE TABLE Ofici (
 	especialitat varchar(100) NULL,
 	instrument_id bigint(20) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	FOREIGN KEY (instrument_id)
-		REFERENCES Instrument(id),
+		REFERENCES instrument(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Casa (
+CREATE TABLE casa (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom_complet varchar(100) NULL,
 	titol varchar(100) NULL,
 	cort varchar(100) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Lloc (
+CREATE TABLE lloc (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	nom_complet varchar(100) NULL,
 	regne int(1) NULL,
 	area int(1) NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE GenereLiterari (
+CREATE TABLE genere_literari (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     entity_id bigint(20) NOT NULL,
     nom_complet varchar(100) NULL,
@@ -259,23 +260,23 @@ CREATE TABLE GenereLiterari (
     nom_occita varchar(100) NULL,
     definicio varchar(100) NULL,
     FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE EntityInstance (
+CREATE TABLE entity_instance (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
 	document_id bigint(20) NOT NULL,
 	FOREIGN KEY (entity_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	FOREIGN KEY (document_id)
-		REFERENCES Document(id),
+		REFERENCES document(id),
 	UNIQUE (entity_id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Transcription (
+CREATE TABLE transcription (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_instance_id bigint(20) NOT NULL,
     selected_text varchar(200) NOT NULL,
@@ -283,95 +284,95 @@ CREATE TABLE Transcription (
     coords_from int(4) NOT NULL,
     coords_to int(4) NOT NULL,
 	FOREIGN KEY (entity_instance_id)
-		REFERENCES EntityInstance(id),
+		REFERENCES entity_instance(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE RelationTypes (
+CREATE TABLE relation_types (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    RelationName varchar(100) NOT NULL,
+    relation_name varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO RelationTypes (RelationName) VALUES ("TeOfici");
-INSERT INTO RelationTypes (RelationName) VALUES ("TeCasa");
-INSERT INTO RelationTypes (RelationName) VALUES ("ServeixA");
-INSERT INTO RelationTypes (RelationName) VALUES ("ResideixA");
-INSERT INTO RelationTypes (RelationName) VALUES ("Moviment");
+INSERT INTO relation_types (relation_name) VALUES ("te_ofici");
+INSERT INTO relation_types (relation_name) VALUES ("te_casa");
+INSERT INTO relation_types (relation_name) VALUES ("serveix_a");
+INSERT INTO relation_types (relation_name) VALUES ("resideix_a");
+INSERT INTO relation_types (relation_name) VALUES ("moviment");
 
-CREATE TABLE Relation (
+CREATE TABLE relation (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     relation_type_id bigint(20) NOT NULL,
     relation_id bigint(20) NOT NULL,
 	document_id bigint(20) NOT NULL,
     FOREIGN KEY (relation_type_id)
-		REFERENCES RelationTypes(id),
+		REFERENCES relation_types(id),
 	FOREIGN KEY (document_id)
-		REFERENCES Document(id),
+		REFERENCES document(id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE TeOfici (
+CREATE TABLE te_ofici (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	relation_id bigint(20) NOT NULL,
 	artista_id bigint(20) NOT NULL,
 	ofici_id bigint(20) NOT NULL,
 	FOREIGN KEY (relation_id)
-		REFERENCES Relation(id),
+		REFERENCES relation(id),
 	FOREIGN KEY (artista_id)
-		REFERENCES Artista(id),
+		REFERENCES artista(id),
 	FOREIGN KEY (ofici_id)
-		REFERENCES Ofici(id),
+		REFERENCES ofici(id),
 	UNIQUE (artista_id, ofici_id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE TeCasa (
+CREATE TABLE te_casa (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	relation_id bigint(20) NOT NULL,
 	promotor_id bigint(20) NOT NULL,
 	casa_id bigint(20) NOT NULL,
 	FOREIGN KEY (relation_id)
-		REFERENCES Relation(id),
+		REFERENCES relation(id),
 	FOREIGN KEY (promotor_id)
-		REFERENCES Promotor(id),
+		REFERENCES promotor(id),
 	FOREIGN KEY (casa_id)
-		REFERENCES Casa(id),
+		REFERENCES casa(id),
 	UNIQUE (promotor_id, casa_id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE ServeixA (
+CREATE TABLE serveix_a (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	relation_id bigint(20) NOT NULL,
 	artista_id bigint(20) NOT NULL,
 	promotor_id bigint(20) NOT NULL,
 	FOREIGN KEY (relation_id)
-		REFERENCES Relation(id),
+		REFERENCES relation(id),
 	FOREIGN KEY (artista_id)
-		REFERENCES Artista(id),
+		REFERENCES artista(id),
 	FOREIGN KEY (promotor_id)
-		REFERENCES Promotor(id),
+		REFERENCES promotor(id),
 	UNIQUE (artista_id, promotor_id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE ResideixA (
+CREATE TABLE resideix_a (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	relation_id bigint(20) NOT NULL,
 	artista_id bigint(20) NOT NULL,
 	lloc_id bigint(20) NOT NULL,
 	FOREIGN KEY (relation_id)
-		REFERENCES Relation(id),
+		REFERENCES relation(id),
 	FOREIGN KEY (artista_id)
-		REFERENCES Artista(id),
+		REFERENCES artista(id),
 	FOREIGN KEY (lloc_id)
-		REFERENCES Lloc(id),
+		REFERENCES lloc(id),
 	UNIQUE (artista_id, lloc_id),
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE Moviment (
+CREATE TABLE moviment (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	relation_id bigint(20) NOT NULL,
     artista_id bigint(20) NOT NULL,
@@ -380,17 +381,17 @@ CREATE TABLE Moviment (
     destino_type_id bigint(20) NOT NULL,
     destino_id bigint(20) NOT NULL,
 	FOREIGN KEY (relation_id)
-		REFERENCES Relation(id),
+		REFERENCES relation(id),
 	FOREIGN KEY (artista_id)
-		REFERENCES Artista(id),
+		REFERENCES artista(id),
 	FOREIGN KEY (origen_type_id)
-		REFERENCES EntityTypes(id),
+		REFERENCES entity_types(id),
 	FOREIGN KEY (destino_type_id)
-		REFERENCES EntityTypes(id),
+		REFERENCES entity_types(id),
 	FOREIGN KEY (origen_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	FOREIGN KEY (destino_id)
-		REFERENCES Entity(id),
+		REFERENCES entity(id),
 	UNIQUE (artista_id, 
 		origen_type_id, 
         origen_id, 
@@ -399,4 +400,4 @@ CREATE TABLE Moviment (
 	PRIMARY KEY (id)
 );
 
-INSERT INTO Bibliografia (ReferenciaCurta) VALUES ("Desconegut");
+INSERT INTO bibliografia (referencia_curta) VALUES ("Desconegut");

@@ -65,7 +65,7 @@ public class OficiDao extends EntityDao<Ofici> {
 
 	@Override
 	public String getTable() {
-		return "Ofici";
+		return "ofici";
 	}
 
 	@Override

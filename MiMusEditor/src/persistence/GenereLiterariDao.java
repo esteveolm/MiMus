@@ -51,7 +51,7 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 
 	@Override
 	public String getTable() {
-		return "GenereLiterari";
+		return "genere_literari";
 	}
 	
 	@Override

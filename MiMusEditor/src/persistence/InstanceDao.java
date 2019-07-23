@@ -20,7 +20,7 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 
 	@Override
 	public int insert(EntityInstance unit) throws SQLException {
-		String sql = "INSERT INTO EntityInstance (entity_id, document_id)"
+		String sql = "INSERT INTO entity_instance (entity_id, document_id)"
 				+ "VALUES (?,?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setInt(1, unit.getItsEntity().getId());
@@ -54,12 +54,12 @@ public class InstanceDao extends UnitDao<EntityInstance> {
 
 	@Override
 	public String getTable() {
-		return "EntityInstance";
+		return "entity_instance";
 	}
 	
 	public List<EntityInstance> select(Document doc) throws SQLException {
 		List<EntityInstance> insts = new ArrayList<>();
-		String sql = "SELECT * FROM EntityInstance WHERE document_id=" + doc.getId();
+		String sql = "SELECT * FROM entity_instance WHERE document_id=" + doc.getId();
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		

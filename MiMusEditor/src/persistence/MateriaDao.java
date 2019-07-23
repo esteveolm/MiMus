@@ -21,14 +21,14 @@ public class MateriaDao extends UnitDao<Materia> {
 
 	@Override
 	protected Materia make(ResultSet rs) throws SQLException {
-		Materia mat = new Materia(rs.getString("MateriaName"));
+		Materia mat = new Materia(rs.getString("materia_name"));
 		mat.setId(rs.getInt("id"));
 		return mat;
 	}
 
 	@Override
 	public String getTable() {
-		return "Materia";
+		return "materia";
 	}
 	
 	public TreeMap<Integer, String> selectAllAsIdsToNames() throws SQLException {

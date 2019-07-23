@@ -63,7 +63,7 @@ public class ArtistaDao extends EntityDao<Artista> {
 
 	@Override
 	public String getTable() {
-		return "Artista";
+		return "artista";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class TranscriptionDao extends UnitDao<Transcription> {
 
 	@Override
 	public int insert(Transcription unit) throws SQLException {
-		String sql = "INSERT INTO Transcription "
+		String sql = "INSERT INTO transcription "
 				+ "(entity_instance_id, selected_text, form, coords_from, coords_to)"
 				+ "VALUES (?,?,?,?,?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -55,14 +55,14 @@ public class TranscriptionDao extends UnitDao<Transcription> {
 
 	@Override
 	public String getTable() {
-		return "Transcription";
+		return "transcription";
 	}
 
 	public List<Transcription> select(Document doc) throws SQLException {
 		List<Transcription> transcriptions = new ArrayList<>();
-		String sql = "SELECT * FROM Transcription, EntityInstance "
-				+ "WHERE Transcription.entity_instance_id=EntityInstance.id "
-				+ "AND EntityInstance.document_id=" + doc.getId();
+		String sql = "SELECT * FROM transcription, entity_instance "
+				+ "WHERE transcription.entity_instance_id=entity_instance.id "
+				+ "AND entity_instance.document_id=" + doc.getId();
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		

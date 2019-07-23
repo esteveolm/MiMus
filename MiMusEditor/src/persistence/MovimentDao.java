@@ -13,7 +13,7 @@ public class MovimentDao extends RelationDao {
 
 	@Override
 	public String getTable() {
-		return "Moviment";
+		return "moviment";
 	}
 
 	@Override

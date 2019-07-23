@@ -49,7 +49,7 @@ public class InstrumentDao extends EntityDao<Instrument> {
 
 	@Override
 	public String getTable() {
-		return "Instrument";
+		return "instrument";
 	}
 
 	@Override

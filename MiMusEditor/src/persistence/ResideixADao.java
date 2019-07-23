@@ -35,7 +35,7 @@ public class ResideixADao extends RelationDao {
 
 	@Override
 	public String getTable() {
-		return "ResideixA";
+		return "resideix_a";
 	}
 
 	@Override

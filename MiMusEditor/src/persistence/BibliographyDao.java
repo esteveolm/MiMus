@@ -16,11 +16,11 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 
 	@Override
 	public int insert(Bibliography unit) throws SQLException {
-		String[] insertColumns = {"Autor1", "Autor2", "Autor3", "Autor4", 
-				 "AutorSecondari1", "AutorSecondari2", "AutorSecondari3", 
-				 "AutorSecondari4", "AutorSecondari5", "AutorSecondari6", 
-				 "Any", "Distincio", "Titol", "TitolPrincipal", "Volum", 
-				 "Lloc", "Editorial", "Serie", "Pagines", "ReferenciaCurta"};
+		String[] insertColumns = {"autor1", "autor2", "autor3", "autor4", 
+				 "autor_secondari1", "autor_secondari2", "autor_secondari3", 
+				 "autor_secondari4", "autor_secondari5", "autor_secondari6", 
+				 "any_", "distincio", "titol", "titol_principal", "volum", 
+				 "lloc", "editorial", "serie", "pagines", "referencia_curta"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -57,26 +57,26 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 	
 	protected Bibliography make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		String autor1 = denullify(rs.getString("Autor1"));
-		String autor2 = denullify(rs.getString("Autor2"));
-		String autor3 = denullify(rs.getString("Autor3"));
-		String autor4 = denullify(rs.getString("Autor4"));
-		String autorSecondari1 = denullify(rs.getString("AutorSecondari1"));
-		String autorSecondari2 = denullify(rs.getString("AutorSecondari2"));
-		String autorSecondari3 = denullify(rs.getString("AutorSecondari3"));
-		String autorSecondari4 = denullify(rs.getString("AutorSecondari4"));
-		String autorSecondari5 = denullify(rs.getString("AutorSecondari5"));
-		String autorSecondari6 = denullify(rs.getString("AutorSecondari6"));
-		String any = denullify(rs.getString("Any"));
-		String distincio = denullify(rs.getString("Distincio"));
-		String titol = denullify(rs.getString("Titol"));
-		String titolPrincipal = denullify(rs.getString("TitolPrincipal"));
-		String volum = denullify(rs.getString("Volum"));
-		String lloc = denullify(rs.getString("Lloc"));
-		String editorial = denullify(rs.getString("Editorial"));
-		String serie = denullify(rs.getString("Serie"));
-		String pagines = denullify(rs.getString("Pagines"));
-		String referenciaCurta = denullify(rs.getString("ReferenciaCurta"));
+		String autor1 = denullify(rs.getString("autor1"));
+		String autor2 = denullify(rs.getString("autor2"));
+		String autor3 = denullify(rs.getString("autor3"));
+		String autor4 = denullify(rs.getString("autor4"));
+		String autorSecondari1 = denullify(rs.getString("autor_secondari1"));
+		String autorSecondari2 = denullify(rs.getString("autor_secondari2"));
+		String autorSecondari3 = denullify(rs.getString("autor_secondari3"));
+		String autorSecondari4 = denullify(rs.getString("autor_secondari4"));
+		String autorSecondari5 = denullify(rs.getString("autor_secondari5"));
+		String autorSecondari6 = denullify(rs.getString("autor_secondari6"));
+		String any = denullify(rs.getString("any_"));
+		String distincio = denullify(rs.getString("distincio"));
+		String titol = denullify(rs.getString("titol"));
+		String titolPrincipal = denullify(rs.getString("titol_principal"));
+		String volum = denullify(rs.getString("volum"));
+		String lloc = denullify(rs.getString("lloc"));
+		String editorial = denullify(rs.getString("editorial"));
+		String serie = denullify(rs.getString("serie"));
+		String pagines = denullify(rs.getString("pagines"));
+		String referenciaCurta = denullify(rs.getString("referencia_curta"));
 		
 		String[] autors = {autor1, autor2, autor3, autor4};
 		String[] autorsSecondaris = {autorSecondari1, autorSecondari2, 
@@ -92,7 +92,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 	
 	@Override
 	public String getTable() {
-		return "Bibliografia";
+		return "bibliografia";
 	}
 
 	@Override

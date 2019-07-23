@@ -160,7 +160,7 @@ public class GenereLiterariView extends DeclarativeView {
 	
 	@Override
 	public String getViewName() {
-		return "GenereLiterari";
+		return "genere_literari";
 	}
 	
 	@Override

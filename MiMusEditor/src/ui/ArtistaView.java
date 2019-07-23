@@ -37,7 +37,7 @@ public class ArtistaView extends DeclarativeView {
 	}
 	
 	public String getViewName() {
-		return "Artista";
+		return "artista";
 	}
 	
 	public String getAddPattern() {

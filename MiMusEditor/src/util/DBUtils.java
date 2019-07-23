@@ -32,7 +32,7 @@ public class DBUtils {
 		}
 		
 		return DriverManager.getConnection(
-				"jdbc:mysql://161.116.21.174:3306/Mimus"
+				"jdbc:mysql://161.116.21.174:3306/mimus"
 				+ "?useUnicode=true&characterEncoding=UTF-8"
 				+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
 				prop.getProperty("editor.user"), prop.getProperty("editor.pass"));

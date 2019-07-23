@@ -31,30 +31,30 @@ public class AnyEntityDao extends UnitDao<Entity> {
 
 	@Override
 	public String getTable() {
-		return "Entity";
+		return "entity";
 	}
 	
 	public String selectType(int id) throws SQLException {
 		Statement selectStmt = getConnection().createStatement();
-		String sql = "SELECT EntityName FROM EntityTypes, Entity " + 
-				"WHERE Entity.id=" + id + " AND Entity.entity_type_id=EntityTypes.id";
+		String sql = "SELECT entity_name FROM entity_types, entity " + 
+				"WHERE entity.id=" + id + " AND entity.entity_type_id=entity_types.id";
 		ResultSet rs = selectStmt.executeQuery(sql);
 		
 		if (rs.next()) {
-			return rs.getString("EntityName");
+			return rs.getString("entity_name");
 		}
 		throw new SQLException();
 	}
 	
 	public EntityDao<? extends Entity> getDao(String type) {
 		HashMap<String, EntityDao<? extends Entity>> map = new HashMap<>();
-		map.put("Artista", new ArtistaDao(getConnection()));
-		map.put("Ofici", new OficiDao(getConnection()));
-		map.put("Promotor", new PromotorDao(getConnection()));
-		map.put("Casa", new CasaDao(getConnection()));
-		map.put("Instrument", new InstrumentDao(getConnection()));
-		map.put("Lloc", new LlocDao(getConnection()));
-		map.put("GenereLiterari", new GenereLiterariDao(getConnection()));
+		map.put("artista", new ArtistaDao(getConnection()));
+		map.put("ofici", new OficiDao(getConnection()));
+		map.put("promotor", new PromotorDao(getConnection()));
+		map.put("casa", new CasaDao(getConnection()));
+		map.put("instrument", new InstrumentDao(getConnection()));
+		map.put("lloc", new LlocDao(getConnection()));
+		map.put("genere_literari", new GenereLiterariDao(getConnection()));
 		return map.get(type);
 	}
 

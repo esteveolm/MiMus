@@ -47,7 +47,7 @@ public class CasaDao extends EntityDao<Casa> {
 
 	@Override
 	public String getTable() {
-		return "Casa";
+		return "casa";
 	}
 
 	@Override

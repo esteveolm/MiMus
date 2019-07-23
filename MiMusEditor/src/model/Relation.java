@@ -5,7 +5,7 @@ import java.util.List;
 public class Relation extends HierarchicalUnit {
 
 	public static final String[] TYPES = 
-			{"TeOfici", "TeCasa", "ServeixA", "ResideixA", "Moviment"};
+			{"te_ofici", "te_casa", "serveix_a", "resideix_a", "moviment"};
 	
 	private Entity itsEntity1;
 	private Entity itsEntity2;

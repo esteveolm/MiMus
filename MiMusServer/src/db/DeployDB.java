@@ -29,7 +29,7 @@ public class DeployDB {
 			}
 			
 			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://161.116.21.174:3306/Mimus"
+					"jdbc:mysql://161.116.21.174:3306/mimus"
 					+ "?useUnicode=true&characterEncoding=UTF-8"
 					+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
 					prop.getProperty("admin.user"), prop.getProperty("admin.pass"));
@@ -66,24 +66,24 @@ public class DeployDB {
 			/* Get llengua_id of associated language */
 			llenguaStmt = conn.createStatement();
 			ResultSet llenguaRS = llenguaStmt.executeQuery(
-					"SELECT id FROM Llengua WHERE LlenguaName='" + 
+					"SELECT id FROM llengua WHERE llengua_name='" + 
 					entry.getLanguage() + "'");
 			if (llenguaRS.next()) {
 				int llenguaId = llenguaRS.getInt("id");
 				
 				/* Insert Document entry using fields from model object + llengua_id */
 				stmt = conn.prepareStatement(
-						"INSERT INTO Document " +
-						"(Numeracio, Any, Any2, Mes, Mes2, Dia, Dia2,"
-						+ "hAny, hAny2, hMes, hMes2, hDia, hDia2,"
-						+ "dAny, dAny2, dMes, dMes2, dDia, dDia2,"
-						+ "Lloc, Lloc2, Regest, lib1Arxiu, lib1Serie, "
-						+ "lib1Subserie, lib1Subserie2, lib1Numero, "
-						+ "lib1Pagina, lib2Arxiu, lib2Serie, lib2Subserie, "
-						+ "lib2Subserie2, lib2Numero, lib2Pagina, "
-						+ "Edicions, Registres,"
-						+ "Citacions, Transcripcio, Notes, llengua_id,"
-						+ "StateAnnot, StateRev) "
+						"INSERT INTO document " +
+						"(numeracio, any1, any2, mes1, mes2, dia1, dia2,"
+						+ "h_any1, h_any2, h_mes1, h_mes2, h_dia1, h_dia2,"
+						+ "d_any1, d_any2, d_mes1, d_mes2, d_dia1, d_dia2,"
+						+ "lloc1, lloc2, regest, lib1_arxiu, lib1_serie, "
+						+ "lib1_subserie, lib1_subserie2, lib1_numero, "
+						+ "lib1_pagina, lib2_arxiu, lib2_serie, lib2_subserie, "
+						+ "lib2_subserie2, lib2_numero, lib2_pagina, "
+						+ "edicions, registres,"
+						+ "citacions, transcripcio, notes, llengua_id,"
+						+ "state_annot, state_rev) "
 						+ "VALUES "
 						+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"
 						+ "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
@@ -142,7 +142,7 @@ public class DeployDB {
 						
 						/* Insert every subject into HasMateria table */
 						selectMateriaStmt = conn.prepareStatement(
-								"SELECT id FROM Materia WHERE MateriaName = ?");
+								"SELECT id FROM materia WHERE materia_name = ?");
 						
 						for (String mat : entry.getSubjects()) {
 							/* First get ID of Materia from its table */
@@ -153,8 +153,8 @@ public class DeployDB {
 								
 								/* Then fill HasMateria table with ID of Materia and Document */
 								insertMateriaStmt = conn.prepareStatement(
-										"INSERT INTO HasMateria (document_id, materia_id) " +
-										"VALUES (?,?)");
+										"INSERT INTO has_materia "
+										+ "(document_id, materia_id) VALUES (?,?)");
 								insertMateriaStmt.setInt(1, documentId);
 								insertMateriaStmt.setInt(2, materiaId);
 								int materiaResult = insertMateriaStmt.executeUpdate();

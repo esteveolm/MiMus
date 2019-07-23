@@ -40,14 +40,14 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	}
 
 	private int insertCommonRelation(Relation unit) throws SQLException {
-		String sql = "SELECT id from RelationTypes WHERE RelationName=?";
+		String sql = "SELECT id from relation_types WHERE relation_name=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, getTable());
 		ResultSet typeRS = stmt.executeQuery();
 		if (typeRS.next()) {
 			int typeId = typeRS.getInt(1);
 			
-			sql = "INSERT INTO Relation "
+			sql = "INSERT INTO relation "
 					+ "(relation_type_id, relation_id, document_id) VALUES (?,?,?)";
 			stmt = getConnection().prepareStatement(sql);
 			stmt.setInt(1, typeId);
@@ -59,7 +59,7 @@ public abstract class RelationDao extends UnitDao<Relation> {
 	}
 	
 	private int updateCommonRelation(int commonId, int specId) throws SQLException {
-		String sql = "UPDATE Relation SET relation_id=? WHERE id=?";
+		String sql = "UPDATE relation SET relation_id=? WHERE id=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setInt(1, specId);
 		stmt.setInt(2, commonId);
@@ -94,9 +94,9 @@ public abstract class RelationDao extends UnitDao<Relation> {
 			
 			/* Then, delete from Relation  table using ID recovered */
 			Statement stmt2 = getConnection().createStatement();
-			String sql2 = "DELETE FROM Relation WHERE id=" + relation.getId();
+			String sql2 = "DELETE FROM relation WHERE id=" + relation.getId();
 			stmt2.executeUpdate(sql2);
-			System.out.println("DelRel: SQL cOMMON: " + sql2);
+			System.out.println("DelRel: SQL Common: " + sql2);
 			
 			getConnection().commit();
 			System.out.println("commited.");

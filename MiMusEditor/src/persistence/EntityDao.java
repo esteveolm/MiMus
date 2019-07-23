@@ -55,14 +55,14 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	public abstract int insertSpecificEntity(E entity, int entId) throws SQLException;
 	
 	public int insertCommonEntity(E entity) throws SQLException {
-		String sql = "SELECT id from EntityTypes WHERE EntityName=?";
+		String sql = "SELECT id from entity_types WHERE entity_name=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, getTable());
 		ResultSet typeRS = stmt.executeQuery();
 		if (typeRS.next()) {
 			int typeId = typeRS.getInt(1);
 			
-			sql = "INSERT INTO Entity (entity_type_id, entity_id) VALUES (?,?)";
+			sql = "INSERT INTO entity (entity_type_id, entity_id) VALUES (?,?)";
 			stmt = getConnection().prepareStatement(sql);
 			stmt.setInt(1, typeId);
 			stmt.setInt(2, 0);	// Don't know entity_id yet, set it to 0
@@ -72,7 +72,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 	}
 	
 	public int updateCommonEntity(int commonId, int specId) throws SQLException {
-		String sql = "UPDATE Entity SET entity_id=? WHERE id=?";
+		String sql = "UPDATE entity SET entity_id=? WHERE id=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setInt(1, specId);
 		stmt.setInt(2, commonId);
@@ -93,7 +93,7 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 			
 			/* Then, delete from Entity table using ID recovered */
 			Statement stmt2 = getConnection().createStatement();
-			String sql2 = "DELETE FROM Entity WHERE id=" + entity.getId();
+			String sql2 = "DELETE FROM entity WHERE id=" + entity.getId();
 			stmt2.executeUpdate(sql2);
 			
 			getConnection().commit();

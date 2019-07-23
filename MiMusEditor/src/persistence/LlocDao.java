@@ -47,7 +47,7 @@ public class LlocDao extends EntityDao<Lloc> {
 
 	@Override
 	public String getTable() {
-		return "Lloc";
+		return "lloc";
 	}
 
 	@Override

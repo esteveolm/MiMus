@@ -20,8 +20,8 @@ public class ReferenceDao extends UnitDao<MiMusReference> {
 
 	@Override
 	public int insert(MiMusReference unit) throws SQLException {
-		String sql = "INSERT INTO Referencia "
-				+ "(id, RefType, Pages, document_id, bibliografia_id) "
+		String sql = "INSERT INTO referencia "
+				+ "(id, ref_type, pages, document_id, bibliografia_id) "
 				+ "VALUES (?,?,?,?,?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setInt(1, unit.getId());
@@ -40,8 +40,8 @@ public class ReferenceDao extends UnitDao<MiMusReference> {
 	@Override
 	protected MiMusReference make(ResultSet rs) throws SQLException {
 		int id = rs.getInt("id");
-		int type = rs.getInt("RefType");
-		String pages = rs.getString("Pages");
+		int type = rs.getInt("ref_type");
+		String pages = rs.getString("pages");
 		int biblioId = rs.getInt("bibliografia_id");
 		Bibliography biblio = new BibliographyDao(getConnection())
 				.selectOne(biblioId);
@@ -52,12 +52,12 @@ public class ReferenceDao extends UnitDao<MiMusReference> {
 
 	@Override
 	public String getTable() {
-		return "Referencia";
+		return "referencia";
 	}
 
 	public List<MiMusReference> select(Document doc) throws SQLException {
 		List<MiMusReference> references = new ArrayList<>();
-		String sql = "SELECT * FROM Referencia WHERE document_id=" + doc.getId();
+		String sql = "SELECT * FROM referencia WHERE document_id=" + doc.getId();
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		
