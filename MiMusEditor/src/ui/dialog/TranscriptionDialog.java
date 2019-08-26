@@ -1,6 +1,8 @@
 package ui.dialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -25,6 +27,15 @@ public abstract class TranscriptionDialog<T extends Entity>
 		super(entities, parentShell);
 		this.setSelectedText(selectedText);
 		this.setTranscription("");
+		
+		/* Dialog shows entities ordered alphabetically by lemma */
+		Collections.sort(entities, new Comparator<EntityInstance>() {
+			@Override
+			public int compare(EntityInstance e1, EntityInstance e2) {
+				return e1.getItsEntity().getLemma()
+						.compareTo(e2.getItsEntity().getLemma());
+			}
+		});
 	}
 	
 	@Override
