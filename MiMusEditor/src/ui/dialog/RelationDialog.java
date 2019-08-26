@@ -1,6 +1,7 @@
 package ui.dialog;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -70,6 +71,16 @@ public class RelationDialog extends Dialog {
 			if (thisEnt.getType().equals(entityType2))
 				entities2.add(thisEnt);
 		}
+		
+		/* Sort lists of entities by lemma */
+		Comparator<Entity> comp = new Comparator<Entity>() {
+			@Override
+			public int compare(Entity e1, Entity e2) {
+				return e1.getLemma().compareTo(e2.getLemma());
+			}
+		};
+		entities1.sort(comp);
+		entities2.sort(comp);
 		
 		/* Make 1st combo with entity strings */
 		String[] e1Names = new String[entities1.size()];
