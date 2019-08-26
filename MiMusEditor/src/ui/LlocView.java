@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Lloc;
 import persistence.DaoNotImplementedException;
 import persistence.LlocDao;
@@ -56,13 +55,28 @@ public class LlocView extends DeclarativeView {
 		Label labelArea = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelArea.setText("Àrea:");
 		Combo comboArea = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboArea.setItems(SharedResources.AREA);
+		comboArea.setItems(Lloc.AREES);
+		/* Default selection at start lets comboRegne know what to load */
+		comboArea.select(0);	
+		comboArea.setLayoutData(grid);
 		
 		/* Regne: option field */
 		Label labelRegne = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelRegne.setText("Regne:");
 		Combo comboRegne = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboRegne.setItems(SharedResources.REGNE);
+		comboRegne.setItems(Lloc.REGNES[0]);	/* At start, comboFamily at 0 */
+		comboRegne.select(0);
+		comboRegne.setLayoutData(grid);
+		
+		/* When comboArea changes, update comboRegne options */
+		comboArea.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				comboRegne.setItems(
+						Lloc.REGNES[comboArea.getSelectionIndex()]);
+				comboRegne.select(0);
+			}
+		});
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -70,8 +84,9 @@ public class LlocView extends DeclarativeView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				textNomComplet.setText("");
-				comboRegne.deselectAll();
-				comboArea.deselectAll();
+				comboArea.select(0);	/* Something is required for comboRegne */
+				comboRegne.setItems(Lloc.REGNES[0]);
+				comboRegne.select(0);				
 			}
 		});
 		

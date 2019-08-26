@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import control.SharedResources;
 import model.Instrument;
 import persistence.DaoNotImplementedException;
 import persistence.InstrumentDao;
@@ -65,15 +64,28 @@ public class InstrumentView extends DeclarativeView {
 		Label labelFamily = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelFamily.setText("Família:");
 		Combo comboFamily = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboFamily.setItems(SharedResources.FAMILY);
+		comboFamily.setItems(Instrument.FAMILIES);
+		/* Default selection at start lets comboClasse know what to load */
+		comboFamily.select(0);	
 		comboFamily.setLayoutData(grid);
 		
 		/* Classe: categorical field (Combo) */
 		Label labelClasse = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelClasse.setText("Classe:");
 		Combo comboClasse = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboClasse.setItems(SharedResources.CLASSE);
+		comboClasse.setItems(Instrument.CLASSES[0]); /* At start, comboFamily at 0 */
+		comboClasse.select(0);
 		comboClasse.setLayoutData(grid);
+		
+		/* When comboFamily changes, update comboClasse options */
+		comboFamily.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				comboClasse.setItems(
+						Instrument.CLASSES[comboFamily.getSelectionIndex()]);
+				comboClasse.select(0);
+			}
+		});
 		
 		/* Part: text field */
 		Label labelPart = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -87,8 +99,9 @@ public class InstrumentView extends DeclarativeView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				textNom.setText("");
-				comboFamily.deselectAll();
-				comboClasse.deselectAll();
+				comboFamily.select(0);	/* Something is required for comboClasse */
+				comboClasse.setItems(Instrument.CLASSES[0]);
+				comboClasse.select(0);
 				textPart.setText("");
 			}
 		});

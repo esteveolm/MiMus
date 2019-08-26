@@ -2,6 +2,34 @@ package model;
 
 public class Instrument extends Entity {
 	
+	/* 
+	 * Tree-like structure of attributes Familia and Classe.
+	 * They are associated by index of the following arrays.
+	 */
+	public static final String[] FAMILIES = {
+			"Cordòfon", 
+			"Aeròfon", 
+			"Idiòfon/Membranòfon",
+			"Altres"
+	};
+	public static final String[][] CLASSES = {
+			{		/* Cordofon */
+				"amb mànec",
+				"sense mànec",
+				"d'arc",
+				"de tecla"
+			},
+			{		/* Aerofon */
+				"tipus flauta",
+				"de llengüeta",
+				"de dipòsit d'aire",
+				"tipus trompa",
+				"de tecla"
+			},
+			{"-"},	/* Idiofon/Membranofon */
+			{"-"}	/* Altres */
+	};
+	
 	private String nom;
 	private int family;
 	private int classe;

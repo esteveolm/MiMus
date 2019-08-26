@@ -1,8 +1,27 @@
 package model;
 
-import control.SharedResources;
-
 public class Lloc extends Entity {
+	
+	public static final String[] AREES = {
+			"-",
+			"Corona d'Aragó",
+			"Portugal", "Castella", "Navarra", "França", 
+			"Anglaterra", "Escòcia", "Flandes", "Alemanya", 
+			"Borgonya", "Itàlia", "Nàpols", "Sicília", 
+			"Xipre", "Altres"
+	};
+	public static final String[][] REGNES = {
+			{"-"},	/* Area "-" */
+			{		/* Corona d'Aragó */
+				"Catalunya, principat de", 
+				"València, regne de", 
+				"Aragó, regne de", 
+				"Mallorca, regne de", 
+				"Sardenya, regne de"
+			},		/* Others */
+			{"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}, 
+			{"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}		
+	};
 	
 	private String nomComplet;
 	private int regne;
@@ -37,17 +56,11 @@ public class Lloc extends Entity {
 	public int getRegne() {
 		return regne;
 	}
-	public String getRegneStr() {
-		return SharedResources.REGNE[regne];
-	}
 	public void setRegne(int regne) {
 		this.regne = regne;
 	}
 	public int getArea() {
 		return area;
-	}
-	public String getAreaStr() {
-		return SharedResources.AREA[area];
 	}
 	public void setArea(int area) {
 		this.area = area;
