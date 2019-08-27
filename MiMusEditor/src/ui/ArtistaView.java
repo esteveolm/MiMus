@@ -184,24 +184,43 @@ public class ArtistaView extends DeclarativeView<Artista> {
 						comboReligion.getSelectionIndex(),
 						textOrigen.getText(),
 						textObs.getText());
-				try {
-					int id = new ArtistaDao(getConnection()).insert(art);
-					if (id>0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new ArtistaDao(getConnection()).insert(art);
+						if (id>0) {
+							artists.clear();
+							artists.addAll(new ArtistaDao(getConnection()).selectAll());
+							System.out.println("Artist created successfully.");
+							LabelPrinter.printInfo(label, "Artist added successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert Artist into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert Artist into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection */
+						art.setSpecificId(getSelectedId());
+						new ArtistaDao(getConnection()).update(art);
 						artists.clear();
 						artists.addAll(new ArtistaDao(getConnection()).selectAll());
-						System.out.println("Artist created successfully.");
-						LabelPrinter.printInfo(label, "Artist added successfully.");
+						System.out.println("Artist updated successfully.");
+						LabelPrinter.printInfo(label, "Artist updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert Artist into DB.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not update Artist to DB.");
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: Could not insert Artist into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
 				}
 			}
 		});

@@ -41,6 +41,7 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	final String BUTTON_EDIT = "Edit " + getViewName();
 	
 	private boolean stateAdd;
+	private int selectedId;
 	private Connection conn;
 	private SharedResources resources;
 	private SharedControl control;
@@ -57,6 +58,7 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 		setResources(SharedResources.getInstance());
 		setControl(SharedControl.getInstance());
 		setStateAdd(true);
+		setSelectedId(0);
 		
 		try {
 			setConnection(DBUtils.connect());
@@ -109,8 +111,8 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 			public void widgetSelected(SelectionEvent e) {
 				if (!stateAdd) {
 					tv.getTable().deselectAll();	/* Add mode = nothing selected */
-					// TODO: clear fields?
 					setStateAdd(true);
+					setSelectedId(0);
 					stateLabel.setText(STATE_ADD);
 					btnAdd.setText(BUTTON_ADD);
 				}
@@ -122,13 +124,24 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 			@SuppressWarnings("unchecked")
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
-				setStateAdd(false);
-				stateLabel.setText(STATE_EDIT);
-				btnAdd.setText(BUTTON_EDIT);
-
 				/* Unchecked warning because selection is Object type */
-				fillFieldsFromSelection(
-						(E) tv.getStructuredSelection().getFirstElement());				
+				Object o = tv.getStructuredSelection().getFirstElement();
+				if (o != null) {
+					/* User selected a row from the table */
+					setStateAdd(false);
+					setSelectedId(((Entity) o).getSpecificId());	/* Save ID */
+					System.out.println("ID is " + getSelectedId());
+					stateLabel.setText(STATE_EDIT);
+					btnAdd.setText(BUTTON_EDIT);
+					
+					fillFieldsFromSelection((E) o);
+				} else {
+					/* After an entity is edited, back to add mode */ 
+					setStateAdd(true);
+					setSelectedId(0);
+					stateLabel.setText(STATE_ADD);
+					btnAdd.setText(BUTTON_ADD);
+				}
 			}
 		});
 	}
@@ -187,5 +200,11 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	}
 	public void setStateAdd(boolean state) {
 		this.stateAdd = state;
+	}
+	public int getSelectedId() {
+		return selectedId;
+	}
+	public void setSelectedId(int selectedId) {
+		this.selectedId = selectedId;
 	}
 }

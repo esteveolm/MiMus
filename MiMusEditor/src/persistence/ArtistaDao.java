@@ -67,8 +67,38 @@ public class ArtistaDao extends EntityDao<Artista> {
 	}
 
 	@Override
-	public void update(Artista unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
-	}
+	public void update(Artista unit) throws SQLException {
+		String sql = "UPDATE artista "
+				+ "SET nom_complet=?, "
+				+ "tractament=?, "
+				+ "nom=?, "
+				+ "cognom=?, "
+				+ "sobrenom=?, "
+				+ "distintiu=?, "
+				+ "genere=?, "
+				+ "religio=?, "
+				+ "origen=?, "
+				+ "observacions=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setString(2, unit.getTractament());
+		stmt.setString(3, unit.getNom());
+		stmt.setString(4, unit.getCognom());
+		stmt.setString(5, unit.getSobrenom());
+		stmt.setString(6, unit.getDistintiu());
+		stmt.setInt(7, unit.getGenere());
+		stmt.setInt(8, unit.getReligio());
+		stmt.setString(9, unit.getOrigen());
+		stmt.setString(10, unit.getObservacions());
+		stmt.setInt(11, unit.getSpecificId());
 
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
+	}
 }
