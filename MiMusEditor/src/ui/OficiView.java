@@ -23,7 +23,7 @@ import persistence.OficiDao;
 import ui.table.OficiTableViewer;
 import util.LabelPrinter;
 
-public class OficiView extends DeclarativeView {
+public class OficiView extends DeclarativeView<Ofici> {
 
 	private List<Ofici> oficis;
 	private List<Instrument> insts;
@@ -59,6 +59,8 @@ public class OficiView extends DeclarativeView {
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -109,6 +111,8 @@ public class OficiView extends DeclarativeView {
 		OficiTableViewer oficiHelper = 
 				new OficiTableViewer(sectTable.getParent(), oficis, insts);
 		setTv(oficiHelper.createTableViewer());
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -213,5 +217,11 @@ public class OficiView extends DeclarativeView {
 			e2.printStackTrace();
 			System.out.println("Could not select Instruments from DB.");
 		}
+	}
+
+	@Override
+	protected void fillFieldsFromSelection(Ofici ent) {
+		// TODO Auto-generated method stub
+		
 	}
 }

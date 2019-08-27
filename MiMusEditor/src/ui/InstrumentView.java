@@ -21,7 +21,7 @@ import persistence.InstrumentDao;
 import ui.table.InstrumentTableViewer;
 import util.LabelPrinter;
 
-public class InstrumentView extends DeclarativeView {
+public class InstrumentView extends DeclarativeView<Instrument> {
 	
 	private List<Instrument> instruments;
 	
@@ -51,8 +51,10 @@ public class InstrumentView extends DeclarativeView {
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
-		sectAdd.setText("Add a new Entity");
+		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* Nom: text field */
 		Label labelNom = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -113,6 +115,8 @@ public class InstrumentView extends DeclarativeView {
 		InstrumentTableViewer instrumentHelper = 
 				new InstrumentTableViewer(sectTable.getParent(), instruments);
 		setTv(instrumentHelper.createTableViewer());
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -203,4 +207,10 @@ public class InstrumentView extends DeclarativeView {
 
 	@Override
 	public void update() {}
+
+	@Override
+	protected void fillFieldsFromSelection(Instrument ent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

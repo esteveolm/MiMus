@@ -20,7 +20,7 @@ import persistence.GenereLiterariDao;
 import ui.table.GenereTableViewer;
 import util.LabelPrinter;
 
-public class GenereLiterariView extends DeclarativeView {
+public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 
 	private List<GenereLiterari> generes;
 	
@@ -40,8 +40,9 @@ public class GenereLiterariView extends DeclarativeView {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
-		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* NomComplet: text field */
 		Label labelNombreCompleto = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -86,6 +87,8 @@ public class GenereLiterariView extends DeclarativeView {
 		GenereTableViewer genereHelper = 
 				new GenereTableViewer(sectTable.getParent(), generes);
 		setTv(genereHelper.createTableViewer());	
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -179,4 +182,10 @@ public class GenereLiterariView extends DeclarativeView {
 	
 	@Override
 	public void update() {}
+
+	@Override
+	protected void fillFieldsFromSelection(GenereLiterari ent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

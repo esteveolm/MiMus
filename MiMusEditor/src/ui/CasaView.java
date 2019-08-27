@@ -20,7 +20,7 @@ import persistence.DaoNotImplementedException;
 import ui.table.CasaTableViewer;
 import util.LabelPrinter;
 
-public class CasaView extends DeclarativeView {
+public class CasaView extends DeclarativeView<Casa> {
 
 	private List<Casa> cases;
 	
@@ -51,6 +51,8 @@ public class CasaView extends DeclarativeView {
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -88,6 +90,8 @@ public class CasaView extends DeclarativeView {
 		CasaTableViewer casaHelper =
 				new CasaTableViewer(sectTable.getParent(), cases);
 		setTv(casaHelper.createTableViewer());
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -169,4 +173,10 @@ public class CasaView extends DeclarativeView {
 
 	@Override
 	public void update() {}
+
+	@Override
+	protected void fillFieldsFromSelection(Casa ent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

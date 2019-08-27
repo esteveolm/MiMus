@@ -20,7 +20,7 @@ import persistence.PromotorDao;
 import ui.table.PromotorTableViewer;
 import util.LabelPrinter;
 
-public class PromotorView extends DeclarativeView {
+public class PromotorView extends DeclarativeView<Promotor> {
 	
 	private List<Promotor> promotors;
 	
@@ -52,6 +52,8 @@ public class PromotorView extends DeclarativeView {
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -117,6 +119,8 @@ public class PromotorView extends DeclarativeView {
 		PromotorTableViewer promotorHelper = 
 				new PromotorTableViewer(sectTable.getParent(), promotors);
 		setTv(promotorHelper.createTableViewer());	
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -209,4 +213,10 @@ public class PromotorView extends DeclarativeView {
 
 	@Override
 	public void update() {}
+
+	@Override
+	protected void fillFieldsFromSelection(Promotor ent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

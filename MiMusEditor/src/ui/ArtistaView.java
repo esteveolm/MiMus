@@ -21,9 +21,20 @@ import persistence.DaoNotImplementedException;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 
-public class ArtistaView extends DeclarativeView {
+public class ArtistaView extends DeclarativeView<Artista> {
 	
 	private List<Artista> artists;
+	
+	private Text textNombreCompleto;
+	private Text textTratamiento;
+	private Text textNombre;
+	private Text textApellido;
+	private Text textSobrenombre;
+	private Text textDistintiu;
+	private Combo comboGenero;
+	private Combo comboReligion;
+	private Text textOrigen;
+	private Text textObs;
 	
 	public ArtistaView() {
 		super();
@@ -49,66 +60,68 @@ public class ArtistaView extends DeclarativeView {
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
 		
+		addStateLabel(sectAdd.getParent());
+		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
 		/* NombreCompleto: text field */
 		Label labelNombreCompleto = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNombreCompleto.setText("Nom complet:");
-		Text textNombreCompleto = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNombreCompleto = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNombreCompleto.setLayoutData(grid);
 
 		/* Tratamiento: text field */
 		Label labelTratamiento = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTratamiento.setText("Tractament:");
-		Text textTratamiento = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textTratamiento = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTratamiento.setLayoutData(grid);
 
 		/* Nombre: text field */
 		Label labelNombre = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNombre.setText("Nom:");
-		Text textNombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNombre.setLayoutData(grid);
 
 		/* Apellido: text field */
 		Label labelApellido = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelApellido.setText("Cognom:");
-		Text textApellido = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textApellido = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textApellido.setLayoutData(grid);
 
 		/* Sobrenombre: text field */
 		Label labelSobrenombre = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelSobrenombre.setText("Sobrenom:");
-		Text textSobrenombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textSobrenombre = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSobrenombre.setLayoutData(grid);
 		
 		/* Distintiu: text field */
 		Label labelDistintiu = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelDistintiu.setText("Distintiu:");
-		Text textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textDistintiu.setLayoutData(grid);
 		
 		/* Genero: option field */
 		Label labelGenero = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenero.setText("Gènere:");
-		Combo comboGenero = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboGenero = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenero.setItems("No marcat", "Home", "Dona");
 		
 		/* Religion: option field */
 		Label labelReligion = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelReligion.setText("Religió:");
-		Combo comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboReligion.setItems("No marcat", "Jueu", "Musulmà");
 		
 		/* Origen: text field */
 		Label labelOrigen = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelOrigen.setText("Origen:");
-		Text textOrigen = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textOrigen = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textOrigen.setLayoutData(grid);
 		
 		/* Observacions: text field */
 		Label labelObs = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelObs.setText("Observacions:");
-		Text textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textObs.setLayoutData(grid);
 		
 		/* Form buttons */
@@ -136,6 +149,8 @@ public class ArtistaView extends DeclarativeView {
 		ArtistaTableViewer artistaHelper = 
 				new ArtistaTableViewer(sectTable.getParent(), artists);
 		setTv(artistaHelper.createTableViewer());	
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -231,4 +246,18 @@ public class ArtistaView extends DeclarativeView {
 
 	@Override
 	public void update() {}
+
+	@Override
+	protected void fillFieldsFromSelection(Artista ent) {
+		textNombreCompleto.setText(ent.getNomComplet());
+		textTratamiento.setText(ent.getTractament());
+		textNombre.setText(ent.getNom());
+		textApellido.setText(ent.getCognom());
+		textSobrenombre.setText(ent.getSobrenom());
+		textDistintiu.setText(ent.getDistintiu());
+		comboGenero.select(ent.getGenere());
+		comboReligion.select(ent.getReligio());
+		textOrigen.setText(ent.getOrigen());
+		textObs.setText(ent.getObservacions());
+	}
 }

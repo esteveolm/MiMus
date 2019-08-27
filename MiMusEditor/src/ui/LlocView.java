@@ -21,7 +21,7 @@ import persistence.LlocDao;
 import ui.table.LlocTableViewer;
 import util.LabelPrinter;
 
-public class LlocView extends DeclarativeView {
+public class LlocView extends DeclarativeView<Lloc> {
 
 	private List<Lloc> llocs;
 	
@@ -42,8 +42,9 @@ public class LlocView extends DeclarativeView {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
-		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		
+		addStateLabel(sectAdd.getParent());
 		
 		/* NomComplet: text field */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -97,6 +98,8 @@ public class LlocView extends DeclarativeView {
 		LlocTableViewer llocHelper = 
 				new LlocTableViewer(sectTable.getParent(), llocs);
 		setTv(llocHelper.createTableViewer());	
+		
+		createTableActions();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -193,5 +196,11 @@ public class LlocView extends DeclarativeView {
 	public void dispose() {
 		super.dispose();
 		getControl().unsetLlocView();
+	}
+
+	@Override
+	protected void fillFieldsFromSelection(Lloc ent) {
+		// TODO Auto-generated method stub
+		
 	}
 }
