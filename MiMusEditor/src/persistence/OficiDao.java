@@ -73,7 +73,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		String sql = "UPDATE ofici "
 				+ "SET nom_complet=?, "
 				+ "terme=?, "
-				+ "especialitat=?, "
+				+ "especialitat=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);

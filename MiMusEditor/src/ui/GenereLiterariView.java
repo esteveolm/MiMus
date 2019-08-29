@@ -24,6 +24,11 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 
 	private List<GenereLiterari> generes;
 	
+	private Text textNombreCompleto;
+	private Text textNomFrances;
+	private Text textNomOccita;
+	private Text textDefinicio;
+	
 	public GenereLiterariView() {
 		super();
 		getControl().setGenereView(this);
@@ -47,25 +52,25 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		/* NomComplet: text field */
 		Label labelNombreCompleto = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNombreCompleto.setText("Nom complet:");
-		Text textNombreCompleto = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNombreCompleto = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNombreCompleto.setLayoutData(grid);
 		
 		/* NomFrances: text field */
 		Label labelNomFrances = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomFrances.setText("Nom frances:");
-		Text textNomFrances = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomFrances = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomFrances.setLayoutData(grid);
 		
 		/* NomOccita: text field */
 		Label labelNomOccita = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomOccita.setText("Nom occita:");
-		Text textNomOccita = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomOccita = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomOccita.setLayoutData(grid);
 		
 		/* Definicio: text field */
 		Label labelDefinicio = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelDefinicio.setText("Definicio:");
-		Text textDefinicio = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDefinicio = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textDefinicio.setLayoutData(grid);
 		
 		/* Form buttons */
@@ -97,7 +102,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
 		btnDel.setText("Delete genere");
 		
-/* Button listeners */
+		/* Button listeners */
 		
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -108,25 +113,45 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 						textNomFrances.getText(), 
 						textNomOccita.getText(), 
 						textDefinicio.getText());
-				try {
-					int id = new GenereLiterariDao(getConnection()).insert(gen);
-					if (id>0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new GenereLiterariDao(getConnection()).insert(gen);
+						if (id>0) {
+							generes.clear();
+							generes.addAll(
+									new GenereLiterariDao(getConnection()).selectAll());
+							System.out.println("Genere created successfully.");
+							LabelPrinter.printInfo(label, "Genere added successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert Genere into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert Genere into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection*/
+						gen.setSpecificId(getSelectedId());
+						new GenereLiterariDao(getConnection()).update(gen);
 						generes.clear();
 						generes.addAll(
 								new GenereLiterariDao(getConnection()).selectAll());
-						System.out.println("Genere created successfully.");
-						LabelPrinter.printInfo(label, "Genere added successfully.");
+						System.out.println("Genere updated successfully.");
+						LabelPrinter.printInfo(label, "Genere updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert Genere into DB.");
-					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: Could not insert Genere into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not update Genere into DB.");
+					} 
 				}
 			}
 		});
@@ -185,7 +210,9 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 
 	@Override
 	protected void fillFieldsFromSelection(GenereLiterari ent) {
-		// TODO Auto-generated method stub
-		
+		textNombreCompleto.setText(ent.getNomComplet());
+		textNomFrances.setText(ent.getNomFrances());
+		textNomOccita.setText(ent.getNomOccita());
+		textDefinicio.setText(ent.getDefinicio());
 	}
 }

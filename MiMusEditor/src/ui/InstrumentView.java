@@ -25,6 +25,11 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	
 	private List<Instrument> instruments;
 	
+	private Text textNom;
+	private Combo comboFamily;
+	private Combo comboClasse;
+	private Text textPart;
+	
 	public InstrumentView() {
 		super();
 		getControl().setInstrumentView(this);
@@ -59,13 +64,13 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		/* Nom: text field */
 		Label labelNom = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNom.setText("Nom:");
-		Text textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNom.setLayoutData(grid);
 		
 		/* Family: categorical field (Combo) */
 		Label labelFamily = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelFamily.setText("Família:");
-		Combo comboFamily = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboFamily = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboFamily.setItems(Instrument.FAMILIES);
 		/* Default selection at start lets comboClasse know what to load */
 		comboFamily.select(0);	
@@ -74,7 +79,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		/* Classe: categorical field (Combo) */
 		Label labelClasse = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelClasse.setText("Classe:");
-		Combo comboClasse = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboClasse = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboClasse.setItems(Instrument.CLASSES[0]); /* At start, comboFamily at 0 */
 		comboClasse.select(0);
 		comboClasse.setLayoutData(grid);
@@ -92,7 +97,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		/* Part: text field */
 		Label labelPart = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelPart.setText("Part:");
-		Text textPart = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textPart = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textPart.setLayoutData(grid);
 		
 		/* Form buttons */
@@ -143,24 +148,41 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 							comboFamily.getSelectionIndex(),
 							comboClasse.getSelectionIndex(),
 							textPart.getText());
-					try {
-						int id = new InstrumentDao(getConnection()).insert(inst);
-						if (id>0) {
+					if (isStateAdd()) {
+						/* Add new entity */
+						try {
+							int id = new InstrumentDao(getConnection()).insert(inst);
+							if (id>0) {
+								instruments.clear();
+								instruments.addAll(new InstrumentDao(getConnection()).selectAll());
+								LabelPrinter.printInfo(label, "Instrument added successfully.");
+								notifyObservers();
+								getTv().refresh();
+							} else {
+								System.out.println("DAO: Could not insert Instrument into DB.");
+							}
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Instrument into DB.");
+						} catch (DaoNotImplementedException e1) {
+							e1.printStackTrace();
+							System.out.println("Insert operation not implemented, this should never happen.");
+						}
+					} else {
+						/* Update values from selected entity */
+						try {
+							/* Recover ID from selection */
+							inst.setSpecificId(getSelectedId());
+							new InstrumentDao(getConnection()).update(inst);
 							instruments.clear();
 							instruments.addAll(new InstrumentDao(getConnection()).selectAll());
-							LabelPrinter.printInfo(label, "Instrument added successfully.");
+							LabelPrinter.printInfo(label, "Instrument updated successfully.");
 							notifyObservers();
 							getTv().refresh();
-
-						} else {
-							System.out.println("DAO: Could not insert Instrument into DB.");
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Instrument into DB.");
 						}
-					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert Instrument into DB.");
-					} catch (DaoNotImplementedException e1) {
-						e1.printStackTrace();
-						System.out.println("Insert operation not implemented, this should never happen.");
 					}
 				}
 			}
@@ -210,7 +232,9 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 
 	@Override
 	protected void fillFieldsFromSelection(Instrument ent) {
-		// TODO Auto-generated method stub
-		
+		textNom.setText(ent.getNom());
+		comboFamily.select(ent.getFamily());
+		comboClasse.select(ent.getClasse());
+		textPart.setText(ent.getPart());
 	}
 }

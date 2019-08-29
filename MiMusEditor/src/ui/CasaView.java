@@ -24,6 +24,10 @@ public class CasaView extends DeclarativeView<Casa> {
 
 	private List<Casa> cases;
 	
+	private Text textNomComplet;
+	private Text textTitol;
+	private Text textCort;
+	
 	public CasaView() {
 		super();
 		getControl().setCasaView(this);
@@ -57,19 +61,19 @@ public class CasaView extends DeclarativeView<Casa> {
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomComplet.setText("Nom Complet:");
-		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		
 		/* Titol (text) */
 		Label labelTitol = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTitol.setText("Titol:");
-		Text textTitol = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textTitol = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTitol.setLayoutData(grid);
 		
 		/* Cort (text) */
 		Label labelCort = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelCort.setText("Cort:");
-		Text textCort = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textCort = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textCort.setLayoutData(grid);
 		
 		/* Form buttons */
@@ -109,25 +113,43 @@ public class CasaView extends DeclarativeView<Casa> {
 						textNomComplet.getText(),
 						textTitol.getText(), 
 						textCort.getText());
-				
-				try {
-					int id = new CasaDao(getConnection()).insert(casa);
-					if (id>0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new CasaDao(getConnection()).insert(casa);
+						if (id>0) {
+							cases.clear();
+							cases.addAll(new CasaDao(getConnection()).selectAll());
+							System.out.println(getViewName() + " created successfully.");
+							LabelPrinter.printInfo(label, getViewName() + " created successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert Casa into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert Casa into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection */
+						casa.setSpecificId(getSelectedId());
+						new CasaDao(getConnection()).update(casa);
 						cases.clear();
 						cases.addAll(new CasaDao(getConnection()).selectAll());
-						System.out.println(getViewName() + " created successfully.");
-						LabelPrinter.printInfo(label, getViewName() + " created successfully.");
+						System.out.println(getViewName() + " updated successfully.");
+						LabelPrinter.printInfo(label, getViewName() + " updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert Casa into DB.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not update Casa to DB.");
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: Could not insert Casa into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
 				}
 			}
 		});
@@ -176,7 +198,8 @@ public class CasaView extends DeclarativeView<Casa> {
 
 	@Override
 	protected void fillFieldsFromSelection(Casa ent) {
-		// TODO Auto-generated method stub
-		
+		textNomComplet.setText(ent.getNomComplet());
+		textTitol.setText(ent.getTitol());
+		textTitol.setText(ent.getCort());
 	}
 }

@@ -24,6 +24,14 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	
 	private List<Promotor> promotors;
 	
+	private Text textNomComplet;
+	private Text textNom;
+	private Text textCognom;
+	private Text textSobrenom;
+	private Text textDistintiu;
+	private Combo comboGenere;
+	private Text textObs;
+	
 	public PromotorView() {
 		super();
 		getControl().setPromotorView(this);
@@ -58,43 +66,43 @@ public class PromotorView extends DeclarativeView<Promotor> {
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomComplet.setText("Nom Complet:");
-		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		
 		/* Nom (text) */
 		Label labelNom = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNom.setText("Nom:");
-		Text textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNom.setLayoutData(grid);
 		
 		/* Cognom (text) */
 		Label labelCognom = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelCognom.setText("Cognom:");
-		Text textCognom = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textCognom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textCognom.setLayoutData(grid);
 		
 		/* Sobrenom (text) */
 		Label labelSobrenom = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelSobrenom.setText("Sobrenom:");
-		Text textSobrenom = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textSobrenom = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSobrenom.setLayoutData(grid);
 		
 		/* Distintiu (text) */
 		Label labelDistintiu = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelDistintiu.setText("Distintiu:");
-		Text textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDistintiu = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textDistintiu.setLayoutData(grid);
 		
 		/* Genere (combo) */
 		Label labelGenere = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenere.setText("Genere:");
-		Combo comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenere.setItems("No marcat", "Home", "Dona");
 		
 		/* Observacions: text field */
 		Label labelObs = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelObs.setText("Observacions:");
-		Text textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textObs = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textObs.setLayoutData(grid);
 		
 		/* Form buttons */
@@ -147,24 +155,43 @@ public class PromotorView extends DeclarativeView<Promotor> {
 						textDistintiu.getText(),
 						comboGenere.getSelectionIndex(),
 						textObs.getText());
-				try {
-					int id = new PromotorDao(getConnection()).insert(prom);
-					if (id > 0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new PromotorDao(getConnection()).insert(prom);
+						if (id > 0) {
+							promotors.clear();
+							promotors.addAll(new PromotorDao(getConnection()).selectAll());
+							System.out.println("Promotor added successfully.");
+							LabelPrinter.printInfo(label, "Promotor added successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert Promotor into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert Promotor into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection */
+						prom.setSpecificId(getSelectedId());
+						new PromotorDao(getConnection()).update(prom);
 						promotors.clear();
 						promotors.addAll(new PromotorDao(getConnection()).selectAll());
-						System.out.println("Promotor added successfully.");
-						LabelPrinter.printInfo(label, "Promotor added successfully.");
+						System.out.println("Promotor updated successfully.");
+						LabelPrinter.printInfo(label, "Promotor updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert Promotor into DB.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert Promotor into DB.");
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: Could not insert Promotor into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
 				}
 			}
 		});
@@ -216,7 +243,12 @@ public class PromotorView extends DeclarativeView<Promotor> {
 
 	@Override
 	protected void fillFieldsFromSelection(Promotor ent) {
-		// TODO Auto-generated method stub
-		
+		textNomComplet.setText(ent.getNomComplet());
+		textNom.setText(ent.getNom());
+		textCognom.setText(ent.getCognom());
+		textSobrenom.setText(ent.getSobrenom());
+		textDistintiu.setText(ent.getDistintiu());
+		comboGenere.select(ent.getGenere());
+		textObs.setText(ent.getObservacions());
 	}
 }

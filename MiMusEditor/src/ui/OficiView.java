@@ -27,6 +27,10 @@ public class OficiView extends DeclarativeView<Ofici> {
 
 	private List<Ofici> oficis;
 	private List<Instrument> insts;
+	
+	private Text textNomComplet;
+	private Text textTerme;
+	private Combo comboEspecialitat;
 	private Combo comboInstrument;
 	
 	public OficiView() {
@@ -65,19 +69,19 @@ public class OficiView extends DeclarativeView<Ofici> {
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomComplet.setText("Nom Complet:");
-		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		
 		/* Terme (text) */
 		Label labelTerme = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTerme.setText("Terme:");
-		Text textTerme = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textTerme = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTerme.setLayoutData(grid);
 		
 		/* Especialitat (combo) */
 		Label labelEspecialitat = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelEspecialitat.setText("Especialitat:");
-		Combo comboEspecialitat = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboEspecialitat = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboEspecialitat.setLayoutData(grid);
 		comboEspecialitat.setItems("-", "Sense especificar", "Instrument",
 				"Veu", "Dansa", "Artesà", "Malabars i altres");
@@ -140,24 +144,43 @@ public class OficiView extends DeclarativeView<Ofici> {
 						textTerme.getText(),
 						comboEspecialitat.getSelectionIndex(),
 						inst);
-				try {
-					int id = new OficiDao(getConnection()).insert(ofici);
-					if (id>0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new OficiDao(getConnection()).insert(ofici);
+						if (id>0) {
+							oficis.clear();
+							oficis.addAll(new OficiDao(getConnection()).selectAll());
+							System.out.println("Ofici created successfully.");
+							LabelPrinter.printInfo(label, "Ofici added successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert Artist into DB.");
+						}					
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not insert Ofici into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection */
+						ofici.setSpecificId(getSelectedId());
+						new OficiDao(getConnection()).update(ofici);
 						oficis.clear();
 						oficis.addAll(new OficiDao(getConnection()).selectAll());
-						System.out.println("Ofici created successfully.");
-						LabelPrinter.printInfo(label, "Ofici added successfully.");
+						System.out.println("Ofici updated successfully.");
+						LabelPrinter.printInfo(label, "Ofici updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert Artist into DB.");
-					}					
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("Could not insert Ofici into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not update Ofici into DB.");
+					}
 				}
 			}
 		});
@@ -207,7 +230,7 @@ public class OficiView extends DeclarativeView<Ofici> {
 	public void update() {
 		/* Re-read instruments and set Combo items again */
 		try {
-			List<Instrument> insts = new InstrumentDao(getConnection()).selectAll();
+			insts = new InstrumentDao(getConnection()).selectAll();
 			String[] instNames = new String[insts.size()];
 			for (int i=0; i<instNames.length; i++) {
 				instNames[i] = ((Instrument) insts.get(i)).getLemma();
@@ -221,7 +244,14 @@ public class OficiView extends DeclarativeView<Ofici> {
 
 	@Override
 	protected void fillFieldsFromSelection(Ofici ent) {
-		// TODO Auto-generated method stub
-		
+		textNomComplet.setText(ent.getNomComplet());
+		textTerme.setText(ent.getTerme());
+		comboEspecialitat.select(ent.getEspecialitat());
+		for (int i=0; i<insts.size(); i++) {
+			if (insts.get(i).getSpecificId() == ent.getSpecificId()) {
+				comboInstrument.select(i);
+				break;
+			}
+		}
 	}
 }

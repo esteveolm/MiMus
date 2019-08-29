@@ -25,6 +25,10 @@ public class LlocView extends DeclarativeView<Lloc> {
 
 	private List<Lloc> llocs;
 	
+	private Text textNomComplet;
+	private Combo comboArea;
+	private Combo comboRegne;
+	
 	public LlocView() {
 		super();
 		getControl().setLlocView(this);
@@ -49,13 +53,13 @@ public class LlocView extends DeclarativeView<Lloc> {
 		/* NomComplet: text field */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelNomComplet.setText("Nom complet:");
-		Text textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		
 		/* Area: option field */
 		Label labelArea = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelArea.setText("Àrea:");
-		Combo comboArea = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboArea = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboArea.setItems(Lloc.AREES);
 		/* Default selection at start lets comboRegne know what to load */
 		comboArea.select(0);	
@@ -64,7 +68,7 @@ public class LlocView extends DeclarativeView<Lloc> {
 		/* Regne: option field */
 		Label labelRegne = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelRegne.setText("Regne:");
-		Combo comboRegne = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboRegne = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboRegne.setItems(Lloc.REGNES[0]);	/* At start, comboFamily at 0 */
 		comboRegne.select(0);
 		comboRegne.setLayoutData(grid);
@@ -126,23 +130,41 @@ public class LlocView extends DeclarativeView<Lloc> {
 						textNomComplet.getText(), 
 						comboRegne.getSelectionIndex(), 
 						comboArea.getSelectionIndex());
-				try {
-					int id = new LlocDao(getConnection()).insert(lloc);
-					if (id>0) {
+				if (isStateAdd()) {
+					/* Add new entity */
+					try {
+						int id = new LlocDao(getConnection()).insert(lloc);
+						if (id>0) {
+							llocs.clear();
+							llocs.addAll(new LlocDao(getConnection()).selectAll());
+							LabelPrinter.printInfo(label, "Lloc added successfully.");
+							notifyObservers();
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert LLoc into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not insert Lloc into DB.");
+					} catch (DaoNotImplementedException e1) {
+						e1.printStackTrace();
+						System.out.println("Insert operation not implemented, this should never happen.");
+					}
+				} else {
+					/* Update values from selected entity */
+					try {
+						/* Recover ID from selection */
+						lloc.setSpecificId(getSelectedId());
+						new LlocDao(getConnection()).update(lloc);
 						llocs.clear();
 						llocs.addAll(new LlocDao(getConnection()).selectAll());
-						LabelPrinter.printInfo(label, "Lloc added successfully.");
+						LabelPrinter.printInfo(label, "Lloc updated successfully.");
 						notifyObservers();
 						getTv().refresh();
-					} else {
-						System.out.println("DAO: Could not insert LLoc into DB.");
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not update Lloc into DB.");
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("Could not insert Lloc into DB.");
-				} catch (DaoNotImplementedException e1) {
-					e1.printStackTrace();
-					System.out.println("Insert operation not implemented, this should never happen.");
 				}
 			}
 		});
@@ -200,7 +222,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 
 	@Override
 	protected void fillFieldsFromSelection(Lloc ent) {
-		// TODO Auto-generated method stub
-		
+		textNomComplet.setText(ent.getNomComplet());
+		comboArea.select(ent.getArea());
+		comboRegne.select(ent.getRegne());
 	}
 }
