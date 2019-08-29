@@ -53,8 +53,27 @@ public class InstrumentDao extends EntityDao<Instrument> {
 	}
 
 	@Override
-	public void update(Instrument unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Instrument unit) throws SQLException {
+		String sql = "UPDATE instrument "
+				+ "SET nom=?, "
+				+ "familia=?, "
+				+ "classe=?, "
+				+ "part=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNom());
+		stmt.setInt(2, unit.getFamily());
+		stmt.setInt(3, unit.getClasse());
+		stmt.setString(4, unit.getPart());
+		stmt.setInt(5, unit.getSpecificId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 
 }

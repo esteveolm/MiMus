@@ -51,8 +51,25 @@ public class LlocDao extends EntityDao<Lloc> {
 	}
 
 	@Override
-	public void update(Lloc unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Lloc unit) throws SQLException {
+		String sql = "UPDATE lloc "
+				+ "SET nom_complet=?, "
+				+ "regne=?, "
+				+ "area=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setInt(2, unit.getRegne());
+		stmt.setInt(3, unit.getArea());
+		stmt.setInt(4, unit.getSpecificId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 
 }

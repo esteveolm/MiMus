@@ -55,7 +55,26 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 	}
 	
 	@Override
-	public void update(GenereLiterari unit) throws DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(GenereLiterari unit) throws SQLException {
+		String sql = "UPDATE genere_literari "
+				+ "SET nom_complet=?, "
+				+ "nom_frances=?, "
+				+ "nom_occita=?, "
+				+ "definicio=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setString(2, unit.getNomFrances());
+		stmt.setString(3, unit.getNomOccita());
+		stmt.setString(4, unit.getDefinicio());
+		stmt.setInt(5, unit.getSpecificId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 }

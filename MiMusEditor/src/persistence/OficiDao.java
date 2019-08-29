@@ -69,8 +69,25 @@ public class OficiDao extends EntityDao<Ofici> {
 	}
 
 	@Override
-	public void update(Ofici unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Ofici unit) throws SQLException {
+		String sql = "UPDATE ofici "
+				+ "SET nom_complet=?, "
+				+ "terme=?, "
+				+ "especialitat=?, "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setString(2, unit.getTerme());
+		stmt.setInt(3, unit.getEspecialitat());
+		stmt.setInt(4, unit.getSpecificId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 
 }

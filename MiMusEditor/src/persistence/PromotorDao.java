@@ -61,8 +61,33 @@ public class PromotorDao extends EntityDao<Promotor> {
 	}
 
 	@Override
-	public void update(Promotor unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Promotor unit) throws SQLException {
+		String sql = "UPDATE promotor "
+				+ "SET nom_complet=?, "
+				+ "nom=?, "
+				+ "cognom=?, "
+				+ "sobrenom=?, "
+				+ "distintiu=?, "
+				+ "genere=?, "
+				+ "observacions=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setString(2, unit.getNom());
+		stmt.setString(3, unit.getCognom());
+		stmt.setString(4, unit.getSobrenom());
+		stmt.setString(5, unit.getDistintiu());
+		stmt.setInt(6, unit.getGenere());
+		stmt.setString(7, unit.getObservacions());
+		stmt.setInt(8, unit.getSpecificId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 
 }

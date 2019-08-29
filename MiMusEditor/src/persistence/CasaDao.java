@@ -51,8 +51,25 @@ public class CasaDao extends EntityDao<Casa> {
 	}
 
 	@Override
-	public void update(Casa unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Casa unit) throws SQLException {
+		String sql = "UPDATE casa "
+				+ "SET nom_complet=?, "
+				+ "titol=?, "
+				+ "cort=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getNomComplet());
+		stmt.setString(2, unit.getTitol());
+		stmt.setString(3, unit.getCort());
+		stmt.setInt(4, unit.getSpecificId());
+		
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 
 }
