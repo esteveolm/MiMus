@@ -92,7 +92,7 @@ public class Editor extends EditorPart implements EventObserver {
 	private Document docEntry;
 	private String docIdStr;
 	private MiMusText regest;
-	private StyledText regestText;
+	private Text regestText;
 	private StyledText transcriptionText;
 	private String docID;
 	private EntityTableViewer entityHelper;
@@ -182,10 +182,7 @@ public class Editor extends EditorPart implements EventObserver {
 		comboStateRev.select(docEntry.getStateRevIdx());
 		
 		/* Button to save state */
-		GridData gd = new GridData();
-		gd.widthHint = 250;
 		Button saveState = new Button(compStatus, SWT.PUSH | SWT.CENTER);
-		saveState.setLayoutData(gd);
 		saveState.setText("Save state to DB");
 		
 		/* Info label of state of the document */
@@ -217,12 +214,11 @@ public class Editor extends EditorPart implements EventObserver {
 		sectRegest.setLayout(new GridLayout());
 		sectRegest.setExpanded(true);
 		
-		regestText = new StyledText(sectRegest, 
+		regestText = new Text(sectRegest, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
 		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		regestText.setEditable(false);
-		TextStyler styler = new TextStyler(regestText);
 		sectRegest.setClient(regestText);
 		
 		
@@ -245,7 +241,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		entityHelper = new EntityTableViewer(compEnt, 
 				entityInstances,
-				styler, regest);
+				null, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		entityTV.refresh();
 		
@@ -302,7 +298,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		relationHelper = new RelationTableViewer(compRel, 
 				relations,
-				styler);
+				null);
 		TableViewer relationTV = relationHelper.createTableViewer();
 		relationTV.refresh();
 		
@@ -343,7 +339,6 @@ public class Editor extends EditorPart implements EventObserver {
 		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		transcriptionText.setEditable(false);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-		transcriptionText.setLayout(new GridLayout());
 		sectTrans.setClient(transcriptionText);
 		
 		
@@ -468,10 +463,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		
 		/* Button to save Llengua and Matèries to SQL */
-		gd = new GridData();
-		gd.widthHint = 250;
 		Button saveMeta = new Button(compMeta, SWT.PUSH | SWT.CENTER);
-		saveMeta.setLayoutData(gd);
 		saveMeta.setText("Save Llengua and Materies to DB");
 		
 		Label metaLabel = toolkit.createLabel(compMeta, "");
