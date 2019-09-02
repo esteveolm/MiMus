@@ -160,6 +160,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Section sectStatus = toolkit.createSection(form.getBody(), 
 				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectStatus.setText("Status of the document");
+		sectStatus.setExpanded(true);
 		
 		/* State of annotation and revision: combos */
 		Composite compStatus = toolkit.createComposite(sectStatus);
@@ -198,6 +199,8 @@ public class Editor extends EditorPart implements EventObserver {
 				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectStatic.setText("Static data");
 		sectStatic.setLayout(new GridLayout());
+		sectStatic.setExpanded(true);
+		
 		Text readOnlyText = new Text(sectStatic, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		readOnlyText.setText(docEntry.getReadOnlyText());
@@ -212,6 +215,8 @@ public class Editor extends EditorPart implements EventObserver {
 				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectRegest.setText("Regest");
 		sectRegest.setLayout(new GridLayout());
+		sectRegest.setExpanded(true);
+		
 		regestText = new StyledText(sectRegest, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
@@ -228,6 +233,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compEnt = toolkit.createComposite(sectEnt);
 		compEnt.setLayout(new GridLayout());
 		sectEnt.setClient(compEnt);
+		sectEnt.setExpanded(true);
 
 		/* Table of entities */
 		entityInstances = new ArrayList<>();
@@ -284,6 +290,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compRel = toolkit.createComposite(sectRel);
 		compRel.setLayout(new GridLayout());
 		sectRel.setClient(compRel);
+		sectRel.setExpanded(true);
 		
 		/* Table of relations */
 		relations = new ArrayList<>();
@@ -327,6 +334,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Section sectTrans = toolkit.createSection(form.getBody(),  
 				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectTrans.setText("Transcription");
+		sectTrans.setExpanded(true);
 		
 		/* Transcription text */
 		transcriptionText = new StyledText(sectTrans, 
@@ -347,6 +355,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compForms = toolkit.createComposite(sectForms);
 		compForms.setLayout(new GridLayout());
 		sectForms.setClient(compForms);
+		sectForms.setExpanded(true);
 		
 		transcriptions = new ArrayList<>();
 		try {
@@ -401,6 +410,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compMeta = toolkit.createComposite(sectMeta);
 		compMeta.setLayout(new GridLayout());
 		sectMeta.setClient(compMeta);
+		sectMeta.setExpanded(true);
 		
 		/* Llengua: combo */
 		toolkit.createLabel(compMeta, "Llengua:");
@@ -489,6 +499,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compRef = toolkit.createComposite(sectRef);
 		compRef.setLayout(new GridLayout());
 		sectRef.setClient(compRef);
+		sectRef.setExpanded(true);
 		
 		String rawRefs = "Editions: " + docEntry.getEditions() +
 				"\nRegisters: " + docEntry.getRegisters() +
