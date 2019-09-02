@@ -224,6 +224,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 	protected void fillFieldsFromSelection(Lloc ent) {
 		textNomComplet.setText(ent.getNomComplet());
 		comboArea.select(ent.getArea());
+		comboRegne.setItems(
+				Lloc.REGNES[comboArea.getSelectionIndex()]);
 		comboRegne.select(ent.getRegne());
 	}
 }

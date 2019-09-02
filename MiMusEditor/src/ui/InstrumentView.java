@@ -234,6 +234,8 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	protected void fillFieldsFromSelection(Instrument ent) {
 		textNom.setText(ent.getNom());
 		comboFamily.select(ent.getFamily());
+		comboClasse.setItems(
+				Instrument.CLASSES[comboFamily.getSelectionIndex()]);
 		comboClasse.select(ent.getClasse());
 		textPart.setText(ent.getPart());
 	}
