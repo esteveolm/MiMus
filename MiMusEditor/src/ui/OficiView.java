@@ -266,9 +266,7 @@ public class OficiView extends DeclarativeView<Ofici> {
 				.equals("Instrument")) {
 			/* If selection has instrument, find it and select it */
 			comboInstrument.setEnabled(true);
-			System.out.println(ent.getSpecificId() + "...");
 			for (int i=0; i<insts.size(); i++) {
-				System.out.println("\t" + insts.get(i).getSpecificId());
 				if (insts.get(i).getSpecificId() == 
 						ent.getInstrument().getSpecificId()) {
 					comboInstrument.select(i);
