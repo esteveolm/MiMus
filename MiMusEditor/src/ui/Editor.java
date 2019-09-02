@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -103,7 +104,9 @@ public class Editor extends EditorPart implements EventObserver {
 	private List<Transcription> transcriptions;
 	private List<Bibliography> bibliography;
 	private List<MiMusReference> references;
+	
 	private FormToolkit toolkit;
+	private ScrolledForm form;
 	
 	public Editor() {
 		super();
@@ -148,49 +151,260 @@ public class Editor extends EditorPart implements EventObserver {
 	@Override
 	public void createPartControl(Composite parent) {
 		toolkit = new FormToolkit(parent.getDisplay());
-		ScrolledForm form = toolkit.createScrolledForm(parent);
+		form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
 		form.getBody().setLayout(new GridLayout());
 		
+		
+		/* SECTION STATUS OF THE DOCUMENT */
+		Section sectStatus = toolkit.createSection(form.getBody(), 
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectStatus.setText("Status of the document");
+		
 		/* State of annotation and revision: combos */
-		Label labelStateAnnot = new Label(form.getBody(), SWT.VERTICAL);
+		Composite compStatus = toolkit.createComposite(sectStatus);
+		sectStatus.setClient(compStatus);
+		compStatus.setLayout(new GridLayout());
+		
+		Label labelStateAnnot = new Label(compStatus, SWT.VERTICAL);
 		labelStateAnnot.setText("Estat de l'anotació:");
 		Combo comboStateAnnot = 
-				new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+				new Combo(compStatus, SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboStateAnnot.setItems(Document.STATES_ANNOT);
 		comboStateAnnot.select(docEntry.getStateAnnotIdx());
 		
-		Label labelStateRev = new Label(form.getBody(), SWT.VERTICAL);
+		Label labelStateRev = new Label(compStatus, SWT.VERTICAL);
 		labelStateRev.setText("Estat de la revisió:");
 		Combo comboStateRev = 
-				new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+				new Combo(compStatus, SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboStateRev.setItems(Document.STATES_REV);
 		comboStateRev.select(docEntry.getStateRevIdx());
 		
 		/* Button to save state */
 		GridData gd = new GridData();
 		gd.widthHint = 250;
-		Button saveState = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		Button saveState = new Button(compStatus, SWT.PUSH | SWT.CENTER);
 		saveState.setLayoutData(gd);
 		saveState.setText("Save state to DB");
 		
-		Label stateLabel = toolkit.createLabel(form.getBody(), "");
+		/* Info label of state of the document */
+		Label stateLabel = new Label(compStatus, SWT.VERTICAL);
+		stateLabel.setText("");
 		stateLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Read-only data */
-		Text readOnlyText = new Text(form.getBody(), 
+		
+		/* SECTION STATIC DATA */
+		Section sectStatic = toolkit.createSection(form.getBody(), 
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectStatic.setText("Static data");
+		sectStatic.setLayout(new GridLayout());
+		Text readOnlyText = new Text(sectStatic, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		String readOnlyStr = docEntry.getReadOnlyText();
-		readOnlyText.setText(readOnlyStr);
+		readOnlyText.setText(docEntry.getReadOnlyText());
 		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
+		sectStatic.setClient(readOnlyText);
 		
 		
-		/* DOC METADATA PART */
+		/* SECTION REGEST */
+		/* Regest text */
+		Section sectRegest = toolkit.createSection(form.getBody(),
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectRegest.setText("Regest");
+		sectRegest.setLayout(new GridLayout());
+		regestText = new StyledText(sectRegest, 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		regestText.setText(docEntry.getRegestText());
+		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		regestText.setEditable(false);
+		TextStyler styler = new TextStyler(regestText);
+		sectRegest.setClient(regestText);
+		
+		
+		/* SECTION ENTITIES */
+		Section sectEnt = toolkit.createSection(form.getBody(), 
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectEnt.setText("Entities at Regest");
+		Composite compEnt = toolkit.createComposite(sectEnt);
+		compEnt.setLayout(new GridLayout());
+		sectEnt.setClient(compEnt);
+
+		/* Table of entities */
+		entityInstances = new ArrayList<>();
+		try {
+			entityInstances = new InstanceDao(conn).select(docEntry);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			System.out.println("SQLException: could not retrieve instances.");
+		}
+		entityHelper = new EntityTableViewer(compEnt, 
+				entityInstances,
+				styler, regest);
+		TableViewer entityTV = entityHelper.createTableViewer();
+		entityTV.refresh();
+		
+		/* Label of Regest entities */
+		Label regestLabel = toolkit.createLabel(compEnt, "");
+		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove entities */
+		GridData buttonsEntData = new GridData();
+		buttonsEntData.widthHint = 125;
+		Button addArt = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addArt.setLayoutData(buttonsEntData);
+		addArt.setText("Add Artist");
+		Button addInst = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addInst.setLayoutData(buttonsEntData);
+		addInst.setText("Add Instrument");
+		Button addCasa = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addCasa.setLayoutData(buttonsEntData);
+		addCasa.setText("Add Casa");
+		Button addProm = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addProm.setLayoutData(buttonsEntData);
+		addProm.setText("Add Promotor");
+		Button addOfici = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addOfici.setLayoutData(buttonsEntData);
+		addOfici.setText("Add Ofici");
+		Button addLloc = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addLloc.setLayoutData(buttonsEntData);
+		addLloc.setText("Add Lloc");
+		Button addGenere = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		addGenere.setLayoutData(buttonsEntData);
+		addGenere.setText("Add Genere");
+		
+		Button removeEnt = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		removeEnt.setLayoutData(buttonsEntData);
+		removeEnt.setText("Delete");
+
+		
+		/* SECTION RELATIONS */
+		Section sectRel = toolkit.createSection(form.getBody(), 
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectRel.setText("Relations between Entities");
+		Composite compRel = toolkit.createComposite(sectRel);
+		compRel.setLayout(new GridLayout());
+		sectRel.setClient(compRel);
+		
+		/* Table of relations */
+		relations = new ArrayList<>();
+		try {
+			relations = new AnyRelationDao(conn).select(docEntry);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException: could not retrieve relations.");
+		}
+		relationHelper = new RelationTableViewer(compRel, 
+				relations,
+				styler);
+		TableViewer relationTV = relationHelper.createTableViewer();
+		relationTV.refresh();
+		
+		/* Label of Relations */
+		Label relationLabel = toolkit.createLabel(compRel, "");
+		relationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove relations */
+		GridData gridRel = new GridData();
+		gridRel.widthHint = 225;
+		Button addArtToOfi = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		addArtToOfi.setLayoutData(gridRel);
+		addArtToOfi.setText("Add Artista-Ofici Relation");
+		Button addPromToCasa = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		addPromToCasa.setLayoutData(gridRel);
+		addPromToCasa.setText("Add Promotor-Casa Relation");
+		Button addArtToProm = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		addArtToProm.setLayoutData(gridRel);
+		addArtToProm.setText("Add Servei Relation");
+		Button addArtToLloc = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		addArtToLloc.setLayoutData(gridRel);
+		addArtToLloc.setText("Add Residencia Relation");
+		Button removeRel = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		removeRel.setLayoutData(gridRel);
+		removeRel.setText("Delete");
+		
+		
+		/* SECTION TRANSCRIPTION */
+		Section sectTrans = toolkit.createSection(form.getBody(),  
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectTrans.setText("Transcription");
+		
+		/* Transcription text */
+		transcriptionText = new StyledText(sectTrans, 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		transcriptionText.setText(docEntry.getTranscriptionText());
+		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		transcriptionText.setEditable(false);
+		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
+		transcriptionText.setLayout(new GridLayout());
+		sectTrans.setClient(transcriptionText);
+		
+		
+		/* SECTION TRANSCRIPTION FORMS */
+		/* Transcription entities and its table */
+		Section sectForms = toolkit.createSection(form.getBody(),
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectForms.setText("Transcription forms");
+		Composite compForms = toolkit.createComposite(sectForms);
+		compForms.setLayout(new GridLayout());
+		sectForms.setClient(compForms);
+		
+		transcriptions = new ArrayList<>();
+		try {
+			transcriptions = new TranscriptionDao(conn).select(docEntry);
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve transcriptions.");
+		}
+		transcriptionHelper = new TranscriptionTableViewer(compForms,
+				transcriptions);
+		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
+		transcriptionTV.refresh();
+		
+		/* Paint transcriptions */
+		for (Transcription t: transcriptions) {
+			transcriptionStyler.addUpdate(t.getCoords().x, t.getCoords().y);
+		}
+		
+		/* Label of transcriptions */
+		Label transcriptionLabel = toolkit.createLabel(compForms, "");
+		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove transcription associations */
+		GridData gridTrans = new GridData();
+		gridTrans.widthHint = 125;
+		Button addTransArt = new Button(compForms, 
+				SWT.PUSH | SWT.CENTER);
+		addTransArt.setLayoutData(gridTrans);
+		addTransArt.setText("Add Artist");
+		Button addTransInst = new Button(compForms, 
+				SWT.PUSH | SWT.CENTER);
+		addTransInst.setLayoutData(gridTrans);
+		addTransInst.setText("Add Instrument");
+		Button addTransOfici = new Button(compForms, 
+				SWT.PUSH | SWT.CENTER);
+		addTransOfici.setLayoutData(gridTrans);
+		addTransOfici.setText("Add Ofici");
+		Button addTransGen = new Button(compForms, 
+				SWT.PUSH | SWT.CENTER);
+		addTransGen.setLayoutData(gridTrans);
+		addTransGen.setText("Add Genere");
+		
+		Button removeTrans = new Button(compForms, 
+				SWT.PUSH | SWT.CENTER);
+		removeTrans.setLayoutData(gridTrans);
+		removeTrans.setText("Delete");
+		
+		
+		/* SECTION METADATA */
+		Section sectMeta = toolkit.createSection(form.getBody(),
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectMeta.setText("Metadata");
+		Composite compMeta = toolkit.createComposite(sectMeta);
+		compMeta.setLayout(new GridLayout());
+		sectMeta.setClient(compMeta);
+		
 		/* Llengua: combo */
-		Label labelLlengua = new Label(form.getBody(), SWT.VERTICAL);
-		labelLlengua.setText("Llengua:");
-		Combo comboLlengua = new Combo(form.getBody(), SWT.DROP_DOWN | SWT.READ_ONLY);
+		toolkit.createLabel(compMeta, "Llengua:");
+		Combo comboLlengua = new Combo(compMeta, SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboLlengua.setItems(Document.LANGS);
 		
 		/* Set Llengua if already defined */
@@ -217,7 +431,7 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		
 		/* Materies checkbox list */
-		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(form.getBody(),
+		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(compMeta,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
@@ -246,195 +460,40 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Button to save Llengua and Matèries to SQL */
 		gd = new GridData();
 		gd.widthHint = 250;
-		Button saveMeta = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		Button saveMeta = new Button(compMeta, SWT.PUSH | SWT.CENTER);
 		saveMeta.setLayoutData(gd);
 		saveMeta.setText("Save Llengua and Materies to DB");
 		
-		Label metaLabel = toolkit.createLabel(form.getBody(), "");
+		Label metaLabel = toolkit.createLabel(compMeta, "");
 		metaLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* ENTITIES PART */
-		/* Regest text */
-		regestText = new StyledText(form.getBody(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		regestText.setText(docEntry.getRegestText());
-		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		regestText.setEditable(false);
-		TextStyler styler = new TextStyler(regestText);
 		
-		/* List of entities */
-		Section sectEnt = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectEnt.setText("Entities at Regest");
-		
-		/* Table of entities */
-		entityInstances = new ArrayList<>();
-		try {
-			entityInstances = new InstanceDao(conn).select(docEntry);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			System.out.println("SQLException: could not retrieve instances.");
-		}
-		entityHelper = new EntityTableViewer(sectEnt.getParent(), 
-				entityInstances,
-				styler, regest);
-		TableViewer entityTV = entityHelper.createTableViewer();
-		entityTV.refresh();
-		
-		/* Label of Regest entities */
-		Label regestLabel = toolkit.createLabel(form.getBody(), "");
-		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		/* Buttons to add/remove entities */
-		GridData gridData = new GridData();
-		gridData.widthHint = 125;
-		Button addArt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addArt.setLayoutData(gridData);
-		addArt.setText("Add Artist");
-		Button addInst = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addInst.setLayoutData(gridData);
-		addInst.setText("Add Instrument");
-		Button addCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addCasa.setLayoutData(gridData);
-		addCasa.setText("Add Casa");
-		Button addProm = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addProm.setLayoutData(gridData);
-		addProm.setText("Add Promotor");
-		Button addOfici = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addOfici.setLayoutData(gridData);
-		addOfici.setText("Add Ofici");
-		Button addLloc = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addLloc.setLayoutData(gridData);
-		addLloc.setText("Add Lloc");
-		Button addGenere = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addGenere.setLayoutData(gridData);
-		addGenere.setText("Add Genere");
-		
-		Button removeEnt = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		removeEnt.setLayoutData(gridData);
-		removeEnt.setText("Delete");
-
-		/* List of relations */
-		Section sectRel = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectRel.setText("Relations between Entities");
-		
-		/* Table of relations */
-		relations = new ArrayList<>();
-		try {
-			relations = new AnyRelationDao(conn).select(docEntry);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("SQLException: could not retrieve relations.");
-		}
-		relationHelper = new RelationTableViewer(sectRel.getParent(), 
-				relations,
-				styler);
-		TableViewer relationTV = relationHelper.createTableViewer();
-		relationTV.refresh();
-		
-		/* Label of Relations */
-		Label relationLabel = toolkit.createLabel(form.getBody(), "");
-		relationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		/* Buttons to add/remove relations */
-		GridData gridRel = new GridData();
-		gridRel.widthHint = 225;
-		Button addArtToOfi = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addArtToOfi.setLayoutData(gridRel);
-		addArtToOfi.setText("Add Artista-Ofici Relation");
-		Button addPromToCasa = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addPromToCasa.setLayoutData(gridRel);
-		addPromToCasa.setText("Add Promotor-Casa Relation");
-		Button addArtToProm = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addArtToProm.setLayoutData(gridRel);
-		addArtToProm.setText("Add Servei Relation");
-		Button addArtToLloc = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		addArtToLloc.setLayoutData(gridRel);
-		addArtToLloc.setText("Add Residencia Relation");
-		Button removeRel = new Button(sectEnt.getParent(), SWT.PUSH | SWT.CENTER);
-		removeRel.setLayoutData(gridRel);
-		removeRel.setText("Delete");
-		
-		/* TRANSCRIPTIONS PART */
-		/* Transcription section */
-		Section sectTrans = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectTrans.setText("Transcriptions of Entities");
-		
-		/* Transcription text */
-		transcriptionText = new StyledText(sectTrans.getParent(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		transcriptionText.setText(docEntry.getTranscriptionText());
-		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		transcriptionText.setEditable(false);
-		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-
-		/* Transcription entities and its table */
-		transcriptions = new ArrayList<>();
-		try {
-			transcriptions = new TranscriptionDao(conn).select(docEntry);
-		} catch (SQLException e) {
-			System.out.println("SQLException: could not retrieve transcriptions.");
-		}
-		transcriptionHelper = new TranscriptionTableViewer(sectTrans.getParent(),
-				transcriptions);
-		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
-		transcriptionTV.refresh();
-		
-		/* Paint transcriptions */
-		for (Transcription t: transcriptions) {
-			transcriptionStyler.addUpdate(t.getCoords().x, t.getCoords().y);
-		}
-		
-		/* Label of transcriptions */
-		Label transcriptionLabel = toolkit.createLabel(sectTrans.getParent(), "");
-		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		/* Buttons to add/remove transcription associations */
-		GridData gridTrans = new GridData();
-		gridTrans.widthHint = 125;
-		Button addTransArt = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransArt.setLayoutData(gridTrans);
-		addTransArt.setText("Add Artist");
-		Button addTransInst = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransInst.setLayoutData(gridTrans);
-		addTransInst.setText("Add Instrument");
-		Button addTransCasa = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransCasa.setLayoutData(gridTrans);
-		addTransCasa.setText("Add Casa");
-		Button addTransProm = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransProm.setLayoutData(gridTrans);
-		addTransProm.setText("Add Promotor");
-		Button addTransOfici = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransOfici.setLayoutData(gridTrans);
-		addTransOfici.setText("Add Ofici");
-		Button addTransLloc = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransLloc.setLayoutData(gridTrans);
-		addTransLloc.setText("Add Lloc");
-		Button addTransGen = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		addTransGen.setLayoutData(gridTrans);
-		addTransGen.setText("Add Genere");
-		
-		Button removeTrans = new Button(sectTrans.getParent(), 
-				SWT.PUSH | SWT.CENTER);
-		removeTrans.setLayoutData(gridTrans);
-		removeTrans.setText("Delete");
+		/* NOTES PART */
+		// TODO: decide what to do with it
+//		Section sectNotes = toolkit.createSection(form.getBody(),  
+//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+//		sectNotes.setText("Notes");
+//		String notesWIP = "Not implemented yet.";
+//		Text notesText = toolkit.createText(sectNotes.getParent(), notesWIP,
+//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+//		notesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		sectNotes.setLayout(new GridLayout());
+//		sectNotes.setClient(notesText);
 		
 		
 		/* REFERENCES PART */
 		/* References section */
-		Section sectRef = toolkit.createSection(form.getBody(), PROP_TITLE);
+		Section sectRef = toolkit.createSection(form.getBody(),  
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectRef.setText("References in bibliography");
+		Composite compRef = toolkit.createComposite(sectRef);
+		compRef.setLayout(new GridLayout());
+		sectRef.setClient(compRef);
 		
 		String rawRefs = "Editions: " + docEntry.getEditions() +
 				"\nRegisters: " + docEntry.getRegisters() +
 				"\nCitations: " + docEntry.getCitations();
-		Text rawRefsText = toolkit.createText(sectRef.getParent(), rawRefs, 
+		Text rawRefsText = toolkit.createText(compRef, rawRefs, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -453,23 +512,24 @@ public class Editor extends EditorPart implements EventObserver {
 			e.printStackTrace();
 		}
 		referenceHelper = new ReferenceTableViewer(
-				sectRef.getParent(), references, bibliography, docEntry, resources);
+				compRef, references, bibliography, docEntry, resources);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		referenceTV.refresh();
 		
 		/* Label of references */
-		Label referenceLabel = toolkit.createLabel(sectRef.getParent(), "");
+		Label referenceLabel = toolkit.createLabel(compRef, "");
 		referenceLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Buttons to add/remove references */
 		GridData gridRef = new GridData();
 		gridRef.widthHint = 100;
-		Button addRef = new Button(sectRef.getParent(), SWT.PUSH | SWT.CENTER);
+		Button addRef = new Button(compRef, SWT.PUSH | SWT.CENTER);
 		addRef.setLayoutData(gridRef);
 		addRef.setText("Add");
-		Button removeRef = new Button(sectRef.getParent(), SWT.PUSH | SWT.CENTER);
+		Button removeRef = new Button(compRef, SWT.PUSH | SWT.CENTER);
 		removeRef.setLayoutData(gridRef);
 		removeRef.setText("Delete");
+		
 		
 		/* BUTTON LISTENERS */
 		saveState.addSelectionListener(new SelectionAdapter() {
@@ -818,40 +878,6 @@ public class Editor extends EditorPart implements EventObserver {
 				transcriptionTV.refresh();
 			}
 		});
-		addTransCasa.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Casa> dialog = 
-						new TranscriptionDialog<Casa>(
-						entityInstances, parent.getShell(), "") {
-					@Override
-					public String getDialogName() {
-						return "Casa";
-					}
-				};
-				runTranscriptionDialog(dialog, 
-						transcriptions, entityInstances, 
-						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
-			}
-		});
-		addTransProm.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Promotor> dialog = 
-						new TranscriptionDialog<Promotor>(
-						entityInstances, parent.getShell(), "") {
-					@Override
-					public String getDialogName() {
-						return "Promotor";
-					}
-				};
-				runTranscriptionDialog(dialog, 
-						transcriptions, entityInstances, 
-						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
-			}
-		});
 		addTransOfici.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -865,23 +891,6 @@ public class Editor extends EditorPart implements EventObserver {
 				};
 				runTranscriptionDialog(dialog, 
 						transcriptions, entityInstances, 
-						transcriptionLabel, transcriptionStyler);
-				transcriptionTV.refresh();
-			}
-		});
-		addTransLloc.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Lloc> dialog = 
-						new TranscriptionDialog<Lloc>(
-						entityInstances, parent.getShell(), "") {
-					@Override
-					public String getDialogName() {
-						return "Lloc";
-					}
-				};
-				runTranscriptionDialog(dialog,
-						transcriptions, entityInstances,
 						transcriptionLabel, transcriptionStyler);
 				transcriptionTV.refresh();
 			}
@@ -1242,7 +1251,9 @@ public class Editor extends EditorPart implements EventObserver {
 	}
 
 	@Override
-	public void setFocus() {}
+	public void setFocus() {
+		form.setFocus();
+	}
 	
 	@Override
 	public void doSave(IProgressMonitor monitor) {}
