@@ -73,14 +73,21 @@ public class OficiDao extends EntityDao<Ofici> {
 		String sql = "UPDATE ofici "
 				+ "SET nom_complet=?, "
 				+ "terme=?, "
-				+ "especialitat=? "
+				+ "especialitat=?, "
+				+ "instrument_id=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, unit.getNomComplet());
 		stmt.setString(2, unit.getTerme());
 		stmt.setInt(3, unit.getEspecialitat());
-		stmt.setInt(4, unit.getSpecificId());
+		/* Instrument is a foreign key that can be null if not specified */
+		if (unit.getInstrument() != null) {
+			stmt.setInt(4, unit.getInstrument().getSpecificId());
+		} else {
+			stmt.setNull(4, java.sql.Types.BIGINT);
+		}
+		stmt.setInt(5, unit.getSpecificId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {

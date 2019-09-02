@@ -2,6 +2,16 @@ package model;
 
 public class Ofici extends Entity {
 	
+	public static final String[] ESPECIALITATS = {
+			"-",
+			"Sense especificar", 
+			"Instrument",
+			"Veu", 
+			"Dansa", 
+			"Artesà", 
+			"Malabars i altres"
+	};
+	
 	private String nomComplet;
 	private String terme;
 	private int especialitat;

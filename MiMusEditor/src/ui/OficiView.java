@@ -83,8 +83,8 @@ public class OficiView extends DeclarativeView<Ofici> {
 		labelEspecialitat.setText("Especialitat:");
 		comboEspecialitat = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboEspecialitat.setLayoutData(grid);
-		comboEspecialitat.setItems("-", "Sense especificar", "Instrument",
-				"Veu", "Dansa", "Artesà", "Malabars i altres");
+		comboEspecialitat.setItems(Ofici.ESPECIALITATS);
+		comboEspecialitat.select(0);
 		
 		/* Instrument (combo) */
 		Label labelInstrument = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -95,6 +95,22 @@ public class OficiView extends DeclarativeView<Ofici> {
 			instNames[i] = ((Instrument) insts.get(i)).getLemma();
 		}
 		comboInstrument.setItems(instNames);
+		comboInstrument.deselectAll();	/* Clearer if field gets empty */
+		comboInstrument.setEnabled(false);
+		
+		comboEspecialitat.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
+						.equals("Instrument")) {
+					comboInstrument.setEnabled(true);
+					comboInstrument.select(0);
+				} else {
+					comboInstrument.deselectAll();	/* Clearer if field gets empty */
+					comboInstrument.setEnabled(false);
+				}
+			}
+		});
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -103,8 +119,9 @@ public class OficiView extends DeclarativeView<Ofici> {
 			public void widgetSelected(SelectionEvent e) {
 				textNomComplet.setText("");
 				textTerme.setText("");
-				comboEspecialitat.deselectAll();
+				comboEspecialitat.select(0);
 				comboInstrument.deselectAll();
+				comboInstrument.setEnabled(false);
 			}
 		});
 		
@@ -130,14 +147,12 @@ public class OficiView extends DeclarativeView<Ofici> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Instrument inst = null;
-				if (insts.size()>0 && 
+				if (insts.size()>0 && comboInstrument.isEnabled() &&
 						comboInstrument.getSelectionIndex()>=0) {
 					/* Only set Instrument if available */
 					inst = (Instrument) 
 							insts.get(comboInstrument.getSelectionIndex());
 				}
-				if (comboEspecialitat.getSelectionIndex()<0)
-					comboEspecialitat.select(0);
 				Ofici ofici = new Ofici(
 						0, 0,
 						textNomComplet.getText(),
@@ -247,11 +262,23 @@ public class OficiView extends DeclarativeView<Ofici> {
 		textNomComplet.setText(ent.getNomComplet());
 		textTerme.setText(ent.getTerme());
 		comboEspecialitat.select(ent.getEspecialitat());
-		for (int i=0; i<insts.size(); i++) {
-			if (insts.get(i).getSpecificId() == ent.getSpecificId()) {
-				comboInstrument.select(i);
-				break;
+		if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
+				.equals("Instrument")) {
+			/* If selection has instrument, find it and select it */
+			comboInstrument.setEnabled(true);
+			System.out.println(ent.getSpecificId() + "...");
+			for (int i=0; i<insts.size(); i++) {
+				System.out.println("\t" + insts.get(i).getSpecificId());
+				if (insts.get(i).getSpecificId() == 
+						ent.getInstrument().getSpecificId()) {
+					comboInstrument.select(i);
+					break;
+				}
 			}
+		} else {
+			comboInstrument.deselectAll();	/* Clearer if field gets empty */
+			comboInstrument.setEnabled(false);
 		}
+		
 	}
 }
