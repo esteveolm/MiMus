@@ -1,5 +1,7 @@
 package ui.dialog;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -7,16 +9,12 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-
 import model.Bibliography;
 
 public class ReferenceDialog extends EditorDialog<Bibliography> {
@@ -25,28 +23,30 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 	private int type;
 	private String pages;
 	
-	/* UI attributes */
-	private ScrolledForm form;
-	
 	protected ReferenceDialog(List<Bibliography> units, Shell parentShell) {
 		super(units, parentShell);
 		this.setType(-1);
 		this.setPages(null);
+		
+		/* Dialog shows entities ordered alphabetically by lemma */
+		Collections.sort(units, new Comparator<Bibliography>() {
+			@Override
+			public int compare(Bibliography b1, Bibliography b2) {
+				return b1.getShortReference()
+						.compareTo(b2.getShortReference());
+			}
+		});
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		FormToolkit toolkit = new FormToolkit(composite.getDisplay());
-		form = toolkit.createScrolledForm(composite);
-		form.setText("Select " + getDialogName());
-		form.getBody().setLayout(new GridLayout());
 		
 		/* Type field (combo) */
-		Label typeLabel = new Label(form.getBody(), SWT.VERTICAL);
+		Label typeLabel = new Label(getForm().getBody(), SWT.VERTICAL);
 		typeLabel.setText("Type:");
 		String[] types = {"Edition", "Register", "Citation"};
-		Combo typeCombo = new Combo(form.getBody(), SWT.VERTICAL | SWT.WRAP);
+		Combo typeCombo = new Combo(getForm().getBody(), SWT.VERTICAL | SWT.WRAP);
 		typeCombo.setItems(types);
 		typeCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -55,9 +55,9 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		});
 		
 		/* Pages field (text) */
-		Label pagesLabel = new Label(form.getBody(), SWT.VERTICAL);
+		Label pagesLabel = new Label(getForm().getBody(), SWT.VERTICAL);
 		pagesLabel.setText("Pages:");
-		Text pagesText = new Text(form.getBody(), SWT.VERTICAL);
+		Text pagesText = new Text(getForm().getBody(), SWT.VERTICAL);
 		pagesText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
