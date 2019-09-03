@@ -1,11 +1,16 @@
 package ui.dialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
@@ -90,6 +95,7 @@ public class RelationDialog extends Dialog {
 		Combo combo1 = new Combo(form.getBody(), SWT.SINGLE | SWT.WRAP);
 		combo1.setItems(e1Names);
 		combo1.select(0);
+		new AutoCompleteField(combo1, new ComboContentAdapter(), combo1.getItems());
 		
 		/* Make 2nd combo with entity strings */
 		String[] e2Names = new String[entities2.size()];
@@ -99,6 +105,7 @@ public class RelationDialog extends Dialog {
 		Combo combo2 = new Combo(form.getBody(), SWT.SINGLE | SWT.WRAP);
 		combo2.setItems(e2Names);
 		combo2.select(0);
+		new AutoCompleteField(combo2, new ComboContentAdapter(), combo2.getItems());
 		
 		/* Initialize stored values */
 		this.setSelection1(0);
@@ -114,13 +121,39 @@ public class RelationDialog extends Dialog {
 			this.setUnit2(entities2.get(0));
 		}
 		
-		/* Updates variable that stores selected artist index */
+		/* 
+		 * Listeners for combos selection. Two are needed:
+		 * 1. Modify Listener for the autocomplete. It does a binary search everytime
+		 * an input modification happens. It should be tested how that behaves when
+		 * the list of entities grows.
+		 * 2. Selection Listener for the classic drop-down menu selection.
+		 * Both ways store the selection in the class attributes that can be accessed
+		 * externally.
+		 */
+		combo1.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				int idx = Arrays.binarySearch(e1Names, combo1.getText());
+				if (idx>=0) {
+					RelationDialog.this.setSelection1(idx);
+					RelationDialog.this.setUnit1(entities1.get(getSelection1()));
+				}
+			}});
 		combo1.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				RelationDialog.this.setSelection1(combo1.getSelectionIndex());
 				RelationDialog.this.setUnit1(entities1.get(getSelection1()));
 			}
 		});
+		combo2.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				int idx = Arrays.binarySearch(e2Names, combo2.getText());
+				if (idx>=0) {
+					RelationDialog.this.setSelection2(idx);
+					RelationDialog.this.setUnit2(entities2.get(getSelection2()));
+				}
+			}});
 		combo2.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				RelationDialog.this.setSelection2(combo2.getSelectionIndex());
