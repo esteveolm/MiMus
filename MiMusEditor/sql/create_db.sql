@@ -145,6 +145,7 @@ CREATE TABLE referencia (
 		REFERENCES document(id),
 	FOREIGN KEY (bibliografia_id)
 		REFERENCES bibliografia(id),
+	UNIQUE (document_id, bibliografia_id),
 	PRIMARY KEY (id)
 );
 
