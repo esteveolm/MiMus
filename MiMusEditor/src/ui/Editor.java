@@ -1209,6 +1209,7 @@ public class Editor extends EditorPart implements EventObserver {
 		int dialogResult = dialog.open();
 		if (dialogResult == Window.OK) {
 			Bibliography added = dialog.getUnit();
+			int type = dialog.getType();
 			if (added != null) {
 				if (MiMusReference.containsBibliography(references, added)) {
 					/* Trying to add bibliography already added */
@@ -1216,12 +1217,15 @@ public class Editor extends EditorPart implements EventObserver {
 							+ bibliography.size());
 					LabelPrinter.printError(label, 
 							"Cannot add the same reference twice.");
+				} else if (type<0){
+					/* Happens when type has not been set by user */
+					System.out.println("No reference added - " 
+							+ bibliography.size());
+					LabelPrinter.printError(label, "Must select type of reference.");
 				} else {
-					int type = dialog.getType();
 					String pages = dialog.getPages();
 					MiMusReference ref = new MiMusReference(added, docEntry,
 							pages, type, 0);
-					
 					try {
 						int id = new ReferenceDao(conn).insert(ref);
 						if (id>0) {
