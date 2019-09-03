@@ -451,6 +451,8 @@ public class Editor extends EditorPart implements EventObserver {
 		}
 		
 		/* Materies checkbox list */
+		toolkit.createLabel(compMeta, "Materies:");
+		
 		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(compMeta,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
