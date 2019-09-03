@@ -249,32 +249,37 @@ public class Editor extends EditorPart implements EventObserver {
 		Label regestLabel = toolkit.createLabel(compEnt, "");
 		regestLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Buttons to add/remove entities */
+		/* Buttons to add/remove entities: 3-column grid */
+		Composite compEntBtns = toolkit.createComposite(compEnt);
+		GridLayout layoutEntBtns = new GridLayout();
+		layoutEntBtns.numColumns = 3;
+		compEntBtns.setLayout(layoutEntBtns);
+		
 		GridData buttonsEntData = new GridData();
 		buttonsEntData.widthHint = 125;
-		Button addArt = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		Button addArt = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addArt.setLayoutData(buttonsEntData);
 		addArt.setText("Add Artist");
-		Button addInst = new Button(compEnt, SWT.PUSH | SWT.CENTER);
-		addInst.setLayoutData(buttonsEntData);
-		addInst.setText("Add Instrument");
-		Button addCasa = new Button(compEnt, SWT.PUSH | SWT.CENTER);
-		addCasa.setLayoutData(buttonsEntData);
-		addCasa.setText("Add Casa");
-		Button addProm = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		Button addProm = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addProm.setLayoutData(buttonsEntData);
 		addProm.setText("Add Promotor");
-		Button addOfici = new Button(compEnt, SWT.PUSH | SWT.CENTER);
-		addOfici.setLayoutData(buttonsEntData);
-		addOfici.setText("Add Ofici");
-		Button addLloc = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		Button addLloc = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addLloc.setLayoutData(buttonsEntData);
 		addLloc.setText("Add Lloc");
-		Button addGenere = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		Button addOfici = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
+		addOfici.setLayoutData(buttonsEntData);
+		addOfici.setText("Add Ofici");
+		Button addCasa = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
+		addCasa.setLayoutData(buttonsEntData);
+		addCasa.setText("Add Casa");
+		Button addGenere = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addGenere.setLayoutData(buttonsEntData);
 		addGenere.setText("Add Genere");
+		Button addInst = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
+		addInst.setLayoutData(buttonsEntData);
+		addInst.setText("Add Instrument");
 		
-		Button removeEnt = new Button(compEnt, SWT.PUSH | SWT.CENTER);
+		Button removeEnt = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(buttonsEntData);
 		removeEnt.setText("Delete");
 
@@ -306,22 +311,27 @@ public class Editor extends EditorPart implements EventObserver {
 		Label relationLabel = toolkit.createLabel(compRel, "");
 		relationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Buttons to add/remove relations */
+		/* Buttons to add/remove relations: 2-column grid */
+		Composite compRelBtns = toolkit.createComposite(compRel);
+		GridLayout layoutRelBtns = new GridLayout();
+		layoutRelBtns.numColumns = 2;
+		compRelBtns.setLayout(layoutRelBtns);
+		
 		GridData gridRel = new GridData();
 		gridRel.widthHint = 225;
-		Button addArtToOfi = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		Button addArtToOfi = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		addArtToOfi.setLayoutData(gridRel);
 		addArtToOfi.setText("Add Artista-Ofici Relation");
-		Button addPromToCasa = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		Button addPromToCasa = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		addPromToCasa.setLayoutData(gridRel);
 		addPromToCasa.setText("Add Promotor-Casa Relation");
-		Button addArtToProm = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		Button addArtToProm = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		addArtToProm.setLayoutData(gridRel);
 		addArtToProm.setText("Add Servei Relation");
-		Button addArtToLloc = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		Button addArtToLloc = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		addArtToLloc.setLayoutData(gridRel);
 		addArtToLloc.setText("Add Residencia Relation");
-		Button removeRel = new Button(compRel, SWT.PUSH | SWT.CENTER);
+		Button removeRel = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		removeRel.setLayoutData(gridRel);
 		removeRel.setText("Delete");
 		
@@ -372,27 +382,32 @@ public class Editor extends EditorPart implements EventObserver {
 		Label transcriptionLabel = toolkit.createLabel(compForms, "");
 		transcriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		/* Buttons to add/remove transcription associations */
+		/* Buttons to add/remove transcription associations: 3-column grid */
+		Composite compFormsBtns = toolkit.createComposite(compForms);
+		GridLayout layoutFormsBtns = new GridLayout();
+		layoutFormsBtns.numColumns = 3;
+		compFormsBtns.setLayout(layoutFormsBtns);
+		
 		GridData gridTrans = new GridData();
 		gridTrans.widthHint = 125;
-		Button addTransArt = new Button(compForms, 
+		Button addTransArt = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransArt.setLayoutData(gridTrans);
 		addTransArt.setText("Add Artist");
-		Button addTransInst = new Button(compForms, 
+		Button addTransInst = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransInst.setLayoutData(gridTrans);
 		addTransInst.setText("Add Instrument");
-		Button addTransOfici = new Button(compForms, 
+		Button addTransOfici = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransOfici.setLayoutData(gridTrans);
 		addTransOfici.setText("Add Ofici");
-		Button addTransGen = new Button(compForms, 
+		Button addTransGen = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransGen.setLayoutData(gridTrans);
 		addTransGen.setText("Add Genere");
 		
-		Button removeTrans = new Button(compForms, 
+		Button removeTrans = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		removeTrans.setLayoutData(gridTrans);
 		removeTrans.setText("Delete");
