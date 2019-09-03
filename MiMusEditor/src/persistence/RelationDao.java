@@ -22,21 +22,30 @@ public abstract class RelationDao extends UnitDao<Relation> {
 		/* Insert is 2-step, make it transactional */
 		getConnection().setAutoCommit(false);
 		
-		int commonId = insertCommonRelation(unit);
-		if (commonId > 0) {
-			int specId = insertSpecificRelation(unit, commonId);
-			int result = updateCommonRelation(commonId, specId);
-			if (result > 0) {
-				/* If insert succeeded, commit and leave transactional mode */
-				getConnection().commit();
-				getConnection().setAutoCommit(true);
-				return result;
+		try {
+			int commonId = insertCommonRelation(unit);
+			if (commonId > 0) {
+				int specId = insertSpecificRelation(unit, commonId);
+				int result = updateCommonRelation(commonId, specId);
+				if (result > 0) {
+					/* If insert succeeded, commit and leave transactional mode */
+					getConnection().commit();
+					getConnection().setAutoCommit(true);
+					return result;
+				}
 			}
+			/* If anything failed, rollback and leave transactional mode */
+			System.out.println("rolling back relation insertion");
+			getConnection().rollback();
+			getConnection().setAutoCommit(true);
+			return -1;
+		} catch (SQLException e)  {
+			System.out.println("rolling back relation insertion after catch");
+			getConnection().rollback();
+			getConnection().setAutoCommit(true);
+			
+			throw e;
 		}
-		/* If anything failed, rollback and leave transactional mode */
-		getConnection().rollback();
-		getConnection().setAutoCommit(true);
-		return -1;
 	}
 
 	private int insertCommonRelation(Relation unit) throws SQLException {
