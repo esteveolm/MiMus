@@ -139,20 +139,9 @@ public class BiblioView extends ViewPart implements EventSubject {
 		textPages.setLayoutData(grid);
 		
 		Label labelShort = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelShort.setText("Referència abreujada:");
+		labelShort.setText("Referència abreujada:\n(deixar blanc per usar referència per defecte)");
 		Text textShort = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textShort.setLayoutData(grid);
-		Button btnGen = new Button(sectAdd.getParent(), BUTTON_FLAGS);
-		btnGen.setText("Generate automatically");
-		btnGen.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				String generated = Bibliography.generateShortReference(
-						textAuthors[0].getText().replaceAll(",", "").split(" ")[0],
-						textAuthors[1].getText().replaceAll(",", "").split(" ")[0],
-						textYear.getText(), textDistinction.getText());
-				textShort.setText(generated);
-			}
-		});
 		
 		/* Label of form */
 		Label labelForm = toolkit.createLabel(sectAdd.getParent(), "");
@@ -174,6 +163,17 @@ public class BiblioView extends ViewPart implements EventSubject {
 					secondaries[i] = (textSecondaries[i].getText().length()==0) ? "" : 
 						textSecondaries[i].getText().trim();
 				}
+				
+				/* Automatically generate short reference if left blank */
+				if (textShort.getText().equals("")) {
+					String generated = Bibliography.generateShortReference(
+							textAuthors[0].getText().replaceAll(",", "").split(" ")[0],
+							textAuthors[1].getText().replaceAll(",", "").split(" ")[0],
+							textYear.getText(), textDistinction.getText());
+					textShort.setText(generated);
+				}
+				
+				
 				
 				Bibliography newEntry = new Bibliography(
 						authors, secondaries, 
