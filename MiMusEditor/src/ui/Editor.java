@@ -770,7 +770,6 @@ public class Editor extends EditorPart implements EventObserver {
 					try {
 						new InstanceDao(conn).delete(ent);
 						entityInstances.remove(ent);
-						entityHelper.packColumns();
 						System.out.println("Removing entity - " 
 								+ entityInstances.size());
 						LabelPrinter.printInfo(regestLabel, 
@@ -848,7 +847,6 @@ public class Editor extends EditorPart implements EventObserver {
 						/* OK case */
 						new AnyRelationDao(conn).delete(rel);
 						relations.remove(rel);
-						relationHelper.packColumns();
 						System.out.println("Removing relation - " 
 								+ relations.size());
 						LabelPrinter.printInfo(relationLabel, 
@@ -949,7 +947,6 @@ public class Editor extends EditorPart implements EventObserver {
 					try {
 						new TranscriptionDao(conn).delete(trans);
 						transcriptions.remove(trans);
-						transcriptionHelper.packColumns();
 						
 						/* Undo colour in text */
 						Point charCoords = trans.getCoords();
