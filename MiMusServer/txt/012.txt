@@ -1,0 +1,23 @@
+a: VII.156
+b: 1389
+c: juny
+d: 18
+e: Montsó
+f: La reina Violant de Bar agraeix al comte de Foix [Gastó III Febus] l’enviament d’un manuscrit de Guillaume de Machaut i li diu que l’hi tornarà tan bon punt l’hagi llegit.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 2053
+l: f. 107r
+m: Rubió i Lluch 1908-1921, I, doc. 403.
+o: Cingolani 1990-1991, p. 49; Alberni 2012, p. 103.
+p: 
+La reyna d’Aragó.
+Car cosí, reebuda havem agradablement vostra letra ensemps ab lo libre molt bell et bo de Guillem de Maixaut que·ns havets tramès, e lo qual vos entenem remetre com l’haurem acabat de legir. E regraciam-vos molt lo plaer que·ns havets fet en trametre’l-nos e no menys vostra liberal proferta. Certificants-vos, car cosí, que nós fem compte de vós com de frare e per aytal vos havem, e volem que semblant lo façats vós de nós en tot ço que fos vostra honor. Mossèn Ffrancesch de Pau ha tramès lo seu cosser a Barchelona per curar-lo d’alcuna malaltia que ha, segons que d’açò nós som certament informada, e per consegüent no l’havem pogut haver, de què·ns desplau, car no us en podem complaure axí com volgrem. Si altres coses vos plaen d’aquestes parts rescrivets-nos-en, car nós les complirem de gran cor. E no us meravellets de la tarda del portador de la present, com d’aquells sia estada causa algun accident de terçana que·l senyor rey ha haüt alscuns dies e del qual és ben guarit, gràcies a nostre senyor Déu, qui us conserve en plena prosperitat segons vós desijats.
+Dada en Montçó sots nostre segell secret a XVIII dies de juny de l’any MCCCLXXXIXº. La reyna.
+Dirigitur comiti Ffuexensis.
+Domina regina mandavit michi Bartholomeus Sirvent.
+Probata.
+q: {nota1} L’havia demanat gairebé un any abans, vg. doc. 127; és possible que l’hi dugués Guerau de Queralt, que havia enviat al comte el 25 de maig (reg. 2053, f. 104v).
+r: català
+s: manuscrit

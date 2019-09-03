@@ -1,0 +1,27 @@
+a: VII.181
+b: 1389
+c: setembre
+d: 9
+e: Montsó
+f: El rei Joan I ordena al batlle general del regne de València que pagui Massot Fuley, Xamari Mariem, l’esposa d’aquest i altres, joglars sarraïns [de Xàtiva], que el rei havia fet venir a la seva cort, per les despeses del viatge de tornada a casa seva.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1873
+l: f. 52v
+g2: ACA
+h2: Cancelleria
+j2: reg.
+k2: 1958
+l2: f. 25r
+m: Gómez Muntané 1979, doc. 111; Trenchs-Baiges 2000-2002, doc. 190.
+p:
+[{curs}Al marge{/curs}:] Nichil. 
+Lo rey.
+Batle general, sapiats que Maçot Fuley, Xamari Mariem et sa muller et los altres moros juglars, los quals de manament nostre havíets fet venir ací, se’n tornen de licència nostra a lurs cases, per què us manam que·ls paguets ço que rahonable sie per lur tornada, cobràn d’ells àpocha et la present, car nós manam al maestra racional de la nostra cort que us ho reeba en compte.
+Dada en Montsó sots nostre segell secret a IX dies de setembre de l’any MCCCLXXXIX. Rex Iohannes.
+Baiulo regni Valencie generali.
+Idem [Dominus rex, qui eam signavit, misit expediendam]. 
+Probata.
+r: català
+s: pagament; moviment d’artistes

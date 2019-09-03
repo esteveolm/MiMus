@@ -1,0 +1,20 @@
+a: VII.92
+b: 1388
+c: juny
+d: 22
+e: Saragossa
+f: El rei Joan I demana novament al vescomte [de Roda] [Ramon de Perellós] que obtingui un salconduit del rei de França [Carles VI] per a Everlí i els seus tres companys, Evelí, Blasoc i Hennequí de l’arpa [de Courtrai], que solien ser ministrers del comte de Vertus [Gian Galeazzo Visconti] i ara són amb el rei Joan I, per tal que puguin anar i tornar lliurement de les escoles, sense témer res per part del duc de Turena [Lluís d’Orleans], si és que el comte de Vertus se sentís agreujat perquè els ministrers han deixat el seu servei.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1955
+l: f. 4rv
+m: Roca 1929, p. 436 (ed. parcial); Gómez Muntané 1979, doc. 99; Trenchs-Baiges 2000-2002, doc. 125.
+p: 
+Lo rey d’Aragó.
+Veçcomte, segons que havem entès, Everlí e sos tres companyons, Evelin, e Blasoch e Anequí de la arpa, qui solien ésser ministrers del comte de Virtut, se’n són partits del dit comte, menys de son grat, per venir a nós, qui·ls havem retenguts en nostre servey, e són ab nós ací. E, per tal com, quan iran a las scolas, los poria ésser feta qualque malícia per lo duch de la Torena, o per ses gens, si sabien que·l dit comte de Virtut se tengués per agreujat de la dita lur partença, manam-vos que·ls haiats sauconduyt, ben bestant e sens prefinició de temps, de nostre molt car frare lo rey de Ffrança, de guissa que ab lurs cavalcadures, macips, diners, joyes e altres béns que ab si portaran, puxen anar, star e tornar salvament e segura e sens embarch e enquietació d’algú, lo qual salconduyt aportats ab vós, quan vendrets a nós, sens falla. E noresmenys féts paraula al dit duch de Torena que ell, per contemplació nostra, haja los dits ministrés nostres, quant que venguen en ço del seu e en qualque part on ell sia, per ben recomenats. Axí mateix, havem entès que lo matrimoni és desfet entre la filla de compte de Virtut e lo duch de Torena, per què volem que, si axí és, tractats matrimoni de nostra filla ab lo dit duch de Torena. Volem encare que diguats al duch de Burgunya que lo falcó blanch que·ns ha promès, tantost com haurà mudat, nos enví.
+Dada en Saragoça sots nostre segell secret a XXII dies de juny de l’any MCCCLXXXVIII. Rex Iohannes. 
+Dominus rex mandavit michi Bernardo de Ionquerio.
+r: català
+s: moviment d’artistes
+
