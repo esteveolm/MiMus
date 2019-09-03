@@ -149,7 +149,8 @@ public class Editor extends EditorPart implements EventObserver {
 		toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
-		form.getBody().setLayout(new GridLayout());
+		GridLayout gl = new GridLayout();
+		form.getBody().setLayout(gl);
 		
 		
 		/* SECTION STATUS OF THE DOCUMENT */
@@ -204,19 +205,24 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* SECTION REGEST */
 		/* Regest text */
-		Section sectRegest = toolkit.createSection(form.getBody(),
-				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-		sectRegest.setText("Regest");
-		sectRegest.setLayout(new GridLayout());
-		sectRegest.setExpanded(true);
+//		Section sectRegest = toolkit.createSection(form.getBody(),
+//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+//		sectRegest.setText("Regest");
+//		sectRegest.setLayout(new GridLayout());
+//		sectRegest.setExpanded(true);
+//		
+//		regestText = new Text(sectRegest, 
+//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+//		regestText.setText(docEntry.getRegestText());
+//		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		regestText.setEditable(false);
+//		sectRegest.setClient(regestText);
 		
-		regestText = new Text(sectRegest, 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		regestText = new Text(form.getBody(),
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		regestText.setText(docEntry.getRegestText());
-		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		regestText.setEditable(false);
-		sectRegest.setClient(regestText);
-		
+		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* SECTION ENTITIES */
 		Section sectEnt = toolkit.createSection(form.getBody(), 
@@ -330,20 +336,26 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		
 		/* SECTION TRANSCRIPTION */
-		Section sectTrans = toolkit.createSection(form.getBody(),  
-				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-		sectTrans.setText("Transcription");
-		sectTrans.setExpanded(true);
+//		Section sectTrans = toolkit.createSection(form.getBody(),  
+//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+//		sectTrans.setText("Transcription");
+//		sectTrans.setExpanded(true);
+//		
+//		/* Transcription text */
+//		transcriptionText = new StyledText(sectTrans, 
+//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+//		transcriptionText.setText(docEntry.getTranscriptionText());
+//		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		transcriptionText.setEditable(false);
+//		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
+//		sectTrans.setClient(transcriptionText);
 		
-		/* Transcription text */
-		transcriptionText = new StyledText(sectTrans, 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+		transcriptionText = new StyledText(form.getBody(), 
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		transcriptionText.setText(docEntry.getTranscriptionText());
-		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		transcriptionText.setEditable(false);
+		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-		sectTrans.setClient(transcriptionText);
-		
 		
 		/* SECTION TRANSCRIPTION FORMS */
 		/* Transcription entities and its table */
