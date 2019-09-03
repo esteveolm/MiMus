@@ -950,11 +950,18 @@ public class Editor extends EditorPart implements EventObserver {
 		addRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				List<Bibliography> biblio = new ArrayList<>();
+				
+				try {
+					biblio = new BibliographyDao(conn).selectAll();
+				} catch (SQLException e1) {
+					System.out.println("SQLException: could not retrieve Artists");
+				}
 				ReferenceDialog dialog = 
-						new ReferenceDialog(bibliography,
+						new ReferenceDialog(biblio,
 						parent.getShell()) {
 				};
-				runReferenceDialog(dialog,bibliography, referenceLabel);
+				runReferenceDialog(dialog, bibliography, referenceLabel);
 				referenceTV.refresh();
 			}
 		});
