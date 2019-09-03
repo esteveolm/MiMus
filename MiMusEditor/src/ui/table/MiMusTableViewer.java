@@ -6,24 +6,14 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 
-import util.TextStyler;
-
-
 public abstract class MiMusTableViewer {
 
 	protected Composite parent;
 	protected TableViewer tv;
-	protected TextStyler styler;
 	protected String[] columnNames;
 	
 	public MiMusTableViewer(Composite parent) {
 		this.parent = parent;
-		this.styler = null;
-	}
-	
-	public MiMusTableViewer(Composite parent, TextStyler styler) {
-		this.parent = parent;
-		this.styler = styler;
 	}
 		
 	public abstract TableViewer createTableViewer();

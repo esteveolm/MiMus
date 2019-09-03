@@ -15,5 +15,4 @@ public class Materia extends Unit {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }

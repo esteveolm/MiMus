@@ -83,29 +83,6 @@ public class TextStyler {
 		update();
 	}
 	
-//	public void select(int from, int to) {
-//		if (lastSelection>=0) {
-//			deselect();
-//		}
-//		
-//		/* Selection from normal to bold */
-//		delete(from, to);
-//		add(from, to, SWT.BOLD);
-//	}
-//	
-//	public void selectUpdate(int from, int to) {
-//		select(from, to);
-//		update();
-//	}
-//	
-//	private void deselect() {
-//		StyleRange style = styles.get(lastSelection);
-//		
-//		/* Selection from bold to normal */
-//		delete(style.start, style.start + style.length);
-//		add(style.start, style.start + style.length);
-//	}
-	
 	/* Getters and setters */
 	
 	public StyledText getText() {

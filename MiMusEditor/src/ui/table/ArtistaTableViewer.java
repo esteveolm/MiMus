@@ -3,7 +3,6 @@ package ui.table;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -12,8 +11,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableItem;
-
 import model.Artista;
 
 public class ArtistaTableViewer extends DeclarativeTableViewer {
@@ -42,85 +39,8 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 	}
 	
 	public void developProviders() {
-		tv.setCellModifier(new ArtistaCellModifier());
 		tv.setLabelProvider(new ArtistaLabelProvider());
 		tv.setComparator(new ArtistaComparator());
-	}
-	
-	class ArtistaCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(Object element, String property) {
-			return true;	/* All fields can be modified */
-		}
-
-		@Override
-		public Object getValue(Object element, String property) {
-			Artista art = (Artista) element;
-			int colIdx = getColumnNames().indexOf(property);
-			switch(colIdx) {
-			case 0:	// Nom Complet	(Text)
-				return art.getNomComplet();
-			case 1:	// Tractament	(Text)
-				return art.getTractament();
-			case 2:	// Nom	(Text)
-				return art.getNom();
-			case 3:	// Cognom	(Text)
-				return art.getCognom();
-			case 4:	// Sobrenom	(Text)
-				return art.getSobrenom();
-			case 5:	// Distintiu (Text)
-				return art.getDistintiu();
-			case 6:	// Gènere (ComboBox)
-				return art.getGenere();
-			case 7: // Religió (ComboBox)
-				return art.getReligio();
-			case 8:	// Origen (Text)
-				return art.getOrigen();
-			case 9:	// Observacions (Text)
-				return art.getObservacions();
-			default:	// Shouldn't reach here
-				return "";
-			}
-		}
-
-		@Override
-		public void modify(Object element, String property, Object value) {
-			Artista art = (Artista) ((TableItem) element).getData();
-			int colIdx = getColumnNames().indexOf(property);
-			switch(colIdx) {
-			case 0:	// Nom Complet (Text)
-				art.setNomComplet((String) value);
-				break;
-			case 1:	// Tractament (Text)
-				art.setTractament((String) value);
-				break;
-			case 2:	// Nom (Text)
-				art.setNom((String) value);
-				break;
-			case 3:	// Cognom (Text)
-				art.setCognom((String) value);
-				break;
-			case 4:	// Sobrenom (Text)
-				art.setSobrenom((String) value);
-				break;
-			case 5:	// Distintiu (Text)
-				art.setDistintiu((String) value);
-				break;
-			case 6:	// Gènere (ComboBox)
-				art.setGenere((int) value);
-				break;
-			case 7:	// Religió (ComboBox)
-				art.setReligio((int) value);
-				break;
-			case 8:	// Origen (ComboBox)
-				art.setOrigen((String) value);
-				break;
-			case 9:	// Observacions (Text)
-				art.setObservacions((String) value);
-			default:	// Shouldn't reach here
-				break;
-			}
-		}
 	}
 	
 	class ArtistaLabelProvider extends LabelProvider 

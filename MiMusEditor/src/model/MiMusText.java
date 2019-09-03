@@ -15,18 +15,6 @@ public class MiMusText {
 		this.words = text.split(" ");
 	}
 	
-//	public Entity xmlElementToEntity(Element elem, boolean typed) {
-//		int from = Integer.parseInt(elem.getElementsByTagName("from").item(0).getTextContent());
-//		int to = Integer.parseInt(elem.getElementsByTagName("to").item(0).getTextContent());
-//		int id = Integer.parseInt(elem.getElementsByTagName("entity_id").item(0).getTextContent());
-//		if (typed) {
-//			String type = elem.getElementsByTagName("type").item(0).getTextContent();
-//			String subtype = elem.getElementsByTagName("subtype").item(0).getTextContent();
-//			return new TypedEntity(words, from, to, type, subtype, id);
-//		}
-//		return new UntypedEntity(words, from, to, id);
-//	}
-	
 	public Point fromCharToWordCoordinates(Point old) {
 		List<Integer> spaces = getSpacesInText();
 		/*
@@ -70,7 +58,7 @@ public class MiMusText {
 		}	
 	}
 	
-	public List<Integer> getSpacesInText() {
+	private List<Integer> getSpacesInText() {
 		/* 
 		 * Spaces contains the index of every space, besides the start
 		 * and ending index of the full text, in ascending order.
@@ -82,13 +70,6 @@ public class MiMusText {
 				idxSpace = text.indexOf(' ', idxSpace+1)) {
 			spaces.add(idxSpace);
 		}
-//		for (int idxSpace = 1;
-//				idxSpace < text.length();
-//				idxSpace++) {
-//			if (text.charAt(idxSpace)==' ' || text.charAt(idxSpace)==',' || 
-//					text.charAt(idxSpace)=='.')
-//				spaces.add(idxSpace);
-//		}
 		spaces.add(text.length());
 		return spaces;
 	}

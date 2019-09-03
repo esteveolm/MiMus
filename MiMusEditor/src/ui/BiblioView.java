@@ -298,9 +298,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 				if (selectedEntry == null) {
 					System.out.println("Could not remove bibEntry because none was selected.");
 					LabelPrinter.printError(labelList, "You must select a bibliography entry to delete it.");
-				} else if (!selectedEntry.getUsers().isEmpty()) {
-					System.out.println("Could not remove bibEntry because because it is in use by some documents.");
-					LabelPrinter.printError(labelList, inUseMessage(selectedEntry.getUsers()));
 				} else if (selectedEntry.getId()==1) {
 					System.out.println("Could not remove bibEntry because it is the default entry (id=0).");
 					LabelPrinter.printError(labelList, "You cannot delete the default bibliography entry.");
@@ -324,14 +321,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 				}
 			}
 		});
-	}
-	
-	private String inUseMessage(List<Integer> users) {
-		String str = "First you must remove its references from docs: ";
-		for (Integer u: users) {
-			str += String.valueOf(u) + ", ";
-		}
-		return str.substring(0, str.lastIndexOf(",")) + ".";
 	}
 	
 	class BiblioLabelProvider extends LabelProvider {

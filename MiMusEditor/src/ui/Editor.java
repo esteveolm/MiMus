@@ -36,7 +36,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import control.EventObserver;
 import control.SharedControl;
-import control.SharedResources;
 import model.Entity;
 import model.EntityInstance;
 import model.GenereLiterari;
@@ -86,7 +85,6 @@ import util.TextStyler;
 
 public class Editor extends EditorPart implements EventObserver {
 	
-	private SharedResources resources;
 	private SharedControl control;
 	private Connection conn;
 	private Document docEntry;
@@ -126,8 +124,6 @@ public class Editor extends EditorPart implements EventObserver {
 		docEntry = (Document) getEditorInput();
 		docID = docEntry.getNumbering();
 		System.out.println("Doc ID: " + docID);
-		resources = SharedResources.getInstance();
-		//resources.globallySetUpdateId();
 		control = SharedControl.getInstance();
 		control.addEditor(this);
 		
@@ -240,8 +236,7 @@ public class Editor extends EditorPart implements EventObserver {
 			System.out.println("SQLException: could not retrieve instances.");
 		}
 		entityHelper = new EntityTableViewer(compEnt, 
-				entityInstances,
-				null, regest);
+				entityInstances, regest);
 		TableViewer entityTV = entityHelper.createTableViewer();
 		entityTV.refresh();
 		
@@ -301,9 +296,7 @@ public class Editor extends EditorPart implements EventObserver {
 			e.printStackTrace();
 			System.out.println("SQLException: could not retrieve relations.");
 		}
-		relationHelper = new RelationTableViewer(compRel, 
-				relations,
-				null);
+		relationHelper = new RelationTableViewer(compRel, relations);
 		TableViewer relationTV = relationHelper.createTableViewer();
 		relationTV.refresh();
 		
@@ -532,7 +525,7 @@ public class Editor extends EditorPart implements EventObserver {
 			e.printStackTrace();
 		}
 		referenceHelper = new ReferenceTableViewer(
-				compRef, references, bibliography, docEntry, resources);
+				compRef, references, bibliography, docEntry);
 		TableViewer referenceTV = referenceHelper.createTableViewer();
 		referenceTV.refresh();
 		
@@ -755,17 +748,6 @@ public class Editor extends EditorPart implements EventObserver {
 							"Could not remove Entity because none was selected.");
 					LabelPrinter.printError(regestLabel, 
 							"You must select an entity to delete it.");
-				} else if (Relation.containsEntity(relations, ent)) {
-					System.out.println(
-							"Could not remove Entity because being used by Relation.");
-					LabelPrinter.printError(regestLabel, 
-							"You must remove all relations using this entity before.");
-				} else if (Transcription.containsEntity(
-						transcriptions, ent)) {
-					System.out.println(
-							"Could not remove Entity because being used by Transcription.");
-					LabelPrinter.printError(regestLabel, 
-							"You must remove all transcriptions using this entity before.");
 				} else {
 					try {
 						new InstanceDao(conn).delete(ent);
@@ -784,7 +766,6 @@ public class Editor extends EditorPart implements EventObserver {
 						e2.printStackTrace();
 						System.out.println("SQLException: could not delete Instance.");
 					}
-					
 				}
 			}
 		});
@@ -1132,62 +1113,52 @@ public class Editor extends EditorPart implements EventObserver {
 				Relation rel = new Relation(docEntry,
 						instance1, instance2, "",
 						0, 0);
-				if (Relation.containsRelation(relations, rel)) {
-					/* This Relation has been declared already */
-					System.out.println("No Relation added, already there - " 
-							+ relations.size());
-					LabelPrinter.printError(label, 
-							"Cannot add the same relation twice.");
-				} else {
-					/* OK case */
-					try {
-						String type1 = dialog.getEntityType1();
-						String type2 = dialog.getEntityType2();
-						RelationDao dao = null;
-						if (type1.equals("Artista") && type2.equals("Ofici")) {
-							dao = new TeOficiDao(conn);
-						} else if (type1.equals("Promotor") && type2.equals("Casa")) {
-							dao = new TeCasaDao(conn);
-						} else if (type1.equals("Artista") && type2.equals("Promotor")) {
-							dao = new ServeixADao(conn);
-						} else if (type1.equals("Artista") && type2.equals("Lloc")) {
-							dao = new ResideixADao(conn);
-						}
-						
-						if (dao != null) {
-							dialog.setRelType(dao.getTable());
-							rel.setType(dialog.getRelType());
-							try {
-								int id = dao.insert(rel);
-								if (id>0) {
-									/* OK case */
-									relations.clear();
-									relations.addAll(new AnyRelationDao(getConnection())
-											.select(docEntry));
-									
-									System.out.println("Adding selected Relation - " 
-											+ relations.size());
-									LabelPrinter.printInfo(label, 
-											"Relation added successfully.");
-								} else {
-									System.out.println("DAO: could not add relation.");
-								}
-							} catch (SQLIntegrityConstraintViolationException e1) {
-								/* Unique constraint violated */
-								System.out.println(
-										"Cannot add the same relation twice.");
-								LabelPrinter.printError(label, 
-										"Cannot add the same relation twice.");
+				try {
+					String type1 = dialog.getEntityType1();
+					String type2 = dialog.getEntityType2();
+					RelationDao dao = null;
+					if (type1.equals("Artista") && type2.equals("Ofici")) {
+						dao = new TeOficiDao(conn);
+					} else if (type1.equals("Promotor") && type2.equals("Casa")) {
+						dao = new TeCasaDao(conn);
+					} else if (type1.equals("Artista") && type2.equals("Promotor")) {
+						dao = new ServeixADao(conn);
+					} else if (type1.equals("Artista") && type2.equals("Lloc")) {
+						dao = new ResideixADao(conn);
+					}
+					
+					if (dao != null) {
+						dialog.setRelType(dao.getTable());
+						rel.setType(dialog.getRelType());
+						try {
+							int id = dao.insert(rel);
+							if (id>0) {
+								/* OK case */
+								relations.clear();
+								relations.addAll(new AnyRelationDao(getConnection())
+										.select(docEntry));
+								
+								System.out.println("Adding selected Relation - " 
+										+ relations.size());
+								LabelPrinter.printInfo(label, 
+										"Relation added successfully.");
+							} else {
+								System.out.println("DAO: could not add relation.");
 							}
-						} else {
-							System.out.println("Error: unknown relation in dialog.");
+						} catch (SQLIntegrityConstraintViolationException e1) {
+							/* Unique constraint violated */
+							System.out.println(
+									"Cannot add the same relation twice.");
+							LabelPrinter.printError(label, 
+									"Cannot add the same relation twice.");
 						}
-					} catch (SQLException e2) {
-						System.out.println("SQLException: could not add relation.");
-						e2.printStackTrace();
-					}		
+					} else {
+						System.out.println("Error: unknown relation in dialog.");
+					}
+				} catch (SQLException e2) {
+					System.out.println("SQLException: could not add relation.");
+					e2.printStackTrace();
 				}
-				
 			} else {
 				/* No instances selected by the user */
 				System.out.println("No Relation added - " 
@@ -1211,13 +1182,7 @@ public class Editor extends EditorPart implements EventObserver {
 			Bibliography added = dialog.getUnit();
 			int type = dialog.getType();
 			if (added != null) {
-				if (MiMusReference.containsBibliography(references, added)) {
-					/* Trying to add bibliography already added */
-					System.out.println("No Reference added - "
-							+ bibliography.size());
-					LabelPrinter.printError(label, 
-							"Cannot add the same reference twice.");
-				} else if (type<0){
+				if (type<0){
 					/* Happens when type has not been set by user */
 					System.out.println("No reference added - " 
 							+ bibliography.size());
@@ -1240,7 +1205,11 @@ public class Editor extends EditorPart implements EventObserver {
 						} else {
 							System.out.println("DAO: could not insert reference");
 						}
-					} catch (SQLException e) {
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(label, 
+								"Cannot insert same Reference twice.");
+						System.out.println("Cannot insert same Reference twice.");
+					} catch (SQLException e2) {
 						System.out.println("SQLException: could not insert reference");
 					}
 				}

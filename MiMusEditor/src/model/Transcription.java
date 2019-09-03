@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 import org.eclipse.swt.graphics.Point;
 
 /**
@@ -17,7 +15,6 @@ public class Transcription extends Unit {
 	private String selectedText;
 	private String form;
 	private Point coords;
-	private int id;
 	
 	public Transcription() {
 		this(null, "", "", null, 0);
@@ -43,13 +40,12 @@ public class Transcription extends Unit {
 		this.setSelectedText(selectedText);
 		this.form = form;
 		this.coords = coords;
-		this.id = id;
+		setId(id);
 	}
 	
 	/* Getters and setters */
 	
 	public EntityInstance getItsEntity() {
-		System.out.println("getting " + itsEntity.toString());
 		return itsEntity;
 	}
 	public void setItsEntity(EntityInstance itsEntity) {
@@ -72,22 +68,5 @@ public class Transcription extends Unit {
 	}
 	public void setCoords(Point coords) {
 		this.coords = coords;
-	}
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public static boolean containsEntity(List<Transcription> list, 
-			EntityInstance ent) {
-		for (Transcription t : list) {
-			if (t.getItsEntity().equals(ent)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

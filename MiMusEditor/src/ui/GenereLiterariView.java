@@ -191,11 +191,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		return "genere_literari";
 	}
 	
-	@Override
-	public String getAddPattern() {
-		return "/genere.xml";
-	}
-	
 	/**
 	 * When GenereLiterariView is closed, it is unregistered from SharedControl.
 	 */

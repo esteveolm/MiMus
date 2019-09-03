@@ -22,7 +22,6 @@ import org.eclipse.ui.part.ViewPart;
 import control.EventObserver;
 import control.EventSubject;
 import control.SharedControl;
-import control.SharedResources;
 import model.Entity;
 import util.DBUtils;
 
@@ -43,7 +42,6 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	private boolean stateAdd;
 	private int selectedId;
 	private Connection conn;
-	private SharedResources resources;
 	private SharedControl control;
 	private List<EventObserver> observers;
 	private TableViewer tv;
@@ -55,7 +53,6 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	public DeclarativeView() {
 		super();
 		setObservers(new ArrayList<>());
-		setResources(SharedResources.getInstance());
 		setControl(SharedControl.getInstance());
 		setStateAdd(true);
 		setSelectedId(0);
@@ -85,9 +82,7 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	}
 	
 	public abstract void developForm(ScrolledForm form);
-	
-	public abstract String getAddPattern();
-	
+		
 	public void addStateLabel(Composite parent) {
 		/* On creation, view is in ADD mode */
 		stateLabel = new Label(parent, LABEL_FLAGS);
@@ -168,12 +163,6 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	
 	
 	/* Getters and setters */
-	public SharedResources getResources() {
-		return resources;
-	}
-	public void setResources(SharedResources resources) {
-		this.resources = resources;
-	}
 	public SharedControl getControl() {
 		return control;
 	}

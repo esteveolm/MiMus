@@ -20,13 +20,10 @@ public class MiMusLibraryIdentifier {
 		this.page = page;
 	}
 
-	public MiMusLibraryIdentifier() {
-		
-	}
+	public MiMusLibraryIdentifier() {}
 
 	@Override
 	public String toString() {
-		// TODO: ask for actual presentation style of signature
 		String str = "";
 		if (archive != null)
 			str += archive + ", ";

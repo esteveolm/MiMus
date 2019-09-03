@@ -3,7 +3,6 @@ package ui.table;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -12,8 +11,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableItem;
-
 import model.Casa;
 
 public class CasaTableViewer extends DeclarativeTableViewer {
@@ -36,50 +33,8 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 
 	@Override
 	public void developProviders() {
-		tv.setCellModifier(new CasaCellModifier());
 		tv.setLabelProvider(new CasaLabelProvider());
 		tv.setComparator(new CasaComparator());
-	}
-	
-	class CasaCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(Object element, String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(Object element, String property) {
-			Casa casa = (Casa) element;
-			int colIdx = getColumnNames().indexOf(property);
-			switch (colIdx) {
-			case 0:		// Nom Complet
-				return casa.getNomComplet();
-			case 1:		// Titol
-				return casa.getTitol();
-			case 2:		// Cort
-				return casa.getCort();
-			default:	// Shouldn't reach here
-				return "";
-			}
-		}
-
-		@Override
-		public void modify(Object element, String property, Object value) {
-			Casa casa = (Casa) ((TableItem) element).getData();
-			int colIdx = getColumnNames().indexOf(property);
-			switch(colIdx) {
-			case 0:		// Nom Complet
-				casa.setNomComplet((String) value);
-			case 1:		// Titol
-				casa.setTitol((String) value);
-				break;
-			case 2:		// Cort
-				casa.setCort((String) value);
-				break;
-			default:	// Shouldn't reach here
-				break;
-			}
-		}
 	}
 	
 	class CasaLabelProvider extends LabelProvider 

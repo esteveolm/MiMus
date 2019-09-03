@@ -204,11 +204,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 	}
 	
 	@Override
-	public String getAddPattern() {
-		return "/lloc.xml";
-	}
-	
-	@Override
 	public void update() {}
 	
 	/**

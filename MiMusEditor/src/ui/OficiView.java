@@ -53,11 +53,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 	}
 	
 	@Override
-	public String getAddPattern() {
-		return "/oficis.xml";
-	}
-	
-	@Override
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);

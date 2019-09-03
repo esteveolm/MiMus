@@ -16,7 +16,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
-import control.SharedResources;
 import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
@@ -27,7 +26,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	private List<Bibliography> bibEntries;
 	
 	public ReferenceTableViewer(Composite parent, List<MiMusReference> references, 
-			List<Bibliography> bibEntries, Document docEntry, SharedResources resources) {
+			List<Bibliography> bibEntries, Document docEntry) {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;
@@ -51,7 +50,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new ComboBoxCellEditor(tv.getTable(), 
-				SharedResources.REF_TYPES, 
+				MiMusReference.TYPES, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
 		tv.setCellEditors(editors);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
@@ -105,7 +104,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 			case 1: // Page
 				return ref.getPage();
 			case 2:	// Reference Type
-				return SharedResources.REF_TYPES[ref.getType()];
+				return MiMusReference.TYPES[ref.getType()];
 			default:
 				return "";
 			}

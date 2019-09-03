@@ -45,11 +45,6 @@ public class CasaView extends DeclarativeView<Casa> {
 	}
 	
 	@Override
-	public String getAddPattern() {
-		return "/cases.xml";
-	}
-	
-	@Override
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);

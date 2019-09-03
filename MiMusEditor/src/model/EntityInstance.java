@@ -1,6 +1,5 @@
 package model;
 
-import java.util.List;
 import model.Document;
 
 public class EntityInstance extends Unit {
@@ -37,28 +36,5 @@ public class EntityInstance extends Unit {
 	@Override
 	public String toString() {
 		return getItsEntity().getLemma();
-	}
-	
-	/**
-	 * Compares fields <itsEntity> of an EntitiesList <list> of EntityInstance
-	 * to check if any equals <ent>.
-	 */
-	public static boolean containsEntity(List<EntityInstance> list, Entity ent) {
-		for (EntityInstance e: list) {
-			if (e.getItsEntity().equals(ent)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static EntityInstance getInstanceWithEntity(List<EntityInstance> list, 
-			Entity ent) {
-		for (EntityInstance e: list) {
-			if (e.getItsEntity().equals(ent)) {
-				return e;
-			}
-		}
-		return null;
 	}
 }

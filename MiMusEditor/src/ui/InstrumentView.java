@@ -46,11 +46,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	public String getViewName() {
 		return "Instrument";
 	}
-	
-	@Override
-	public String getAddPattern() {
-		return "/instruments.xml";
-	}
 
 	@Override
 	public void developForm(ScrolledForm form) {

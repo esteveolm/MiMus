@@ -49,8 +49,6 @@ public class Bibliography extends Unit {
 	private String series;
 	private String pages;
 	private String shortReference;
-	private int id;
-	private List<Integer> users;
 	
 	public Bibliography() {}
 	
@@ -79,7 +77,6 @@ public class Bibliography extends Unit {
 		pages = "";
 		shortReference = "";
 		this.setId(id);
-		users = new ArrayList<>();
 	}
 	
 	/**
@@ -107,7 +104,6 @@ public class Bibliography extends Unit {
 		this.pages = pages;
 		this.shortReference = shortReference;
 		this.setId(id);
-		this.users = users;
 	}
 	
 	public Bibliography(String[] authors, String[] secondaryAuthors,
@@ -316,47 +312,6 @@ public class Bibliography extends Unit {
 	}
 	public void setPages(String pages) {
 		this.pages = pages;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public List<Integer> getUsers() {
-		return users;
-	}
-	public void setUsers(List<Integer> users) {
-		this.users = users;
-	}
-	public void addUser(Integer user) {
-		users.add(user);
-	}
-	public void removeUser(Integer user) {
-		users.remove(user);
-	}
-
-	/**
-	 * Creates an entity of this class that works as placeholder
-	 * when there are no bibliography entries created yet. It
-	 * contains a main author called "unknown reference" so one
-	 * can see this value and understand what this entry means
-	 * in the bibliography.
-	 */
-	public static Bibliography createUnknownEntry() {
-		String[] unknownAut = new String[NUM_AUTHORS];
-		String[] second = new String[NUM_SECONDARY];
-		for (int i=0; i<NUM_AUTHORS; i++) {
-			if (i==0) {
-				unknownAut[i] = "unknown reference";
-				second[i] = "";
-			} else {
-				unknownAut[i] = "";
-				second[i] = "";
-			}
-		}
-		return new Bibliography(unknownAut, second, "", "", "", "",
-				"", "", "", "", "", 0, new ArrayList<>());
 	}
 	
 	public static String generateShortReference(String author0,

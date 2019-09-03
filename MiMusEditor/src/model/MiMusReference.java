@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 /**
  * 
  * @author Javier Beltrán Jorba
@@ -26,11 +24,12 @@ import java.util.List;
  */
 public class MiMusReference extends Unit {
 	
+	public static final String [] TYPES = {"Edition", "Register", "Citation"};
+	
 	private Bibliography itsBiblio;
 	private Document itsDocument;
 	private String page;
 	private int type;
-	private int id;
 	
 	public MiMusReference() {}
 	
@@ -72,21 +71,5 @@ public class MiMusReference extends Unit {
 	}
 	public void setType(int type) {
 		this.type = type;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public static boolean containsBibliography(List<MiMusReference> references, 
-			Bibliography biblio) {
-		for (MiMusReference ref: references) {
-			if (ref.getItsBiblio().equals(biblio)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -15,15 +15,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
 import model.Relation;
-import util.TextStyler;
 
 public class RelationTableViewer extends MiMusTableViewer {
 	
 	private List<Relation> relations;
 	
-	public RelationTableViewer(Composite parent, List<Relation> initials, 
-			TextStyler styler) {
-		super(parent, styler);
+	public RelationTableViewer(Composite parent, List<Relation> initials) {
+		super(parent);
 		String[] aux = {"Tipus", "Entitat A", "Entitat B"};
 		columnNames = aux;
 		relations = initials;

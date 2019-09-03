@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 public class Relation extends HierarchicalUnit {
 
 	public static final String[] TYPES = 
@@ -52,26 +50,5 @@ public class Relation extends HierarchicalUnit {
 	@Override
 	public String toString() {
 		return getItsEntity1().toString() + " - " + getItsEntity2().toString();
-	}
-	
-	public static boolean containsRelation(List<Relation> relations, Relation rel) {
-		for (Relation r: relations) {
-			if (r.getItsEntity1().equals(rel.getItsEntity1()) &&
-					(r.getItsEntity2().equals(rel.getItsEntity2()))) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static boolean containsEntity(List<Relation> relations, 
-			EntityInstance ent) {
-		for (Relation r: relations) {
-			if (r.getItsEntity1().equals(ent.getItsEntity()) ||
-					(r.getItsEntity2().equals(ent.getItsEntity()))) {
-				return true;	
-			}
-		}
-		return false;
 	}
 }

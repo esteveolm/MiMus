@@ -28,8 +28,6 @@ public class Document extends Unit implements IEditorInput {
 	public final static String[] STATES_ANNOT = {"-", "En procés", "Per revisar"};
 	public final static String[] STATES_REV = {"-", "En procés", "Revisat"};
 	
-
-	private int id;
 	private String numbering;
 	private MiMusDate date;
 	private String place1;
@@ -78,7 +76,6 @@ public class Document extends Unit implements IEditorInput {
 	}
 	
 	public Document() {
-		this.id = -1;
 		this.numbering = null;
 		this.date = null;
 		this.setPlace1(null);
@@ -111,13 +108,9 @@ public class Document extends Unit implements IEditorInput {
 	 * Some naming variations refer to the fact that String!=MiMusText
 	 * Some methods encapsulate access to complex objects like the Language 
 	 */
-	
-	public int getId() {
-		return id;
-	}
 	public String getIdStr() {
 		/* As IDs in 001..999, 3-len(id) gives the number of leading zeros */
-		String str = String.valueOf(id);
+		String str = String.valueOf(getId());
 		int len0 = Math.max(3-str.length(), 0);
 		String zeros = "";
 		if (len0>0) {
@@ -125,9 +118,6 @@ public class Document extends Unit implements IEditorInput {
 			zeros = new String(new char[len0]).replace('\0', '0');
 		}
 		return zeros + str;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	
 	public String getNumbering() {

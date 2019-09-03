@@ -15,15 +15,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 import model.EntityInstance;
 import model.MiMusText;
-import util.TextStyler;
 
 public class EntityTableViewer extends MiMusTableViewer {
 
 	private List<EntityInstance> entities;
 
 	public EntityTableViewer(Composite parent, 
-			List<EntityInstance> initials, TextStyler styler, MiMusText text) {
-		super(parent, styler);
+			List<EntityInstance> initials, MiMusText text) {
+		super(parent);
 		String[] aux = {"Type", "Entity"};
 		columnNames = aux;
 		entities = initials;

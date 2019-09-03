@@ -28,14 +28,6 @@
       </view>
       <view
             category="MiMusEditor.mimus"
-            class="ui.QueryView"
-            icon="icons/sample.png"
-            id="MiMusEditor.queryView"
-            name="Query View"
-            restorable="true">
-      </view>
-      <view
-            category="MiMusEditor.mimus"
             class="ui.ArtistaView"
             icon="icons/sample.png"
             id="MiMusEditor.artistaView"

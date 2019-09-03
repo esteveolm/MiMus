@@ -3,7 +3,6 @@ package ui.table;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -12,24 +11,18 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableItem;
-
 import model.Instrument;
 import model.Ofici;
-import model.Unit;
 
 public class OficiTableViewer extends DeclarativeTableViewer {
 
 	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 
 			"Instrument", "Veu", "Dansa", "Artesà", "Malabars i altres"};
 	
-	private List<Instrument> instruments;
-	
 	public OficiTableViewer(Composite parent, List<Ofici> oficis, 
 			List<Instrument> instruments) {
 		super(parent);
 		this.entities = oficis;
-		this.instruments = instruments;
 		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument"};
 		this.columnNames = aux;
 	}
@@ -46,60 +39,8 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 
 	@Override
 	public void developProviders() {
-		tv.setCellModifier(new OficiCellModifier());
 		tv.setLabelProvider(new OficiLabelProvider());
 		tv.setComparator(new OficiComparator());
-	}
-
-	class OficiCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(Object element, String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(Object element, String property) {
-			Ofici ofici = (Ofici) element;
-			int colIdx = getColumnNames().indexOf(property);
-			switch (colIdx) {
-			case 0:		// Nom Complet
-				return ofici.getNomComplet();
-			case 1:		// Terme
-				return ofici.getTerme();
-			case 2:		// Especialitat
-				return ofici.getEspecialitat();
-			case 3:		// Instrument
-				return ofici.getInstrument();
-			default:
-				return "";
-			}
-		}
-
-		@Override
-		public void modify(Object element, String property, Object value) {
-			Ofici ofici = (Ofici) ((TableItem) element).getData();
-			int colIdx = getColumnNames().indexOf(property);
-			switch (colIdx) {
-			case 0:		// Nom Complet
-				ofici.setNomComplet((String) value);
-				break;
-			case 1:		// Terme
-				ofici.setTerme((String) value);
-				break;
-			case 2:		// Especialitat
-				ofici.setEspecialitat((int) value);
-				break;
-			case 3:		// Instrument
-				Instrument inst = (Instrument) Unit.findById(
-						instruments, 
-						(int) value);
-				if (inst != null)
-					ofici.setInstrument(inst);
-				break;
-			default:	// Shouldn't reach here
-				break;
-			}
-		}
 	}
 	
 	class OficiLabelProvider extends LabelProvider 

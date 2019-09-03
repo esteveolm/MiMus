@@ -9,7 +9,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
-import control.SharedResources;
 import model.Document;
 import persistence.DocumentDao;
 import ui.table.DocumentsTableViewer;
@@ -17,12 +16,10 @@ import util.DBUtils;
 
 public class DocumentsView extends ViewPart {
 	
-	private SharedResources resources;
 	private DocumentsTableViewer tv;
 	
 	public DocumentsView() {
 		super();
-		setResources(SharedResources.getInstance());
 		setTv(null);
 	}
 
@@ -49,13 +46,6 @@ public class DocumentsView extends ViewPart {
 
 	
 	/* Getters and setters */
-	
-	public SharedResources getResources() {
-		return resources;
-	}
-	public void setResources(SharedResources resources) {
-		this.resources = resources;
-	}
 	public DocumentsTableViewer getTv() {
 		return tv;
 	}

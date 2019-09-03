@@ -50,11 +50,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	}
 	
 	@Override
-	public String getAddPattern() {
-		return "/promotors.xml";
-	}
-	
-	@Override
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
