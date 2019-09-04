@@ -273,7 +273,7 @@ CREATE TABLE entity_instance (
 		REFERENCES entity(id),
 	FOREIGN KEY (document_id)
 		REFERENCES document(id),
-	UNIQUE (entity_id),
+	UNIQUE (entity_id, document_id),
 	PRIMARY KEY (id)
 );
 
