@@ -339,7 +339,7 @@ CREATE TABLE te_casa (
 		REFERENCES promotor(id),
 	FOREIGN KEY (casa_id)
 		REFERENCES casa(id),
-	UNIQUE (promotor_id, casa_id),
+	UNIQUE (promotor_id, casa_id, relation_id),
 	PRIMARY KEY (id)
 );
 
@@ -354,7 +354,7 @@ CREATE TABLE serveix_a (
 		REFERENCES artista(id),
 	FOREIGN KEY (promotor_id)
 		REFERENCES promotor(id),
-	UNIQUE (artista_id, promotor_id),
+	UNIQUE (artista_id, promotor_id, relation_id),
 	PRIMARY KEY (id)
 );
 
@@ -369,7 +369,7 @@ CREATE TABLE resideix_a (
 		REFERENCES artista(id),
 	FOREIGN KEY (lloc_id)
 		REFERENCES lloc(id),
-	UNIQUE (artista_id, lloc_id),
+	UNIQUE (artista_id, lloc_id, relation_id),
 	PRIMARY KEY (id)
 );
 
@@ -397,7 +397,8 @@ CREATE TABLE moviment (
 		origen_type_id, 
         origen_id, 
 		destino_type_id, 
-        destino_id),
+        destino_id,
+        relation_id),
 	PRIMARY KEY (id)
 );
 
