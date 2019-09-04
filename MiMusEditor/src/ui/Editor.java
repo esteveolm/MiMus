@@ -761,22 +761,45 @@ public class Editor extends EditorPart implements EventObserver {
 					LabelPrinter.printError(regestLabel, 
 							"You must select an entity to delete it.");
 				} else {
-					try {
-						new InstanceDao(conn).delete(ent);
-						entityInstances.remove(ent);
-						System.out.println("Removing entity - " 
-								+ entityInstances.size());
-						LabelPrinter.printInfo(regestLabel, 
-								"Entity deleted successfully.");
-						
-						entityTV.refresh();
-					} catch (SQLIntegrityConstraintViolationException e1) {
+					/* 
+					 * Check if instance is being used by relation.
+					 * Our SQL schema cannot provide such constraint because
+					 * in the DB relations are linked to entities, not instances.
+					 */
+					boolean used = false;
+					for (Relation rel : relations) {
+						if (ent.getItsEntity().getId()
+								==rel.getItsEntity1().getId()
+							|| ent.getItsEntity().getId()
+								==rel.getItsEntity2().getId()) {
+							used = true;
+							break;
+						}
+					}
+					if (!used) {
+						/* OK case */
+						try {
+							new InstanceDao(conn).delete(ent);
+							entityInstances.remove(ent);
+							System.out.println("Removing entity - " 
+									+ entityInstances.size());
+							LabelPrinter.printInfo(regestLabel, 
+									"Entity deleted successfully.");
+							
+							entityTV.refresh();
+						} catch (SQLIntegrityConstraintViolationException e1) {
+							LabelPrinter.printError(regestLabel, 
+									"Cannot delete Entity Instance in use.");
+							System.out.println("Could not delete: entity in use.");
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+							System.out.println("SQLException: could not delete Instance.");
+						}
+					} else {
+						/* Entity in use in some relation of the document */
 						LabelPrinter.printError(regestLabel, 
 								"Cannot delete Entity Instance in use.");
 						System.out.println("Could not delete: entity in use.");
-					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: could not delete Instance.");
 					}
 				}
 			}
