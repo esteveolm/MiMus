@@ -149,6 +149,8 @@ public class Editor extends EditorPart implements EventObserver {
 		toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
+		
+		/* Composite (the form) needs a layout or components aren't drawn */
 		GridLayout gl = new GridLayout();
 		form.getBody().setLayout(gl);
 		
@@ -203,26 +205,23 @@ public class Editor extends EditorPart implements EventObserver {
 		sectStatic.setClient(readOnlyText);
 		
 		
-		/* SECTION REGEST */
-		/* Regest text */
-//		Section sectRegest = toolkit.createSection(form.getBody(),
-//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-//		sectRegest.setText("Regest");
-//		sectRegest.setLayout(new GridLayout());
-//		sectRegest.setExpanded(true);
-//		
-//		regestText = new Text(sectRegest, 
-//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-//		regestText.setText(docEntry.getRegestText());
-//		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		regestText.setEditable(false);
-//		sectRegest.setClient(regestText);
+		/* SECTION REGEST */		
+		/* 
+		 * GridData for Regest.
+		 * Apparently, texts only wrap when their unwrapped width surpasses the
+		 * specified widthHint in the GridData, hence we use a small widthHint
+		 * to force the wrap behaviour in any usual window sizes.
+		 */
+		GridData regestData = new GridData(GridData.FILL_HORIZONTAL);
+		regestData.widthHint = 10;
 		
+		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		regestText.setText(docEntry.getRegestText());
 		regestText.setEditable(false);
-		regestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		regestText.setLayoutData(regestData);
+		
 		
 		/* SECTION ENTITIES */
 		Section sectEnt = toolkit.createSection(form.getBody(), 
@@ -335,26 +334,17 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRel.setText("Delete");
 		
 		
-		/* SECTION TRANSCRIPTION */
-//		Section sectTrans = toolkit.createSection(form.getBody(),  
-//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-//		sectTrans.setText("Transcription");
-//		sectTrans.setExpanded(true);
-//		
-//		/* Transcription text */
-//		transcriptionText = new StyledText(sectTrans, 
-//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-//		transcriptionText.setText(docEntry.getTranscriptionText());
-//		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		transcriptionText.setEditable(false);
-//		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
-//		sectTrans.setClient(transcriptionText);
+		/* SECTION TRANSCRIPTION */	
+		/* GridData for Transcription: wrap behaviour like Regest */
+		GridData transcriptionData = new GridData(GridData.FILL_HORIZONTAL);
+		transcriptionData.widthHint = 10;
 		
+		/* Transcription text wraps if too long */
 		transcriptionText = new StyledText(form.getBody(), 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		transcriptionText.setText(docEntry.getTranscriptionText());
 		transcriptionText.setEditable(false);
-		transcriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		transcriptionText.setLayoutData(transcriptionData);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		
 		/* SECTION TRANSCRIPTION FORMS */
@@ -558,6 +548,7 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* BUTTON LISTENERS */
 		saveState.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int annotSel = comboStateAnnot.getSelectionIndex();
 				int revSel = comboStateRev.getSelectionIndex();
@@ -579,6 +570,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		saveMeta.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				/* Recover items to save */
 				
@@ -616,6 +608,7 @@ public class Editor extends EditorPart implements EventObserver {
 
 		/* Entity buttons */
 		addArt.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Artista> artists = new ArrayList<>();
 				
@@ -636,6 +629,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addInst.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Instrument> instruments = new ArrayList<>();
 				try {
@@ -655,6 +649,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addCasa.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Casa> cases = new ArrayList<>();
 				try {
@@ -674,6 +669,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addProm.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Promotor> proms = new ArrayList<>();
 				try {
@@ -693,6 +689,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addOfici.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Ofici> oficis = new ArrayList<>();
 				try {
@@ -712,6 +709,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addLloc.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<Lloc> llocs = new ArrayList<>();
 				try {
@@ -731,6 +729,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		addGenere.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<GenereLiterari> generes = new ArrayList<>();
 				try {
@@ -751,6 +750,7 @@ public class Editor extends EditorPart implements EventObserver {
 			}
 		});
 		removeEnt.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				EntityInstance ent = (EntityInstance) 
 						((IStructuredSelection) entityTV.getSelection())
