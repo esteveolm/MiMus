@@ -289,10 +289,21 @@ public class DocumentDao extends UnitDao<Document> {
 		getConnection().setAutoCommit(true);
 	}
 	
+	public List<Document> selectWhereEntity(int id) throws SQLException {
+		String sql = "SELECT document.* FROM document, entity_instance, entity "
+				+ "WHERE document.id=entity_instance.document_id AND "
+				+ "entity_instance.entity_id="+id;
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		List<Document> docs = new ArrayList<>();
+		while (rs.next()) {
+			docs.add(make(rs));
+		}
+		return docs;
+	}
+	
 	@Override
 	public String getTable() {
 		return "document";
 	}
-
-
 }

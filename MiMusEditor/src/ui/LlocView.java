@@ -103,6 +103,7 @@ public class LlocView extends DeclarativeView<Lloc> {
 				new LlocTableViewer(sectTable.getParent(), llocs);
 		setTv(llocHelper.createTableViewer());	
 		
+		addAnnotationsLabel(sectAdd.getParent());
 		createTableActions();
 		
 		/* Label for user feedback */

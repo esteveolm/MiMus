@@ -93,6 +93,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 				new GenereTableViewer(sectTable.getParent(), generes);
 		setTv(genereHelper.createTableViewer());	
 		
+		addAnnotationsLabel(sectAdd.getParent());
 		createTableActions();
 		
 		/* Label for user feedback */

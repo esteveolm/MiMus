@@ -128,6 +128,7 @@ public class OficiView extends DeclarativeView<Ofici> {
 				new OficiTableViewer(sectTable.getParent(), oficis, insts);
 		setTv(oficiHelper.createTableViewer());
 		
+		addAnnotationsLabel(sectAdd.getParent());
 		createTableActions();
 		
 		/* Label for user feedback */

@@ -116,6 +116,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 				new InstrumentTableViewer(sectTable.getParent(), instruments);
 		setTv(instrumentHelper.createTableViewer());
 		
+		addAnnotationsLabel(sectAdd.getParent());
 		createTableActions();
 		
 		/* Label for user feedback */
