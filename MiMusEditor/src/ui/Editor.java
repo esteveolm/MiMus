@@ -250,9 +250,9 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		regestText.setText(docEntry.getRegestText());
-		regestText.setEditable(false);
+		regestText.setEditable(true);
 		regestText.setLayoutData(regestData);
 		
 		/* SECTION ENTITIES */
@@ -377,9 +377,9 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Transcription text wraps if too long */
 		transcriptionText = new StyledText(form.getBody(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
 		transcriptionText.setText(docEntry.getTranscriptionText());
-		transcriptionText.setEditable(false);
+		transcriptionText.setEditable(true);
 		transcriptionText.setLayoutData(transcriptionData);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		
