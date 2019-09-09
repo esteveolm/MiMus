@@ -17,6 +17,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -159,7 +161,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Section sectStatus = toolkit.createSection(form.getBody(), 
 				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
 		sectStatus.setText("Status of the document");
-		sectStatus.setExpanded(true);
+		sectStatus.setExpanded(false);
 		
 		/* State of annotation and revision: combos */
 		Composite compStatus = toolkit.createComposite(sectStatus);
@@ -191,18 +193,23 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		
 		/* SECTION STATIC DATA */
-		Section sectStatic = toolkit.createSection(form.getBody(), 
-				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-		sectStatic.setText("Static data");
-		sectStatic.setLayout(new GridLayout());
-		sectStatic.setExpanded(true);
+		Label titleStatic = new Label(form.getBody(), SWT.VERTICAL);
+		titleStatic.setText("Static:");
+		FontData fontDataTitle = titleStatic.getFont().getFontData()[0];
+		Font fontTitle = new Font(titleStatic.getDisplay(), 
+				new FontData(fontDataTitle.getName(), 
+						fontDataTitle.getHeight(), 
+						SWT.BOLD));
+		titleStatic.setFont(fontTitle);
 		
-		Text readOnlyText = new Text(sectStatic, 
+		GridData staticData = new GridData(GridData.FILL_HORIZONTAL);
+		staticData.widthHint = 10;
+		
+		Text readOnlyText = new Text(form.getBody(), 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		readOnlyText.setText(docEntry.getReadOnlyText());
-		readOnlyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		readOnlyText.setEditable(false);
-		sectStatic.setClient(readOnlyText);
+		readOnlyText.setLayoutData(staticData);
 		
 		
 		/* SECTION REGEST */		
@@ -215,13 +222,16 @@ public class Editor extends EditorPart implements EventObserver {
 		GridData regestData = new GridData(GridData.FILL_HORIZONTAL);
 		regestData.widthHint = 10;
 		
+		Label titleRegest = new Label(form.getBody(), SWT.VERTICAL);
+		titleRegest.setText("Regest:");
+		titleRegest.setFont(fontTitle);
+		
 		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
 		regestText.setEditable(false);
 		regestText.setLayoutData(regestData);
-		
 		
 		/* SECTION ENTITIES */
 		Section sectEnt = toolkit.createSection(form.getBody(), 
@@ -230,7 +240,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compEnt = toolkit.createComposite(sectEnt);
 		compEnt.setLayout(new GridLayout());
 		sectEnt.setClient(compEnt);
-		sectEnt.setExpanded(true);
+		sectEnt.setExpanded(false);
 
 		/* Table of entities */
 		entityInstances = new ArrayList<>();
@@ -291,7 +301,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compRel = toolkit.createComposite(sectRel);
 		compRel.setLayout(new GridLayout());
 		sectRel.setClient(compRel);
-		sectRel.setExpanded(true);
+		sectRel.setExpanded(false);
 		
 		/* Table of relations */
 		relations = new ArrayList<>();
@@ -334,14 +344,18 @@ public class Editor extends EditorPart implements EventObserver {
 		removeRel.setText("Delete");
 		
 		
-		/* SECTION TRANSCRIPTION */	
+		/* SECTION TRANSCRIPTION */
+		Label titleTranscription = new Label(form.getBody(), SWT.VERTICAL);
+		titleTranscription.setText("Transcription:");
+		titleTranscription.setFont(fontTitle);
+		
 		/* GridData for Transcription: wrap behaviour like Regest */
 		GridData transcriptionData = new GridData(GridData.FILL_HORIZONTAL);
 		transcriptionData.widthHint = 10;
 		
 		/* Transcription text wraps if too long */
 		transcriptionText = new StyledText(form.getBody(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
+				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		transcriptionText.setText(docEntry.getTranscriptionText());
 		transcriptionText.setEditable(false);
 		transcriptionText.setLayoutData(transcriptionData);
@@ -355,7 +369,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compForms = toolkit.createComposite(sectForms);
 		compForms.setLayout(new GridLayout());
 		sectForms.setClient(compForms);
-		sectForms.setExpanded(true);
+		sectForms.setExpanded(false);
 		
 		transcriptions = new ArrayList<>();
 		try {
@@ -415,7 +429,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compMeta = toolkit.createComposite(sectMeta);
 		compMeta.setLayout(new GridLayout());
 		sectMeta.setClient(compMeta);
-		sectMeta.setExpanded(true);
+		sectMeta.setExpanded(false);
 		
 		/* Llengua: combo */
 		toolkit.createLabel(compMeta, "Llengua:");
@@ -503,7 +517,7 @@ public class Editor extends EditorPart implements EventObserver {
 		Composite compRef = toolkit.createComposite(sectRef);
 		compRef.setLayout(new GridLayout());
 		sectRef.setClient(compRef);
-		sectRef.setExpanded(true);
+		sectRef.setExpanded(false);
 		
 		String rawRefs = "Editions: " + docEntry.getEditions() +
 				"\nRegisters: " + docEntry.getRegisters() +
