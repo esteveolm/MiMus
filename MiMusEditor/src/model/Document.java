@@ -271,11 +271,6 @@ public class Document extends Unit implements IEditorInput {
 		if (getLibrary2().toString().length()>0) {
 			str += "Signatura B: " + getLibrary2() + "\n";
 		}
-		str += "Llengua: " + getLanguage() +
-				"\nMatèries: ";
-		for (Materia mat: getSubjects()) {
-			str += mat.getName() + ", ";
-		}
 		return str.substring(0,str.length()-2);
 	}
 
