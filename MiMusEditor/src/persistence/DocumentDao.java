@@ -94,7 +94,7 @@ public class DocumentDao extends UnitDao<Document> {
 		int any = rs.getInt("any1");
 		int any2 = rs.getInt("any2");
 		int mes = rs.getInt("mes1");
-		int mes2 = rs.getInt("mes1");
+		int mes2 = rs.getInt("mes2");
 		int dia = rs.getInt("dia1");
 		int dia2 = rs.getInt("dia2");
 		boolean hany = rs.getBoolean("h_any1");
@@ -164,6 +164,7 @@ public class DocumentDao extends UnitDao<Document> {
 			
 			MiMusDate date = new MiMusDate();
 			date.setInterval(any2>0 || mes2>0 || dia2>0);
+			System.out.println(date.isInterval() + " " + any2 + " " + mes2 + " " + dia2);
 			date.setYear1(any);
 			date.setMonth1(mes);
 			date.setDay1(dia);
