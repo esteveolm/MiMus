@@ -16,8 +16,7 @@ import model.GenereLiterari;
 public class GenereTableViewer extends DeclarativeTableViewer {
 
 	public GenereTableViewer(Composite parent, List<GenereLiterari> generes) {
-		super(parent);
-		this.entities = generes;
+		super(parent, generes);
 		String[] aux = {"Nom Complet", "Nom Frances", "Nom Occita", "Definicio"};
 		this.columnNames = aux;
 	}
@@ -68,7 +67,7 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			GenereLiterari gen1 = (GenereLiterari) e1;
 			GenereLiterari gen2 = (GenereLiterari) e2;
-			return gen1.getId()-gen2.getId();
+			return gen1.getLemma().compareTo(gen2.getLemma());
 		}
 	}
 }

@@ -19,8 +19,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 	private static final String[] GENDERS = {"No marcat", "Home", "Dona"};
 	
 	public PromotorTableViewer(Composite parent, List<Promotor> promotors) {
-		super(parent);
-		this.entities = promotors;
+		super(parent, promotors);
 		String[] aux = {"Nom complet", "Nom", "Cognom", "Sobrenom",
 				"Distintiu", "Gènere", "Observacions"};
 		this.columnNames = aux;

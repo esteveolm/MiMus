@@ -16,8 +16,7 @@ import model.Artista;
 public class ArtistaTableViewer extends DeclarativeTableViewer {
 	
 	public ArtistaTableViewer(Composite parent, List<Artista> artists) {
-		super(parent);
-		this.entities = artists;
+		super(parent, artists);
 		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
 				"Distintiu", "Gènere", "Religió", "Origen", "Observacions"};
 		this.columnNames = aux;
@@ -84,7 +83,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Artista art1 = (Artista) e1;
 			Artista art2 = (Artista) e2;
-			return art1.getId()-art2.getId();
+			return art1.getLemma().compareTo(art2.getLemma());
 		}
 	}
 }

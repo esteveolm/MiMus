@@ -17,8 +17,7 @@ import model.Lloc;
 public class LlocTableViewer extends DeclarativeTableViewer {
 
 	public LlocTableViewer(Composite parent, List<Lloc> llocs) {
-		super(parent);
-		this.entities = llocs;
+		super(parent, llocs);
 		String[] aux = {"Nom Complet", "Àrea", "Regne"};
 		this.columnNames = aux;
 	}
@@ -65,7 +64,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Lloc l1 = (Lloc) e1;
 			Lloc l2 = (Lloc) e2;
-			return l1.getId() - l2.getId();
+			return l1.getLemma().compareTo(l2.getLemma());
 		}
 	}
 }

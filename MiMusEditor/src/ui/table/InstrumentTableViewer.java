@@ -16,8 +16,7 @@ import model.Instrument;
 public class InstrumentTableViewer extends DeclarativeTableViewer {
 
 	public InstrumentTableViewer(Composite parent, List<Instrument> instruments) {
-		super(parent);
-		this.entities = instruments;
+		super(parent, instruments);
 		String[] aux = {"Nom", "Família", "Classe", "Part"};
 		this.columnNames = aux;
 	}
@@ -67,15 +66,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Instrument i1 = (Instrument) e1;
 			Instrument i2 = (Instrument) e2;
-			int byFamily = i1.getFamily() - i2.getFamily();
-			if (byFamily == 0) {
-				int byClasse = i1.getClasse() - i2.getClasse();
-				if (byClasse == 0) {
-					return i1.getNom().compareTo(i2.getNom());
-				}
-				return byClasse;
-			}		
-			return byFamily;
+			return i1.getLemma().compareTo(i2.getLemma());
 		}
 	}
 

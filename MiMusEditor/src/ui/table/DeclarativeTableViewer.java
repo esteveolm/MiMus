@@ -10,14 +10,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
-import model.Unit;
+import model.Entity;
 
 public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 	
-	protected List<? extends Unit> entities;
+	protected List<? extends Entity> entities;
 	
-	public DeclarativeTableViewer(Composite parent) {
+	public DeclarativeTableViewer(Composite parent, List<? extends Entity> entities) {
 		super(parent);
+		this.entities = entities;
 	}
 
 	public abstract CellEditor[] developEditors();

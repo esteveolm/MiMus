@@ -21,8 +21,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 	
 	public OficiTableViewer(Composite parent, List<Ofici> oficis, 
 			List<Instrument> instruments) {
-		super(parent);
-		this.entities = oficis;
+		super(parent, oficis);
 		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument"};
 		this.columnNames = aux;
 	}
