@@ -123,7 +123,20 @@ public class Editor extends EditorPart implements EventObserver {
 			throw new PartInitException("Could not connect to SQL database");
 		}
 		
+		/* 
+		 * DocumentView loads all documents on opening but is unaware of changes
+		 * in metadata that modify the state of a Document. Hence, first thing
+		 * the editor does is retrieve the Document from DB again using the ID 
+		 * (which is a field that never changes).
+		 */
 		docEntry = (Document) getEditorInput();
+		try {
+			docEntry = new DocumentDao(conn).selectOne(docEntry.getId());
+		} catch (SQLException e) {
+			System.out.println("Couldn't download last version of Document.");
+			e.printStackTrace();
+		}
+		
 		docID = docEntry.getNumbering();
 		System.out.println("Doc ID: " + docID);
 		control = SharedControl.getInstance();
