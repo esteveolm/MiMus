@@ -100,7 +100,7 @@ public class Document extends Unit implements IEditorInput {
 	}
 	
 	public String toString() {
-		return "Document " + getNumbering();
+		return "Document " + getIdStr();
 	}
 	
 	/* 
@@ -111,7 +111,7 @@ public class Document extends Unit implements IEditorInput {
 	public String getIdStr() {
 		/* As IDs in 001..999, 3-len(id) gives the number of leading zeros */
 		String str = String.valueOf(getId());
-		int len0 = Math.max(3-str.length(), 0);
+		int len0 = Math.max(5-str.length(), 0);
 		String zeros = "";
 		if (len0>0) {
 			/* Creates array with null characters and replaces them by 0s */

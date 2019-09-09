@@ -46,7 +46,6 @@ public class DocumentsTableViewer {
 			}
 		}
 		);
-		
 	}
 
 	public List<Document> getDocuments() {
