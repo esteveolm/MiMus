@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -236,6 +238,7 @@ public class BiblioView extends ViewPart implements EventSubject {
 		lv.setUseHashlookup(true);
 		lv.setContentProvider(ArrayContentProvider.getInstance());
 		lv.setLabelProvider(new BiblioLabelProvider());
+		lv.setComparator(new BiblioComparator());
 		
 		/* Load bibliography entries from DB */
 		try {
@@ -327,6 +330,14 @@ public class BiblioView extends ViewPart implements EventSubject {
 		@Override
 		public String getText(Object element) {
 			return ((Bibliography)element).getShortReference();
+		}
+	}
+	
+	class BiblioComparator extends ViewerComparator {
+		public int compare(Viewer viewer, Object e1, Object e2) {
+			Bibliography b1 = (Bibliography) e1;
+			Bibliography b2 = (Bibliography) e2;
+			return b1.getShortReference().compareTo(b2.getShortReference());
 		}
 	}
 	
