@@ -99,11 +99,14 @@ public class Editor extends EditorPart implements EventObserver {
 	private RelationTableViewer relationHelper;
 	private TranscriptionTableViewer transcriptionHelper;
 	private ReferenceTableViewer referenceHelper;
+	private CheckboxTableViewer materiesTV;
+	private Combo comboLlengua;
 	private List<EntityInstance> entityInstances;
 	private List<Relation> relations;
 	private List<Transcription> transcriptions;
 	private List<Bibliography> bibliography;
 	private List<MiMusReference> references;
+	private List<Materia> allMateries;
 	
 	private FormToolkit toolkit;
 	private ScrolledForm form;
@@ -130,12 +133,7 @@ public class Editor extends EditorPart implements EventObserver {
 		 * (which is a field that never changes).
 		 */
 		docEntry = (Document) getEditorInput();
-		try {
-			docEntry = new DocumentDao(conn).selectOne(docEntry.getId());
-		} catch (SQLException e) {
-			System.out.println("Couldn't download last version of Document.");
-			e.printStackTrace();
-		}
+		updateDocument();
 		
 		docID = docEntry.getNumbering();
 		System.out.println("Doc ID: " + docID);
@@ -149,6 +147,15 @@ public class Editor extends EditorPart implements EventObserver {
 		this.setPartName("Doc. " + docIdStr);
 	}
 	
+	private void updateDocument() {
+		try {
+			docEntry = new DocumentDao(conn).selectOne(docEntry.getId());
+		} catch (SQLException e) {
+			System.out.println("Couldn't download last version of Document.");
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * When Editor is closed, it is unregistered from SharedControl.
 	 */
@@ -169,6 +176,8 @@ public class Editor extends EditorPart implements EventObserver {
 		GridLayout gl = new GridLayout();
 		form.getBody().setLayout(gl);
 		
+		Button refreshBtn = toolkit.createButton(
+				form.getBody(), "Refresh", SWT.PUSH | SWT.CENTER);
 		
 		/* SECTION STATUS OF THE DOCUMENT */
 		Section sectStatus = toolkit.createSection(form.getBody(), 
@@ -446,17 +455,12 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		/* Llengua: combo */
 		toolkit.createLabel(compMeta, "Llengua:");
-		Combo comboLlengua = new Combo(compMeta, SWT.DROP_DOWN | SWT.READ_ONLY);
+		comboLlengua = new Combo(compMeta, SWT.DROP_DOWN | SWT.READ_ONLY);
 		comboLlengua.setItems(Document.LANGS);
 		
 		/* Set Llengua if already defined */
-		String llengua = docEntry.getLanguage();
-		for (int i=0; i<comboLlengua.getItems().length; i++) {
-			if (llengua.equals(comboLlengua.getItem(i))) {
-				comboLlengua.select(i);
-				break;
-			}
-		}
+		selectLlengua();
+		
 		
 		/* Materies: CheckBoxTableViewer */
 		class MateriesLabelProvider extends LabelProvider
@@ -475,13 +479,13 @@ public class Editor extends EditorPart implements EventObserver {
 		/* Materies checkbox list */
 		toolkit.createLabel(compMeta, "Materies:");
 		
-		CheckboxTableViewer materiesTV = CheckboxTableViewer.newCheckList(compMeta,
+		materiesTV = CheckboxTableViewer.newCheckList(compMeta,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
 		
 		/* The checkbox list is filled with the entries from Materies table on DB */
-		List<Materia> allMateries = new ArrayList<>();
+		allMateries = new ArrayList<>();
 		try {
 			allMateries = new MateriaDao(conn).selectAll();
 		} catch (SQLException e1) {
@@ -490,16 +494,7 @@ public class Editor extends EditorPart implements EventObserver {
 		materiesTV.setInput(allMateries);
 		
 		/* Check those Materies already selected in Document */
-		List<Materia> materies = docEntry.getSubjects();
-		System.out.println("Read " + materies.size());
-		for (int i=0; i<allMateries.size(); i++) {
-			Materia thisMat = allMateries.get(i);
-			for (Materia mat : materies) {
-				if (mat.getName().equals(thisMat.getName())) {
-					materiesTV.setChecked(thisMat, true);
-				}
-			}
-		}
+		checkMateries();
 		
 		/* Button to save Llengua and Matèries to SQL */
 		Button saveMeta = new Button(compMeta, SWT.PUSH | SWT.CENTER);
@@ -574,6 +569,55 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		
 		/* BUTTON LISTENERS */
+		refreshBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateDocument();
+				comboStateAnnot.select(docEntry.getStateAnnotIdx());
+				comboStateRev.select(docEntry.getStateRevIdx());
+				regestText.setText(docEntry.getRegestText());
+				transcriptionText.setText(docEntry.getTranscriptionText());
+				
+				try {
+					entityInstances = new InstanceDao(conn).select(docEntry);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					System.out.println("SQLException: could not retrieve instances.");
+				}
+				try {
+					relations = new AnyRelationDao(conn).select(docEntry);
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					System.out.println("SQLException: could not retrieve relations.");
+				}
+				try {
+					transcriptions = new TranscriptionDao(conn).select(docEntry);
+				} catch (SQLException e3) {
+					System.out.println("SQLException: could not retrieve transcriptions.");
+					e3.printStackTrace();
+				}
+				try {
+					references = new ReferenceDao(conn).select(docEntry);
+				} catch (SQLException e4) {
+					System.out.println("SQLException: could not retrieve references.");
+					e4.printStackTrace();
+				}
+				allMateries = new ArrayList<>();
+				try {
+					allMateries = new MateriaDao(conn).selectAll();
+				} catch (SQLException e5) {
+					e5.printStackTrace();
+					System.out.println("Could not query DB to retrieve Materies");
+				}
+				entityTV.refresh();
+				relationTV.refresh();
+				transcriptionTV.refresh();
+				referenceTV.refresh();
+				
+				selectLlengua();
+				checkMateries();
+			}
+		});
 		saveState.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1056,6 +1100,28 @@ public class Editor extends EditorPart implements EventObserver {
 		});
 	}
 	
+	private void checkMateries() {
+		List<Materia> materies = docEntry.getSubjects();
+		for (int i=0; i<allMateries.size(); i++) {
+			Materia thisMat = allMateries.get(i);
+			for (Materia mat : materies) {
+				if (mat.getName().equals(thisMat.getName())) {
+					materiesTV.setChecked(thisMat, true);
+				}
+			}
+		}
+	}
+
+	private void selectLlengua() {
+		String llengua = docEntry.getLanguage();
+		for (int i=0; i<comboLlengua.getItems().length; i++) {
+			if (llengua.equals(comboLlengua.getItem(i))) {
+				comboLlengua.select(i);
+				break;
+			}
+		}
+	}
+
 	private void runDialog(InstanceDialog<? extends Entity> dialog, 
 			List<EntityInstance> entities, Label label) {
 		int dialogResult = dialog.open();
