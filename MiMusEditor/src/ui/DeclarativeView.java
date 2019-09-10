@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -87,11 +88,11 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	
 	public abstract void developForm(ScrolledForm form);
 	
-	public void addAnnotationsLabel(Composite parent) {
+	public void addAnnotationsLabel(Composite parent, GridData gd) {
 		annotationsText = new Text(parent, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		annotationsText.setText("");
-		
+		annotationsText.setLayoutData(gd);
 	}
 	
 	public void addStateLabel(Composite parent) {

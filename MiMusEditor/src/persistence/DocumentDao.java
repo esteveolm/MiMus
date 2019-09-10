@@ -290,9 +290,10 @@ public class DocumentDao extends UnitDao<Document> {
 	}
 	
 	public List<Document> selectWhereEntity(int id) throws SQLException {
-		String sql = "SELECT document.* FROM document, entity_instance, entity "
-				+ "WHERE document.id=entity_instance.document_id AND "
-				+ "entity_instance.entity_id="+id;
+		String sql = "SELECT DISTINCT document.* "
+				+ "FROM document, entity_instance, entity "
+				+ "WHERE document.id=entity_instance.document_id "
+				+ "AND entity_instance.entity_id="+id;
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		List<Document> docs = new ArrayList<>();

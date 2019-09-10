@@ -90,7 +90,7 @@ public class CasaView extends DeclarativeView<Casa> {
 				new CasaTableViewer(sectTable.getParent(), cases);
 		setTv(casaHelper.createTableViewer());
 		
-		addAnnotationsLabel(sectAdd.getParent());
+		addAnnotationsLabel(sectAdd.getParent(), grid);
 		createTableActions();
 		
 		/* Label for user feedback */

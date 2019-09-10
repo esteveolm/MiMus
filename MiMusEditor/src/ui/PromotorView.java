@@ -123,7 +123,7 @@ public class PromotorView extends DeclarativeView<Promotor> {
 				new PromotorTableViewer(sectTable.getParent(), promotors);
 		setTv(promotorHelper.createTableViewer());	
 		
-		addAnnotationsLabel(sectAdd.getParent());
+		addAnnotationsLabel(sectAdd.getParent(), grid);
 		createTableActions();
 		
 		/* Label for user feedback */

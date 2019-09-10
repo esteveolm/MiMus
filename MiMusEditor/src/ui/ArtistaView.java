@@ -150,7 +150,7 @@ public class ArtistaView extends DeclarativeView<Artista> {
 				new ArtistaTableViewer(sectTable.getParent(), artists);
 		setTv(artistaHelper.createTableViewer());	
 		
-		addAnnotationsLabel(sectTable.getParent());
+		addAnnotationsLabel(sectTable.getParent(), grid);
 		createTableActions();
 		
 		/* Label for user feedback */
