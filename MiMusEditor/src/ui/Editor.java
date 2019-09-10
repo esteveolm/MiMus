@@ -36,8 +36,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
-import control.EventObserver;
-import control.SharedControl;
 import model.Entity;
 import model.EntityInstance;
 import model.GenereLiterari;
@@ -85,9 +83,8 @@ import util.DBUtils;
 import util.LabelPrinter;
 import util.TextStyler;
 
-public class Editor extends EditorPart implements EventObserver {
+public class Editor extends EditorPart {
 	
-	private SharedControl control;
 	private Connection conn;
 	private Document docEntry;
 	private String docIdStr;
@@ -137,8 +134,6 @@ public class Editor extends EditorPart implements EventObserver {
 		
 		docID = docEntry.getNumbering();
 		System.out.println("Doc ID: " + docID);
-		control = SharedControl.getInstance();
-		control.addEditor(this);
 		
 		/* Txt must always be present so the text can be loaded */
 		docIdStr = docEntry.getIdStr();
@@ -162,7 +157,6 @@ public class Editor extends EditorPart implements EventObserver {
 	@Override
 	public void dispose() {
 		super.dispose();
-		control.removeEditor(this);
 		toolkit.dispose();
 	}
 	
@@ -1389,14 +1383,5 @@ public class Editor extends EditorPart implements EventObserver {
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
-	}
-
-	@Override
-	public void update() {		
-		/* Refresh all table viewers */
-		entityHelper.refresh();
-		transcriptionHelper.refresh();
-		relationHelper.refresh();
-		referenceHelper.refresh();
 	}
 }

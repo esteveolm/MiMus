@@ -21,16 +21,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
-import control.EventObserver;
-import control.EventSubject;
-import control.SharedControl;
 import model.Document;
 import model.Entity;
 import persistence.DocumentDao;
 import util.DBUtils;
 
-public abstract class DeclarativeView<E extends Entity> extends ViewPart 
-		implements EventSubject, EventObserver {
+public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	
 	final int LABEL_FLAGS = SWT.VERTICAL;
 	final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
@@ -46,8 +42,6 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	private boolean stateAdd;
 	private int selectedId;
 	private Connection conn;
-	private SharedControl control;
-	private List<EventObserver> observers;
 	private TableViewer tv;
 	protected Button btnAdd;
 	protected Button btnClr;
@@ -57,8 +51,6 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	
 	public DeclarativeView() {
 		super();
-		setObservers(new ArrayList<>());
-		setControl(SharedControl.getInstance());
 		setStateAdd(true);
 		setSelectedId(0);
 		
@@ -185,34 +177,10 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart
 	}
 	
 	@Override
-	public void attach(EventObserver o) {
-		getObservers().add(o);
-	}
-	
-	@Override
-	public void detach(EventObserver o) {
-		getObservers().remove(o);
-	}
-	
-	@Override
-	public List<EventObserver> getObservers() {
-		return observers;
-	}
-	
-	@Override
 	public void setFocus() {}
 	
 	
 	/* Getters and setters */
-	public SharedControl getControl() {
-		return control;
-	}
-	public void setControl(SharedControl control) {
-		this.control = control;
-	}
-	public void setObservers(List<EventObserver> observers) {
-		this.observers = observers;
-	}
 	public TableViewer getTv() {
 		return tv;
 	}

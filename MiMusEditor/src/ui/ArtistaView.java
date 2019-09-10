@@ -38,7 +38,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 	
 	public ArtistaView() {
 		super();
-		getControl().setArtistaView(this);
 		try {
 			artists = new ArtistaDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
@@ -194,7 +193,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 							artists.addAll(new ArtistaDao(getConnection()).selectAll());
 							System.out.println("Artist created successfully.");
 							LabelPrinter.printInfo(label, "Artist added successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert Artist into DB.");
@@ -216,7 +214,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 						artists.addAll(new ArtistaDao(getConnection()).selectAll());
 						System.out.println("Artist updated successfully.");
 						LabelPrinter.printInfo(label, "Artist updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -241,7 +238,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 						artists.clear();
 						artists.addAll(new ArtistaDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
@@ -254,18 +250,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 			}
 		});
 	}
-	
-	/**
-	 * When ArtistaView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
-		getControl().unsetArtistaView();
-	}
-
-	@Override
-	public void update() {}
 
 	@Override
 	protected void fillFieldsFromSelection(Artista ent) {

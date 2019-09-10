@@ -30,7 +30,6 @@ public class CasaView extends DeclarativeView<Casa> {
 	
 	public CasaView() {
 		super();
-		getControl().setCasaView(this);
 		try {
 			cases = new CasaDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
@@ -118,7 +117,6 @@ public class CasaView extends DeclarativeView<Casa> {
 							cases.addAll(new CasaDao(getConnection()).selectAll());
 							System.out.println(getViewName() + " created successfully.");
 							LabelPrinter.printInfo(label, getViewName() + " created successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert Casa into DB.");
@@ -140,7 +138,6 @@ public class CasaView extends DeclarativeView<Casa> {
 						cases.addAll(new CasaDao(getConnection()).selectAll());
 						System.out.println(getViewName() + " updated successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -165,7 +162,6 @@ public class CasaView extends DeclarativeView<Casa> {
 						cases.clear();
 						cases.addAll(new CasaDao(getConnection()).selectAll());
 						getTv().refresh();
-						notifyObservers();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -186,11 +182,7 @@ public class CasaView extends DeclarativeView<Casa> {
 	@Override
 	public void dispose() {
 		super.dispose();
-		getControl().unsetCasaView();
 	}
-
-	@Override
-	public void update() {}
 
 	@Override
 	protected void fillFieldsFromSelection(Casa ent) {

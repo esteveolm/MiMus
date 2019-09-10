@@ -31,7 +31,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 	
 	public GenereLiterariView() {
 		super();
-		getControl().setGenereView(this);
 		try {
 			generes = new GenereLiterariDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
@@ -124,7 +123,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 									new GenereLiterariDao(getConnection()).selectAll());
 							System.out.println("Genere created successfully.");
 							LabelPrinter.printInfo(label, "Genere added successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert Genere into DB.");
@@ -147,7 +145,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 								new GenereLiterariDao(getConnection()).selectAll());
 						System.out.println("Genere updated successfully.");
 						LabelPrinter.printInfo(label, "Genere updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -173,7 +170,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 						generes.addAll(
 								new GenereLiterariDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Genere deleted successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
@@ -192,18 +188,6 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		return "genere_literari";
 	}
 	
-	/**
-	 * When GenereLiterariView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
-		getControl().unsetGenereView();
-	}
-	
-	@Override
-	public void update() {}
-
 	@Override
 	protected void fillFieldsFromSelection(GenereLiterari ent) {
 		textNombreCompleto.setText(ent.getNomComplet());

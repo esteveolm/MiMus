@@ -10,8 +10,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.14.0",
  org.eclipse.ui;bundle-version="3.109.100",
  org.eclipse.ui.forms,
  org.eclipse.ui.ide;bundle-version="3.14.0"
-Export-Package: control,
- model,
+Export-Package: model,
  ui,
  util
 Bundle-ClassPath: lib/mysql-connector-java-8.0.15.jar,

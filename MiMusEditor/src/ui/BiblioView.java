@@ -29,30 +29,22 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
-import control.EventObserver;
-import control.EventSubject;
-import control.SharedControl;
 import model.Bibliography;
 import persistence.BibliographyDao;
 import util.DBUtils;
 import util.LabelPrinter;
 
-public class BiblioView extends ViewPart implements EventSubject {
+public class BiblioView extends ViewPart {
 
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
 	private ListViewer lv;
 	private List<Bibliography> bibliography;
-	private SharedControl control;
-	private List<EventObserver> observers;
 	private Connection conn;
 	
 	public BiblioView() {
 		super();
-		observers = new ArrayList<>();
 		bibliography = new ArrayList<>();
-		control = SharedControl.getInstance();
-		control.setBiblioView(this);
 		try {
 			setConnection(DBUtils.connect());
 		} catch (SQLException e) {
@@ -197,7 +189,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 						bibliography.clear();
 						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
-						notifyObservers();
 						lv.refresh();
 					} else {
 						System.out.println("DAO: Could not insert entry into DB.");
@@ -311,7 +302,6 @@ public class BiblioView extends ViewPart implements EventSubject {
 						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
 						System.out.println("BibEntry removed successfully.");
 						LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
-						notifyObservers();
 						lv.refresh();
 						fullReference.setText(""); /* Clear full reference */
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -347,28 +337,10 @@ public class BiblioView extends ViewPart implements EventSubject {
 	@Override
 	public void dispose() {
 		super.dispose();
-		control.unsetBiblioView();
 	}
 	
 	@Override
 	public void setFocus() {}
-	
-	/* Observer pattern for updates in state changes to Editors */
-	
-	@Override
-	public void attach(EventObserver o) {
-		observers.add(o);
-	}
-	
-	@Override
-	public void detach(EventObserver o) {
-		observers.remove(o);
-	}
-	
-	@Override
-	public List<EventObserver> getObservers() {
-		return observers;
-	}
 
 	public Connection getConnection() {
 		return conn;

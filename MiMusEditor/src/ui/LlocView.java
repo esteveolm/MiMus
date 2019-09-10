@@ -31,7 +31,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 	
 	public LlocView() {
 		super();
-		getControl().setLlocView(this);
 		
 		try {
 			llocs = new LlocDao(getConnection()).selectAll();
@@ -139,7 +138,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 							llocs.clear();
 							llocs.addAll(new LlocDao(getConnection()).selectAll());
 							LabelPrinter.printInfo(label, "Lloc added successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert LLoc into DB.");
@@ -160,7 +158,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 						llocs.clear();
 						llocs.addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -186,7 +183,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 						llocs.addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
 						getTv().refresh();
-						notifyObservers();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
@@ -205,15 +201,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 	}
 	
 	@Override
-	public void update() {}
-	
-	/**
-	 * When LlocView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
 	public void dispose() {
 		super.dispose();
-		getControl().unsetLlocView();
 	}
 
 	@Override

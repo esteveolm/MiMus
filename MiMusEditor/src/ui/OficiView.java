@@ -35,7 +35,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 	
 	public OficiView() {
 		super();
-		getControl().setOficiView(this);
 		comboInstrument = null;
 		
 		try {
@@ -98,6 +97,19 @@ public class OficiView extends DeclarativeView<Ofici> {
 			public void widgetSelected(SelectionEvent e) {
 				if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
 						.equals("Instrument")) {
+					/* First, update list of instruments */
+					try {
+						insts = new InstrumentDao(getConnection()).selectAll();
+						String[] instNames = new String[insts.size()];
+						for (int i=0; i<instNames.length; i++) {
+							instNames[i] = ((Instrument) insts.get(i)).getLemma();
+						}
+						comboInstrument.setItems(instNames);
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("Could not select Instruments from DB.");
+					}
+					
 					comboInstrument.setEnabled(true);
 					comboInstrument.select(0);
 				} else {
@@ -164,7 +176,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 							oficis.addAll(new OficiDao(getConnection()).selectAll());
 							System.out.println("Ofici created successfully.");
 							LabelPrinter.printInfo(label, "Ofici added successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert Artist into DB.");
@@ -186,7 +197,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 						oficis.addAll(new OficiDao(getConnection()).selectAll());
 						System.out.println("Ofici updated successfully.");
 						LabelPrinter.printInfo(label, "Ofici updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -215,7 +225,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
-						notifyObservers();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
@@ -234,23 +243,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 	@Override
 	public void dispose() {
 		super.dispose();
-		getControl().unsetOficiView();
-	}
-
-	@Override
-	public void update() {
-		/* Re-read instruments and set Combo items again */
-		try {
-			insts = new InstrumentDao(getConnection()).selectAll();
-			String[] instNames = new String[insts.size()];
-			for (int i=0; i<instNames.length; i++) {
-				instNames[i] = ((Instrument) insts.get(i)).getLemma();
-			}
-			comboInstrument.setItems(instNames);
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			System.out.println("Could not select Instruments from DB.");
-		}
 	}
 
 	@Override

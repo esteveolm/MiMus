@@ -34,7 +34,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	
 	public PromotorView() {
 		super();
-		getControl().setPromotorView(this);
 		
 		try {
 			promotors = new PromotorDao(getConnection()).selectAll();
@@ -160,7 +159,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 							promotors.addAll(new PromotorDao(getConnection()).selectAll());
 							System.out.println("Promotor added successfully.");
 							LabelPrinter.printInfo(label, "Promotor added successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} else {
 							System.out.println("DAO: Could not insert Promotor into DB.");
@@ -182,7 +180,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 						promotors.addAll(new PromotorDao(getConnection()).selectAll());
 						System.out.println("Promotor updated successfully.");
 						LabelPrinter.printInfo(label, "Promotor updated successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLException e2) {
 						e2.printStackTrace();
@@ -211,7 +208,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() 
 								+ " removed successfully.");
-						notifyObservers();
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
@@ -231,11 +227,7 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	@Override
 	public void dispose() {
 		super.dispose();
-		getControl().unsetPromotorView();
 	}
-
-	@Override
-	public void update() {}
 
 	@Override
 	protected void fillFieldsFromSelection(Promotor ent) {

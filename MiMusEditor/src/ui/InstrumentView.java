@@ -32,7 +32,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	
 	public InstrumentView() {
 		super();
-		getControl().setInstrumentView(this);
 		
 		try {
 			instruments = new InstrumentDao(getConnection()).selectAll();
@@ -152,7 +151,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 								instruments.clear();
 								instruments.addAll(new InstrumentDao(getConnection()).selectAll());
 								LabelPrinter.printInfo(label, "Instrument added successfully.");
-								notifyObservers();
 								getTv().refresh();
 							} else {
 								System.out.println("DAO: Could not insert Instrument into DB.");
@@ -173,7 +171,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 							instruments.clear();
 							instruments.addAll(new InstrumentDao(getConnection()).selectAll());
 							LabelPrinter.printInfo(label, "Instrument updated successfully.");
-							notifyObservers();
 							getTv().refresh();
 						} catch (SQLException e2) {
 							e2.printStackTrace();
@@ -198,7 +195,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 						instruments.clear();
 						instruments.addAll(new InstrumentDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
-						notifyObservers();
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
@@ -207,7 +203,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 						System.out.println("Could not delete Instrument from DB.");
 					}
 					getTv().refresh();
-					notifyObservers();
 					System.out.println("Instrument removed successfully.");
 				}
 			}
@@ -220,11 +215,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	@Override
 	public void dispose() {
 		super.dispose();
-		getControl().unsetInstrumentView();
 	}
-
-	@Override
-	public void update() {}
 
 	@Override
 	protected void fillFieldsFromSelection(Instrument ent) {
