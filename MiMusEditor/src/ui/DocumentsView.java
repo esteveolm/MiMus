@@ -38,7 +38,7 @@ public class DocumentsView extends ViewPart {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		setTv(new DocumentsTableViewer(parent, documents));
+		setTv(new DocumentsTableViewer(form.getBody(), documents));
 	}
 
 	@Override
