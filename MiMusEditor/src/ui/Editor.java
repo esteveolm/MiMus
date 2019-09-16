@@ -8,9 +8,11 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -30,7 +32,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -308,6 +312,10 @@ public class Editor extends EditorPart {
 		Button removeEnt = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		removeEnt.setLayoutData(buttonsEntData);
 		removeEnt.setText("Delete");
+		
+		Button associateEnt = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
+		associateEnt.setLayoutData(buttonsEntData);
+		associateEnt.setText("Open Entity");
 
 		
 		/* SECTION RELATIONS */
@@ -865,6 +873,106 @@ public class Editor extends EditorPart {
 						LabelPrinter.printError(regestLabel, 
 								"Cannot delete Entity Instance in use.");
 						System.out.println("Could not delete: entity in use.");
+					}
+				}
+			}
+		});
+		associateEnt.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				EntityInstance ent = (EntityInstance) 
+						((IStructuredSelection) entityTV.getSelection())
+						.getFirstElement();
+				if (ent==null) {
+					System.out.println(
+							"Could not open Entity because none was selected.");
+					LabelPrinter.printError(regestLabel, 
+							"You must select an entity to open it.");
+				} else {
+					if (ent.getItsEntity().getType().equals("Artista")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.artistaView");
+							DeclarativeView<Artista> decView = 
+									(DeclarativeView<Artista>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("Casa")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.casaView");
+							DeclarativeView<Casa> decView = 
+									(DeclarativeView<Casa>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("GenereLiterari")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.genereView");
+							DeclarativeView<GenereLiterari> decView = 
+									(DeclarativeView<GenereLiterari>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("Instrument")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.instrumentView");
+							DeclarativeView<Instrument> decView = 
+									(DeclarativeView<Instrument>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("Lloc")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.llocView");
+							DeclarativeView<Lloc> decView = 
+									(DeclarativeView<Lloc>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("Ofici")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.oficiView");
+							DeclarativeView<Ofici> decView = 
+									(DeclarativeView<Ofici>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
+					} else if (ent.getItsEntity().getType().equals("Promotor")) {
+						try {
+							IViewPart view = PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow()
+									.getActivePage()
+									.showView("MiMusEditor.promotorView");
+							DeclarativeView<Promotor> decView = 
+									(DeclarativeView<Promotor>) view;
+							decView.selectEntityInTable(ent.getItsEntity());
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}

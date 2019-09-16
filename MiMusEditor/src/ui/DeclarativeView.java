@@ -179,6 +179,18 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	@Override
 	public void setFocus() {}
 	
+	public abstract List<E> getEntities();
+	
+	public void selectEntityInTable(Entity ent) {
+		for (int i=0; i<getEntities().size(); i++) {
+			Entity thisEnt = (Entity) getTv().getElementAt(i);
+			if (thisEnt.getId() == ent.getId()) {
+				getTv().getTable().select(i);
+				break;
+			}
+		}
+	}
+	
 	
 	/* Getters and setters */
 	public TableViewer getTv() {

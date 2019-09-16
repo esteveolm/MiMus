@@ -213,4 +213,9 @@ public class LlocView extends DeclarativeView<Lloc> {
 				Lloc.REGNES[comboArea.getSelectionIndex()]);
 		comboRegne.select(ent.getRegne());
 	}
+
+	@Override
+	public List<Lloc> getEntities() {
+		return llocs;
+	}
 }

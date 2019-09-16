@@ -226,4 +226,9 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		comboClasse.select(ent.getClasse());
 		textPart.setText(ent.getPart());
 	}
+
+	@Override
+	public List<Instrument> getEntities() {
+		return instruments;
+	}
 }

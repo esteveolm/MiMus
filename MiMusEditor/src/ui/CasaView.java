@@ -190,4 +190,9 @@ public class CasaView extends DeclarativeView<Casa> {
 		textTitol.setText(ent.getTitol());
 		textTitol.setText(ent.getCort());
 	}
+
+	@Override
+	public List<Casa> getEntities() {
+		return cases;
+	}
 }

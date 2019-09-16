@@ -195,4 +195,9 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		textNomOccita.setText(ent.getNomOccita());
 		textDefinicio.setText(ent.getDefinicio());
 	}
+
+	@Override
+	public List<GenereLiterari> getEntities() {
+		return generes;
+	}
 }

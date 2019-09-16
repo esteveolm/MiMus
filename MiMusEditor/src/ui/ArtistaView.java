@@ -264,4 +264,9 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		textOrigen.setText(ent.getOrigen());
 		textObs.setText(ent.getObservacions());
 	}
+
+	@Override
+	public List<Artista> getEntities() {
+		return artists;
+	}
 }

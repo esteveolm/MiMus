@@ -239,4 +239,9 @@ public class PromotorView extends DeclarativeView<Promotor> {
 		comboGenere.select(ent.getGenere());
 		textObs.setText(ent.getObservacions());
 	}
+
+	@Override
+	public List<Promotor> getEntities() {
+		return promotors;
+	}
 }

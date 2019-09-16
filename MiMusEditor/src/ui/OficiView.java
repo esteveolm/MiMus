@@ -267,4 +267,9 @@ public class OficiView extends DeclarativeView<Ofici> {
 		}
 		
 	}
+
+	@Override
+	public List<Ofici> getEntities() {
+		return oficis;
+	}
 }
