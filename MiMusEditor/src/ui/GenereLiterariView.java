@@ -200,4 +200,14 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 	public List<GenereLiterari> getEntities() {
 		return generes;
 	}
+
+	@Override
+	public List<GenereLiterari> retrieveEntities() throws SQLException {
+		return new GenereLiterariDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<GenereLiterari> entities) {
+		generes = entities;
+	}
 }

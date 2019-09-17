@@ -195,4 +195,14 @@ public class CasaView extends DeclarativeView<Casa> {
 	public List<Casa> getEntities() {
 		return cases;
 	}
+
+	@Override
+	public List<Casa> retrieveEntities() throws SQLException {
+		return new CasaDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<Casa> entities) {
+		cases = entities;
+	}
 }

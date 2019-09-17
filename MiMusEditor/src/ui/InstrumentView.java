@@ -231,4 +231,14 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	public List<Instrument> getEntities() {
 		return instruments;
 	}
+
+	@Override
+	public List<Instrument> retrieveEntities() throws SQLException {
+		return new InstrumentDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<Instrument> entities) {
+		instruments = entities;
+	}
 }

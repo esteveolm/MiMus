@@ -10,6 +10,7 @@ public abstract class MiMusTableViewer {
 
 	protected Composite parent;
 	protected TableViewer tv;
+
 	protected String[] columnNames;
 	
 	public MiMusTableViewer(Composite parent) {
@@ -33,5 +34,13 @@ public abstract class MiMusTableViewer {
 	}
 	public void setColumnNames(String[] columnNames) {
 		this.columnNames = columnNames;
+	}
+	
+	public TableViewer getTv() {
+		return tv;
+	}
+
+	public void setTv(TableViewer tv) {
+		this.tv = tv;
 	}
 }

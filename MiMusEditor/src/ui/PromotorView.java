@@ -244,4 +244,14 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	public List<Promotor> getEntities() {
 		return promotors;
 	}
+
+	@Override
+	public List<Promotor> retrieveEntities() throws SQLException {
+		return new PromotorDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<Promotor> entities) {
+		promotors = entities;
+	}
 }

@@ -218,4 +218,14 @@ public class LlocView extends DeclarativeView<Lloc> {
 	public List<Lloc> getEntities() {
 		return llocs;
 	}
+
+	@Override
+	public List<Lloc> retrieveEntities() throws SQLException {
+		return new LlocDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<Lloc> entities) {
+		llocs = entities;
+	}
 }

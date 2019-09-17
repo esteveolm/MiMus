@@ -65,10 +65,37 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		ScrolledForm form = initForm(parent);
+		
+		Button refreshBtn = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		refreshBtn.setText("Refresh");
+		
 		developForm(form);
+		
+		refreshBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					setEntities(retrieveEntities());
+				} catch(SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				tv.setInput(getEntities());
+				tv.refresh();
+				setStateAdd(true);
+				setSelectedId(0);
+				stateLabel.setText(STATE_ADD);
+				btnAdd.setText(BUTTON_ADD);
+				
+				/* Empty label for document annotations */
+				annotationsText.setText("");
+			}
+		});
 	}
 	
 	public abstract String getViewName();
+	
+	public abstract List<E> retrieveEntities() throws SQLException;
 	
 	private ScrolledForm initForm(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
@@ -178,6 +205,8 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	
 	@Override
 	public void setFocus() {}
+	
+	public abstract void setEntities(List<E> entities);
 	
 	public abstract List<E> getEntities();
 	

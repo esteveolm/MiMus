@@ -39,10 +39,9 @@ public class ArtistaView extends DeclarativeView<Artista> {
 	public ArtistaView() {
 		super();
 		try {
-			artists = new ArtistaDao(getConnection()).selectAll();
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			System.out.println("Could not load artists from DB.");
+			artists = retrieveEntities();
+		} catch(SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -54,7 +53,7 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		return "/artista.xml";
 	}
 	
-	public void developForm(ScrolledForm form) {
+	public void developForm(ScrolledForm form) {		
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new " + getViewName());
@@ -268,5 +267,15 @@ public class ArtistaView extends DeclarativeView<Artista> {
 	@Override
 	public List<Artista> getEntities() {
 		return artists;
+	}
+	
+	@Override
+	public void setEntities(List<Artista> entities) {
+		artists = entities;
+	}
+
+	@Override
+	public List<Artista> retrieveEntities() throws SQLException {
+		return new ArtistaDao(getConnection()).selectAll();
 	}
 }

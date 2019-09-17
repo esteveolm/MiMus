@@ -272,4 +272,14 @@ public class OficiView extends DeclarativeView<Ofici> {
 	public List<Ofici> getEntities() {
 		return oficis;
 	}
+
+	@Override
+	public List<Ofici> retrieveEntities() throws SQLException {
+		return new OficiDao(getConnection()).selectAll();
+	}
+
+	@Override
+	public void setEntities(List<Ofici> entities) {
+		oficis = entities;
+	}
 }
