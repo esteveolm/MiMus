@@ -8,11 +8,9 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -611,9 +609,13 @@ public class Editor extends EditorPart {
 					e5.printStackTrace();
 					System.out.println("Could not query DB to retrieve Materies");
 				}
+				entityTV.setInput(entityInstances);
 				entityTV.refresh();
+				relationTV.setInput(relations);
 				relationTV.refresh();
+				transcriptionTV.setInput(transcriptions);
 				transcriptionTV.refresh();
+				referenceTV.setInput(references);
 				referenceTV.refresh();
 				
 				selectLlengua();
@@ -878,6 +880,7 @@ public class Editor extends EditorPart {
 			}
 		});
 		associateEnt.addSelectionListener(new SelectionAdapter() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				EntityInstance ent = (EntityInstance) 
