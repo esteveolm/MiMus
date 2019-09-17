@@ -324,7 +324,7 @@ CREATE TABLE te_ofici (
 		REFERENCES artista(id),
 	FOREIGN KEY (ofici_id)
 		REFERENCES ofici(id),
-	UNIQUE (artista_id, ofici_id),
+	UNIQUE (artista_id, ofici_id, relation_id),
 	PRIMARY KEY (id)
 );
 
