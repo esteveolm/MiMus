@@ -24,7 +24,7 @@ package model;
  */
 public class MiMusReference extends Unit {
 	
-	public static final String [] TYPES = {"Edition", "Register", "Citation"};
+	public static final String [] TYPES = {"Edició", "Regest", "Citació"};
 	
 	private Bibliography itsBiblio;
 	private Document itsDocument;

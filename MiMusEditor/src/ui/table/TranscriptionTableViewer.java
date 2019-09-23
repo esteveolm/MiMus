@@ -22,7 +22,7 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 	
 	public TranscriptionTableViewer(Composite parent, List<Transcription> initials) {
 		super(parent);
-		String[] cols = {"Selection", "Transcription", "Lemma"};
+		String[] cols = {"Transcripció", "Forma estàndard", "Lema"};
 		columnNames = cols;
 		transcriptions = initials;
 	}

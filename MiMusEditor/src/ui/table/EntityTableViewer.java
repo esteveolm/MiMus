@@ -23,10 +23,9 @@ public class EntityTableViewer extends MiMusTableViewer {
 	public EntityTableViewer(Composite parent, 
 			List<EntityInstance> initials, MiMusText text) {
 		super(parent);
-		String[] aux = {"Type", "Entity"};
+		String[] aux = {"Tipus", "Entitat"};
 		columnNames = aux;
 		entities = initials;
-		System.out.println("Initial instances: " + initials.size());
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;
-		String[] aux = {"Bibliography Entry", "Page info", "Reference Type"};
+		String[] aux = {"Tipus de referència", "Referència bibliogràfica", "Pàgina"};
 		columnNames = aux;
 	}
 
@@ -47,11 +47,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		/* Cell editors */
 		CellEditor[] editors = new CellEditor[columnNames.length];
 		editors[0] = new ComboBoxCellEditor(tv.getTable(), 
-				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
-		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
-		editors[2] = new ComboBoxCellEditor(tv.getTable(), 
 				MiMusReference.TYPES, 
 				SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[1] = new ComboBoxCellEditor(tv.getTable(), 
+				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
+		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		
 		tv.setCellEditors(editors);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setLabelProvider(new ReferenceLabelProvider());
@@ -83,7 +84,6 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 	@Override
 	public void refresh() {
 		super.refresh();
-		System.out.println("Refreshing reference tv.");
 		CellEditor[] editors = tv.getCellEditors();
 		((ComboBoxCellEditor) editors[0]).setItems(getBibEntriesText());
 		tv.refresh();
@@ -99,12 +99,12 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		public String getColumnText(Object element, int columnIndex) {
 			MiMusReference ref = (MiMusReference) element;
 			switch (columnIndex) {
-			case 0:	// BibEntry as a short reference
-				return ref.getItsBiblio().getShortReference();
-			case 1: // Page
-				return ref.getPage();
-			case 2:	// Reference Type
+			case 0:	// Reference Type
 				return MiMusReference.TYPES[ref.getType()];
+			case 1:	// BibEntry as a short reference
+				return ref.getItsBiblio().getShortReference();
+			case 2: // Page
+				return ref.getPage();
 			default:
 				return "";
 			}

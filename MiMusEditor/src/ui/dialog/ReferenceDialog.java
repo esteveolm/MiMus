@@ -45,7 +45,7 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		/* Type field (combo) */
 		Label typeLabel = new Label(getForm().getBody(), SWT.VERTICAL);
 		typeLabel.setText("Type:");
-		String[] types = {"Edition", "Register", "Citation"};
+		String[] types = {"Edició", "Regest", "Citació"};
 		Combo typeCombo = new Combo(getForm().getBody(), SWT.VERTICAL | SWT.WRAP);
 		typeCombo.setItems(types);
 		typeCombo.addSelectionListener(new SelectionAdapter() {

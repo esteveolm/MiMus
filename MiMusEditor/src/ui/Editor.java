@@ -284,10 +284,10 @@ public class Editor extends EditorPart {
 		compEntBtns.setLayout(layoutEntBtns);
 		
 		GridData buttonsEntData = new GridData();
-		buttonsEntData.widthHint = 125;
+		buttonsEntData.widthHint = 150;
 		Button addArt = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addArt.setLayoutData(buttonsEntData);
-		addArt.setText("Add Artist");
+		addArt.setText("Add Artista");
 		Button addProm = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addProm.setLayoutData(buttonsEntData);
 		addProm.setText("Add Promotor");
@@ -302,7 +302,7 @@ public class Editor extends EditorPart {
 		addCasa.setText("Add Casa");
 		Button addGenere = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addGenere.setLayoutData(buttonsEntData);
-		addGenere.setText("Add Genere");
+		addGenere.setText("Add Gènere literari");
 		Button addInst = new Button(compEntBtns, SWT.PUSH | SWT.CENTER);
 		addInst.setLayoutData(buttonsEntData);
 		addInst.setText("Add Instrument");
@@ -360,7 +360,7 @@ public class Editor extends EditorPart {
 		addArtToProm.setText("Add Servei Relation");
 		Button addArtToLloc = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		addArtToLloc.setLayoutData(gridRel);
-		addArtToLloc.setText("Add Residencia Relation");
+		addArtToLloc.setText("Add Residència Relation");
 		Button removeRel = new Button(compRelBtns, SWT.PUSH | SWT.CENTER);
 		removeRel.setLayoutData(gridRel);
 		removeRel.setText("Delete");
@@ -420,11 +420,11 @@ public class Editor extends EditorPart {
 		compFormsBtns.setLayout(layoutFormsBtns);
 		
 		GridData gridTrans = new GridData();
-		gridTrans.widthHint = 125;
+		gridTrans.widthHint = 150;
 		Button addTransArt = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransArt.setLayoutData(gridTrans);
-		addTransArt.setText("Add Artist");
+		addTransArt.setText("Add Artista");
 		Button addTransInst = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransInst.setLayoutData(gridTrans);
@@ -436,7 +436,7 @@ public class Editor extends EditorPart {
 		Button addTransGen = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
 		addTransGen.setLayoutData(gridTrans);
-		addTransGen.setText("Add Genere");
+		addTransGen.setText("Add Gènere Literari");
 		
 		Button removeTrans = new Button(compFormsBtns, 
 				SWT.PUSH | SWT.CENTER);
@@ -477,7 +477,7 @@ public class Editor extends EditorPart {
 		}
 		
 		/* Materies checkbox list */
-		toolkit.createLabel(compMeta, "Materies:");
+		toolkit.createLabel(compMeta, "Matèries:");
 		
 		materiesTV = CheckboxTableViewer.newCheckList(compMeta,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -498,7 +498,7 @@ public class Editor extends EditorPart {
 		
 		/* Button to save Llengua and Matèries to SQL */
 		Button saveMeta = new Button(compMeta, SWT.PUSH | SWT.CENTER);
-		saveMeta.setText("Save Llengua and Materies to DB");
+		saveMeta.setText("Save Llengua and Matèries to DB");
 		
 		Label metaLabel = toolkit.createLabel(compMeta, "");
 		metaLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -524,9 +524,9 @@ public class Editor extends EditorPart {
 		sectRef.setClient(compRef);
 		sectRef.setExpanded(false);
 		
-		String rawRefs = "Editions: " + docEntry.getEditions() +
-				"\nRegisters: " + docEntry.getRegisters() +
-				"\nCitations: " + docEntry.getCitations();
+		String rawRefs = "Edició: " + docEntry.getEditions() +
+				"\nRegest: " + docEntry.getRegisters() +
+				"\nCitació: " + docEntry.getCitations();
 		Text rawRefsText = toolkit.createText(compRef, rawRefs, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		rawRefsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
