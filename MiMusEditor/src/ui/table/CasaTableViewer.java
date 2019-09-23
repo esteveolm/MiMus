@@ -17,7 +17,7 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 
 	public CasaTableViewer(Composite parent, List<Casa> cases) {
 		super(parent, cases);
-		String[] aux = {"Nom complet", "Titol", "Cort"};
+		String[] aux = {"Nom complet", "Títol", "Cort"};
 		this.columnNames = aux;
 	}
 

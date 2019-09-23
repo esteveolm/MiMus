@@ -60,7 +60,7 @@ public class CasaView extends DeclarativeView<Casa> {
 		
 		/* Titol (text) */
 		Label labelTitol = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelTitol.setText("Titol:");
+		labelTitol.setText("Títol:");
 		textTitol = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTitol.setLayoutData(grid);
 		
@@ -83,7 +83,7 @@ public class CasaView extends DeclarativeView<Casa> {
 		
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);
-		sectTable.setText("Artists created");
+		sectTable.setText("Cases created");
 		
 		CasaTableViewer casaHelper =
 				new CasaTableViewer(sectTable.getParent(), cases);
@@ -97,7 +97,7 @@ public class CasaView extends DeclarativeView<Casa> {
 		label.setLayoutData(grid);
 		
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnDel.setText("Delete artist");
+		btnDel.setText("Delete " + getViewName());
 		
 		/* Button listeners */
 		

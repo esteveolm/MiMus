@@ -86,7 +86,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		
 		/* Table for generes created */
 		Section sectTable = new Section(form.getBody(), 0);
-		sectTable.setText("Generes created");
+		sectTable.setText("Gèneres literaris created");
 				
 		GenereTableViewer genereHelper = 
 				new GenereTableViewer(sectTable.getParent(), generes);
@@ -100,7 +100,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		label.setLayoutData(grid);
 		
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnDel.setText("Delete genere");
+		btnDel.setText("Delete " + getViewName());
 		
 		/* Button listeners */
 		

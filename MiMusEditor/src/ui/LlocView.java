@@ -110,7 +110,7 @@ public class LlocView extends DeclarativeView<Lloc> {
 		label.setLayoutData(grid);
 		
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnDel.setText("Delete lloc");
+		btnDel.setText("Delete " + getViewName());
 		
 		/* Button listeners */
 		

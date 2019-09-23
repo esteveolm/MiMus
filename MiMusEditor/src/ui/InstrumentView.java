@@ -123,7 +123,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		label.setLayoutData(grid);
 		
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnDel.setText("Delete instrument");
+		btnDel.setText("Delete " + getViewName());
 		
 		/* Button listeners */
 		

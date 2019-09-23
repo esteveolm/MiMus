@@ -89,7 +89,7 @@ public class PromotorView extends DeclarativeView<Promotor> {
 		
 		/* Genere (combo) */
 		Label labelGenere = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelGenere.setText("Genere:");
+		labelGenere.setText("Gènere:");
 		comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
 		comboGenere.setItems("No marcat", "home", "dona");
 		

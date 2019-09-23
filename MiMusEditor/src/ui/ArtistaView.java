@@ -142,7 +142,7 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);
-		sectTable.setText("Artists created");
+		sectTable.setText("Artistes created");
 				
 		ArtistaTableViewer artistaHelper = 
 				new ArtistaTableViewer(sectTable.getParent(), artists);
@@ -156,7 +156,7 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		label.setLayoutData(grid);
 		
 		Button btnDel = new Button(sectTable.getParent(), BUTTON_FLAGS);
-		btnDel.setText("Delete artist");
+		btnDel.setText("Delete " + getViewName());
 		
 		/* Button listeners */
 		
