@@ -159,7 +159,7 @@ public class MiMusEntryReader {
 		String regest = "";
 		for (int i=regestIdx; i<lines.size(); i++) {
 			if (lines.get(i).startsWith(STARTERS[9])) {
-				regest += lines.get(i).substring(2) + "\n";
+				regest += lines.get(i).substring(3) + "\n";
 			} else if (lines.get(i).startsWith(STARTERS[10])) {
 				break;
 			} else {

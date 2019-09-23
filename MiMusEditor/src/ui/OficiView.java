@@ -96,7 +96,9 @@ public class OficiView extends DeclarativeView<Ofici> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
-						.equals("Instrument")) {
+								.equals("Instrument") ||
+						Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
+								.equals("Artesà")) {
 					/* First, update list of instruments */
 					try {
 						insts = new InstrumentDao(getConnection()).selectAll();
@@ -251,7 +253,9 @@ public class OficiView extends DeclarativeView<Ofici> {
 		textTerme.setText(ent.getTerme());
 		comboEspecialitat.select(ent.getEspecialitat());
 		if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
-				.equals("Instrument")) {
+				.equals("Instrument") ||
+				Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()]
+						.equals("Artesà")) {
 			/* If selection has instrument, find it and select it */
 			comboInstrument.setEnabled(true);
 			for (int i=0; i<insts.size(); i++) {
