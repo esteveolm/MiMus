@@ -82,14 +82,15 @@ public class OficiView extends DeclarativeView<Ofici> {
 		
 		/* Instrument (combo) */
 		Label labelInstrument = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelInstrument.setText("Instrument:");
+		labelInstrument.setText("Instruments:");
 		comboInstrument = new Combo(sectAdd.getParent(), COMBO_FLAGS);
+		comboInstrument.setLayoutData(grid);
 		String[] instNames = new String[insts.size()];
 		for (int i=0; i<instNames.length; i++) {
 			instNames[i] = ((Instrument) insts.get(i)).getLemma();
 		}
 		comboInstrument.setItems(instNames);
-		comboInstrument.deselectAll();	/* Clearer if field gets empty */
+		comboInstrument.deselectAll();
 		comboInstrument.setEnabled(false);
 		
 		comboEspecialitat.addSelectionListener(new SelectionAdapter() {
