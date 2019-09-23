@@ -18,7 +18,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 
 	public LlocTableViewer(Composite parent, List<Lloc> llocs) {
 		super(parent, llocs);
-		String[] aux = {"Nom Complet", "Àrea", "Regne"};
+		String[] aux = {"Nom complet", "Àrea", "Regne"};
 		this.columnNames = aux;
 	}
 

@@ -17,7 +17,7 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 
 	public GenereTableViewer(Composite parent, List<GenereLiterari> generes) {
 		super(parent, generes);
-		String[] aux = {"Nom Complet", "Nom Frances", "Nom Occita", "Definicio"};
+		String[] aux = {"Nom complet", "Nom francès", "Nom occità", "Definició"};
 		this.columnNames = aux;
 	}
 

@@ -17,7 +17,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 	
 	public ArtistaTableViewer(Composite parent, List<Artista> artists) {
 		super(parent, artists);
-		String[] aux = {"Nom Complet", "Tractament", "Nom", "Cognom", "Sobrenom",
+		String[] aux = {"Nom complet", "Tractament", "Nom", "Cognom", "Sobrenom",
 				"Distintiu", "Gènere", "Religió", "Origen", "Observacions"};
 		this.columnNames = aux;
 	}

@@ -54,7 +54,7 @@ public class CasaView extends DeclarativeView<Casa> {
 		
 		/* Nom Complet (text) */
 		Label labelNomComplet = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelNomComplet.setText("Nom Complet:");
+		labelNomComplet.setText("Nom complet:");
 		textNomComplet = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomComplet.setLayoutData(grid);
 		

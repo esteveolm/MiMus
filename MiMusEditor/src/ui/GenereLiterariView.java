@@ -56,19 +56,19 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		
 		/* NomFrances: text field */
 		Label labelNomFrances = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelNomFrances.setText("Nom frances:");
+		labelNomFrances.setText("Nom francès:");
 		textNomFrances = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomFrances.setLayoutData(grid);
 		
 		/* NomOccita: text field */
 		Label labelNomOccita = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelNomOccita.setText("Nom occita:");
+		labelNomOccita.setText("Nom occità:");
 		textNomOccita = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textNomOccita.setLayoutData(grid);
 		
 		/* Definicio: text field */
 		Label labelDefinicio = new Label(sectAdd.getParent(), LABEL_FLAGS);
-		labelDefinicio.setText("Definicio:");
+		labelDefinicio.setText("Definició:");
 		textDefinicio = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textDefinicio.setLayoutData(grid);
 		
