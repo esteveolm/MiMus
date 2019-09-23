@@ -122,7 +122,7 @@ CREATE TABLE bibliografia (
 	autor_secondari4 varchar(100) NULL,
 	autor_secondari5 varchar(100) NULL,
 	autor_secondari6 varchar(100) NULL,
-	any_ int(4) NULL,
+	any_ varchar(100) NULL,
 	distincio varchar(1) NULL,
 	titol varchar(100) NULL,
 	titol_principal varchar(100) NULL,
