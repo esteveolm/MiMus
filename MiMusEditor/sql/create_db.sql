@@ -8,6 +8,7 @@ CREATE TABLE llengua (
     PRIMARY KEY (id)
 );
 
+INSERT INTO llengua (llengua_name) VALUES ("-");
 INSERT INTO llengua (llengua_name) VALUES ("llatí");
 INSERT INTO llengua (llengua_name) VALUES ("català");
 INSERT INTO llengua (llengua_name) VALUES ("castellà");
@@ -53,10 +54,9 @@ CREATE TABLE document (
 	registres varchar(100) NULL,
 	citacions varchar(100) NULL,
 	transcripcio text NULL,
-	notes varchar(1024) NULL,
-	llengua_id bigint(20) NOT NULL,
-    state_annot int(1) NOT NULL,
-    state_rev int(1) NOT NULL,
+	llengua_id bigint(20) NULL,
+    state_annot int(1) NULL,
+    state_rev int(1) NULL,
     FOREIGN KEY (llengua_id)
 		REFERENCES llengua(id),
 	PRIMARY KEY (id)
@@ -399,6 +399,29 @@ CREATE TABLE moviment (
 		destino_type_id, 
         destino_id,
         relation_id),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE note_types (
+	id bigint(20) NOT NULL AUTO_INCREMENT,
+    note_name varchar(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO note_types(note_name) VALUES ("nota");
+INSERT INTO note_types(note_name) VALUES ("referencia");
+INSERT INTO note_types(note_name) VALUES ("nota_bibliografica");
+INSERT INTO note_types(note_name) VALUES ("nota_data");
+
+CREATE TABLE note (
+	id bigint(20) NOT NULL AUTO_INCREMENT,
+    document_id bigint(20) NOT NULL,
+    note_type_id bigint(20) NOT NULL,
+    note_text varchar(1024) NOT NULL,
+    FOREIGN KEY (document_id)
+		REFERENCES document(id),
+	FOREIGN KEY (note_type_id)
+		REFERENCES note_types(id),
 	PRIMARY KEY (id)
 );
 

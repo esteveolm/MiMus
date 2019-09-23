@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -14,6 +13,7 @@ import model.Document;
 import model.Materia;
 import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
+import model.Note;
 
 public class DocumentDao extends UnitDao<Document> {
 
@@ -26,12 +26,12 @@ public class DocumentDao extends UnitDao<Document> {
 		String[] insertColumns = {"numeracio", "any1", "any2", "mes1", "mes2",
 				"dia1", "dia2", "h_any1", "h_any2", "h_mes1", "h_mes2", "h_dia1",
 				"h_dia2","d_any1", "d_any2", "d_mes1", "d_mes2", "d_dia1",
-				"d_dia2", "lloc1", "Lloc2","regest", "lib1_arxiu", "lib1_serie", 
+				"d_dia2", "lloc1", "lloc2","regest", "lib1_arxiu", "lib1_serie", 
 				"lib1_subserie", "lib1_subserie2","lib1_numero", "lib1_pagina", 
 				"lib2_arxiu", "lib2_serie", "lib2_subserie", "lib2_subserie2", 
 				"lib2_numero", "lib2_pagina", "edicions", "registres",
-				"citacions", "transcripcio", "notes", "llengua", "materies", 
-				"state_annot", "state_rev"};
+				"citacions", "transcripcio", "llengua_id", "state_annot", 
+				"state_rev"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -80,12 +80,25 @@ public class DocumentDao extends UnitDao<Document> {
 		stmt.setString(36, unit.getRegisters());
 		stmt.setString(37, unit.getCitations());
 		stmt.setString(38, unit.getTranscriptionText());
-		stmt.setString(39, String.join("$", unit.getNotes()));
-		stmt.setString(40, unit.getLanguage());
-		stmt.setInt(41, unit.getStateAnnotIdx());
-		stmt.setInt(42, unit.getStateRevIdx());
+		stmt.setInt(39, unit.getLanguage());
+		stmt.setInt(40, unit.getStateAnnotIdx());
+		stmt.setInt(41, unit.getStateRevIdx());
 		
-		return executeGetId(stmt);
+		int docResult = executeGetId(stmt);
+		if (docResult>0) {
+			boolean notesOk = true;
+			for (Note note : unit.getNotes()) {
+				int noteResult = new NoteDao(getConnection()).insert(note);
+				if (noteResult<1) {
+					notesOk = false;
+					break;
+				}
+			}
+			if (notesOk) {
+				return docResult;
+			}
+		}
+		return -1;
 	}
 
 	protected Document make(ResultSet rs) throws SQLException {
@@ -128,11 +141,10 @@ public class DocumentDao extends UnitDao<Document> {
 		String registres = rs.getString("registres");
 		String citacions = rs.getString("citacions");
 		String transcripcio = rs.getString("transcripcio");
-		String notes = rs.getString("notes");
 		int llenguaId = rs.getInt("llengua_id");
 		int stateAnnot = rs.getInt("state_annot");
 		int stateRev = rs.getInt("state_rev");
-
+		System.out.println("Llengua ID:" + llenguaId);
 		/* Query to Llengua table to get it from ID */
 		String sql = "SELECT llengua_name FROM llengua WHERE id=" + llenguaId;
 		Statement stmt = getConnection().createStatement();
@@ -158,9 +170,14 @@ public class DocumentDao extends UnitDao<Document> {
 				System.out.println("Materia: " + materiaId);
 			}
 			
+			
+			/* Make Document from its parts */
 			Document doc = new Document();
 			doc.setId(id);
 			doc.setNumbering(numeracio);
+			
+			/* Query to Note table */
+			List<Note> notes = new NoteDao(getConnection()).select(doc);
 			
 			MiMusDate date = new MiMusDate();
 			date.setInterval(any2>0 || mes2>0 || dia2>0);
@@ -211,7 +228,7 @@ public class DocumentDao extends UnitDao<Document> {
 			doc.setRegisters(registres);
 			doc.setCitations(citacions);
 			doc.setTranscriptionText(transcripcio);
-			doc.setNotes(Arrays.asList(notes.split("$")));
+			doc.setNotes(notes);
 			doc.setLanguage(llengua);
 			doc.setSubjects(materies);
 			doc.setStateAnnotIdx(stateAnnot);
@@ -241,7 +258,7 @@ public class DocumentDao extends UnitDao<Document> {
 			/* Get llengua_id from Llengua String */
 			sql = "SELECT id FROM llengua WHERE llengua_name=?";
 			PreparedStatement llenguaStmt = getConnection().prepareStatement(sql);
-			llenguaStmt.setString(1, unit.getLanguage());
+			llenguaStmt.setString(1, unit.getLanguageStr());
 			ResultSet llenguaRS = llenguaStmt.executeQuery();
 			if (llenguaRS.next()) {
 				int llenguaId = llenguaRS.getInt("id");

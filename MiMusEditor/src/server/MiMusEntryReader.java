@@ -1,4 +1,4 @@
-package db;
+package server;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import model.Document;
 import model.MiMusDate;
-import model.MiMusEntry;
 import model.MiMusLibraryIdentifier;
+import model.Note;
 
 public class MiMusEntryReader {
 	
@@ -21,14 +22,14 @@ public class MiMusEntryReader {
 			"Month1","Month2","Day1","Day2","Place1","Place2","Regest",
 			"Archive","Series","Subseries1","Subseries2","Number","Page1",
 			"Archive2","Series2","Subseries12","Subseries22","Number12","Page12",
-			"Edition","Register","Citation","Transcription","Notes","Language",
-			"Subjects"};
+			"Edition","Register","Citation","Transcription","Notes","NotesData",
+			"NotesSignatura"};
 	
 	public MiMusEntryReader() {
 		
 	}
 	
-	public MiMusEntry read(String path) {
+	public Document read(String path) {
 		/* Read lines of text file with Java 8 Streams */
 		List<String> lines = new ArrayList<>();
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
@@ -38,14 +39,14 @@ public class MiMusEntryReader {
 			System.out.println("Could not read MiMus document.");
 		}
 		
-		MiMusEntry entry = new MiMusEntry();
+		Document entry = new Document();
 		MiMusDate date = new MiMusDate();
 		MiMusLibraryIdentifier ident1 = new MiMusLibraryIdentifier();
 		MiMusLibraryIdentifier ident2 = new MiMusLibraryIdentifier();
 		String editions = "";
 		String registers = "";
 		String citations = "";
-		List<String> notes = new ArrayList<>();
+		List<Note> notes = new ArrayList<>();
 		int regestIdx = -1;
 		int transcriptionIdx = -1;
 		int notesIdx = -1;
@@ -140,12 +141,6 @@ public class MiMusEntryReader {
 							case 26:
 								notesIdx = i;
 								break;
-							case 27:
-								entry.setLanguage(content);
-								break;
-							case 28:
-								entry.setSubjects(parseSubjects(content));
-								break;
 							}
 						} catch (NumberFormatException e) {
 							System.out.println("Could not read field " + FIELD_NAMES[j] + " properly, this field will be empty.");
@@ -189,38 +184,44 @@ public class MiMusEntryReader {
 		
 		/* Notes (q) just as a single note containing all text */
 		if (notesIdx!=-1) {
-			String note = "";	// TODO: actual way of storing notes when decided
 			for (int i=notesIdx; i<lines.size(); i++) {
 				if (lines.get(i).startsWith(STARTERS[26])) {
-					note += lines.get(i).substring(2);
+					notes.add(toNote(lines.get(i).substring(2), entry));
 				} else if (lines.get(i).startsWith(STARTERS[27])) {
 					break;
 				} else {
-					note += lines.get(i);
+					notes.add(toNote(lines.get(i), entry));
 				}
 			}
-			notes.add(note);
 		}
 		entry.setNotes(notes);
+		
+		entry.setStateAnnotIdx(0);
+		entry.setStateRevIdx(0);
+		entry.setLanguage(1);
 		
 		/* Read ID from path */
 		String[] parts = path.split("/");
 		String idStr = parts[parts.length-1].split("\\.")[0];	// This is regex, need to escape point
 		entry.setId(Integer.parseInt(idStr));
 		
-		// TODO: empty fields. what to do
 		return entry;
 	}
 	
-	private List<String> parseSubjects(String subjects) {
-		List<String> parsed = new ArrayList<>();
-		for (String subject : subjects.split(";")) {
-			subject = subject.trim().toLowerCase();
-			if (subject.length()>0) {
-				parsed.add(subject);
-			}
+	private Note toNote(String text, Document entry) {
+		String type = "nota";
+		if (text.contains("{nota")) {
+			type = "nota";
+		} else if (text.contains("{ref")) {
+			type = "referencia";
+		} else if (text.contains("{nbib")) {
+			type = "nota_bibliografica";
+		} else if (text.contains("{ndata")) {
+			type = "nota_data";
 		}
-		return parsed;
+		
+		String note = text.substring(text.indexOf("}")+1);
+		return new Note(0, type, note, entry);
 	}
 	
 }

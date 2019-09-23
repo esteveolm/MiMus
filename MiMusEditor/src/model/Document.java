@@ -1,29 +1,16 @@
 package model;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 public class Document extends Unit implements IEditorInput {
-	public final static String LANGS_PATH = "strings/languages.txt";
-	public final static String[] LANGS;
 	
-	public final static String MATERIES_PATH = "strings/languages.txt";
-	public final static String[] MATERIES;
+	public final static String[] LANGS = 
+		{"-", "llatí", "català", "castellà", "aragonès/castellà"};
 	
 	public final static String[] STATES_ANNOT = {"-", "En procés", "Per revisar"};
 	public final static String[] STATES_REV = {"-", "En procés", "Revisat"};
@@ -39,41 +26,12 @@ public class Document extends Unit implements IEditorInput {
 	private String registers;
 	private String citations;
 	private String transcription;
-	private List<String> notes;		// TODO: change to real Notes structure when we define it
+	private List<Note> notes;
 	private int langIdx;
 	private List<Materia> subjects;
 	private int stateAnnotIdx;
 	private int stateRevIdx;
 	
-	/* Load languages array from file only once for all entries */
-	static {
-		/* Stream all lines and convert to array */
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFolder stringsFolder = corpus.getFolder("strings");
-		IFile langsFile = stringsFolder.getFile("languages");
-		IFile matFile = stringsFolder.getFile("materies");
-		
-		List<String> langLines = new ArrayList<>();
-		String langsPath = langsFile.getLocation().toString() + ".txt";
-		try (Stream<String> stream = Files.lines(Paths.get(langsPath))) {
-			langLines = stream.collect(Collectors.toList());
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Could not load language names from " + LANGS_PATH);
-		}
-		LANGS = langLines.stream().toArray(String[]::new);
-		
-		List<String> matLines = new ArrayList<>();
-		String matPath = matFile.getLocation().toString() + ".txt";
-		try (Stream<String> stream = Files.lines(Paths.get(matPath))) {
-			matLines = stream.collect(Collectors.toList());
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Could not load materies names from " + LANGS_PATH);
-		}
-		MATERIES = matLines.stream().toArray(String[]::new);
-	}
 	
 	public Document() {
 		this.numbering = null;
@@ -203,16 +161,16 @@ public class Document extends Unit implements IEditorInput {
 	public void setTranscriptionText(String transcription) {
 		this.transcription = transcription;
 	}
-	
-	// TODO: change to real Notes behavior when we define it
-	public List<String> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
-	public void setNotes(List<String> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
-
-	public String getLanguage() {
+	public int getLanguage() {
+		return langIdx;
+	}
+	public String getLanguageStr() {
 		return LANGS[langIdx];
 	}
 	public void setLanguage(int langIdx) {

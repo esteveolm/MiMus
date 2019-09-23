@@ -40,23 +40,13 @@ public class MiMusDate {
 	private static final Map<String, Integer> MONTH_TO_NUMBER;
 	
 	/* Utility for month-to-number assignment that only loads once */
-	static {
-		/* Stream all lines and convert to array */
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFolder stringsFolder = corpus.getFolder("strings");
-		IFile monthsFile = stringsFolder.getFile("months");
-		String monthsPath = monthsFile.getLocation().toString() + ".txt";
-		
+	static {		
+		String[] months = {"gener", "febrer", "març", "abril", "maig", "juny",
+		                   "juliol", "agost", "setembre", "octubre", "novembre",
+		                   "desembre"};
 		Map<String, Integer> auxMap = new HashMap<>();
-		try (Stream<String> stream = Files.lines(Paths.get(monthsPath))) {
-			Iterator<String> it = stream.iterator();
-			for (int i=0; it.hasNext(); i++) {
-				auxMap.put(it.next(), i+1);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Could not load months from file.");
+		for (int i=0; i<months.length; i++) {
+			auxMap.put(months[i], i+1);
 		}
 		MONTH_TO_NUMBER = new HashMap<>(auxMap);
 	}

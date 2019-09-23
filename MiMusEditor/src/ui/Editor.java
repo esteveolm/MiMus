@@ -505,16 +505,13 @@ public class Editor extends EditorPart {
 		
 		
 		/* NOTES PART */
-		// TODO: decide what to do with it
-//		Section sectNotes = toolkit.createSection(form.getBody(),  
-//				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-//		sectNotes.setText("Notes");
-//		String notesWIP = "Not implemented yet.";
-//		Text notesText = toolkit.createText(sectNotes.getParent(), notesWIP,
-//				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-//		notesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		sectNotes.setLayout(new GridLayout());
-//		sectNotes.setClient(notesText);
+		Section sectNotes = toolkit.createSection(form.getBody(),  
+				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+		sectNotes.setText("Notes");
+		Composite compNotes = toolkit.createComposite(sectNotes);
+		compNotes.setLayout(new GridLayout());
+		sectNotes.setClient(compNotes);
+		sectNotes.setExpanded(false);
 		
 		
 		/* REFERENCES PART */
@@ -1218,7 +1215,7 @@ public class Editor extends EditorPart {
 	}
 
 	private void selectLlengua() {
-		String llengua = docEntry.getLanguage();
+		String llengua = docEntry.getLanguageStr();
 		for (int i=0; i<comboLlengua.getItems().length; i++) {
 			if (llengua.equals(comboLlengua.getItem(i))) {
 				comboLlengua.select(i);
