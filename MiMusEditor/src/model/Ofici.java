@@ -4,12 +4,12 @@ public class Ofici extends Entity {
 	
 	public static final String[] ESPECIALITATS = {
 			"-",
-			"Sense especificar", 
-			"Instrument",
-			"Veu", 
-			"Dansa", 
-			"Artesà", 
-			"Malabars i altres"
+			"sense especificar", 
+			"instrument",
+			"veu", 
+			"dansa", 
+			"artesà", 
+			"malabars i altres"
 	};
 	
 	private String nomComplet;

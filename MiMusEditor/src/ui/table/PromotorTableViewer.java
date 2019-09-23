@@ -16,7 +16,7 @@ import model.Promotor;
 
 public class PromotorTableViewer extends DeclarativeTableViewer {
 	
-	private static final String[] GENDERS = {"No marcat", "Home", "Dona"};
+	private static final String[] GENDERS = {"no marcat", "home", "dona"};
 	
 	public PromotorTableViewer(Composite parent, List<Promotor> promotors) {
 		super(parent, promotors);

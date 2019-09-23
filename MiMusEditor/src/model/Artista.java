@@ -75,12 +75,12 @@ public class Artista extends Entity {
 	}
 	public String getGenereStr() {
 		if (genere==0)
-			return "No marcat";
+			return "no marcat";
 		if (genere==1)
-			return "Home";
+			return "home";
 		if (genere==2)
-			return "Dona";
-		return "Desconegut";
+			return "dona";
+		return "desconegut";
 	}
 	public int getReligio() {
 		return religio;
@@ -90,11 +90,11 @@ public class Artista extends Entity {
 	}
 	public String getReligioStr() {
 		if (religio==0)
-			return "No marcat";
+			return "no marcat";
 		if (religio==1)
-			return "Jueu";
+			return "jueu";
 		if (religio==2)
-			return "Musulmà";
+			return "musulmà";
 		return "Desconegut";
 	}
 	public String getOrigen() {

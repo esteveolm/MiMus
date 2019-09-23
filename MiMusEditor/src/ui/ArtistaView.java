@@ -102,13 +102,13 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		Label labelGenero = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenero.setText("Gènere:");
 		comboGenero = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboGenero.setItems("No marcat", "Home", "Dona");
+		comboGenero.setItems("no marcat", "home", "dona");
 		
 		/* Religion: option field */
 		Label labelReligion = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelReligion.setText("Religió:");
 		comboReligion = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboReligion.setItems("No marcat", "Jueu", "Musulmà");
+		comboReligion.setItems("no marcat", "jueu", "musulmà");
 		
 		/* Origen: text field */
 		Label labelOrigen = new Label(sectAdd.getParent(), LABEL_FLAGS);
