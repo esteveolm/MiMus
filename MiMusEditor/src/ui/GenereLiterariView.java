@@ -185,7 +185,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 	
 	@Override
 	public String getViewName() {
-		return "genere_literari";
+		return "Gènere literari";
 	}
 	
 	@Override
