@@ -41,7 +41,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 		stmt.setString(8, unit.getSecondaryAuthor(3));
 		stmt.setString(9, unit.getSecondaryAuthor(4));
 		stmt.setString(10, unit.getSecondaryAuthor(5));
-		stmt.setInt(11, Integer.parseInt(unit.getYear()));
+		stmt.setString(11, unit.getYear());
 		stmt.setString(12, unit.getDistinction());
 		stmt.setString(13, unit.getTitle());
 		stmt.setString(14, unit.getMainTitle());

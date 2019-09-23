@@ -32,7 +32,6 @@ public class NoteDao extends UnitDao<Note> {
 		if (typeRS.next()) {
 			stmt.setInt(2, typeRS.getInt(1));
 			stmt.setString(3, unit.getText());
-			System.out.println("STMT IS: "+ stmt.toString());
 			return executeGetId(stmt);
 		}
 		return -1;
