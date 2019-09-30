@@ -5,14 +5,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 /**
- * 
- * @author Javier Beltrán Jorba
- * 
  * LabelPrinter facilitates the creation of information messages in
- * the SWT Label objects of the user interface, based on the idea
+ * the SWT Label objects of the user interface, based on the assumption
  * that all such messages are different only in three variables: the
  * label used, the color of the font and the message itself.
  *
+ * @author Javier Beltrán Jorba
+ * 
  */
 public class LabelPrinter {
 	

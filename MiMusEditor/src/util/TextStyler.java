@@ -10,9 +10,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * 
- * @author Javier Beltrán Jorba
- * 
  * A TextStyler helps managing the styles of the Text elements in the
  * user interface of MiMus Editor. Specifically, it handles the yellow
  * highlighting of every part of the text associated with an entity,
@@ -20,7 +17,7 @@ import org.eclipse.swt.widgets.Display;
  * the user modifies the lists of entities.
  * 
  * This robustness is achieved by a two-stage functionality: first, a
- * list of current styles is modified with the adition or removal of
+ * list of current styles is modified with the addition or removal of
  * a highlight; then, the whole StyledText SWT element is refreshed
  * and the current highlights are re-painted. That's why the methods
  * distinguish between add and addUpdate, or delete and deleteUpdate.
@@ -28,6 +25,8 @@ import org.eclipse.swt.widgets.Display;
  * This allows for a correct presentation when entities overlap with
  * each other, where the removal of an entity would otherwise remove
  * the style of an entity inscribed in its range.
+ * 
+ * @author Javier Beltrán Jorba
  *
  */
 public class TextStyler {
@@ -50,19 +49,32 @@ public class TextStyler {
 		}
 	}
 	
+	/**
+	 * Adds highlight between coordinates <from> and <to>, using default font.
+	 */
 	public void add(int from, int to) {
 		add(from, to, SWT.NORMAL);
 	}
 	
+	/**
+	 * Adds highlight between coordinates <from> and <to>, using a certain <font>.
+	 */
 	public void add(int from, int to, int font) {
 		styles.add(new StyleRange(from, to-from, null, new Color(Display.getCurrent(), 255, 255, 153), font));
 	}
 	
+	/**
+	 * Adds highlight between coordinates <from> and <to>, and updates the text so
+	 * the changes are viewed immediately.
+	 */
 	public void addUpdate(int from, int to) {
 		add(from, to);
 		update();
 	}
 	
+	/**
+	 * Deletes highlight between <from> and <to>.
+	 */
 	public void delete(int from, int to) {
 		int toDelete = -1;
 		/* First, only find element to delete */
@@ -78,6 +90,10 @@ public class TextStyler {
 		}
 	}
 	
+	/**
+	 * Deletes highlight between <from> and <to>, and updates the text so the
+	 * changes are viewed immediately.
+	 */
 	public void deleteUpdate(int from, int to) {
 		delete(from, to);
 		update();
