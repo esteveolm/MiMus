@@ -21,6 +21,12 @@ import org.eclipse.ui.part.ViewPart;
 import util.DBUtils;
 import util.LabelPrinter;
 
+/**
+ * Eclipse View for login of users to the MiMus database.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class LoginView extends ViewPart {
 
 	private Connection connection;
@@ -36,6 +42,11 @@ public class LoginView extends ViewPart {
 		}
 	}
 	
+	/**
+	 * Draws the view, which consists of a form to introduce the
+	 * username and the password, an action button and a label
+	 * with the result of the login operation.
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());

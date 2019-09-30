@@ -20,10 +20,18 @@ import persistence.DaoNotImplementedException;
 import ui.table.CasaTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Casa entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class CasaView extends DeclarativeView<Casa> {
 
+	/* List of entities */
 	private List<Casa> cases;
 	
+	/* Form fields */
 	private Text textNomComplet;
 	private Text textTitol;
 	private Text textCort;
@@ -174,14 +182,6 @@ public class CasaView extends DeclarativeView<Casa> {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * When CasaView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	@Override

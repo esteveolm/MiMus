@@ -20,10 +20,18 @@ import persistence.PromotorDao;
 import ui.table.PromotorTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Promotor entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class PromotorView extends DeclarativeView<Promotor> {
 	
+	/* List of entities */
 	private List<Promotor> promotors;
 	
+	/* Form fields */
 	private Text textNomComplet;
 	private Text textNom;
 	private Text textCognom;
@@ -219,14 +227,6 @@ public class PromotorView extends DeclarativeView<Promotor> {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * When PromotorView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	@Override

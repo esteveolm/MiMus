@@ -14,6 +14,13 @@ import persistence.DocumentDao;
 import ui.table.DocumentsTableViewer;
 import util.DBUtils;
 
+/**
+ * Eclipse View that lists all Documents on MiMus database,
+ * and allows users to click and open them in the Editor.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class DocumentsView extends ViewPart {
 	
 	private DocumentsTableViewer tv;
@@ -23,6 +30,10 @@ public class DocumentsView extends ViewPart {
 		setTv(null);
 	}
 
+	/**
+	 * Draws the DocumentsView, which contains a List of documents
+	 * selectable to open their editor.
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());

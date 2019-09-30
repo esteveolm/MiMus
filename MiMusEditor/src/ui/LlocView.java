@@ -21,10 +21,18 @@ import persistence.LlocDao;
 import ui.table.LlocTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Lloc entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class LlocView extends DeclarativeView<Lloc> {
 
+	/* List of entities */
 	private List<Lloc> llocs;
 	
+	/* Form fields */
 	private Text textNomComplet;
 	private Combo comboArea;
 	private Combo comboRegne;
@@ -198,11 +206,6 @@ public class LlocView extends DeclarativeView<Lloc> {
 	@Override
 	public String getViewName() {
 		return "Lloc";
-	}
-	
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	@Override

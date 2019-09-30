@@ -26,16 +26,35 @@ import model.Entity;
 import persistence.DocumentDao;
 import util.DBUtils;
 
+/**
+ * DeclarativeView is any Eclipse View of MiMus application that allows
+ * to declare MiMus Entities. In principle, there is one of these views
+ * for every entity declared. All of these must be implemented by
+ * inheriting from this class.
+ * 
+ * DeclarativeViews contain a form that allows to fill the fields that
+ * make an Entity of that type. They also contain a table showing all
+ * entities of that type, and control buttons.
+ * 
+ * DeclarativeViews have two functions: to insert new entities and to
+ * update existing entities. Hence, sometimes we talk of a state of the
+ * view, which can be ADD or EDIT.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ * @param <E>
+ */
 public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	
+	/* SWT flags grouped together based on use cases of DeclarativeViews */
 	final int LABEL_FLAGS = SWT.VERTICAL;
 	final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
 	final int COMBO_FLAGS = SWT.DROP_DOWN | SWT.READ_ONLY;
 	final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
 	
+	/* Texts of state */
 	final String STATE_ADD = "Adding a new entity";
 	final String STATE_EDIT = "Editing an existing entity";
-	
 	final String BUTTON_ADD = "Add " + getViewName();
 	final String BUTTON_EDIT = "Edit " + getViewName();
 	
@@ -49,6 +68,9 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	protected Label stateLabel;
 	protected Text annotationsText;
 	
+	/**
+	 * DeclarativeViews have associated a connection to the DB.
+	 */
 	public DeclarativeView() {
 		super();
 		setStateAdd(true);
@@ -62,6 +84,11 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		}
 	}
 
+	/**
+	 * Creates view, consisting of a Refresh button, a form
+	 * for introduction of new entities, and a table of
+	 * declared entities.
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		ScrolledForm form = initForm(parent);
@@ -93,10 +120,15 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		});
 	}
 	
+	/**
+	 * Returns the entity name associated to this view. 
+	 */
 	public abstract String getViewName();
 	
-	public abstract List<E> retrieveEntities() throws SQLException;
-	
+	/**
+	 * Initializes a ScrolledForm object that facilitates view
+	 * creation.
+	 */
 	private ScrolledForm initForm(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
@@ -105,8 +137,15 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		return form;
 	}
 	
+	/**
+	 * Implementation of the form for a specific entity must go in
+	 * this method.
+	 */
 	public abstract void developForm(ScrolledForm form);
 	
+	/**
+	 * Draws annotations label in the declarative views.
+	 */
 	public void addAnnotationsLabel(Composite parent, GridData gd) {
 		annotationsText = new Text(parent, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
@@ -114,12 +153,19 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		annotationsText.setLayoutData(gd);
 	}
 	
+	/**
+	 * Draws the label for state in the declarative views.
+	 */
 	public void addStateLabel(Composite parent) {
 		/* On creation, view is in ADD mode */
 		stateLabel = new Label(parent, LABEL_FLAGS);
 		stateLabel.setText(STATE_ADD);
 	}
 	
+	/**
+	 * Draws buttons to add entity, clear form and
+	 * deselect entity.
+	 */
 	public void addButtons(Composite parent) {
 		/* Form buttons */
 		btnAdd = new Button(parent, BUTTON_FLAGS);
@@ -130,6 +176,9 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		btnDes.setText("Back to Insert mode");
 	}
 	
+	/**
+	 * Contains listeners with actions related to the buttons.
+	 */
 	public void createTableActions() {
 		/* Click deselect button to go back to insert mode */
 		btnDes.addSelectionListener(new SelectionAdapter() {
@@ -178,11 +227,17 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		});
 	}
 	
+	/**
+	 * Given an entity of the type of the view, fills the fields of
+	 * the form with the attributes of the entity.
+	 */
 	protected abstract void fillFieldsFromSelection(E ent);
-
 	
+	/**
+	 * Draws label that says what documents have annotations of a
+	 * certain entity.
+	 */
 	private void fillAnnotationsLabel(E entity) {
-		System.out.println("Filling.");
 		List<Document> docs = new ArrayList<>();
 		try {
 			docs = new DocumentDao(conn)
@@ -203,13 +258,26 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		}
 	}
 	
-	@Override
-	public void setFocus() {}
+	/**
+	 * Downloads from DB the list of entities declared in this view.
+	 */
+	public abstract List<E> retrieveEntities() throws SQLException;
 	
-	public abstract void setEntities(List<E> entities);
-	
+	/**
+	 * Returns the list of entities declared in this view, which is
+	 * not necessarily updated wrt the DB.
+	 */
 	public abstract List<E> getEntities();
 	
+	/**
+	 * Updates the list of entities declared in this view.
+	 */
+	public abstract void setEntities(List<E> entities);
+	
+	/**
+	 * Given the table in the view, selects the row corresponding
+	 * to Entity <ent>.
+	 */
 	public void selectEntityInTable(Entity ent) {
 		for (int i=0; i<getEntities().size(); i++) {
 			Entity thisEnt = (Entity) getTv().getElementAt(i);
@@ -220,6 +288,8 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 		}
 	}
 	
+	@Override
+	public void setFocus() {}
 	
 	/* Getters and setters */
 	public TableViewer getTv() {

@@ -21,10 +21,18 @@ import persistence.InstrumentDao;
 import ui.table.InstrumentTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Instrument entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class InstrumentView extends DeclarativeView<Instrument> {
 	
+	/* List of entities */
 	private List<Instrument> instruments;
 	
+	/* Form fields */
 	private Text textNom;
 	private Combo comboFamily;
 	private Combo comboClasse;
@@ -207,14 +215,6 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * When ArtistaView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	@Override

@@ -23,11 +23,22 @@ import persistence.OficiDao;
 import ui.table.OficiTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Ofici entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class OficiView extends DeclarativeView<Ofici> {
 
+	/* 
+	 * List of entities. 
+	 * Also Instruments needed because are associated with Oficis.
+	 */
 	private List<Ofici> oficis;
 	private List<Instrument> insts;
 	
+	/* Form fields */
 	private Text textNomComplet;
 	private Text textTerme;
 	private Combo comboEspecialitat;
@@ -238,14 +249,6 @@ public class OficiView extends DeclarativeView<Ofici> {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * When OficiView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	@Override

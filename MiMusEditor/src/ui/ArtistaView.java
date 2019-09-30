@@ -21,10 +21,17 @@ import persistence.DaoNotImplementedException;
 import ui.table.ArtistaTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for Artista entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ArtistaView extends DeclarativeView<Artista> {
-	
+	/* List of entities */
 	private List<Artista> artists;
 	
+	/* Form fields */
 	private Text textNombreCompleto;
 	private Text textTratamiento;
 	private Text textNombre;
@@ -47,10 +54,6 @@ public class ArtistaView extends DeclarativeView<Artista> {
 	
 	public String getViewName() {
 		return "Artista";
-	}
-	
-	public String getAddPattern() {
-		return "/artista.xml";
 	}
 	
 	public void developForm(ScrolledForm form) {		

@@ -20,10 +20,18 @@ import persistence.GenereLiterariDao;
 import ui.table.GenereTableViewer;
 import util.LabelPrinter;
 
+/**
+ * Declarative view for GenereLiterari entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 
+	/* List of entities */
 	private List<GenereLiterari> generes;
 	
+	/* Form fields */
 	private Text textNombreCompleto;
 	private Text textNomFrances;
 	private Text textNomOccita;

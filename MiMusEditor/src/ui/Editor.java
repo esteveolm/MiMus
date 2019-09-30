@@ -85,6 +85,19 @@ import util.DBUtils;
 import util.LabelPrinter;
 import util.TextStyler;
 
+/**
+ * Editor is the Editor of MiMus Documents. When a user clicks
+ * on an element of DocumentsView, this Editor is opened using
+ * as input the Document selected.
+ * 
+ * The Editor is MiMus main component. It allows for annotation of
+ * Entities, Relations, Transcriptions, References and metadata 
+ * in the Documents. It also allows for control for the state of the
+ * annotation.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Editor extends EditorPart {
 	
 	private Connection conn;
@@ -114,6 +127,10 @@ public class Editor extends EditorPart {
 		super();
 	}
 	
+	/**
+	 * Initializes the Editor with the input Document and setting
+	 * some class attributes.
+	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
@@ -144,6 +161,10 @@ public class Editor extends EditorPart {
 		this.setPartName("Doc. " + docIdStr);
 	}
 	
+	/**
+	 * Downloads Document object from DB again, effectively refreshing
+	 * the UI.
+	 */
 	private void updateDocument() {
 		try {
 			docEntry = new DocumentDao(conn).selectOne(docEntry.getId());
@@ -153,15 +174,15 @@ public class Editor extends EditorPart {
 		}
 	}
 
-	/**
-	 * When Editor is closed, it is unregistered from SharedControl.
-	 */
 	@Override
 	public void dispose() {
 		super.dispose();
 		toolkit.dispose();
 	}
 	
+	/**
+	 * Draws the Editor.
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		toolkit = new FormToolkit(parent.getDisplay());
@@ -1202,6 +1223,10 @@ public class Editor extends EditorPart {
 		});
 	}
 	
+	/**
+	 * Given the Document which contains certain Materies, it
+	 * checks all their checkbox entries in the Editor.
+	 */
 	private void checkMateries() {
 		List<Materia> materies = docEntry.getSubjects();
 		for (int i=0; i<allMateries.size(); i++) {
@@ -1214,6 +1239,10 @@ public class Editor extends EditorPart {
 		}
 	}
 
+	/**
+	 * Given the Document which contains a certain Llengua, it
+	 * selects this option in the Editor.
+	 */
 	private void selectLlengua() {
 		String llengua = docEntry.getLanguageStr();
 		for (int i=0; i<comboLlengua.getItems().length; i++) {
@@ -1224,6 +1253,11 @@ public class Editor extends EditorPart {
 		}
 	}
 
+	/**
+	 * When a button for adding entities is pressed, an InstanceDialog
+	 * is opened to the user. This method processes its result and
+	 * performs the insertion to the DB when it's the case.
+	 */
 	private void runDialog(InstanceDialog<? extends Entity> dialog, 
 			List<EntityInstance> entities, Label label) {
 		int dialogResult = dialog.open();
@@ -1270,6 +1304,12 @@ public class Editor extends EditorPart {
 		}
 	}
 	
+	/**
+	 * When a button for adding transcriptions is pressed,
+	 * a TranscriptionDialog is opened to the user. This method 
+	 * processes its result and performs the insertion to the DB 
+	 * when it's the case.
+	 */
 	private void runTranscriptionDialog(TranscriptionDialog<? extends Entity> dialog, 
 			List<Transcription> transcriptions, List<EntityInstance> entities, 
 			Label label, TextStyler styler) {
@@ -1339,6 +1379,11 @@ public class Editor extends EditorPart {
 		}
 	}
 	
+	/**
+	 * When a button for adding relations is pressed, a RelationDialog
+	 * is opened to the user. This method processes its result and
+	 * performs the insertion to the DB when it's the case.
+	 */
 	private void runRelationDialog(RelationDialog dialog,
 			List<Relation> relations, Label label) {
 		int dialogResult = dialog.open();
@@ -1412,6 +1457,11 @@ public class Editor extends EditorPart {
 		}
 	}
 	
+	/**
+	 * When a button for adding references is pressed, a ReferenceDialog
+	 * is opened to the user. This method processes its result and
+	 * performs the insertion to the DB when it's the case.
+	 */
 	private void runReferenceDialog(ReferenceDialog dialog,
 			List<Bibliography> bibliography, Label label) {
 		int dialogResult = dialog.open();
@@ -1469,8 +1519,6 @@ public class Editor extends EditorPart {
 	public Connection getConnection() {
 		return conn;
 	}
-	
-	/* Following methods shouldn't be touched */
 	
 	@Override
 	public boolean isDirty() {

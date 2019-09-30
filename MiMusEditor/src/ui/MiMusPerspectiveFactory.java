@@ -4,6 +4,14 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+/**
+ * MiMusPerspectiveFactory provides an Eclipse Perspective that sets
+ * up the Eclipse application with the views and layout for use of
+ * the MiMus application.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MiMusPerspectiveFactory implements IPerspectiveFactory {
 
 	@Override

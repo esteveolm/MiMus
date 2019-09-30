@@ -34,10 +34,21 @@ import persistence.BibliographyDao;
 import util.DBUtils;
 import util.LabelPrinter;
 
+/**
+ * Eclipse View for declaration of Bibliography units. Though
+ * it is not a DeclarativeView because Bibliography are not
+ * entities, this class is analogous to DeclarativeView in
+ * all senses.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class BiblioView extends ViewPart {
 
+	/* Constants for number of authors in bibliography */
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
+
 	private ListViewer lv;
 	private List<Bibliography> bibliography;
 	private Connection conn;
@@ -166,8 +177,6 @@ public class BiblioView extends ViewPart {
 							textYear.getText(), textDistinction.getText());
 					textShort.setText(generated);
 				}
-				
-				
 				
 				Bibliography newEntry = new Bibliography(
 						authors, secondaries, 
@@ -316,6 +325,10 @@ public class BiblioView extends ViewPart {
 		});
 	}
 	
+	/**
+	 * LabelProvider for Bibliography TableViewer, which presents
+	 * Bibliography elements as their short reference.
+	 */
 	class BiblioLabelProvider extends LabelProvider {
 		@Override
 		public String getText(Object element) {
@@ -323,20 +336,16 @@ public class BiblioView extends ViewPart {
 		}
 	}
 	
+	/**
+	 * Comparator for Bibliography TableViewer which sorts elements
+	 * based on their short reference.
+	 */
 	class BiblioComparator extends ViewerComparator {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Bibliography b1 = (Bibliography) e1;
 			Bibliography b2 = (Bibliography) e2;
 			return b1.getShortReference().compareTo(b2.getShortReference());
 		}
-	}
-	
-	/**
-	 * When BiblioView is closed, it is unregistered from SharedControl.
-	 */
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 	
 	@Override
