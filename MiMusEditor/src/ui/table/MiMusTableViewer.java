@@ -6,6 +6,14 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 
+/**
+ * MiMusTableViewer is any Eclipse JFace TableViewer used
+ * in the MiMus application. It contains common functionality
+ * used in the project.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public abstract class MiMusTableViewer {
 
 	protected Composite parent;
@@ -16,9 +24,15 @@ public abstract class MiMusTableViewer {
 	public MiMusTableViewer(Composite parent) {
 		this.parent = parent;
 	}
-		
+	
+	/**
+	 * Creates a JFace TableViewer.
+	 */
 	public abstract TableViewer createTableViewer();
 
+	/**
+	 * Updates the size of columns.
+	 */
 	public void packColumns() {
 		for (int i = 0; i < columnNames.length; i++) {
 			tv.getTable().getColumn(i).pack();

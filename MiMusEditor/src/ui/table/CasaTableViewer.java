@@ -13,6 +13,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import model.Casa;
 
+/**
+ * TableViewer for Casa view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class CasaTableViewer extends DeclarativeTableViewer {
 
 	public CasaTableViewer(Composite parent, List<Casa> cases) {

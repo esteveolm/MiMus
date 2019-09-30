@@ -16,6 +16,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import model.EntityInstance;
 import model.MiMusText;
 
+/**
+ * TableViewer for annotated Entities in the Editor, that is, table
+ * containing EntityInstances.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class EntityTableViewer extends MiMusTableViewer {
 
 	private List<EntityInstance> entities;
@@ -28,6 +35,9 @@ public class EntityTableViewer extends MiMusTableViewer {
 		entities = initials;
 	}
 
+	/**
+	 * Creates the table viewer and leaves it ready to use.
+	 */
 	@Override
 	public TableViewer createTableViewer() {
 		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -51,6 +61,9 @@ public class EntityTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 	
+	/**
+	 * Label provider telling how to present instances in the table.
+	 */
 	class EntityLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -71,13 +84,13 @@ public class EntityTableViewer extends MiMusTableViewer {
 		}
 	}
 	
+	/**
+	 * Compares entities alphanumerically, using two criteria:
+	 * first, by the name of their type (e.g. Artista goes before
+	 * Promotor); then, ties are resolved by name of their String
+	 * representation (e.g. Joan I goes before Pere IV).
+	 */
 	public class EntityComparator extends ViewerComparator {
-		/**
-		 * Compares entities alphanumerically, using two criteria:
-		 * first, by the name of their type (e.g. Artista goes before
-		 * Promotor); then, ties are resolved by name of their String
-		 * representation (e.g. Joan I goes before Pere IV).
-		 */
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			EntityInstance ent1 = (EntityInstance) e1;
 			EntityInstance ent2 = (EntityInstance) e2;

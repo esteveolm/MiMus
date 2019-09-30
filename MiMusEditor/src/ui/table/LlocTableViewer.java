@@ -14,6 +14,12 @@ import org.eclipse.swt.widgets.Composite;
 
 import model.Lloc;
 
+/**
+ * TableViewer for Lloc view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class LlocTableViewer extends DeclarativeTableViewer {
 
 	public LlocTableViewer(Composite parent, List<Lloc> llocs) {

@@ -16,6 +16,12 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import model.Transcription;
 
+/**
+ * TableViewer for annotated Transcriptions in the Editor.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class TranscriptionTableViewer extends MiMusTableViewer {
 	
 	private List<Transcription> transcriptions;
@@ -27,6 +33,9 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		transcriptions = initials;
 	}
 
+	/**
+	 * Creates the table viewer and leaves it ready to use.
+	 */
 	@Override
 	public TableViewer createTableViewer() {
 		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -50,6 +59,9 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 	
+	/**
+	 * Label provider telling how to present transcriptions in the table.
+	 */
 	class TranscriptionLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -72,12 +84,12 @@ public class TranscriptionTableViewer extends MiMusTableViewer {
 		}
 	}
 	
+	/**
+	 * Compares transcriptions alphanumerically, using two criteria:
+	 * first, by their lemma; then, ties are resolved by the
+	 * transcripted form.
+	 */
 	public class TranscriptionComparator extends ViewerComparator {
-		/**
-		 * Compares transcriptions alphanumerically, using two criteria:
-		 * first, by their lemma; then, ties are resolved by the
-		 * transcripted form.
-		 */
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Transcription tra1 = (Transcription) e1;
 			Transcription tra2 = (Transcription) e2;

@@ -12,19 +12,42 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import model.Entity;
 
+/**
+ * DeclarativeTableViewer is the MiMusTableViewer used in DeclarativeViews.
+ * These are the tables of declared entities.
+ * 
+ * All implementations must declare a LabelProvider that says how to present
+ * the MiMus elements in the table, and optionally a ViewerComparator that
+ * sorts the table elements based on a certain criterion. These objects must
+ * be related to the DeclarativeTableViewer implementing method developProviders().
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 	
+	/* List of entities on the table */
 	protected List<? extends Entity> entities;
 	
 	public DeclarativeTableViewer(Composite parent, List<? extends Entity> entities) {
 		super(parent);
 		this.entities = entities;
 	}
-
+	
+	/**
+	 * Assigns the CellEditors for every column in a table.
+	 */
 	public abstract CellEditor[] developEditors();
 	
+	/**
+	 * Relates the TableViewer with the JFace Providers needed for
+	 * TableViewers to work, specifically LabelProvider and ViewerComparator.
+	 */
 	public abstract void developProviders();
 	
+	/**
+	 * Creates the table and leaves it ready for use.
+	 */
 	@Override
 	public TableViewer createTableViewer() {
 		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);

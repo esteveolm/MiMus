@@ -14,6 +14,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import model.Promotor;
 
+/**
+ * TableViewer for Promotor view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class PromotorTableViewer extends DeclarativeTableViewer {
 	
 	private static final String[] GENDERS = {"no marcat", "home", "dona"};

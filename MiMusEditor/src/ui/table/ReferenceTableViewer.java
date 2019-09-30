@@ -20,6 +20,13 @@ import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
 
+/**
+ * TableViewer for annotated bibliography in the Editor, that is, table
+ * containing References.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ReferenceTableViewer extends MiMusTableViewer {
 	
 	private List<MiMusReference> references;
@@ -34,6 +41,9 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		columnNames = aux;
 	}
 
+	/**
+	 * Creates the table viewer and leaves it ready to use.
+	 */
 	@Override
 	public TableViewer createTableViewer() {
 		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -67,6 +77,9 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 
+	/**
+	 * Return an array of short reference representations.
+	 */
 	private String[] getBibEntriesText() {
 		List<Bibliography> entries = getBibEntries();
 		String[] res = new String[entries.size()];
@@ -89,6 +102,9 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		tv.refresh();
 	}
 	
+	/**
+	 * Label provider telling how to present references in the table.
+	 */
 	class ReferenceLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -111,6 +127,9 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		}
 	}
 	
+	/**
+	 * References are sorted by year, alphanumerically.
+	 */
 	class ReferenceComparator extends ViewerComparator {
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			MiMusReference ref1 = (MiMusReference) e1;

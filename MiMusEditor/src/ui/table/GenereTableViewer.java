@@ -13,6 +13,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import model.GenereLiterari;
 
+/**
+ * TableViewer for GenereLiterari view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class GenereTableViewer extends DeclarativeTableViewer {
 
 	public GenereTableViewer(Composite parent, List<GenereLiterari> generes) {

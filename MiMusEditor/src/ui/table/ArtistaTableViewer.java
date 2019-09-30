@@ -13,6 +13,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import model.Artista;
 
+/**
+ * TableViewer for Artista view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ArtistaTableViewer extends DeclarativeTableViewer {
 	
 	public ArtistaTableViewer(Composite parent, List<Artista> artists) {

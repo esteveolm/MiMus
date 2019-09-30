@@ -16,6 +16,12 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import model.Relation;
 
+/**
+ * TableViewer for annotated Relations in the Editor.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class RelationTableViewer extends MiMusTableViewer {
 	
 	private List<Relation> relations;
@@ -27,6 +33,9 @@ public class RelationTableViewer extends MiMusTableViewer {
 		relations = initials;
 	}
 
+	/**
+	 * Creates the table viewer and leaves it ready to use.
+	 */
 	@Override
 	public TableViewer createTableViewer() {
 		tv = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -50,6 +59,9 @@ public class RelationTableViewer extends MiMusTableViewer {
 		return tv;
 	}
 	
+	/**
+	 * Label provider telling how to present relations in the table.
+	 */
 	class RelationLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -72,10 +84,10 @@ public class RelationTableViewer extends MiMusTableViewer {
 		}
 	}
 	
+	/**
+	 * Compares relations alphanumerically, based on their entities names.
+	 */
 	public class RelationComparator extends ViewerComparator {
-		/**
-		 * Compares relations alphanumerically, based on their entities names.
-		 */
 		public int compare(Viewer viewer, Object e1, Object e2) {
 			Relation rel1 = (Relation) e1;
 			Relation rel2 = (Relation) e2;

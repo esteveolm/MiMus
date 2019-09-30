@@ -14,6 +14,12 @@ import org.eclipse.swt.widgets.Composite;
 import model.Instrument;
 import model.Ofici;
 
+/**
+ * TableViewer for Ofici view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class OficiTableViewer extends DeclarativeTableViewer {
 
 	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 

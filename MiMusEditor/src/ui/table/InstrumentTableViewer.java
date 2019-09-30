@@ -13,6 +13,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import model.Instrument;
 
+/**
+ * TableViewer for Instrument view.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class InstrumentTableViewer extends DeclarativeTableViewer {
 
 	public InstrumentTableViewer(Composite parent, List<Instrument> instruments) {
