@@ -1,3 +1,4 @@
+-- Schema follows character set utf8mb4.
 CREATE SCHEMA mimus;
 USE mimus;
 ALTER SCHEMA mimus  DEFAULT CHARACTER SET utf8mb4  DEFAULT COLLATE utf8mb4_general_ci;
@@ -14,6 +15,9 @@ INSERT INTO llengua (llengua_name) VALUES ("català");
 INSERT INTO llengua (llengua_name) VALUES ("castellà");
 INSERT INTO llengua (llengua_name) VALUES ("aragonès/castellà");
 
+-- Document has dates specified in several fields.
+-- h_any1 and so on are boolean variables for hypothetical date fields.
+-- d_any1 and so on are boolean variables for unknown date fields.
 CREATE TABLE document (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	numeracio varchar(20) NOT NULL,
@@ -97,6 +101,7 @@ INSERT INTO materia (materia_name) VALUES ("petició d’artistes");
 INSERT INTO materia (materia_name) VALUES ("protecció");
 INSERT INTO materia (materia_name) VALUES ("recomanació d’artistes");
 
+-- Document-Materia is a many-to-many relationship reflected on table has_materia.
 CREATE TABLE has_materia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     document_id bigint(20) NOT NULL,
@@ -161,6 +166,9 @@ INSERT INTO entity_types (entity_name) VALUES ("instrument");
 INSERT INTO entity_types (entity_name) VALUES ("lloc");
 INSERT INTO entity_types (entity_name) VALUES ("genere_literari");
 
+-- entity.entity_id is a foreign key to the ID of the child table.
+-- Because the table in question depends on the entity type, we can't
+-- specify it on the schema, and this is handled by the MiMus code directly.
 CREATE TABLE entity (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     entity_type_id bigint(20) NOT NULL,
@@ -299,6 +307,9 @@ INSERT INTO relation_types (relation_name) VALUES ("serveix_a");
 INSERT INTO relation_types (relation_name) VALUES ("resideix_a");
 INSERT INTO relation_types (relation_name) VALUES ("moviment");
 
+-- relation.relation_id is a foreign key to the ID of the child table.
+-- Because the table in question depends on the relation type, we can't
+-- specify it on the schema, and this is handled by the MiMus code directly.
 CREATE TABLE relation (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     relation_type_id bigint(20) NOT NULL,

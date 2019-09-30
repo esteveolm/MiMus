@@ -1,3 +1,5 @@
+-- Grants annotator users with the permissions needed to use the MiMus application.
+-- Ideally, only the minimum set of permissions should be provided.
 GRANT UPDATE ON Mimus.Document TO mimus01@localhost;
 GRANT SELECT, INSERT, DELETE ON Mimus.HasMateria TO mimus01@localhost;
 GRANT SELECT, INSERT, DELETE ON Mimus.Entity TO mimus01@localhost;
