@@ -1,7 +1,17 @@
 package model;
 
+/**
+ * Lloc is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Lloc extends Entity {
 	
+	/*
+	 * Tree-like structure of attributes Area and Regne.
+	 * They are associated by index of the following arrays.
+	 */
 	public static final String[] AREES = {
 			"-",
 			"Corona d'Aragó",
@@ -23,6 +33,7 @@ public class Lloc extends Entity {
 			{"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}, {"-"}		
 	};
 	
+	/* Lloc attributes */
 	private String nomComplet;
 	private int regne;
 	private int area;
@@ -35,6 +46,10 @@ public class Lloc extends Entity {
 		this.area = area;
 	}
 
+	/**
+	 * Returns the lemma of a Lloc, which coincides
+	 * with its <nomComplet>.
+	 */
 	@Override
 	public String getLemma() {
 		return getNomComplet();

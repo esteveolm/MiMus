@@ -5,13 +5,13 @@ package model;
  * @author Javier Beltrán Jorba
  * 
  * A MiMusReference is an instance of a Bibliography in a
- * certain MiMusEntry document of the corpora. It specifies what
+ * certain MiMusEntry document of the corpus. It specifies what
  * bibliography entry the reference is addressed at, as well as
  * the specific pages where the reference happens for such document.
  * 
  * The conceptual relations between these classes can be summarized as:
  * 
- * 1 <MiMusEntry> has several <MiMusReference>
+ * 1 <Document> has several <MiMusReference>
  * 1 <MiMusReference> has 1 <Bibliography>
  * Hence, 1 <Bibliography> is indirectly linked to several <MiMusEntry>
  * 
@@ -24,15 +24,14 @@ package model;
  */
 public class MiMusReference extends Unit {
 	
+	/* <type> attribute can use one of these values */
 	public static final String [] TYPES = {"Edició", "Regest", "Citació"};
 	
 	private Bibliography itsBiblio;
 	private Document itsDocument;
 	private String page;
 	private int type;
-	
-	public MiMusReference() {}
-	
+		
 	public MiMusReference(Bibliography itsBiblio, Document itsDocument,
 			String page, int type, int id) {
 		this.itsBiblio = itsBiblio;
@@ -42,6 +41,11 @@ public class MiMusReference extends Unit {
 		this.setId(id);
 	}
 	
+	/**
+	 * String representation constructed from string representation
+	 * of its bibliography, plus the page annotated to this reference
+	 * specifically.
+	 */
 	public String toString() {
 		return itsBiblio.toString() + ", p. " + page + ".";
 	}

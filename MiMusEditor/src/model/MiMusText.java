@@ -5,16 +5,35 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
 
+/**
+ * MiMusText represents a text in a MiMus Document (either a
+ * regest or a transcription). It has methods that enable
+ * decoration of the text as in the case of the transcription
+ * on the UI.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MiMusText {
 	
 	private String text;
-	private String[] words;
+	private String[] words;	/* Just <text> separated by whitespaces */
 	
 	public MiMusText(String text) {
 		this.text = text;
 		this.words = text.split(" ");
 	}
 	
+	/**
+	 * Translates from coordinates at the character level
+	 * to the word level, returning them in a Point object where
+	 * the x component is the start of a text selection and y
+	 * is the ending.
+	 * 
+	 * This helps trimming user selections in the transcription to
+	 * the words only, but it is a feature currently disabled in
+	 * the project, because it led to some misbehaviors.
+	 */
 	public Point fromCharToWordCoordinates(Point old) {
 		List<Integer> spaces = getSpacesInText();
 		/*
@@ -38,6 +57,16 @@ public class MiMusText {
 		return new Point(from, to);
 	}
 	
+	/**
+	 * Translates from coordinates at the word level
+	 * to the character level, returning them in a Point object where
+	 * the x component is the start of a text selection and y
+	 * is the ending.
+	 * 
+	 * This helps trimming user selections in the transcription to
+	 * the words only, but it is a feature currently disabled in
+	 * the project, because it led to some misbehaviors.
+	 */
 	public Point fromWordToCharCoordinates(Point old) {
 		int charIdx=0;
 		int wordIdx=0;
@@ -58,11 +87,12 @@ public class MiMusText {
 		}	
 	}
 	
+	/**
+	 * Return a list of integers which are the positions of spaces
+	 * in the text. The start and ending positions are also added,
+	 * i.e. 0 and text.length. Hence, the list is ordered ascending.
+	 */
 	private List<Integer> getSpacesInText() {
-		/* 
-		 * Spaces contains the index of every space, besides the start
-		 * and ending index of the full text, in ascending order.
-		 */
 		List<Integer> spaces = new ArrayList<>();
 		spaces.add(0);
 		for (int idxSpace = text.indexOf(' '); 

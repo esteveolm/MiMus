@@ -1,7 +1,14 @@
 package model;
 
+/**
+ * Promotor is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Promotor extends Entity {
 	
+	/* Promotor attributes */
 	private String nomComplet;
 	private String nom;
 	private String cognom;
@@ -23,6 +30,12 @@ public class Promotor extends Entity {
 		this.observacions = observacions;
 	}
 	
+	/**
+	 * Returns the lemma of a Promotor as its attribute
+	 * <nomComplet>, optionally followed by <distintiu>
+	 * with a slash "/" separating them, when <distintiu>
+	 * is specified.
+	 */
 	@Override
 	public String getLemma() {
 		String str = getNomComplet();

@@ -1,7 +1,14 @@
 package model;
 
+/**
+ * Casa is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Casa extends Entity {
 	
+	/* Casa attributes */
 	private String nomComplet;
 	private String titol;
 	private String cort;
@@ -14,6 +21,10 @@ public class Casa extends Entity {
 		this.cort = cort;
 	}
 
+	/**
+	 * Returns the lemma of a Casa, which coincides
+	 * with its <nomComplet>.
+	 */
 	@Override
 	public String getLemma() {
 		return getNomComplet();

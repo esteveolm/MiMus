@@ -7,14 +7,31 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+/**
+ * A Document represents a text document of MiMus corpus. It
+ * is associated with the entries from table Document in MiMus
+ * database.
+ * 
+ * Document implements IEditorInput, which means it is a suitable
+ * input for an Eclipse Editor such as MiMus Editor.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Document extends Unit implements IEditorInput {
 	
+	/* Lists of values Language can take, reflected on langIdx */
 	public final static String[] LANGS = 
 		{"-", "llatí", "català", "castellà", "aragonès/castellà"};
 	
+	/* 
+	 * Lists of values for state of annotation and revision, reflected
+	 * on stateAnnotIdx and stateRevIdx, respectively.
+	 */
 	public final static String[] STATES_ANNOT = {"-", "En procés", "Per revisar"};
 	public final static String[] STATES_REV = {"-", "En procés", "Revisat"};
 	
+	/* Document attributes */
 	private String numbering;
 	private MiMusDate date;
 	private String place1;
@@ -52,11 +69,10 @@ public class Document extends Unit implements IEditorInput {
 		this.stateAnnotIdx = -1;
 	}
 	
-	public Document(String regest, String body) {
-		this.regest = regest;
-		this.transcription = body;
-	}
-	
+	/**
+	 * String representation of Document which reflects
+	 * its ID.
+	 */
 	public String toString() {
 		return "Document " + getIdStr();
 	}
@@ -84,14 +100,12 @@ public class Document extends Unit implements IEditorInput {
 	public void setNumbering(String numbering) {
 		this.numbering = numbering;
 	}
-	
 	public MiMusDate getDate() {
 		return date;
 	}
 	public void setDate(MiMusDate date) {
 		this.date = date;
 	}
-	
 	public String getPlace1() {
 		return place1;
 	}
@@ -104,7 +118,6 @@ public class Document extends Unit implements IEditorInput {
 	public void setPlace2(String place2) {
 		this.place2 = place2;
 	}
-	
 	public MiMusText getRegest() {
 		return new MiMusText(regest);
 	}
@@ -130,28 +143,24 @@ public class Document extends Unit implements IEditorInput {
 	public String getFullLibraryIdentifier() {
 		return library.toString() + "; " + library2.toString();
 	}
-	
 	public String getEditions() {
 		return editions;
 	}
 	public void setEditions(String editions) {
 		this.editions = editions;
 	}
-	
 	public String getRegisters() {
 		return registers;
 	}
 	public void setRegisters(String registers) {
 		this.registers = registers;
 	}
-	
 	public String getCitations() {
 		return citations;
 	}
 	public void setCitations(String citations) {
 		this.citations = citations;
 	}
-	
 	public MiMusText getTranscription() {
 		return new MiMusText(transcription);
 	}
@@ -184,7 +193,6 @@ public class Document extends Unit implements IEditorInput {
 				.orElse(-1);
 		setLanguage(langIdx);
 	}
-	
 	public List<Materia> getSubjects() {
 		return subjects;
 	}
@@ -212,7 +220,11 @@ public class Document extends Unit implements IEditorInput {
 	public void setStateRevIdx(int stateRevIdx) {
 		this.stateRevIdx = stateRevIdx;
 	}
-
+	
+	/**
+	 * Returns part of the document with static information,
+	 * in a string presentation.
+	 */
 	public String getReadOnlyText() {
 		String str = "Doc ID: " + getIdStr() + 
 				"\nNumeració antiga: " + getNumbering() +

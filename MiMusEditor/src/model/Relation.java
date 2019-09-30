@@ -1,5 +1,23 @@
 package model;
 
+/**
+ * Relation is a relation between two Entities in the MiMus corpus.
+ * There are categories of relations, each of which are specified for a
+ * certain type of entities. For instance "serveix_a" is between Artista
+ * and Promotor.
+ * 
+ * Note that Relations are actually RelationInstances, because there are
+ * no Relation concepts (the types are already predefined), but just
+ * appearances of these in the documents. Hence, it contains a foreign
+ * key to Document.
+ * 
+ * In the MiMus database, Relations are implemented hierarchically, i.e.
+ * with a table for the data common to all relations, and many subtables
+ * with the data specific to the implementations.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Relation extends HierarchicalUnit {
 
 	public static final String[] TYPES = 
@@ -10,8 +28,6 @@ public class Relation extends HierarchicalUnit {
 	private String type;
 	private Document doc;
 	
-	public Relation() {}
-
 	public Relation(Document doc, Entity ent1, Entity ent2, 
 			String type, int id, int specId) {
 		this.itsEntity1 = ent1;
@@ -47,6 +63,10 @@ public class Relation extends HierarchicalUnit {
 		this.doc = doc;
 	}
 
+	/**
+	 * A Relation is represented as the string representation of
+	 * both entities related, with a hyphen " - " in between.
+	 */
 	@Override
 	public String toString() {
 		return getItsEntity1().toString() + " - " + getItsEntity2().toString();

@@ -1,14 +1,21 @@
 package model;
 
+/**
+ * Artista is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Artista extends Entity {
 	
+	/* Artista attributes */
 	private String nomComplet;
 	private String tractament;
 	private String nom;
 	private String cognom;
 	private String sobrenom;
 	private String distintiu;
-	private int genere;
+	private int genere;		/* Genere and religio use a numerical key */
 	private int religio;
 	private String origen;
 	private String observacions;
@@ -110,6 +117,12 @@ public class Artista extends Entity {
 		this.observacions = observacions;
 	}
 
+	/**
+	 * Returns the lemma of an Artista as its attribute
+	 * <nomComplet>, optionally followed by <distintiu>
+	 * with a slash "/" separating them, when <distintiu>
+	 * is specified.
+	 */
 	@Override
 	public String getLemma() {
 		String str = getNomComplet();

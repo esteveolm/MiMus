@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * Artista is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Instrument extends Entity {
 	
 	/* 
@@ -30,6 +36,7 @@ public class Instrument extends Entity {
 			{"-"}	/* Altres */
 	};
 	
+	/* Instrument attributes */
 	private String nom;
 	private int family;
 	private int classe;
@@ -45,6 +52,10 @@ public class Instrument extends Entity {
 		this.part = part;
 	}
 	
+	/**
+	 * Returns the lemma of an Instrument, which
+	 * coincides with its <nom>.
+	 */
 	@Override
 	public String getLemma() {
 		return getNom();

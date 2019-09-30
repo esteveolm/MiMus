@@ -3,8 +3,14 @@ package model;
 import org.eclipse.swt.graphics.Point;
 
 /**
+ * Transcription is an annotation on the Transcription text of
+ * a MiMus Document which relates a portion of the text with
+ * an entity previously annotated in the document, and optionally
+ * adds a standard form to it.
  * 
- * TODO: coords is not model logic. Could come from an interface instead?
+ * Because transcriptions paint the Transcription text where the
+ * annotations occured, they have coordinates associated with
+ * the start and ending position in Point object <coords>.
  * 
  * @author Javier Beltrán Jorba
  *
@@ -16,22 +22,9 @@ public class Transcription extends Unit {
 	private String form;
 	private Point coords;
 	
-	public Transcription() {
-		this(null, "", "", null, 0);
-	}
-	
-	public Transcription(EntityInstance itsEntity, String selectedText, String form) {
-		this(itsEntity, selectedText, form, null, 0);
-	}
-	
 	public Transcription(EntityInstance itsEntity, String selectedText, 
 			String form, Point coords) {
 		this(itsEntity, selectedText, form, coords, 0);
-	}
-	
-	public Transcription(EntityInstance itsEntity, String selectedText, 
-			String form, int id) {
-		this(itsEntity, selectedText, form, null, id);
 	}
 	
 	public Transcription(EntityInstance itsEntity, String selectedText, 

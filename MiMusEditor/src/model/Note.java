@@ -1,5 +1,13 @@
 package model;
 
+/**
+ * A Note is a footnote appearing in a MiMus Document. Hence, it
+ * represents a foreign key in its associated table in the MiMus
+ * database, as well as the text of the note and the type of note.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Note extends Unit {
 	
 	private String type;

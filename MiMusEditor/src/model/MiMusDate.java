@@ -155,6 +155,18 @@ public class MiMusDate {
 		this.uYear2 = uYear2;
 	}
 	
+	/**
+	 * MiMusDate objects have a string representation used by the UI
+	 * when printing dates of Documents:
+	 * 
+	 * dd/mm/yyyy when only one date is specified.
+	 * dd/mm/yyyy - dd/mm/yyyy when both dates are specified.
+	 * Any of these components (dd, mm, yyyy) is encapsulated in
+	 * squared brackets "[dd]" when they represent a hypothetical
+	 * component of a date.
+	 * Any of these components is substituted by a hyphen "-" when
+	 * they represent an unknown component of a date.
+	 */
 	public String toString() {
 		String str = "";
 		

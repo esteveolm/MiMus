@@ -1,5 +1,12 @@
 package model;
 
+/**
+ * MiMusLibraryIdentifier is a container for a part of the information
+ * associated with a MiMus Document.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MiMusLibraryIdentifier {
 	
 	private String archive;
@@ -8,20 +15,15 @@ public class MiMusLibraryIdentifier {
 	private String subseries2;
 	private String number;
 	private String page;
-	
-	public MiMusLibraryIdentifier(String archive, String series, String subseries1, String subseries2, String number,
-			String page) {
-		super();
-		this.archive = archive;
-		this.series = series;
-		this.subseries1 = subseries1;
-		this.subseries2 = subseries2;
-		this.number = number;
-		this.page = page;
-	}
 
 	public MiMusLibraryIdentifier() {}
 
+	/**
+	 * String representation of a library identification,
+	 * where all components are separated by commas except
+	 * for the separation between subseries and number, which
+	 * uses a whitespace regarding the specification.
+	 */
 	@Override
 	public String toString() {
 		String str = "";
@@ -38,7 +40,7 @@ public class MiMusLibraryIdentifier {
 		if (page != null)
 			str += page + ", ";
 		/* 
-		 * Remove last ", " ignoring 2 last characters (length-2).
+		 * Remove last ", " by removing 2 last characters (length-2).
 		 * If everything is null, return empty sequence.
 		 */
 		return str.substring(0, Math.max(0,str.length()-2));

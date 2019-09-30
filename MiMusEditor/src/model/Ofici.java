@@ -1,7 +1,14 @@
 package model;
 
+/**
+ * Ofici is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class Ofici extends Entity {
 	
+	/* List of elements that attribute <especialitat> can take */
 	public static final String[] ESPECIALITATS = {
 			"-",
 			"sense especificar", 
@@ -12,6 +19,7 @@ public class Ofici extends Entity {
 			"malabars i altres"
 	};
 	
+	/* Ofici attributes */
 	private String nomComplet;
 	private String terme;
 	private int especialitat;
@@ -27,6 +35,10 @@ public class Ofici extends Entity {
 		this.instrument = instrument;
 	}
 
+	/**
+	 * Returns the lemma of an Ofici, which coincides
+	 * with its <nomComplet>.
+	 */
 	@Override
 	public String getLemma() {
 		return getNomComplet();

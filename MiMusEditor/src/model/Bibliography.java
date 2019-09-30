@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
- * @author Javier Beltrán Jorba
- * 
- * A Bibliography is a Bibliography Entry in the MiMus corpora.
+ * A Bibliography is a Bibliography Entry in the MiMus corpus.
  * MiMus documents have a bibliography associated in annotation,
  * which can also be explored and manipulated through the UI.
  * 
- * It is important to note that MiMusEntry documents are not directly
- * associated to Bibliography bibliography. Instead, they use
- * MiMusReference, which is an instance of a Bibliography Entry
+ * It is important to note that MiMus Documents are not directly
+ * associated to Bibliography. Instead, they use
+ * MiMusReference, which is an instance of a Bibliography entry
  * with information of that specific reference (in general, the pages
  * inside the bibliography where the reference happens to such particular
  * document).
@@ -25,7 +22,7 @@ import java.util.List;
  * first positions and the empty positions are at the end, but highly
  * recommended for the String representations to work properly.
  * 
- * TODO: guarantee sequentiality of authors.
+ * @author Javier Beltrán Jorba
  * 
  */
 public class Bibliography extends Unit {
@@ -37,6 +34,7 @@ public class Bibliography extends Unit {
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
 	
+	/* Bibliography attributes */
 	private String[] authors;
 	private String[] secondaryAuthors;
 	private String year;
@@ -115,16 +113,6 @@ public class Bibliography extends Unit {
 				new ArrayList<>());
 	}
 	
-	public Bibliography(String[] authors, String[] secondaryAuthors,
-			String year, String distinction, String title, String mainTitle,
-			String volume, String place, String editorial, String series, 
-			String pages, int id, List<Integer> users) {
-		this(authors, secondaryAuthors, year, distinction,
-				title, mainTitle, volume, place, editorial, series, pages, 
-				"", id, users);
-		setShortReference(generateShortReference());
-	}
-	
 	/**
 	 * Returns a String representation of the entry, which coincides
 	 * with its short reference.
@@ -138,25 +126,6 @@ public class Bibliography extends Unit {
 	}
 	public void setShortReference(String shortReference) {
 		this.shortReference = shortReference;
-	}
-	
-	/**
-	 * Returns an abbreviated textual reference of the bibliography entry,
-	 * consisting of:
-	 * 
-	 * <authorShort0> - <authorShort1> <year><distinction>
-	 * 
-	 * Where - <authorShort1> only appears if it exists,
-	 * and <distinction> only appears if specified.
-	 * 
-	 * Note that the specification says that no separation should appear
-	 * between year and distinction.
-	 */
-	public String generateShortReference() {
-		String str = getAuthorShort(0);
-		str += (getAuthor(1) == "") ? "" : " - " + getAuthorShort(1);
-		str += " " + getYear() + getDistinction();
-		return str;
 	}
 	
 	/**
@@ -314,6 +283,18 @@ public class Bibliography extends Unit {
 		this.pages = pages;
 	}
 	
+	/**
+	 * Generates an abbreviated textual reference of the bibliography entry,
+	 * consisting of:
+	 * 
+	 * <author0> - <author1> <year><distinction>
+	 * 
+	 * Where - <author1> only appears if it exists,
+	 * and <distinction> only appears if specified.
+	 * 
+	 * Note that the specification says that no separation should appear
+	 * between year and distinction.
+	 */
 	public static String generateShortReference(String author0,
 			String author1, String year, String distinction) {
 		String str = author0;

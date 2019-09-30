@@ -1,7 +1,14 @@
 package model;
 
+/**
+ * GenereLiterari is one of MiMus entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class GenereLiterari extends Entity {
 
+	/* GenereLiterari attributes */
 	private String nomComplet;
 	private String nomFrances;
 	private String nomOccita;
@@ -17,6 +24,10 @@ public class GenereLiterari extends Entity {
 		this.definicio = definicio;
 	}
 	
+	/**
+	 * Returns the lemma of a GenereLiterari, which
+	 * coincides with its <nomComplet>.
+	 */
 	@Override
 	public String getLemma() {
 		return getNomComplet();
