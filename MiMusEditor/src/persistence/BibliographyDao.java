@@ -8,6 +8,13 @@ import java.util.ArrayList;
 
 import model.Bibliography;
 
+/**
+ * Contains the specific implementation of Bibliography queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class BibliographyDao extends UnitDao<Bibliography> {
 
 	public BibliographyDao(Connection conn) {

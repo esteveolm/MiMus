@@ -7,6 +7,13 @@ import java.sql.SQLException;
 
 import model.Lloc;
 
+/**
+ * Contains the specific implementation of Lloc queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class LlocDao extends EntityDao<Lloc> {
 
 	public LlocDao(Connection conn) {

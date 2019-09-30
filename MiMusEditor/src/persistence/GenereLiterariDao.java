@@ -7,6 +7,13 @@ import java.sql.SQLException;
 
 import model.GenereLiterari;
 
+/**
+ * Contains the specific implementation of GenereLiterari queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 
 	public GenereLiterariDao(Connection conn) {

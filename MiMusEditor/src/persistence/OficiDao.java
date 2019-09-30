@@ -8,6 +8,13 @@ import java.sql.SQLException;
 import model.Instrument;
 import model.Ofici;
 
+/**
+ * Contains the specific implementation of Ofici queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class OficiDao extends EntityDao<Ofici> {
 
 	public OficiDao(Connection conn) {

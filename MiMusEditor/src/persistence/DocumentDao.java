@@ -15,6 +15,13 @@ import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
 import model.Note;
 
+/**
+ * Contains the specific implementation of Document queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class DocumentDao extends UnitDao<Document> {
 
 	public DocumentDao(Connection conn) {

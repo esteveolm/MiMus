@@ -12,6 +12,12 @@ import model.Document;
 import model.Entity;
 import model.EntityInstance;
 
+/**
+ * DAO for EntityInstances.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class InstanceDao extends UnitDao<EntityInstance> {
 
 	public InstanceDao(Connection conn) {

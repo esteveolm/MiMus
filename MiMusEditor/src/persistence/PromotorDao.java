@@ -7,6 +7,13 @@ import java.sql.SQLException;
 
 import model.Promotor;
 
+/**
+ * Contains the specific implementation of Promotor queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class PromotorDao extends EntityDao<Promotor> {
 
 	public PromotorDao(Connection conn) {

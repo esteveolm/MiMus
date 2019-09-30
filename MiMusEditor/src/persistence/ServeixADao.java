@@ -6,6 +6,13 @@ import java.sql.SQLException;
 
 import model.Relation;
 
+/**
+ * Contains the specific implementation of ServeixA queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ServeixADao extends RelationDao {
 
 	public ServeixADao(Connection conn) {

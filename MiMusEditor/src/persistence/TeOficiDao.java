@@ -6,6 +6,13 @@ import java.sql.SQLException;
 
 import model.Relation;
 
+/**
+ * Contains the specific implementation of TeOfici queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class TeOficiDao extends RelationDao {
 	
 	public TeOficiDao(Connection conn) {

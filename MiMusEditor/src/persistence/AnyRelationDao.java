@@ -13,6 +13,13 @@ import model.Document;
 import model.Entity;
 import model.Relation;
 
+/**
+ * This is a special DAO that only redirects the application to the
+ * DAO necessary given the relation in question.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class AnyRelationDao extends UnitDao<Relation> {
 
 	public AnyRelationDao(Connection conn) {

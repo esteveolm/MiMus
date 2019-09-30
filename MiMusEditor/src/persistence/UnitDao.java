@@ -10,8 +10,19 @@ import java.util.List;
 
 import model.Unit;
 
+/**
+ * Main class of the persistence package. All DAO patterns
+ * in the project inherit from UnitDao, because they are
+ * specific DAOs for different objects reflected in different
+ * tables of the database.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ * @param <U> the specific Unit
+ */
 public abstract class UnitDao<U extends Unit> {
 	
+	/* DAO requires a Connection to DB to perform queries and changes */
 	private Connection conn;
 	
 	public UnitDao(Connection conn) {
@@ -26,6 +37,9 @@ public abstract class UnitDao<U extends Unit> {
 		this.conn = conn;
 	}
 
+	/**
+	 * Selects all DB entries in table associated to class U.
+	 */
 	public List<U> selectAll() throws SQLException {
 		String sql = "SELECT * FROM " + getTable();
 		Statement stmt = getConnection().createStatement();
@@ -38,6 +52,10 @@ public abstract class UnitDao<U extends Unit> {
 		return elems;
 	}
 	
+	/**
+	 * Selects one DB entry in table associated to class U,
+	 * arbitrarily.
+	 */
 	public U selectOne() throws SQLException {
 		String sql = "SELECT * FROM " + getTable();
 		Statement stmt = getConnection().createStatement();
@@ -48,23 +66,16 @@ public abstract class UnitDao<U extends Unit> {
 		throw new SQLException();
 	}
 	
+	/**
+	 * Selects the DB entry in the table associated to class U
+	 * that has ID <id>, or null if none has.
+	 */
 	public U selectOne(int id) throws SQLException {
 		String sql = "SELECT * FROM " + getTable() + " WHERE id=" + id;
 		System.out.println("SQL: " + sql);
 		Statement stmt = getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		if (rs.next()) {
-			return make(rs);
-		}
-		return null;
-	}
-	
-	public U selectOne(String... criteria) throws SQLException {
-		String sql = "SELECT * FROM " + getTable() + " LIMIT 1";
-		Statement stmt = getConnection().createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-		
-		while (rs.next()) {
 			return make(rs);
 		}
 		return null;
@@ -79,6 +90,12 @@ public abstract class UnitDao<U extends Unit> {
 	public abstract int insert(U unit) 
 			throws SQLException, DaoNotImplementedException;
 	
+	/**
+	 * Given a SQL statement ready to be executed, it executes it and
+	 * returns the last ID inserted by the user. This means that, if the
+	 * statement was an INSERT, this method returns the ID the DB chose
+	 * for the element inserted.
+	 */
 	protected int executeGetId(PreparedStatement stmt) throws SQLException {
 		int success = stmt.executeUpdate();
 		if (success == 1) {
@@ -90,6 +107,9 @@ public abstract class UnitDao<U extends Unit> {
 		return -1;
 	}
 	
+	/**
+	 * Deletes unit <unit> from the table based on its ID.
+	 */
 	public void delete(U unit) throws SQLException {
 		Statement stmt = getConnection().createStatement();
 		String sql = "DELETE FROM " + getTable() + 
@@ -97,10 +117,21 @@ public abstract class UnitDao<U extends Unit> {
 		stmt.executeUpdate(sql);
 	}
 	
+	/**
+	 * Given a ResultSet from executing a query, transforms it
+	 * into a model object of class U.
+	 */
 	protected abstract U make(ResultSet rs) throws SQLException;
 	
+	/**
+	 * Returns the name of the DB table this DAO is using.
+	 */
 	public abstract String getTable();
 
+	/**
+	 * Given unit <unit> with a certain ID, this method finds an
+	 * entry with the same ID and replaces it with the data from <unit>.
+	 */
 	public abstract void update(U unit) 
 			throws SQLException, DaoNotImplementedException;
 }

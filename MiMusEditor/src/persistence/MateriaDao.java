@@ -8,6 +8,13 @@ import java.util.TreeMap;
 
 import model.Materia;
 
+/**
+ * Contains the specific implementation of Materia queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MateriaDao extends UnitDao<Materia> {
 
 	public MateriaDao(Connection conn) {

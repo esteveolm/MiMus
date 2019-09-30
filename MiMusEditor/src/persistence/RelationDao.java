@@ -11,12 +11,25 @@ import java.util.List;
 import model.Entity;
 import model.Relation;
 
+/**
+ * Common DAO for all relations. Contains implementation specific to
+ * these units.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public abstract class RelationDao extends UnitDao<Relation> {
 	
 	public RelationDao(Connection conn) {
 		super(conn);
 	}
 	
+	/**
+	 * Inserts a relation to the DB. This requires an insertion on
+	 * the common and the specific table, which is why it's done in
+	 * auto-commit mode. This means that, if something fails in between,
+	 * state is recovered to how it was before this method was executed.
+	 */
 	@Override
 	public int insert(Relation unit) throws SQLException {
 		/* Insert is 2-step, make it transactional */

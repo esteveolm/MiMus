@@ -8,6 +8,13 @@ import java.util.HashMap;
 
 import model.Entity;
 
+/**
+ * This is a special DAO only in charge of redirecting the application
+ * to the specific DAO that is necessary for a certain type of entities.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class AnyEntityDao extends UnitDao<Entity> {
 
 	public AnyEntityDao(Connection conn) {

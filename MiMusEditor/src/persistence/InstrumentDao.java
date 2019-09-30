@@ -7,6 +7,13 @@ import java.sql.SQLException;
 
 import model.Instrument;
 
+/**
+ * Contains the specific implementation of Instrument queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class InstrumentDao extends EntityDao<Instrument> {
 
 	public InstrumentDao(Connection conn) {

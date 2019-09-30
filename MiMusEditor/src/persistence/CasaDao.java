@@ -7,6 +7,13 @@ import java.sql.SQLException;
 
 import model.Casa;
 
+/**
+ * Contains the specific implementation of Casa queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class CasaDao extends EntityDao<Casa> {
 
 	public CasaDao(Connection conn) {

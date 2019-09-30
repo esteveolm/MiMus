@@ -11,6 +11,13 @@ import java.util.List;
 import model.Document;
 import model.Note;
 
+/**
+ * Contains the specific implementation of Note queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class NoteDao extends UnitDao<Note> {
 
 	public NoteDao(Connection conn) {

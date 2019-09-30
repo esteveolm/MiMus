@@ -12,6 +12,13 @@ import model.Bibliography;
 import model.Document;
 import model.MiMusReference;
 
+/**
+ * Contains the specific implementation of Reference queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ReferenceDao extends UnitDao<MiMusReference> {
 
 	public ReferenceDao(Connection conn) {

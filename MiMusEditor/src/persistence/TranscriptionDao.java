@@ -14,6 +14,13 @@ import model.Document;
 import model.EntityInstance;
 import model.Transcription;
 
+/**
+ * Contains the specific implementation of Transcription queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class TranscriptionDao extends UnitDao<Transcription> {
 
 	public TranscriptionDao(Connection conn) {

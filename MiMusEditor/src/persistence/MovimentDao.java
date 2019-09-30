@@ -5,6 +5,13 @@ import java.sql.SQLException;
 
 import model.Relation;
 
+/**
+ * Contains the specific implementation of Moviment queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MovimentDao extends RelationDao {
 
 	public MovimentDao(Connection conn) {

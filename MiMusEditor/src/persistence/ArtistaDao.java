@@ -6,6 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Artista;
 
+/**
+ * Contains the specific implementation of Artista queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ArtistaDao extends EntityDao<Artista> {
 
 	public ArtistaDao(Connection conn) {

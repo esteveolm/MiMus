@@ -6,6 +6,13 @@ import java.sql.SQLException;
 
 import model.Relation;
 
+/**
+ * Contains the specific implementation of ResideixA queries and statements to
+ * the DB.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ResideixADao extends RelationDao {
 
 	public ResideixADao(Connection conn) {

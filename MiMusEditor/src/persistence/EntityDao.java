@@ -8,16 +8,32 @@ import java.sql.Statement;
 
 import model.Entity;
 
+/**
+ * Common DAO for all Entity tables. Contains implementation specific
+ * to these units.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ * @param <E> the Entity class.
+ */
 public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 
 	public EntityDao(Connection conn) {
 		super(conn);
 	}
 	
+	/**
+	 * Selects an entity based on its common id.
+	 */
 	public E selectOne(int id) throws SQLException {
 		return selectOne(id, false);
 	}
 	
+	/**
+	 * Entities are hierarchical units which have two IDs, the common
+	 * and the specific one. Boolean parameter <specific> defines
+	 * where to look parameter <id> from.
+	 */
 	public E selectOne(int id, boolean specific) throws SQLException {
 		String key = specific ? "id" : "entity_id";
 		String sql = "SELECT * FROM " + getTable() + " WHERE " + key + "=" + id;
@@ -30,6 +46,14 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		throw new SQLException();
 	}
 	
+	/**
+	 * Inserts an Entity. This requires making an insertion in the
+	 * common Entity table and in the specific E table. To avoid
+	 * failures during the process that lead to unstable state, this
+	 * procedure is executed without auto-commit mode in the DB. That is,
+	 * if something fails, state is reversed to how it was before this
+	 * method was executed.
+	 */
 	public int insert(E entity) throws SQLException, DaoNotImplementedException {
 		/* Insert is 2-step, make it transactional */
 		getConnection().setAutoCommit(false);
@@ -52,8 +76,21 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return -1;
 	}
 	
+	/**
+	 * This method contains the specific implementation of a certain type of
+	 * Entity E, that is, the columns stored in the DB. It is also passed the
+	 * common ID <entId> to make the foreign key.
+	 */
 	public abstract int insertSpecificEntity(E entity, int entId) throws SQLException;
 	
+	/**
+	 * This method contains the insertion of Entity in the common table.
+	 * Because it is linked to a specific entity with a foreign key but
+	 * this is unknown at this moment, it is set to 0 and updated later.
+	 * This is possible because the DB schema is not specifying this
+	 * foreign key, we're only using it as such without the constraint 
+	 * of a certain table.
+	 */
 	public int insertCommonEntity(E entity) throws SQLException {
 		String sql = "SELECT id from entity_types WHERE entity_name=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -71,6 +108,10 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return -1;
 	}
 	
+	/**
+	 * Updates foreign key on common entity table, finding the common
+	 * entry with <commonId> and setting the foreign key as <specId>.
+	 */
 	public int updateCommonEntity(int commonId, int specId) throws SQLException {
 		String sql = "UPDATE entity SET entity_id=? WHERE id=?";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -79,6 +120,12 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		return executeGetId(stmt);
 	}
 	
+	/**
+	 * Deletes an entity from its table. This requires performing a delete
+	 * on the common and the specific table, hence it is done without
+	 * auto-commit mode. This means that, if something fails, state is
+	 * reversed to how it was before this method was executed.
+	 */
 	@Override
 	public void delete(E entity) throws SQLException {
 		/* Delete is a two-step operation, we do it in transactional mode */
