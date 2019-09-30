@@ -13,10 +13,18 @@ import java.util.Properties;
 import model.Document;
 import persistence.DocumentDao;
 
+/**
+ * Script to deploy the MiMus server. It populates the MiMus DB
+ * with all MiMus documents in txt format found in directory "txt".
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class DeployDB {
 
 	public static void main(String[] args) {
 		try {
+			/* Read DB user-pass from config.properties */
 			Properties prop = new Properties();
 			InputStream is = null;
 			
@@ -32,6 +40,8 @@ public class DeployDB {
 					+ "?useUnicode=true&characterEncoding=UTF-8"
 					+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
 					prop.getProperty("admin.user"), prop.getProperty("admin.pass"));
+			
+			/* Reads all txt files in txt folder */
 			MiMusEntryReader reader = new MiMusEntryReader();
 			File txtPath = new File("txt/");
 			File[] files = txtPath.listFiles();
@@ -40,6 +50,7 @@ public class DeployDB {
 				String fName = f.getName();
 				if (fName.endsWith(".txt")) {
 					try {
+						/* Transform txt to Document, and insert to DB */
 						Document doc = reader.read(f.getAbsolutePath());
 						if (new DocumentDao(conn).insert(doc) > 0) {
 							System.out.println("Inserted " + fName);

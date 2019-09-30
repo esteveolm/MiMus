@@ -13,8 +13,17 @@ import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
 import model.Note;
 
+/**
+ * MiMusEntryReader reads a MiMus document in the txt format declared
+ * by the specification, and translates it to a MiMus Document model
+ * object.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class MiMusEntryReader {
 	
+	/* Headers and their field name associated */
 	private static final String[] STARTERS = {"a:","b:","b2:","c:","c2:",
 			"d:","d2:","e:","e2:","f:","g:","h:","i:","j:","k:","l:","g2:",
 			"h2:","i2:","j2:","k2:","l2:","m:","n:","o:","p:","q:","r:","s:"};
@@ -25,10 +34,11 @@ public class MiMusEntryReader {
 			"Edition","Register","Citation","Transcription","Notes","NotesData",
 			"NotesSignatura"};
 	
-	public MiMusEntryReader() {
-		
-	}
-	
+	/**
+	 * Reads a MiMus txt document from a <path> and returns a MiMus
+	 * Document object with all information from the txt transferred to
+	 * the model.
+	 */
 	public Document read(String path) {
 		/* Read lines of text file with Java 8 Streams */
 		List<String> lines = new ArrayList<>();
@@ -208,6 +218,10 @@ public class MiMusEntryReader {
 		return entry;
 	}
 	
+	/**
+	 * Transforms a line of text inside the notes field into a
+	 * Note object, preprocessing its type prequalifier (e.g. {nota}).
+	 */
 	private Note toNote(String text, Document entry) {
 		String type = "nota";
 		if (text.contains("{nota")) {
