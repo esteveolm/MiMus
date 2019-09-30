@@ -1075,8 +1075,8 @@ public class Editor extends EditorPart {
 		addTransArt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Artista> dialog = 
-						new TranscriptionDialog<Artista>(
+				TranscriptionDialog dialog = 
+						new TranscriptionDialog(
 						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
@@ -1092,8 +1092,8 @@ public class Editor extends EditorPart {
 		addTransInst.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Instrument> dialog = 
-						new TranscriptionDialog<Instrument>(
+				TranscriptionDialog dialog = 
+						new TranscriptionDialog(
 						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
@@ -1109,8 +1109,8 @@ public class Editor extends EditorPart {
 		addTransOfici.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<Ofici> dialog = 
-						new TranscriptionDialog<Ofici>(
+				TranscriptionDialog dialog = 
+						new TranscriptionDialog(
 						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
@@ -1126,8 +1126,8 @@ public class Editor extends EditorPart {
 		addTransGen.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TranscriptionDialog<GenereLiterari> dialog = 
-						new TranscriptionDialog<GenereLiterari>(
+				TranscriptionDialog dialog = 
+						new TranscriptionDialog(
 						entityInstances, parent.getShell(), "") {
 					@Override
 					public String getDialogName() {
@@ -1310,7 +1310,7 @@ public class Editor extends EditorPart {
 	 * processes its result and performs the insertion to the DB 
 	 * when it's the case.
 	 */
-	private void runTranscriptionDialog(TranscriptionDialog<? extends Entity> dialog, 
+	private void runTranscriptionDialog(TranscriptionDialog dialog, 
 			List<Transcription> transcriptions, List<EntityInstance> entities, 
 			Label label, TextStyler styler) {
 		Point charCoords = transcriptionText.getSelection();

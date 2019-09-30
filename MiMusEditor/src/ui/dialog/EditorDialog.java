@@ -22,6 +22,20 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import model.Unit;
 
+/**
+ * EditorDialog is an Eclipse Dialog that allows users to select
+ * a unit to be inserted to DB. Different types of Units require
+ * inheriting from this class.
+ * 
+ * After the user selected an element and the Dialog is closed,
+ * the Editor can access the selection made by the user, in order
+ * to perform the insertion. That is, the Dialog only contains the
+ * user selection procedure.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ * @param <U> the type of Unit being added by the Dialog
+ */
 public abstract class EditorDialog<U extends Unit> extends Dialog {
 
 	/* Model attributes */
@@ -46,6 +60,12 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		this.setBlockOnOpen(true);
 	}
 	
+	/**
+	 * Draws the Dialog, which contains a ComboBox with the elements
+	 * available for insertion and control buttons. This component has
+	 * autocomplete functionality: if the user starts writing, they
+	 * will find the options available starting by this text.
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -107,8 +127,9 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 		return composite;
 	}
 	
-	public abstract List<U> getUnitsUsed();
-	
+	/**
+	 * Returns the name of the Dialog for presentation of titles.
+	 */
 	public abstract String getDialogName();
 
 	public List<U> getUnits() {
@@ -118,6 +139,15 @@ public abstract class EditorDialog<U extends Unit> extends Dialog {
 	public void setUnits(List<U> units) {
 		this.units = units;
 	}
+	
+	/**
+	 * Given the list of units passed to the Dialog, this method
+	 * returns a sublist of the previous, which only contains the
+	 * units actually available in the Dialog. This provides
+	 * flexibility, as it allows to do filtering of the units
+	 * passed by the Editor depending on the type of Dialog implemented.
+	 */
+	public abstract List<U> getUnitsUsed();
 	
 	public int getSelection() {
 		return selection;

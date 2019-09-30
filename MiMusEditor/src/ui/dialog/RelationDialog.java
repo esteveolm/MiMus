@@ -26,9 +26,24 @@ import model.Entity;
 import model.EntityInstance;
 import util.LabelPrinter;
 
+/**
+ * RelationDialog is an Eclipse Dialog that allows users to select
+ * the elements that make a relation, in order to insert the relation to DB.
+ * 
+ * After the user selected the elements and the Dialog is closed,
+ * the Editor can access the selections made by the user, in order
+ * to perform the insertion. That is, the Dialog only contains the
+ * user selection procedure.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class RelationDialog extends Dialog {
 
+	/* List of entities */
 	private List<Entity> units;
+	
+	/* Selections of entities from the list <units> */
 	private int selection1;
 	private int selection2;
 	private Entity unit1;
@@ -49,6 +64,10 @@ public class RelationDialog extends Dialog {
 		this.entityType2 = entityType2;		
 	}
 	
+	/**
+	 * Transforms from a list of EntityInstances to a list of
+	 * Entities, using the Entities contained in the Instances.
+	 */
 	private List<Entity> getEntitiesFromInstances(List<EntityInstance> instances) {
 		List<Entity> entities = new ArrayList<>();
 		for (EntityInstance inst: instances) {
@@ -57,6 +76,12 @@ public class RelationDialog extends Dialog {
 		return entities;
 	}
 
+	/**
+	 * Draws the Dialog, which contains two ComboBox components
+	 * for selection of the elements of the relation. These have
+	 * autocomplete functionality: when a user starts typing, the
+	 * list of options gets reduced accordingly to the text introduced.
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -213,11 +238,9 @@ public class RelationDialog extends Dialog {
 	public void setEntityType2(String entityType2) {
 		this.entityType2 = entityType2;
 	}
-
 	public String getRelType() {
 		return relType;
 	}
-
 	public void setRelType(String relType) {
 		this.relType = relType;
 	}

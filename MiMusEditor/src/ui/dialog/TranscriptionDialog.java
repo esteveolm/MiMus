@@ -14,10 +14,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import model.Entity;
 import model.EntityInstance;
 
-public abstract class TranscriptionDialog<T extends Entity>
+/**
+ * Implementation of EditorDialog for inserting Transcriptions,
+ * i.e. for selecting an EntityInstance and making a Transcription
+ * associated with it.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
+public abstract class TranscriptionDialog
 		extends EditorDialog<EntityInstance> {
 	
 	private String selectedText;
@@ -39,6 +46,10 @@ public abstract class TranscriptionDialog<T extends Entity>
 		});
 	}
 	
+	/**
+	 * Returns these elements passed to the Dialog whose Entity type
+	 * corresponds to the TranscriptionDialog created.
+	 */
 	@Override
 	public List<EntityInstance> getUnitsUsed() {
 		List<EntityInstance> used = new ArrayList<>();
@@ -51,6 +62,10 @@ public abstract class TranscriptionDialog<T extends Entity>
 		return used;
 	}
 	
+	/**
+	 * Draws the Dialog, which contains a text field for inserting a
+	 * standard form of the Transcription.
+	 */
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		
@@ -71,6 +86,10 @@ public abstract class TranscriptionDialog<T extends Entity>
 		return composite;
 	}
 	
+	/**
+	 * Returns the name of the Dialog, which must correspond with the
+	 * type of Entity of this Transcription.
+	 */
 	@Override
 	public abstract String getDialogName();
 

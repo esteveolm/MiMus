@@ -17,6 +17,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import model.Bibliography;
 
+/**
+ * Implementation of EditorDialog for inserting References, i.e. for
+ * selecting a Bibliography and making a Reference that relates the
+ * Bibliography with the Document.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ */
 public class ReferenceDialog extends EditorDialog<Bibliography> {
 
 	/* Model attributes */
@@ -38,6 +46,10 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		});
 	}
 
+	/**
+	 * Draws the Dialog, which contains a ComboBox with the type of
+	 * reference and a text field to specify pages.
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
@@ -68,6 +80,9 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		return composite;
 	}
 	
+	/**
+	 * Returns all elements passed to the Dialog.
+	 */
 	@Override
 	public List<Bibliography> getUnitsUsed() {
 		return getUnits();

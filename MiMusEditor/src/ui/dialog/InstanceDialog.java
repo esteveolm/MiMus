@@ -10,6 +10,15 @@ import org.eclipse.swt.widgets.Shell;
 import model.Entity;
 import util.LabelPrinter;
 
+/**
+ * Implementation of EditorDialog for inserting a certain type of
+ * Entities, i.e. for creating EntityInstances of a certain type of
+ * Entity.
+ * 
+ * @author Javier Beltrán Jorba
+ *
+ * @param <E> the specific Entity class
+ */
 public abstract class InstanceDialog<E extends Entity> extends EditorDialog<E> {
 	
 	public InstanceDialog(List<E> entities, Shell parentShell) {
@@ -24,14 +33,24 @@ public abstract class InstanceDialog<E extends Entity> extends EditorDialog<E> {
 		});
 	}
 	
+	/**
+	 * Returns all entities passed to the dialog.
+	 */
 	@Override
 	public List<E> getUnitsUsed() {
 		return getUnits();
 	}
 	
+	/**
+	 * Returns the name of the Dialog, for presentation purposes.
+	 */
 	@Override
 	public abstract String getDialogName();
 	
+	/**
+	 * Draws the dialog. Must be inherited and completed in the
+	 * implementation class.
+	 */
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		
