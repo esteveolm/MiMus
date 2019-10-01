@@ -421,6 +421,7 @@ INSERT INTO note_types(note_name) VALUES ("nota");
 INSERT INTO note_types(note_name) VALUES ("referencia");
 INSERT INTO note_types(note_name) VALUES ("nota_bibliografica");
 INSERT INTO note_types(note_name) VALUES ("nota_data");
+INSERT INTO note_types(note_name) VALUES ("nota_arxiu");
 
 CREATE TABLE note (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
