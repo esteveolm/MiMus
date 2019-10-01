@@ -50,6 +50,7 @@ import model.Casa;
 import model.Document;
 import model.MiMusReference;
 import model.MiMusText;
+import model.Note;
 import model.Ofici;
 import model.Promotor;
 import model.Relation;
@@ -534,6 +535,27 @@ public class Editor extends EditorPart {
 		sectNotes.setClient(compNotes);
 		sectNotes.setExpanded(false);
 		
+		String notesStr = "";
+		for (Note note : docEntry.getNotes()) {
+			if (note.getType().equals("nota")) {
+				notesStr += "{nota} ";
+			} else if (note.getType().equals("referencia")) {
+				notesStr += "{ref} ";
+			} else if (note.getType().equals("nota_bibliografica")) {
+				notesStr += "{nbib} ";
+			} else if (note.getType().equals("nota_data")) {
+				notesStr += "{ndata} ";
+			} else if (note.getType().equals("nota_arxiu")) {
+				notesStr += "{narxiu} ";
+			}
+			notesStr += note.getText() + "\n\n";
+		}
+		Text notesText = new Text(form.getBody(), 
+				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+		notesText.setText(notesStr.substring(0, notesStr.length()-2));
+		GridData notesData = new GridData(GridData.FILL_HORIZONTAL);
+		notesData.widthHint = 10;
+		notesText.setLayoutData(notesData);
 		
 		/* REFERENCES PART */
 		/* References section */
