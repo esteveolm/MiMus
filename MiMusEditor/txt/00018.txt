@@ -1,0 +1,17 @@
+a: IV.75
+b: 1302
+c: setembre
+d: [17]
+e: [Barcelona]
+f: [Per manament del rei Jaume II] Pere Boïl, tresorer reial, paga el personal de la casa del rei Jaume II, entre el qual hi ha Jaume de Santesteve [Joan de Santesteve?],{nota1}{ref1} trompeta,{ref2} que rep 4 sous barcelonesos.
+g: ACA
+h: Reial Patrimoni
+i: MR
+j: reg.
+k: 265
+m: González 1911, doc. 329.
+p: […] companya de peu de casa del senyor rey fo fet acorriment axí [com] segueix, és assaber a cascun {curs}IIII solidos barchinonenses{/curs}: […] Jacme de Santesteve, trompeta.
+q: {nota1} Podria tractar-se d’un error de l’editor o del copista; en altres documents apareix un trompeta de nom Joan de Santesteve.
+{ref1} Podria tractar-se d’un error de l’editor o del copista; en altres documents (per ex. IV, doc. 77 i 80) apareix un trompeta de nom Joan de Santesteve.
+{ref2} Trompeta de casa del rei.
+s: {narxiu} El registre no és consultable, per això no se’n pot indicar el foli; el text parteix del de l’edició de referència, adaptat als nostres criteris de transcripció.

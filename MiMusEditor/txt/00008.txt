@@ -1,0 +1,13 @@
+a: I.25
+b: 1274
+c: agost
+d: 20
+e: Barcelona
+f: El rei reconeix deure a Ramon Ricard, ciutadà de Barcelona, certes sumes de diners que aquest va avançar quan va ser enviat com a ambaixador a Tunis, entre les quals hi ha 1.600 sous barcelonesos per tretze escuders, dos trompetes i un sonador de flauta, a raó de 100 sous per cap.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 19
+l: f. 161r.
+p: Nos Iacobus, et cetera, recognoscimus et confitemur debere vobis Raimundo Ricardi, civi Barchinone, que modo pro nuncio nostro ad regem Tunicii destinamus, septem mille et ducentos solidos barchinonenses, quos nobis mutuastis, nobis modo ad solvendum nauleum navis qua vos de mandato nostro conduxistis pro faciendo viatico antedicto; et debenus vobis quadringentos solidos barchinonenses quos vobis damus pro vestibus persone vestre racione dicti viatici; et debemus vobis mille quingentos solidos barchononenses quos vobis damus pro vestibus et sellis et frenis quinque sociorum vestrorum quos in dicto viatico vobiscum ducere debetis, scilicet pro unoquoque trescentos solidos barchinonenses; et debemus vobis pro vestibus tresdecim scutiferorum et duorum tubicinatorum et unius flautatoris quos in dicto viatico ducere debetis mille et DC solidos barchinonenses, scilicet pro unoquoque C solidos barchinonenses; item, debemus vobis duo mille solidos barchinonenses quos vobis damus pro victualibus ad opus viatici antedicti. Et sic est in suma quod debemus vobis inter omnia suprascripta duodecim mille et septingentos solidos barchinonenses. Quos quidem denariis assignamus vobis habendos et percipiendos in peccunia qua vos nobis de partibus Tunicii aportabitis vel qua rex Tunicii per suum nuncium nobis mitet. Et si forte rex Tunicii per vos vel per nuncium suum nobis peccuniam non miteret, promitimus dictos denarios vobis persolvere bona fide cum de dicto viatico reversus fueritis ad voluntatem vestram, vel assignant eos vobis in loco a quo breviter ipsos habere possitis.
+Datum Barchinone XIIIº kalendas septembris anno Domini MºCCºLXXº quarto.

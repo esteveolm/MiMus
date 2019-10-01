@@ -1,0 +1,18 @@
+a: II.6
+b: 1261
+c: agost
+d: 23
+e: Barcelona
+f: En una relació de pagaments de l’infant Pere per quitació n’hi ha un per a Pere, joglar [Pere Joglar?],{nota1}{ref1} i un altre per als trompadors, que l’acompanyen en un viatge.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 27
+l: f. 68r-69v
+p: Quitavimus familiam domini infantis in Barchinona a die mercurii IIª iunii usque diem martis IIII augusti per totam diem, et sunt LXXVII dies:
+[…]
+Pere,{curs} juglar{/curs}, I bestia per LXXV dies et II de anata, CLI solidos IIII denarios.
+{curs}Trompadors{/curs}, II bestias per LXXV dies et II de anata, CCCII solidos VIII denarios.
+[…]
+q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom. Per un document de 12 de maig de [1262] consta que a l’infant Pere l’acompanyaven Pere, joglar, i Pere, joglar, de Tunis; tenint en compte les formes d’identificació d’aquest document, identifiquem Pere, joglar, amb el primer, però no es pot descartar que sigui Pere, joglar, de Tunis.
+{ref1} Cf. II doc. 2, 3, 5, 6, 7. A l’hora de marcar [Pere Joglar?] s’ha d’identificar amb Pere Joglar, joglar de Galícia, i amb Pere Joglar, joglar, germà de Centpunys.

@@ -1,0 +1,15 @@
+a: III.16
+b: 1290
+c: setembre
+d: 4
+e: Barcelona
+f: El rei Alfons II mana a Pere Esquerit que pagui a Castanyet, joglar de Guillema de Montcada [esposa de l’infant Pere],{ref1} una cavalcadura.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 85
+l: f. 52r
+m: Trenchs Ódena 2011, doc. 104.
+p: Eidem [{curs}scil{/curs}. Petro Esquerit] quod donet Castanyeto, iutglario inclite dompne Guilelme de Montecatheno, unam equitaturam sibi competentem. Qua sibi data et cetera.
+Data ut supra [Barchinone II{supra}e{/supra} nonas septembris anno Domini MºCCºXCº].
+q: {ref1} Guillema de Montcada també és coneguda com a Guillema de Bearn, perquè era filla de Gastó VII de Bearn i de Mata de Bigorra; com a senyora de Montcada era cognominada “de Montcada”, però a la BD es podria recollir també l’altre nom per a cerques. Cal recordar que l’important, però, és que era l’esposa de l’infant Pere (germà d’Alfons II i Jaume II).

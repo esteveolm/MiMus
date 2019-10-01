@@ -1,0 +1,17 @@
+a: IV.179
+b: 1312
+c: febrer
+d: 3
+e: Calataiud
+f: El rei Jaume II reconeix certs pagaments que, per manament seu, ha efectuat Pere Marc, tresorer reial, entre els quals n’hi ha un de 270 sous jaquesos a diversos joglars (100 als joglars del rei de Castella [Ferran IV], 30 als dos joglars de l’infant Pere [de Castella],{ref1} 80 als joglars de l’infant Joan [de Castella el de Tarifa], 10 al joglar de l’infant Felip [de Castella],{ref2} 10 al de Juan Alfonso de Haro i 40 a quatre joglars d’altres nobles castellans) i un altre de 153 sous jaquesos a totes les soldaderes presents aleshores a Calataiud.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 298
+l: f. 55r-56v
+p: Nos Iacobus, et cetera, quia vos fidelis thesaurarius noster Petrus Marci solvistis, tradidistis et expendistis de peccunia curie nostre in mense ianuario proxime preterito ex causis subscriptis quantitates peccunie infrascriptas, videlicet: […] et ioculatoribus ipsius regis Castelle centum solidos iaccenses; et duobus ioculatoribus infantis Petri triginta solidos iaccenses; et ioculatoribus infantis Iohannis octuaginta solidos iaccenses; et cuidam ioculatori infantis Philipi decem solidos iaccenses; et cuidam ioculatori {ratllat}infantis{/ratllat} /Iohannis\ Alfonsi de Faro decem solidos iaccenses; et quatuor ioculatoribus aliquorum richorum hominum de Castella quadraginta solidos iaccenses; qui denarii ioculatorum ascendunt ad summam ducentorum LXX solidorum iaccensium; et universis soldaderiis in Calatayubi tunc existentibus centum quinquaginta tres solidos iaccenses […].
+Data Calataiubi IIIº nonas ffebruarii anno Domini MºCCCº undecimo.
+Petrus de Solerio mandato domini regis, cui lecta fuit.
+q: {ref1} És fill de Sanç IV i Maria de Molina, germà del rei Ferran IV.
+{ref2} És fill de Sanç IV i Maria de Molina, germà del rei Ferran IV.
+{nota1} És impossible especificar de qui es tracta perquè els noms de joglars al servei del rei i dels infants de Castella són nombrosos i sovint canvien de servei de l’un a l’altre.

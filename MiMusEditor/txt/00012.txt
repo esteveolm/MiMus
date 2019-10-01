@@ -1,0 +1,17 @@
+a: II.11
+b: 1267
+c: juny
+d: 16
+e: Terol
+f: En una relació de pagaments de l’infant Pere n’hi ha dos per a unes dones que ballaven, unes de Monreal del Campo i les altres de Terol.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 2v
+p: {curs}Die ioviis tercera iunii, exivit dominus infans de Alfambra et intravit Terolium, et stetit familia ad pignora per duos dies […].{/curs}
+[…]
+Donam a Muntreyal a les massipes qui balaven, {curs}IIII solidos{/curs}.
+{curs}Item{/curs}, a les massipes de Terol qui balaven, {curs}VII solidos{/curs}.
+[…]
+q: {nota1} Miret i Sans (1908, p. 209) cita per l’agost de 1269, sense donar-ne el registre, un pagament de 2 sous per a “fembres qui balaven en Darocha”, però no s’ha pogut localitzar.

@@ -1,0 +1,17 @@
+a: IV.43
+b: 1297
+c: març
+d: 23
+e: Roma
+f: El rei Jaume II concedeix pels seus serveis a Bernat Percasset, mim, 6 diners jaquesos diaris sobre les rendes de Lleida i, en espera que s’alliberi aquesta possibilitat, li concedeix 4 diners sobre la lleuda de la ciutat.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 321
+l: f. 53v
+p: Nos Iacobus, et cetera, attendentes grata et accepta servicia per te Bernardum Percasseti, mimmum, nobis exhibita, idcirco damus et concedimus tibi qualibet die toto tempore vite tue sex denarios iaccensium cum ipsos vacare per mortem alicuius, vel aliter ad violarium concessos in civitate Ilerde. Interim vero damus et concedimus tibi quatuor denarios iaccensium habendos et percipiendos die qualibet super lezda civitatis Ilerde quousque habeas et percipias dictos VI denarios per nos, ut predicitur, tibi concessos. Mandantes per presentem cartam lezdario civitatis Ilerde predicte, vel cuicumque denarios ipsius lezde recipenti, presenti vel qui pro tempore fuerit, quod tibi dent et solvant die qualibet dictos IIII{supra}or{/supra} denarios de denariis lezde predicte, donec habeas et percipias dictos sex denarios, ut superius continetur. Mandantes nichilominus baiulo civitatis predicte et universis aliis officialibus, presentibus vel qui pro tempore fuerint, quod predictam donacionem et concessionem nostram firmam habeant et observent, et faciant inviolabiliter observari ut superius continetur.
+Data Rome decimo kalendas aprilis anno Domini MCCXC septimo.
+Petrus Letonis.
+r: {ndata} El copista escriu de manera equivocada 1297, com al document precedent, que és quan el rei es troba a Roma, quan hauria d’haver escrit 1296, ja que el canvi d’any és el VIII de les calendes. Més endavant, el 4 de febrer de 1311, en anul·lar la concessió, sí que s’indica correctament l’any.
+[AFC1]En casos anteriors en què conflueix amb altres tipus de nota, es posa en primer lloc. Caldria fer-ho sempre igual.
+[AFC2]Falta la marca de camp q:

@@ -1,0 +1,17 @@
+a: III.17
+b: 1290
+c: novembre
+d: 20
+e: Barcelona
+f: El rei Alfons II concedeix a Pere Joglar [joglar?]{nota1}{ref1}, mentre visqui, 60 morabatins sobre la carnisseria d’Alzira, pels serveis prestats al rei i als seus pare i avi, Pere II i Jaume I, i per la seva senectut.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 83
+l: f. 95r
+m: Gallofré Guinovart 1968, doc. 1842.
+p: Noverint universi quod nos Alfonsus, et cetera, propter plura et grata servicia per vos Petrum Juglar exhibita domino regi Iacobo, avo nostro, et domino regi Petro, patri nostro, et nobis, et quia estis senex, damus et concedimos vobis quamdiu vixeris in sustentacionem vite vestre illos sexaginta morabetinos censuales quos recipimus et debemos recipere quolibet anno in carniçeria Aliezire. Hanc autem donacionem facimus vobis, sicut melius dici et intelligi potest, ad vestrum salvamentum et bonum intellectum. Mandantes per presentem cartam procuratori nostro regni Valencie, et baiulo et iusticie dicti loci Aliezire, et universis officialibus nostris quod vobis, vel cui volueritis, observent et observari faciant dictam donacionem et concessionem nostram /dum vobis\ ut predicitur.
+Data Barchinone XIIº kalendas decembris [anno Domini MºCCºXCº].
+Iacobus de Cabanis.
+q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que exercís l’ofici. Per context i cronologia no podem descartar que sigui el mateix Pere Joglar, joglar, germà de Centpunys, que també sembla que resideix a Alzira.
+{ref1} Es tracta de Pere Joglar, de Galícia. Cf. I.15; III.8; III.17; III.18; III.19; IV.3; IV.4; potser també IV.11.

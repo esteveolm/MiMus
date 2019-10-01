@@ -36,9 +36,14 @@ public class DeployDB {
 			}
 			
 			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://161.116.21.174:3306/mimus"
+					"jdbc:mysql://" 
+					+ prop.getProperty("host.name") 
+					+ ":3306/mimus"
 					+ "?useUnicode=true&characterEncoding=UTF-8"
-					+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
+					+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10"
+					+ "&useJDBCCompliantTimezoneShift=true"
+					+ "&useLegacyDatetimeCode=false"
+					+ "&serverTimezone=UTC",
 					prop.getProperty("admin.user"), prop.getProperty("admin.pass"));
 			
 			/* Reads all txt files in txt folder */

@@ -1,0 +1,17 @@
+a: III.8
+b: 1287
+c: maig
+d: 7
+e: València
+f: El rei Alfons II confirma a Pere Joglar [joglar?]{nota1}{ref1} el corral que li havia donat el seu avi, el rei Jaume I, a Alzira.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 75
+l: f. 8v
+n: Gallofré Guinovart 1968, doc. 768.
+p: Noverint universi quod nos Alfonsus, et cetera, per nos et nostros laudamus, concedimus et confirmamus vobis Petro Juglar et vestris illud corrale quod serenissimus dominus rex Iacobus, avus noster, vobis dedit in Alyaçira cum carta sua, ut continetur in ea, quod est iuxta Regale nostrum Alyaçire; et affrontat ex una parte cum Regali nostro predicto, et ex alia cum domib[us] iudei, et ex alia cum domibus de los Rossetes, et ex alia cum tenedone vestra. Ita quod vos et vestri dictum cor[ralem] sub predictis affrontacionibus, dum modo vobis concessum sit sub eisdem per dictum dominum regem avum nostrum, h[abea]tis et teneatis vos et vestri ad omnes vestras voluntates faciendas, secundum quod vobis melius concessum est per d[ictum] dominum regem Iacobum, avum nostrum, et in carta sue donacionis et concessionis plenius continetur, sicut melius dici potest et cetera. Mandantes universis officialibus et subditis nostris et cetera.
+Data Valencie nonas may [anno Domini MºCCºLXXXºVIIº].
+Petrus Marchesii.
+q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que exercís l’ofici. Per context i cronologia no podem descartar que sigui el mateix Pere Joglar, joglar, germà de Centpunys, que també sembla que resideix a Alzira.
+{ref1} Es tracta de Pere Joglar, de Galícia. Cf. I.15; III.8; III.17; III.18; III.19; IV.3; IV.4; potser també IV.11.

@@ -1,0 +1,20 @@
+a: I.31
+b: 1276
+c: març
+d: 4
+e: Alzira
+f: El rei Jaume I enfranqueix de certs tributs Pere Joglar, joglar, germà de Centpunys.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 194
+l: f. 48r-v
+m: parcial Anglès 1935, p. 320.{nbib1}
+o: Burns 1985-2007, III, 134.
+p: Noverint universi quod nos Iacobus, Dei gracia rex Aragonum, Maioricarum et Valencie, comes Barchinone et Urgelli et dominus Montispessulani, per nos et nostros infranchimus et franchum ac liberum facimus penitus et immunem te Petrum Juglar, fratrem Centipuynos, ioculatorem, in tota vita tua, cum omnibus bonis tuis mobilibus et immobilibus habitis et habendis, ab omni scilicet peyta sive questia, et exercitu ac cavalquada et redempcionibus eorundem, et a monetatico et qualibus alia exaccione sive demanda regali, ita videlicet quod tu in vita tua non tenearis dare vel solvere aliquod aliquo predictorum, set sis inde cum omnibus bonis tuis habitis et habendis toto tempori vite tue liberus et immunis et penitus perpetuo absolutus, sicut melius dici et intelligi potest, ad tuum bonum et scincerum intellectum. Nos autem et nostri recipiemus et teneamur recipere in compotum nostrum partem que te pro bonis tuis in predictis contingeret et ei solvere tenereris. Mandantes firmiter baiulis, iusticiis et iuratis, et collectoribus predictorum, et universis aliis officialibus et subditis nostris presentibus et futuris quod partem te in predictis contingentem pro bonis tuis recipiant in compotum nostrum, et predicta omnia et singula firma habeant et observent, et non contra veniant nec aliquem contravenire permitant aliqua racione.
+Data Algezire IIIIº nonas marcii anno Domini MºCCºLXXVº.
+Sig+num Iacobis, Dei gracia et cetera.
+Testes sunt: Bernardus Guilelmi de Entença, Berengarius de Podioviridi, Raimundus de Moncada, Guilelmus de Caneto, Dalmacius de Crexello.
+Sig+num Simonis de Sancto Felicio qui, mandato domini regis predicti, hoc scribi fecit et clausit loco, die et anno prefixis.
+q: {nbib1} Datat el 1275.
+{nota1} Per context —sembla que resideix a Alzira— i cronologia no podem descartar que sigui el mateix que Pere Joglar, segurament també joglar, de Galícia, que té propietats a Alzira.

@@ -1,0 +1,16 @@
+a: I.5
+b: 1246
+c: gener
+d: 24
+f: En el repartiment de terres al regne de València s’assignen quatre jovades de terra a Tora, una casa i un hort a Pere, joglar [Pere Joglar?],{ref1}{nota1} i a la seva esposa Marquesa.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 6
+l: f. 21v (primera numeració)
+m: Bofarull 1856, p. 362.
+p: Anno MCCXL quinto.
+[…] Petrus, ioculator, et Marquesia, uxor eius: quatuor iovatas in Tora, et domos /de Hamet Avinsargen, et ortus de Hamet Alacon\.
+IX kalendas februarii.
+q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom.
+{ref1} La identificació amb [Pere Joglar?] implica marcar a la BD com si pogués ser: Pere Joglar, joglar (germà de Centpunys i marit d’Elvira) i Pere Joglar, [joglar?] de Galícia.

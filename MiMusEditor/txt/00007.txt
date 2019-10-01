@@ -1,0 +1,15 @@
+a: I.23
+b: 1273
+c: maig
+d: 5
+e: Lleida
+f: El rei Jaume I declara Ramonet Millaç innocent de la mort de Bartomeu Joglar [joglar?], fill de Pere Joglar [joglar?],{nota1} perquè ha actuat en legítima defensa.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 21
+l: f. 144v-145r.
+p: Noverint universi quod cum Raymundetus Millaç inculpatus fuerit de morte Bartolomei Juglar, quondam, filii Petri Juglar, super qua inquisitum fuit per curiam et paciarios ilerdenses, et dicerent dictum Raymundetum Millaç predictum Bartolomeum in sui deffensione vulnerasse, idcirco nos Iacobus, Dei gracia et cetera, visa dicta inquisicione, cum per eam inquisicionem invenerimus probatum dictum Raymundetum Millaç in sui defensionem incidisse dicto Bartolomeo Juglar vulnera de quibus dicitur obiisse, per nos et nostros concedimus dicto Raymundeto Millaç quod pro [...] [vu]lneravit, possit mane et stare salve et secure ac redire, et sub assecuramento nostro et [...] nostre excepta tamen civitate Ilerde, in qua non volumus quod intret, pro eo quia infra [...] eo non comparuit; et aliquis officialis noster vel alia persona extra dictam civitatem Ilerde dictum Raymundetum non [capia]t, detineat, impediat vel offendat racione mortis predicte, nec capi, ditineri, impediri vel offendi permitat, ipso faciente [persona]liter parentibus dicti mortui m[...] ipso iusticie complementum. Nos enim occasionem penam criminalem quam dicto Raymundeto [racio]ne mortis predicte imponere possemus, eidem remitimus penitus, pro eo quia in sui deffensionem fecit, ut dictum est, vulnera antedicta. Mandantes firmiter et cetera.
+Data Ilerde IIIº nonas madii anno Domini MºCCºLXXº tercio.
+q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que exercís l’ofici.
+s: {narxiu} El registre presenta unes taques d’humitat que impedeixen llegir gairebé la meitat de les primeres dues ratlles del verso.

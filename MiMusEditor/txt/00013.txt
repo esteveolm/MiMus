@@ -1,0 +1,16 @@
+a: II.17
+b: [1268]
+c: [juliol]
+b2: [1268]
+c2: [agost]
+f: En una relació de pagaments de l’infant Pere n’hi ha un per a un joglar de Pamplona.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 51v
+o: Miret i Sans 1908, p. 204.{nbib1}
+p: […]
+{curs}Item{/curs}, a I juglar de Panplona, {curs}XLIII solidos{/curs}.
+[…]
+q: {nbib1}Sense indicació de registre i foli.

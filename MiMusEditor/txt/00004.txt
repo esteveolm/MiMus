@@ -1,0 +1,18 @@
+a: I.9
+b: 1262
+c: gener
+d: 23
+e: Montpeller
+f: El rei Jaume I confirma a Gauter de Mora la donació de sis jovades de terra a les Alcusses (Moixent) que li ha fet Pere [Joglar], joglar.{ref1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 11
+l: f. 237v
+m: Burns 1985-2007, II, doc. 384.{nbib1}
+n: Martínez Ferrando 1934, doc. 377.
+o: Anglès 1935, p. 319.
+p: Per nos et nostros laudamus, concedimus et confirmamus vobis Garterio de Mora et vestris im perpetuum donacionem quam Petrus ioculator vobis fecit de sex iovatis terre in alcheria sua de Alcuça, quam habet in regno Valencie, videlicet in termino de Muxen, prout in carta inde ab ipso vobis facta plenius continetur. Promitentes vobis et vestris quod contra predictam donacionem non veniemus nec aliquem venire permitemus, immo faciemus vos et vestros habere et tenere predictam hereditatem, prout in carta quam, ut dictum est, inde ab eo habetis plenius continetur, salvo iure et dominio quod habemus et habere debemus in predicta hereditate.
+Data in Montepessulano Xº kalendas februarii anno Domini millesimo CCºLXº primo.
+q: {nbib1} Burns llegeix {curs}Garrerio{/curs} en lloc de {curs}Garterio{/curs}.
+{ref1} Cf. I, doc. 9, 12, 19, 20, 21, 24.

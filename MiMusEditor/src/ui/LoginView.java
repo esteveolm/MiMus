@@ -94,7 +94,8 @@ public class LoginView extends ViewPart {
 					
 					/* First, try connection */
 					try {
-						DBUtils.connect(user, pass);
+						DBUtils.connect(user, pass, 
+								oldProp.getProperty("host.name"));
 						
 						/* If successful, store values in config.properties */
 						DBUtils.writeProperties(user, pass);

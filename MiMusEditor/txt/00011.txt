@@ -1,0 +1,28 @@
+a: II.7
+b: [1262]
+c: maig
+d: 12
+e: Barcelona
+f: En una relació de pagaments de l’infant Pere n’hi ha un per a Pere, joglar [Pere Joglar?],{nota1}{ref1} un per a Pere, joglar, de Tunis,{nota2} un per a uns trompadors i un altre per a Paulet [Paulet de Marsella?]{nota3} [joglar?], que l’acompanyen en un viatge.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 27
+l: f. 73v-75v
+o: Anglès 1935, p. 322; Soldevila 1995, I, p. 72.
+p: [Die] iovis III aprilis recessit dominus infans de Villafrancha et intravit Barchinona […].
+[…]
+Expensa domus domini infantis a die iovis IIIª aprilis, que dominus infans intravit Barchinonam usque diem veneris IIª madii per totam diem, et sunt XXIII dies, per totum mille DCCCCVIII solidos III obolos.
+[…]
+{curs}Trompadors{/curs}, II bestias, CXXII solidos.
+[…]
+Pere,{curs} juglar{/curs}, I bestia, XXVII solidos.
+[…]
+Pere, {curs}juglar, de Túniz{/curs}, I bestia, XXVII solidos.
+[…]
+Paulet, I bestia, XXII solidos.
+[…]
+q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom. Per context i per cronologia l’hem identificat amb un Pere, joglar, que acompanya l’infant Pere; tanmateix aquest altre Pere, joglar, podria ser el mateix Pere, joglar, de Tunis, que apareix en aquest mateix document.
+{nota2} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom. Per context i per cronologia podria ser el mateix Pere, joglar, que acompanya l’infant Pere; tanmateix, aquest l’hem identificat amb l’altre Pere, joglar, que apareix en aquest mateix document.
+{nota3} La hipòtesi d’identificació amb el trobador Paulet de Marsella es deu a Miret i Sans (1908, p. 204) i es funda en el document II, 16, on consta que el març de l’any 1268 (corregim la data errònia de Miret i Sans) l’infant Pere paga, a Barcelona, 50 sous a un Paulet joglar. La proposta és acceptada per Menéndez Pidal (1924, p. 131) i per Soldevila (1995, I, 193), el qual dona a conèixer també aquest document, on considera que l’esment a Paulet podria fer referència al trobador. La identificació és qualificada de “muy verosímil” per M. de Riquer (1951, p. 217) i més tard represa per I. de Riquer en la seva monografia sobre el trobador (1979-1982, p. 137-138 i 1996, p. 25-26).
+{ref1} Cf. II doc. 2, 3, 5, 6, 7. A l’hora de marcar [Pere Joglar?] s’ha d’identificar amb Pere Joglar, joglar de Galícia, i amb Pere Joglar, joglar, germà de Centpunys.

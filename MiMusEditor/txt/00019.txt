@@ -1,0 +1,16 @@
+a: IV.76
+b: 1302
+c: octubre
+e: Girona
+f: Per manament del rei Jaume II, Pere Boïl, tresorer reial, paga, entre altres despeses i de gràcia, 268 sous 6 diners barcelonesos a tres joglars del rei de Mallorca [Jaume II], que l’han acompanyat quan ha vingut [a Girona] a veure’s amb el rei d’Aragó.
+g: ACA
+h: Reial Patrimoni
+i: MR
+j: reg.
+k: 266
+l: f. 76r
+m: González 1911, doc. 329.
+n: Trenchs 2011, doc. 384.{nbib1}
+p: {curs}Infra predictum mensem octobris{/curs}, en Gerona, per manament del senyor rey a mi fet de boca, doné a les persones dejús escrites e en les coses dejús escrites, és asaber: a III juglars del rey de Mallorcha que vengren a la cort del senyor rey ab lo dit rey de Mallorches, que·ls manà donar de gràcia, {curs}CCLXVIII solidos VIII denarios{/curs} […].
+{nbib1} [AFC2]Amb equivocació de cota arxivística, Cancelleria, en lloc de Reial Patrimoni.
+s: {narxiu} El registre no és consultable; el text parteix del de l’edició de referència, adaptat als nostres criteris de transcripció.

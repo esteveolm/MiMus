@@ -30,9 +30,9 @@ public class DBUtils {
 	public static Connection connect() throws SQLException {
 		try {
 			Properties prop = readProperties();
-			
 			return connect(prop.getProperty("editor.user"), 
-					prop.getProperty("editor.pass"));
+					prop.getProperty("editor.pass"),
+					prop.getProperty("host.name"));
 		} catch(IOException e) {
 			throw new SQLException();
 		}
@@ -42,12 +42,19 @@ public class DBUtils {
 	 * Returns an open Connection to the MiMus DB using SQL connector.
 	 * User and password are passed as parameters.
 	 */
-	public static Connection connect(String user, String pass) throws SQLException {
-		return DriverManager.getConnection(
-				"jdbc:mysql://161.116.21.174:3306/mimus"
+	public static Connection connect(String user, String pass, String host)
+			throws SQLException {
+		String conn = "jdbc:mysql://" 
+				+ host
+				+ ":3306/mimus"
 				+ "?useUnicode=true&characterEncoding=UTF-8"
-				+ "&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",
-				user, pass);
+				+ "&autoReconnect=true"
+				+ "&failOverReadOnly=false&maxReconnects=10"
+				+ "&useJDBCCompliantTimezoneShift=true"
+				+ "&useLegacyDatetimeCode=false"
+				+ "&serverTimezone=UTC";
+		return DriverManager.getConnection(
+				conn, user, pass);
 	}
 	
 	/**

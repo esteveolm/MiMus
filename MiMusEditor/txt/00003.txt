@@ -1,0 +1,17 @@
+a: I.8
+b: [1258]
+c: [setembre]
+d: [8]
+e: [Montpeller]
+f: En uns comptes [manats pel rei Jaume I] hi ha pagaments pels vestits de Guillem Ramon, joglar [que viatja amb el rei].{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 27
+l: f. 37r
+p: Guillem Ramon, juglar, per mantel et cot, II canes {curs}et media{/curs} de bifa, que fan {curs}XXXV solidos{/curs}.
+{curs}Item{/curs}, per gonela de xaló d’alsayne, VII palms, {curs}XVII solidos et medio{/curs}.
+{curs}Item{/curs}, per calces, III palms d’anglès negret, que fan {curs}VI solidos{/curs}.
+{curs}Item{/curs}, per penes, {curs}XXIII solidos{/curs}.
+q: {nota1} Al f. 32r hi ha el següent encapçalament que sembla referir-se a aquests comptes: “Anno Domini millesimo ducentesimo quinquagesimo octavo VI id[us] septembris in [domin]ice die, [i]ntravit dominus rex in Montepessulano et mandavit dare vestes domine Eliz[a]bet, fil[ie] [sue]”.
+
