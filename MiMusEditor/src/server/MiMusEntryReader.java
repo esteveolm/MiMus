@@ -151,6 +151,16 @@ public class MiMusEntryReader {
 							case 26:
 								notesIdx = i;
 								break;
+							case 27:
+								if (notesIdx==-1) {
+									notesIdx = i;
+									break;
+								}
+							case 28:
+								if (notesIdx==-1) {
+									notesIdx = i;
+									break;
+								}
 							}
 						} catch (NumberFormatException e) {
 							System.out.println("Could not read field " + FIELD_NAMES[j] + " properly, this field will be empty.");
@@ -183,8 +193,9 @@ public class MiMusEntryReader {
 			if (lines.get(i).startsWith(STARTERS[25])) {
 				transcription += lines.get(i).substring(2) + "\n";
 			} else if (lines.get(i).startsWith(STARTERS[26]) 
-					|| lines.get(i).startsWith(STARTERS[27])) {
-				/* May have q: notes or not (r:) */
+					|| lines.get(i).startsWith(STARTERS[27])
+					|| lines.get(i).startsWith(STARTERS[28])) {
+				/* Terminate if notes (q: / r: / s:) show up */
 				break;
 			} else {
 				transcription +=lines.get(i) + "\n";
@@ -192,13 +203,13 @@ public class MiMusEntryReader {
 		}
 		entry.setTranscriptionText(transcription);
 		
-		/* Notes (q) just as a single note containing all text */
+		/* Notes (q, r, s) just as a single note containing all text */
 		if (notesIdx!=-1) {
 			for (int i=notesIdx; i<lines.size(); i++) {
-				if (lines.get(i).startsWith(STARTERS[26])) {
+				if (lines.get(i).startsWith(STARTERS[26])
+						|| lines.get(i).startsWith(STARTERS[27])
+						|| lines.get(i).startsWith(STARTERS[28])) {
 					notes.add(toNote(lines.get(i).substring(2), entry));
-				} else if (lines.get(i).startsWith(STARTERS[27])) {
-					break;
 				} else {
 					notes.add(toNote(lines.get(i), entry));
 				}
@@ -232,6 +243,8 @@ public class MiMusEntryReader {
 			type = "nota_bibliografica";
 		} else if (text.contains("{ndata")) {
 			type = "nota_data";
+		} else if (text.contains("{narxiu")) {
+			type = "nota_arxiu";
 		}
 		
 		String note = text.substring(text.indexOf("}")+1);
