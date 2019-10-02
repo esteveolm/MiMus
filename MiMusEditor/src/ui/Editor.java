@@ -537,17 +537,6 @@ public class Editor extends EditorPart {
 		
 		String notesStr = "";
 		for (Note note : docEntry.getNotes()) {
-			if (note.getType().equals("nota")) {
-				notesStr += "{nota} ";
-			} else if (note.getType().equals("referencia")) {
-				notesStr += "{ref} ";
-			} else if (note.getType().equals("nota_bibliografica")) {
-				notesStr += "{nbib} ";
-			} else if (note.getType().equals("nota_data")) {
-				notesStr += "{ndata} ";
-			} else if (note.getType().equals("nota_arxiu")) {
-				notesStr += "{narxiu} ";
-			}
 			notesStr += note.getText() + "\n\n";
 		}
 		Text notesText = new Text(form.getBody(), 

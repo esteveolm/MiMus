@@ -246,9 +246,7 @@ public class MiMusEntryReader {
 		} else if (text.contains("{narxiu")) {
 			type = "nota_arxiu";
 		}
-		
-		String note = text.substring(text.indexOf("}")+1);
-		return new Note(0, type, note, entry);
+		return new Note(0, type, text.trim(), entry);
 	}
 	
 }

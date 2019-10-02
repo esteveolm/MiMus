@@ -226,9 +226,24 @@ public class Document extends Unit implements IEditorInput {
 	 * in a string presentation.
 	 */
 	public String getReadOnlyText() {
+		Note nData = null;
+		Note nArxiu = null;
+		for (Note note: getNotes()) {
+			if (note.getType().equals("nota_data")) {
+				nData = note;
+			}
+			if  (note.getType().equals("nota_arxiu")) {
+				nArxiu = note;
+			}
+		}
 		String str = "Doc ID: " + getIdStr() + 
 				"\nNumeració antiga: " + getNumbering() +
-				"\nData: " + getDate().toString() + "\n";
+				"\nData: " + getDate().toString();
+		if (nData != null) {
+			str += " {ndata}\n";
+		} else {
+			str += "\n";
+		}
 		if (getPlace2() != null) {
 			str += "Lloc: de " + getPlace1() + 
 					" a " + getPlace2() + "\n";
@@ -237,11 +252,16 @@ public class Document extends Unit implements IEditorInput {
 		} else {
 			str += "Lloc: -\n";
 		}
-		str += "Signatura A: " + getLibrary() + "\n";
+		str += "Signatura A: " + getLibrary();
 		if (getLibrary2().toString().length()>0) {
-			str += "Signatura B: " + getLibrary2() + "\n";
+			str += "\nSignatura B: " + getLibrary2();
 		}
-		return str.substring(0,str.length()-2);
+		if (nArxiu != null) {
+			str += " {narxiu}\n";
+		} else {
+			str += "\n";
+		}
+		return str.substring(0,str.length()-1);
 	}
 
 	/* IEditorInput implementation */

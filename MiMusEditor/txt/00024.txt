@@ -13,5 +13,3 @@ p: Nos Iacobus, et cetera, attendentes grata et accepta servicia per te Bernardu
 Data Rome decimo kalendas aprilis anno Domini MCCXC septimo.
 Petrus Letonis.
 r: {ndata} El copista escriu de manera equivocada 1297, com al document precedent, que és quan el rei es troba a Roma, quan hauria d’haver escrit 1296, ja que el canvi d’any és el VIII de les calendes. Més endavant, el 4 de febrer de 1311, en anul·lar la concessió, sí que s’indica correctament l’any.
-[AFC1]En casos anteriors en què conflueix amb altres tipus de nota, es posa en primer lloc. Caldria fer-ho sempre igual.
-[AFC2]Falta la marca de camp q:
