@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import model.Bibliography;
+import model.Note;
 
 /**
  * Implementation of EditorDialog for inserting References, i.e. for
@@ -30,11 +31,17 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 	/* Model attributes */
 	private int type;
 	private String pages;
+	private Note note;
 	
-	protected ReferenceDialog(List<Bibliography> units, Shell parentShell) {
+	private List<Note> notes;
+	
+	protected ReferenceDialog(List<Bibliography> units, List<Note> notes,
+			Shell parentShell) {
 		super(units, parentShell);
 		this.setType(-1);
 		this.setPages(null);
+		this.setNote(null);
+		this.notes = notes;
 		
 		/* Dialog shows entities ordered alphabetically by lemma */
 		Collections.sort(units, new Comparator<Bibliography>() {
@@ -77,6 +84,31 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 			}
 		});
 		
+		/* Notes combo contains notes preceded by "-" for No selection */
+		String[] noteNames = new String[notes.size()+1];
+		noteNames[0] = "-";
+		for (int i=0; i<notes.size(); i++) {
+			noteNames[i+1] = notes.get(i).getText()
+					.substring(0, notes.get(i).getText().indexOf('}')+1);
+		}
+		
+		/* Note field (combo) */
+		Label noteLabel = new Label(getForm().getBody(), SWT.VERTICAL);
+		noteLabel.setText("Note:");
+		Combo noteCombo = new Combo(getForm().getBody(), SWT.VERTICAL | SWT.WRAP);
+		noteCombo.setItems(noteNames);
+		noteCombo.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				/* Selection = 0 means no note was selected */
+				if (noteCombo.getSelectionIndex()>0) {
+					setNote(notes.get(noteCombo.getSelectionIndex()-1));
+				}
+				else {
+					setNote(null);
+				}
+			}
+		});
+		
 		return composite;
 	}
 	
@@ -107,6 +139,14 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 
 	public void setPages(String pages) {
 		this.pages = pages;
+	}
+
+	public Note getNote() {
+		return note;
+	}
+
+	public void setNote(Note note) {
+		this.note = note;
 	}
 
 }

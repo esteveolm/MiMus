@@ -1198,7 +1198,7 @@ public class Editor extends EditorPart {
 					System.out.println("SQLException: could not retrieve Artists");
 				}
 				ReferenceDialog dialog = 
-						new ReferenceDialog(biblio,
+						new ReferenceDialog(biblio, docEntry.getNotes(),
 						parent.getShell()) {
 				};
 				runReferenceDialog(dialog, bibliography, referenceLabel);
@@ -1480,6 +1480,7 @@ public class Editor extends EditorPart {
 			Bibliography added = dialog.getUnit();
 			int type = dialog.getType();
 			if (added != null) {
+				Note note = dialog.getNote();
 				if (type<0){
 					/* Happens when type has not been set by user */
 					System.out.println("No reference added - " 
@@ -1488,7 +1489,7 @@ public class Editor extends EditorPart {
 				} else {
 					String pages = dialog.getPages();
 					MiMusReference ref = new MiMusReference(added, docEntry,
-							null, pages, type, 0);	//TODO: handle Note
+							note, pages, type, 0);
 					try {
 						int id = new ReferenceDao(conn).insert(ref);
 						if (id>0) {
