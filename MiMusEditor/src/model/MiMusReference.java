@@ -18,6 +18,9 @@ package model;
  * This allows for definition of information specific to the <MiMusEntry>
  * for each appearance of the same <Bibliography>.
  * 
+ * References may have associated a Note or not, in which case attribute
+ * <itsNote> is null.
+ * 
  * Its String representation is constructed from that from its Bibliography,
  * just by attaching the pages field at the end of it.
  * 
@@ -29,13 +32,15 @@ public class MiMusReference extends Unit {
 	
 	private Bibliography itsBiblio;
 	private Document itsDocument;
+	private Note itsNote;
 	private String page;
 	private int type;
 		
 	public MiMusReference(Bibliography itsBiblio, Document itsDocument,
-			String page, int type, int id) {
+			Note itsNote, String page, int type, int id) {
 		this.itsBiblio = itsBiblio;
 		this.itsDocument = itsDocument;
+		this.setItsNote(itsNote);
 		this.page = page;
 		this.setType(type);
 		this.setId(id);
@@ -63,6 +68,12 @@ public class MiMusReference extends Unit {
 	}
 	public void setItsDocument(Document itsDocument) {
 		this.itsDocument = itsDocument;
+	}
+	public Note getItsNote() {
+		return itsNote;
+	}
+	public void setItsNote(Note itsNote) {
+		this.itsNote = itsNote;
 	}
 	public String getPage() {
 		return page;

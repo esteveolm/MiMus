@@ -1488,7 +1488,7 @@ public class Editor extends EditorPart {
 				} else {
 					String pages = dialog.getPages();
 					MiMusReference ref = new MiMusReference(added, docEntry,
-							pages, type, 0);
+							null, pages, type, 0);	//TODO: handle Note
 					try {
 						int id = new ReferenceDao(conn).insert(ref);
 						if (id>0) {

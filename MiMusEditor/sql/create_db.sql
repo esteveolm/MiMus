@@ -138,12 +138,16 @@ CREATE TABLE bibliografia (
 	PRIMARY KEY (id)
 );
 
+-- Triangular relation Document - Reference - Note
+-- Reference-Note we create it without foreign key constraint
+-- And deal with it in the code
 CREATE TABLE referencia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     ref_type varchar(20) NOT NULL,
     pages varchar(100) NULL,
 	document_id bigint(20) NOT NULL,
 	bibliografia_id bigint(20) NOT NULL,
+    note_id bigint(20) NULL,
 	FOREIGN KEY (document_id)
 		REFERENCES document(id),
 	FOREIGN KEY (bibliografia_id)

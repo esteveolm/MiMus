@@ -102,7 +102,6 @@ public class DocumentDao extends UnitDao<Document> {
 				}
 			}
 			if (notesOk) {
-				System.out.println("done");
 				return docResult;
 			}
 		}
