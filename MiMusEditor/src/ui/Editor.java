@@ -1228,6 +1228,7 @@ public class Editor extends EditorPart {
 						referenceTV.refresh();
 					} catch (SQLException e1) {
 						System.out.println("SQLException: could not delete ref");
+						e1.printStackTrace();
 					}
 				}
 			}

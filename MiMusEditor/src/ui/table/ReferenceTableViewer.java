@@ -37,7 +37,8 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		super(parent);
 		this.references = references;
 		this.bibEntries = bibEntries;
-		String[] aux = {"Tipus de referència", "Referència bibliogràfica", "Pàgina"};
+		String[] aux = {"Tipus de referència", "Referència bibliogràfica", 
+				"Pàgina", "Nota"};
 		columnNames = aux;
 	}
 
@@ -62,6 +63,7 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 		editors[1] = new ComboBoxCellEditor(tv.getTable(), 
 				getBibEntriesText(), SWT.READ_ONLY | SWT.DROP_DOWN);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		
 		tv.setCellEditors(editors);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
@@ -121,6 +123,14 @@ public class ReferenceTableViewer extends MiMusTableViewer {
 				return ref.getItsBiblio().getShortReference();
 			case 2: // Page
 				return ref.getPage();
+			case 3:	// Nota
+				if (ref.getItsNote() != null) {
+					return ref.getItsNote().getText().substring(0, 
+							ref.getItsNote().getText().indexOf('}') +1);
+				} else {
+					return "-";
+				}
+				
 			default:
 				return "";
 			}

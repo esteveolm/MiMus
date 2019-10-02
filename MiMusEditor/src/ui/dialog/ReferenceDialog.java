@@ -1,5 +1,6 @@
 package ui.dialog;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,7 +42,14 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		this.setType(-1);
 		this.setPages(null);
 		this.setNote(null);
-		this.notes = notes;
+		
+		List<Note> filteredNotes = new ArrayList<>();
+		for (Note n: notes) {
+			if (n.getType().equals("nota_bibliografica")) {
+				filteredNotes.add(n);
+			}
+		}
+		this.notes = filteredNotes;
 		
 		/* Dialog shows entities ordered alphabetically by lemma */
 		Collections.sort(units, new Comparator<Bibliography>() {
@@ -97,6 +105,7 @@ public class ReferenceDialog extends EditorDialog<Bibliography> {
 		noteLabel.setText("Note:");
 		Combo noteCombo = new Combo(getForm().getBody(), SWT.VERTICAL | SWT.WRAP);
 		noteCombo.setItems(noteNames);
+		noteCombo.select(0);
 		noteCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				/* Selection = 0 means no note was selected */
