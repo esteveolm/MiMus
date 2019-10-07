@@ -186,7 +186,7 @@ public class CasaView extends EntityView<Casa> {
 	protected void fillFieldsFromSelection(Casa ent) {
 		textNomComplet.setText(ent.getNomComplet());
 		textTitol.setText(ent.getTitol());
-		textTitol.setText(ent.getCort());
+		textCort.setText(ent.getCort());
 	}
 
 	@Override
