@@ -27,10 +27,7 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class InstrumentView extends DeclarativeView<Instrument> {
-	
-	/* List of entities */
-	private List<Instrument> instruments;
+public class InstrumentView extends EntityView<Instrument> {
 	
 	/* Form fields */
 	private Text textNom;
@@ -42,7 +39,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		super();
 		
 		try {
-			instruments = new InstrumentDao(getConnection()).selectAll();
+			setUnits(new InstrumentDao(getConnection()).selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load instruments from DB.");
@@ -120,11 +117,12 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 		sectTable.setText("Instruments created");
 		
 		InstrumentTableViewer instrumentHelper = 
-				new InstrumentTableViewer(sectTable.getParent(), instruments);
+				new InstrumentTableViewer(sectTable.getParent(), getUnits());
 		setTv(instrumentHelper.createTableViewer());
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -156,8 +154,8 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 						try {
 							int id = new InstrumentDao(getConnection()).insert(inst);
 							if (id>0) {
-								instruments.clear();
-								instruments.addAll(new InstrumentDao(getConnection()).selectAll());
+								getUnits().clear();
+								getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
 								LabelPrinter.printInfo(label, "Instrument added successfully.");
 								getTv().refresh();
 							} else {
@@ -176,8 +174,8 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 							/* Recover ID from selection */
 							inst.setSpecificId(getSelectedId());
 							new InstrumentDao(getConnection()).update(inst);
-							instruments.clear();
-							instruments.addAll(new InstrumentDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
 							LabelPrinter.printInfo(label, "Instrument updated successfully.");
 							getTv().refresh();
 						} catch (SQLException e2) {
@@ -200,8 +198,8 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 				} else {
 					try {
 						new InstrumentDao(getConnection()).delete(inst);
-						instruments.clear();
-						instruments.addAll(new InstrumentDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
@@ -228,17 +226,7 @@ public class InstrumentView extends DeclarativeView<Instrument> {
 	}
 
 	@Override
-	public List<Instrument> getEntities() {
-		return instruments;
-	}
-
-	@Override
-	public List<Instrument> retrieveEntities() throws SQLException {
+	public List<Instrument> retrieveUnits() throws SQLException {
 		return new InstrumentDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<Instrument> entities) {
-		instruments = entities;
 	}
 }

@@ -27,11 +27,8 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class LlocView extends DeclarativeView<Lloc> {
+public class LlocView extends EntityView<Lloc> {
 
-	/* List of entities */
-	private List<Lloc> llocs;
-	
 	/* Form fields */
 	private Text textNomComplet;
 	private Combo comboArea;
@@ -41,7 +38,7 @@ public class LlocView extends DeclarativeView<Lloc> {
 		super();
 		
 		try {
-			llocs = new LlocDao(getConnection()).selectAll();
+			setUnits(new LlocDao(getConnection()).selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load llocs from DB.");
@@ -107,11 +104,12 @@ public class LlocView extends DeclarativeView<Lloc> {
 		sectTable.setText("Llocs created");
 				
 		LlocTableViewer llocHelper = 
-				new LlocTableViewer(sectTable.getParent(), llocs);
+				new LlocTableViewer(sectTable.getParent(), getUnits());
 		setTv(llocHelper.createTableViewer());	
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -143,8 +141,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 					try {
 						int id = new LlocDao(getConnection()).insert(lloc);
 						if (id>0) {
-							llocs.clear();
-							llocs.addAll(new LlocDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new LlocDao(getConnection()).selectAll());
 							LabelPrinter.printInfo(label, "Lloc added successfully.");
 							getTv().refresh();
 						} else {
@@ -163,8 +161,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 						/* Recover ID from selection */
 						lloc.setSpecificId(getSelectedId());
 						new LlocDao(getConnection()).update(lloc);
-						llocs.clear();
-						llocs.addAll(new LlocDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
@@ -187,8 +185,8 @@ public class LlocView extends DeclarativeView<Lloc> {
 				} else {
 					try {
 						new LlocDao(getConnection()).delete(lloc);
-						llocs.clear();
-						llocs.addAll(new LlocDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new LlocDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -218,17 +216,7 @@ public class LlocView extends DeclarativeView<Lloc> {
 	}
 
 	@Override
-	public List<Lloc> getEntities() {
-		return llocs;
-	}
-
-	@Override
-	public List<Lloc> retrieveEntities() throws SQLException {
+	public List<Lloc> retrieveUnits() throws SQLException {
 		return new LlocDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<Lloc> entities) {
-		llocs = entities;
 	}
 }

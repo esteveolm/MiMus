@@ -10,7 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
-import model.Entity;
+import model.Unit;
 
 /**
  * DeclarativeTableViewer is the MiMusTableViewer used in DeclarativeViews.
@@ -27,9 +27,9 @@ import model.Entity;
 public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 	
 	/* List of entities on the table */
-	protected List<? extends Entity> entities;
+	protected List<? extends Unit> entities;
 	
-	public DeclarativeTableViewer(Composite parent, List<? extends Entity> entities) {
+	public DeclarativeTableViewer(Composite parent, List<? extends Unit> entities) {
 		super(parent);
 		this.entities = entities;
 	}

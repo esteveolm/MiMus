@@ -1,15 +1,12 @@
 package ui;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -19,19 +16,16 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
-
 import model.Bibliography;
+import model.Document;
 import persistence.BibliographyDao;
-import util.DBUtils;
+import persistence.DocumentDao;
+import ui.table.BibliographyTableViewer;
 import util.LabelPrinter;
 
 /**
@@ -43,46 +37,47 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class BiblioView extends ViewPart {
+public class BiblioView extends DeclarativeView<Bibliography> {
 
 	/* Constants for number of authors in bibliography */
 	private static final int NUM_AUTHORS = 4;
 	private static final int NUM_SECONDARY = 6;
 
-	private ListViewer lv;
-	private List<Bibliography> bibliography;
-	private Connection conn;
-	
+	/* Form fields */
+	private Text[] textAuthors = new Text[NUM_AUTHORS];
+	private Text[] textSecondaries = new Text[NUM_SECONDARY];
+	private Text textYear;
+	private Text textDistinction;
+	private Text textTitle;
+	private Text textMainTitle;
+	private Text textVolume;
+	private Text textPlace;
+	private Text textEditorial;
+	private Text textSeries;
+	private Text textPages;
+	private Text textShort;
+		
 	public BiblioView() {
 		super();
-		bibliography = new ArrayList<>();
 		try {
-			setConnection(DBUtils.connect());
-		} catch (SQLException e) {
+			setUnits(retrieveUnits());
+		} catch(SQLException e) {
 			e.printStackTrace();
-			System.out.println("Could not load biblio from DB.");
 		}
 	}
 	
 	@Override
-	public void createPartControl(Composite parent) {
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-		ScrolledForm form = toolkit.createScrolledForm(parent);
-		form.setText("Bibliography Entries");
-		form.getBody().setLayout(new GridLayout());
-		
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entries */
 		Section sectAdd = new Section(form.getBody(), 0);
 		sectAdd.setText("Add a new entry");
 		
+		addStateLabel(sectAdd.getParent());
+		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
-		final int LABEL_FLAGS = SWT.VERTICAL;
-		final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
-		final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
-		final int REFERENCE_FLAGS = SWT.MULTI | SWT.WRAP | SWT.VERTICAL;
 		Label[] labelAuthors = new Label[NUM_AUTHORS];
-		Text[] textAuthors = new Text[NUM_AUTHORS];
+		textAuthors = new Text[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
 			labelAuthors[i] = new Label(sectAdd.getParent(), LABEL_FLAGS);
 			labelAuthors[i].setText("Autor " + (i+1) + ":");
@@ -90,7 +85,7 @@ public class BiblioView extends ViewPart {
 			textAuthors[i].setLayoutData(grid);
 		}
 		Label[] labelSecondaries = new Label[NUM_SECONDARY];
-		Text[] textSecondaries = new Text[NUM_SECONDARY];
+		textSecondaries = new Text[NUM_SECONDARY];
 		for (int i=0; i<NUM_SECONDARY; i++) {
 			labelSecondaries[i] = new Label(sectAdd.getParent(), LABEL_FLAGS);
 			labelSecondaries[i].setText("Autor secundari " + (i+1) + ":");
@@ -100,61 +95,133 @@ public class BiblioView extends ViewPart {
 		
 		Label labelYear = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelYear.setText("Any:");
-		Text textYear = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textYear = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textYear.setLayoutData(grid);
 		
 		Label labelDistinction = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelDistinction.setText("Distinció:");
-		Text textDistinction = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textDistinction = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textDistinction.setLayoutData(grid);
 		
 		Label labelTitle = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelTitle.setText("Títol:");
-		Text textTitle = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textTitle = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textTitle.setLayoutData(grid);
 		
 		Label labelMainTitle = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelMainTitle.setText("Títol principal:");
-		Text textMainTitle = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textMainTitle = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textMainTitle.setLayoutData(grid);
 		
 		Label labelVolume = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelVolume.setText("Volum:");
-		Text textVolume = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textVolume = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textVolume.setLayoutData(grid);
 		
 		Label labelPlace = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelPlace.setText("Lloc:");
-		Text textPlace = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textPlace = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textPlace.setLayoutData(grid);
 		
 		Label labelEditorial = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelEditorial.setText("Editorial:");
-		Text textEditorial = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textEditorial = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textEditorial.setLayoutData(grid);
 		
 		Label labelSeries = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelSeries.setText("Sèrie:");
-		Text textSeries = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textSeries = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textSeries.setLayoutData(grid);
 		
 		Label labelPages = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelPages.setText("Pàgines:");
-		Text textPages = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textPages = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textPages.setLayoutData(grid);
 		
 		Label labelShort = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelShort.setText("Referència abreujada:\n(deixar blanc per usar referència per defecte)");
-		Text textShort = new Text(sectAdd.getParent(), TEXT_FLAGS);
+		textShort = new Text(sectAdd.getParent(), TEXT_FLAGS);
 		textShort.setLayoutData(grid);
 		
-		/* Label of form */
-		Label labelForm = toolkit.createLabel(sectAdd.getParent(), "");
-		labelForm.setLayoutData(grid);
+		/* Form buttons */
+		addButtons(sectAdd.getParent());
+		btnClr.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (int i=0; i<NUM_AUTHORS; i++) {
+					textAuthors[i].setText("");
+				}
+				for (int i=0; i<NUM_SECONDARY; i++) {
+					textSecondaries[i].setText("");
+				}
+				textYear.setText("");
+				textDistinction.setText("");
+				textTitle.setText("");
+				textMainTitle.setText("");
+				textVolume.setText("");
+				textPlace.setText("");
+				textEditorial.setText("");
+				textSeries.setText("");
+				textPages.setText("");
+				textShort.setText("");
+			}
+		});
 		
-		/* Declare form buttons */
-		Button btnAdd = new Button(sectAdd.getParent(), BUTTON_FLAGS);
-		btnAdd.setText("Add entry");
+		/* List of existing entries from DB*/
+		Section sectList = new Section(form.getBody(), PROP_TITLE);
+		sectList.setText("Declared entries");
+		
+		BibliographyTableViewer bibliographyHelper =
+				new BibliographyTableViewer(sectList.getParent(), getUnits());
+		setTv(bibliographyHelper.createTableViewer());
+		
+		addAnnotationsLabel(sectList.getParent(), grid);
+		createDeselectAction();
+		createEditAction();
+		
+		/* Label for user feedback */
+		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
+		label.setLayoutData(grid);
+		
+		Button btnDel = new Button(sectList.getParent(), BUTTON_FLAGS);
+		btnDel.setText("Delete " + getViewName());
+		
+		/* Text of selected entity and listener that prints selection */
+		StyledText fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
+		fullReference.setEditable(false);
+		fullReference.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		/* Listeners for buttons and list */
+		
+		getTv().addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				/* 1st removes old style in case this is a change of reference */
+				StyleRange defaultStyle = new StyleRange(0, fullReference.getText().length(), null, null);
+				fullReference.setStyleRange(defaultStyle);
+				
+				Bibliography selectedEntry = (Bibliography) 
+						getTv().getStructuredSelection().getFirstElement();
+				
+				/* Null happens when nothing gets selected */
+				if (selectedEntry != null) {
+					fullReference.setText(selectedEntry.getFullReference());
+					
+					/* Makes main title italic */
+					int italicStart = selectedEntry.getFullReference()
+							.indexOf(selectedEntry.getMainTitle());
+					StyleRange italic = new StyleRange(italicStart, 
+							selectedEntry.getMainTitle().length(),
+							null, null, SWT.ITALIC);
+					fullReference.setStyleRange(italic);
+				} else {
+					/* Stops displaying reference when deselected */
+					fullReference.setStyleRange(defaultStyle);
+					fullReference.setText("");
+				}
+			}
+		});
+		
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {		
 				String[] authors = new String[NUM_AUTHORS];
@@ -178,7 +245,7 @@ public class BiblioView extends ViewPart {
 					textShort.setText(generated);
 				}
 				
-				Bibliography newEntry = new Bibliography(
+				Bibliography biblio = new Bibliography(
 						authors, secondaries, 
 						(textYear.getText().length()==0) ? "" : textYear.getText().trim(), 
 						(textDistinction.getText().length()==0) ? "" : textDistinction.getText().trim(), 
@@ -191,130 +258,65 @@ public class BiblioView extends ViewPart {
 						(textPages.getText().length()==0) ? "" : textPages.getText().trim(),
 						(textShort.getText().length()==0) ? "" : textShort.getText().trim(),
 						0);
-				try {
-					int id = new BibliographyDao(getConnection()).insert(newEntry);
-					if (id>0) {
-						newEntry.setId(id);
-						bibliography.clear();
-						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
-						LabelPrinter.printInfo(labelForm, "Bibliography entry added successfully.");
-						lv.refresh();
-					} else {
-						System.out.println("DAO: Could not insert entry into DB.");
+				if (isStateAdd()) {
+					/* Add a new entity */
+					try {
+						int id = new BibliographyDao(getConnection()).insert(biblio);
+						if (id>0) {
+							biblio.setId(id);
+							getUnits().clear();
+							getUnits().addAll(new BibliographyDao(getConnection()).selectAll());
+							LabelPrinter.printInfo(label, "Bibliography entry added successfully.");
+							getTv().refresh();
+						} else {
+							System.out.println("DAO: Could not insert entry into DB.");
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println("SQLException: Could not insert entry into DB.");
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: Could not insert entry into DB.");
-				}
-			}
-		});
-		Button btnClear = new Button(sectAdd.getParent(), BUTTON_FLAGS);
-		btnClear.setText("Clear fields");
-		btnClear.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				for (int i=0; i<NUM_AUTHORS; i++) {
-					textAuthors[i].setText("");
-				}
-				for (int i=0; i<NUM_SECONDARY; i++) {
-					textSecondaries[i].setText("");
-				}
-				textYear.setText("");
-				textDistinction.setText("");
-				textTitle.setText("");
-				textMainTitle.setText("");
-				textVolume.setText("");
-				textPlace.setText("");
-				textEditorial.setText("");
-				textSeries.setText("");
-				textPages.setText("");
-				textShort.setText("");
-			}
-		});
-		
-		/* List of existing entries from DB*/
-		Section sectList = toolkit.createSection(form.getBody(), PROP_TITLE);
-		sectList.setText("Declared entries");
-		lv = new ListViewer(sectList.getParent());
-		lv.setUseHashlookup(true);
-		lv.setContentProvider(ArrayContentProvider.getInstance());
-		lv.setLabelProvider(new BiblioLabelProvider());
-		lv.setComparator(new BiblioComparator());
-		
-		/* Load bibliography entries from DB */
-		try {
-			bibliography = new BibliographyDao(getConnection()).selectAll();
-			System.out.println("Bibliography length: " + bibliography.size());
-			lv.setInput(bibliography);
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			System.out.println("Could not load bibliography from DB.");
-		}
-		lv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		/* Label of results */
-		Label labelList = toolkit.createLabel(sectList.getParent(), "");
-		labelList.setLayoutData(grid);
-		
-		/* Text of selected entity and listener that prints selection */
-		StyledText fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
-		fullReference.setEditable(false);
-		fullReference.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		/* Listeners for buttons and list */
-		
-		lv.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				/* 1st removes old style in case this is a change of reference */
-				StyleRange defaultStyle = new StyleRange(0, fullReference.getText().length(), null, null);
-				fullReference.setStyleRange(defaultStyle);
-				
-				Bibliography selectedEntry = (Bibliography) 
-						lv.getStructuredSelection().getFirstElement();
-				
-				/* Null happens when nothing gets selected */
-				if (selectedEntry != null) {
-					fullReference.setText(selectedEntry.getFullReference());
-					
-					/* Makes main title italic */
-					int italicStart = selectedEntry.getFullReference()
-							.indexOf(selectedEntry.getMainTitle());
-					StyleRange italic = new StyleRange(italicStart, 
-							selectedEntry.getMainTitle().length(),
-							null, null, SWT.ITALIC);
-					fullReference.setStyleRange(italic);
 				} else {
-					/* Stops displaying reference when deselected */
-					fullReference.setStyleRange(defaultStyle);
-					fullReference.setText("");
+					/* Update values from selected unit */
+					try {
+						/* Recover ID from selection */
+						biblio.setId(getSelectedId());
+						new BibliographyDao(getConnection()).update(biblio);
+						getUnits().clear();
+						getUnits().addAll(
+								new BibliographyDao(getConnection()).selectAll());
+						System.out.println("Bibliography updated successfully.");
+						LabelPrinter.printInfo(label, 
+								"Bibliography updated successfully.");
+						getTv().refresh();
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+						System.out.println(
+								"SQLException: Could not update Bibliography to DB.");
+					}
 				}
 			}
 		});
-		
-		/* Declare button and listener for removing selection */
-		Button btnRemove = new Button(sectList.getParent(), BUTTON_FLAGS);
-		btnRemove.setText("Remove selected entry");
-		btnRemove.addSelectionListener(new SelectionAdapter() {
+		btnDel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Bibliography selectedEntry = (Bibliography) 
-						lv.getStructuredSelection().getFirstElement();
+						getTv().getStructuredSelection().getFirstElement();
 				if (selectedEntry == null) {
 					System.out.println("Could not remove bibEntry because none was selected.");
-					LabelPrinter.printError(labelList, "You must select a bibliography entry to delete it.");
+					LabelPrinter.printError(label, "You must select a bibliography entry to delete it.");
 				} else if (selectedEntry.getId()==1) {
 					System.out.println("Could not remove bibEntry because it is the default entry (id=0).");
-					LabelPrinter.printError(labelList, "You cannot delete the default bibliography entry.");
+					LabelPrinter.printError(label, "You cannot delete the default bibliography entry.");
 				} else {
 					try {
 						new BibliographyDao(getConnection()).delete(selectedEntry);
-						bibliography.clear();
-						bibliography.addAll(new BibliographyDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new BibliographyDao(getConnection()).selectAll());
 						System.out.println("BibEntry removed successfully.");
-						LabelPrinter.printInfo(labelList, "Bibliography entry deleted successfully.");
-						lv.refresh();
+						LabelPrinter.printInfo(label, "Bibliography entry deleted successfully.");
+						getTv().refresh();
 						fullReference.setText(""); /* Clear full reference */
 					} catch (SQLIntegrityConstraintViolationException e1) {
-						LabelPrinter.printError(labelList, "Cannot delete Entity in use.");
+						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -349,13 +351,89 @@ public class BiblioView extends ViewPart {
 	}
 	
 	@Override
+	protected void fillAnnotationsLabel(Bibliography unit) {
+		List<Document> docs = new ArrayList<>();
+		try {
+			docs = new DocumentDao(getConnection())
+					.selectWhereBiblio(unit.getId());
+		} catch (SQLException e) {
+			System.out.println("Could not retrieve documents where bibliography is.");
+			e.printStackTrace();
+		}
+		String ids = "";
+		for (Document doc : docs) {
+			ids += doc.getIdStr() + ", ";
+		}
+		if (ids.length()>2) {
+			ids = ids.substring(0, ids.length()-2);
+			annotationsText.setText("Used in documents: " + ids);
+		} else {
+			annotationsText.setText("Used in 0 documents.");
+		}
+	}
+	
+	@Override
 	public void setFocus() {}
 
-	public Connection getConnection() {
-		return conn;
+	public List<Bibliography> retrieveUnits() throws SQLException {
+		return new BibliographyDao(getConnection()).selectAll();
 	}
 
-	public void setConnection(Connection conn) {
-		this.conn = conn;
+	@Override
+	public String getViewName() {
+		return "Bibliography";
+	}
+
+	@Override
+	protected void fillFieldsFromSelection(Bibliography unit) {
+		for (int i=0; i<unit.getAuthors().length; i++) {
+			textAuthors[i].setText(unit.getAuthors()[i]);
+		}
+		for (int i=0; i<unit.getSecondaryAuthors().length; i++) {
+			textSecondaries[i].setText(unit.getSecondaryAuthors()[i]);
+		}
+		textYear.setText(unit.getYear());
+		textDistinction.setText(unit.getDistinction());
+		textTitle.setText(unit.getTitle());
+		textMainTitle.setText(unit.getMainTitle());
+		textVolume.setText(unit.getVolume());
+		textPlace.setText(unit.getPlace());
+		textEditorial.setText(unit.getEditorial());
+		textSeries.setText(unit.getSeries());
+		textPages.setText(unit.getPages());
+		textShort.setText(unit.getShortReference());
+	}
+	
+	@Override
+	public void createEditAction() {
+		/* Select a table row to enter edit mode with the row selected */
+		getTv().addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent e) {
+				/* Unchecked warning because selection is Object type */
+				Object o = getTv().getStructuredSelection().getFirstElement();
+				if (o != null) {
+					/* User selected a row from the table, move to Edit mode */
+					setStateAdd(false);
+					setSelectedId(((Bibliography) o).getId());	/* Save ID */
+					System.out.println("ID is " + getSelectedId());
+					stateLabel.setText(STATE_EDIT);
+					btnAdd.setText(BUTTON_EDIT);
+					fillFieldsFromSelection((Bibliography) o);
+					
+					/* Tell documents where entity is annotated */
+					fillAnnotationsLabel((Bibliography) o);
+				} else {
+					/* After an entity is edited, back to add mode */ 
+					setStateAdd(true);
+					setSelectedId(0);
+					stateLabel.setText(STATE_ADD);
+					btnAdd.setText(BUTTON_ADD);
+					
+					/* Empty label for document annotations */
+					annotationsText.setText("");
+				}
+			}
+		});
 	}
 }

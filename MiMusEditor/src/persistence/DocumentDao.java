@@ -327,6 +327,20 @@ public class DocumentDao extends UnitDao<Document> {
 		return docs;
 	}
 	
+	public List<Document> selectWhereBiblio(int id) throws SQLException {
+		String sql = "SELECT DISTINCT document.* "
+				+ "FROM document, referencia, bibliografia "
+				+ "WHERE document.id=referencia.document_id "
+				+ "AND referencia.bibliografia_id=" + id;
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		List<Document> docs = new ArrayList<>();
+		while (rs.next()) {
+			docs.add(make(rs));
+		}
+		return docs;
+	}
+	
 	@Override
 	public String getTable() {
 		return "document";

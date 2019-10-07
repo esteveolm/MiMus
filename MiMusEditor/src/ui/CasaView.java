@@ -26,10 +26,7 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class CasaView extends DeclarativeView<Casa> {
-
-	/* List of entities */
-	private List<Casa> cases;
+public class CasaView extends EntityView<Casa> {
 	
 	/* Form fields */
 	private Text textNomComplet;
@@ -39,7 +36,7 @@ public class CasaView extends DeclarativeView<Casa> {
 	public CasaView() {
 		super();
 		try {
-			cases = new CasaDao(getConnection()).selectAll();
+			setUnits(new CasaDao(getConnection()).selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load cases from DB.");
@@ -94,11 +91,12 @@ public class CasaView extends DeclarativeView<Casa> {
 		sectTable.setText("Cases created");
 		
 		CasaTableViewer casaHelper =
-				new CasaTableViewer(sectTable.getParent(), cases);
+				new CasaTableViewer(sectTable.getParent(), getUnits());
 		setTv(casaHelper.createTableViewer());
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -121,8 +119,8 @@ public class CasaView extends DeclarativeView<Casa> {
 					try {
 						int id = new CasaDao(getConnection()).insert(casa);
 						if (id>0) {
-							cases.clear();
-							cases.addAll(new CasaDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new CasaDao(getConnection()).selectAll());
 							System.out.println(getViewName() + " created successfully.");
 							LabelPrinter.printInfo(label, getViewName() + " created successfully.");
 							getTv().refresh();
@@ -142,8 +140,8 @@ public class CasaView extends DeclarativeView<Casa> {
 						/* Recover ID from selection */
 						casa.setSpecificId(getSelectedId());
 						new CasaDao(getConnection()).update(casa);
-						cases.clear();
-						cases.addAll(new CasaDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new CasaDao(getConnection()).selectAll());
 						System.out.println(getViewName() + " updated successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " updated successfully.");
 						getTv().refresh();
@@ -167,8 +165,8 @@ public class CasaView extends DeclarativeView<Casa> {
 				} else {
 					try {
 						new CasaDao(getConnection()).delete(casa);
-						cases.clear();
-						cases.addAll(new CasaDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new CasaDao(getConnection()).selectAll());
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
@@ -192,17 +190,7 @@ public class CasaView extends DeclarativeView<Casa> {
 	}
 
 	@Override
-	public List<Casa> getEntities() {
-		return cases;
-	}
-
-	@Override
-	public List<Casa> retrieveEntities() throws SQLException {
+	public List<Casa> retrieveUnits() throws SQLException {
 		return new CasaDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<Casa> entities) {
-		cases = entities;
 	}
 }

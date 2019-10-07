@@ -29,13 +29,11 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class OficiView extends DeclarativeView<Ofici> {
+public class OficiView extends EntityView<Ofici> {
 
 	/* 
-	 * List of entities. 
-	 * Also Instruments needed because are associated with Oficis.
+	 * List of Instruments needed because are associated with Oficis.
 	 */
-	private List<Ofici> oficis;
 	private List<Instrument> insts;
 	
 	/* Form fields */
@@ -49,7 +47,7 @@ public class OficiView extends DeclarativeView<Ofici> {
 		comboInstrument = null;
 		
 		try {
-			oficis = new OficiDao(getConnection()).selectAll();
+			setUnits(new OficiDao(getConnection()).selectAll());
 			insts = new InstrumentDao(getConnection()).selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -151,11 +149,12 @@ public class OficiView extends DeclarativeView<Ofici> {
 		sectTable.setText(getViewName() + "s created");
 		
 		OficiTableViewer oficiHelper = 
-				new OficiTableViewer(sectTable.getParent(), oficis, insts);
+				new OficiTableViewer(sectTable.getParent(), getUnits(), insts);
 		setTv(oficiHelper.createTableViewer());
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -186,8 +185,8 @@ public class OficiView extends DeclarativeView<Ofici> {
 					try {
 						int id = new OficiDao(getConnection()).insert(ofici);
 						if (id>0) {
-							oficis.clear();
-							oficis.addAll(new OficiDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new OficiDao(getConnection()).selectAll());
 							System.out.println("Ofici created successfully.");
 							LabelPrinter.printInfo(label, "Ofici added successfully.");
 							getTv().refresh();
@@ -207,8 +206,8 @@ public class OficiView extends DeclarativeView<Ofici> {
 						/* Recover ID from selection */
 						ofici.setSpecificId(getSelectedId());
 						new OficiDao(getConnection()).update(ofici);
-						oficis.clear();
-						oficis.addAll(new OficiDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new OficiDao(getConnection()).selectAll());
 						System.out.println("Ofici updated successfully.");
 						LabelPrinter.printInfo(label, "Ofici updated successfully.");
 						getTv().refresh();
@@ -234,8 +233,8 @@ public class OficiView extends DeclarativeView<Ofici> {
 				} else {
 					try {
 						new OficiDao(getConnection()).delete(ofici);
-						oficis.clear();
-						oficis.addAll(new OficiDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new OficiDao(getConnection()).selectAll());
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
@@ -277,17 +276,7 @@ public class OficiView extends DeclarativeView<Ofici> {
 	}
 
 	@Override
-	public List<Ofici> getEntities() {
-		return oficis;
-	}
-
-	@Override
-	public List<Ofici> retrieveEntities() throws SQLException {
+	public List<Ofici> retrieveUnits() throws SQLException {
 		return new OficiDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<Ofici> entities) {
-		oficis = entities;
 	}
 }

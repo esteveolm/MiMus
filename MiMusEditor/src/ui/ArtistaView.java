@@ -27,9 +27,7 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class ArtistaView extends DeclarativeView<Artista> {
-	/* List of entities */
-	private List<Artista> artists;
+public class ArtistaView extends EntityView<Artista> {
 	
 	/* Form fields */
 	private Text textNombreCompleto;
@@ -46,7 +44,7 @@ public class ArtistaView extends DeclarativeView<Artista> {
 	public ArtistaView() {
 		super();
 		try {
-			artists = retrieveEntities();
+			setUnits(retrieveUnits());
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -148,11 +146,12 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		sectTable.setText("Artistes created");
 				
 		ArtistaTableViewer artistaHelper = 
-				new ArtistaTableViewer(sectTable.getParent(), artists);
+				new ArtistaTableViewer(sectTable.getParent(), getUnits());
 		setTv(artistaHelper.createTableViewer());	
 		
 		addAnnotationsLabel(sectTable.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -191,8 +190,8 @@ public class ArtistaView extends DeclarativeView<Artista> {
 					try {
 						int id = new ArtistaDao(getConnection()).insert(art);
 						if (id>0) {
-							artists.clear();
-							artists.addAll(new ArtistaDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
 							System.out.println("Artist created successfully.");
 							LabelPrinter.printInfo(label, "Artist added successfully.");
 							getTv().refresh();
@@ -212,8 +211,8 @@ public class ArtistaView extends DeclarativeView<Artista> {
 						/* Recover ID from selection */
 						art.setSpecificId(getSelectedId());
 						new ArtistaDao(getConnection()).update(art);
-						artists.clear();
-						artists.addAll(new ArtistaDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
 						System.out.println("Artist updated successfully.");
 						LabelPrinter.printInfo(label, "Artist updated successfully.");
 						getTv().refresh();
@@ -237,8 +236,8 @@ public class ArtistaView extends DeclarativeView<Artista> {
 				} else {
 					try {
 						new ArtistaDao(getConnection()).delete(art);
-						artists.clear();
-						artists.addAll(new ArtistaDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -266,19 +265,9 @@ public class ArtistaView extends DeclarativeView<Artista> {
 		textOrigen.setText(ent.getOrigen());
 		textObs.setText(ent.getObservacions());
 	}
-
-	@Override
-	public List<Artista> getEntities() {
-		return artists;
-	}
 	
 	@Override
-	public void setEntities(List<Artista> entities) {
-		artists = entities;
-	}
-
-	@Override
-	public List<Artista> retrieveEntities() throws SQLException {
+	public List<Artista> retrieveUnits() throws SQLException {
 		return new ArtistaDao(getConnection()).selectAll();
 	}
 }

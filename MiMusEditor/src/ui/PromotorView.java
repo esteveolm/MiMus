@@ -26,11 +26,8 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class PromotorView extends DeclarativeView<Promotor> {
-	
-	/* List of entities */
-	private List<Promotor> promotors;
-	
+public class PromotorView extends EntityView<Promotor> {
+
 	/* Form fields */
 	private Text textNomComplet;
 	private Text textNom;
@@ -44,7 +41,7 @@ public class PromotorView extends DeclarativeView<Promotor> {
 		super();
 		
 		try {
-			promotors = new PromotorDao(getConnection()).selectAll();
+			setUnits(new PromotorDao(getConnection()).selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load promotors from DB.");
@@ -127,11 +124,12 @@ public class PromotorView extends DeclarativeView<Promotor> {
 		sectTable.setText(getViewName() + "s created");
 				
 		PromotorTableViewer promotorHelper = 
-				new PromotorTableViewer(sectTable.getParent(), promotors);
+				new PromotorTableViewer(sectTable.getParent(), getUnits());
 		setTv(promotorHelper.createTableViewer());	
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -163,8 +161,8 @@ public class PromotorView extends DeclarativeView<Promotor> {
 					try {
 						int id = new PromotorDao(getConnection()).insert(prom);
 						if (id > 0) {
-							promotors.clear();
-							promotors.addAll(new PromotorDao(getConnection()).selectAll());
+							getUnits().clear();
+							getUnits().addAll(new PromotorDao(getConnection()).selectAll());
 							System.out.println("Promotor added successfully.");
 							LabelPrinter.printInfo(label, "Promotor added successfully.");
 							getTv().refresh();
@@ -184,8 +182,8 @@ public class PromotorView extends DeclarativeView<Promotor> {
 						/* Recover ID from selection */
 						prom.setSpecificId(getSelectedId());
 						new PromotorDao(getConnection()).update(prom);
-						promotors.clear();
-						promotors.addAll(new PromotorDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new PromotorDao(getConnection()).selectAll());
 						System.out.println("Promotor updated successfully.");
 						LabelPrinter.printInfo(label, "Promotor updated successfully.");
 						getTv().refresh();
@@ -211,8 +209,8 @@ public class PromotorView extends DeclarativeView<Promotor> {
 				} else {
 					try {
 						new PromotorDao(getConnection()).delete(prom);
-						promotors.clear();
-						promotors.addAll(new PromotorDao(getConnection()).selectAll());
+						getUnits().clear();
+						getUnits().addAll(new PromotorDao(getConnection()).selectAll());
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() 
 								+ " removed successfully.");
@@ -241,17 +239,7 @@ public class PromotorView extends DeclarativeView<Promotor> {
 	}
 
 	@Override
-	public List<Promotor> getEntities() {
-		return promotors;
-	}
-
-	@Override
-	public List<Promotor> retrieveEntities() throws SQLException {
+	public List<Promotor> retrieveUnits() throws SQLException {
 		return new PromotorDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<Promotor> entities) {
-		promotors = entities;
 	}
 }

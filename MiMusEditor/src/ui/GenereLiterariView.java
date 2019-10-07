@@ -26,10 +26,7 @@ import util.LabelPrinter;
  * @author Javier Beltrán Jorba
  *
  */
-public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
-
-	/* List of entities */
-	private List<GenereLiterari> generes;
+public class GenereLiterariView extends EntityView<GenereLiterari> {
 	
 	/* Form fields */
 	private Text textNombreCompleto;
@@ -40,7 +37,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 	public GenereLiterariView() {
 		super();
 		try {
-			generes = new GenereLiterariDao(getConnection()).selectAll();
+			setUnits(new GenereLiterariDao(getConnection()).selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load generes from DB.");
@@ -97,11 +94,12 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 		sectTable.setText("Gèneres literaris created");
 				
 		GenereTableViewer genereHelper = 
-				new GenereTableViewer(sectTable.getParent(), generes);
+				new GenereTableViewer(sectTable.getParent(), getUnits());
 		setTv(genereHelper.createTableViewer());	
 		
 		addAnnotationsLabel(sectAdd.getParent(), grid);
-		createTableActions();
+		createDeselectAction();
+		createEditAction();
 		
 		/* Label for user feedback */
 		Label label = new Label(sectAdd.getParent(), LABEL_FLAGS);
@@ -126,8 +124,8 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 					try {
 						int id = new GenereLiterariDao(getConnection()).insert(gen);
 						if (id>0) {
-							generes.clear();
-							generes.addAll(
+							getUnits().clear();
+							getUnits().addAll(
 									new GenereLiterariDao(getConnection()).selectAll());
 							System.out.println("Genere created successfully.");
 							LabelPrinter.printInfo(label, "Genere added successfully.");
@@ -148,8 +146,8 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 						/* Recover ID from selection*/
 						gen.setSpecificId(getSelectedId());
 						new GenereLiterariDao(getConnection()).update(gen);
-						generes.clear();
-						generes.addAll(
+						getUnits().clear();
+						getUnits().addAll(
 								new GenereLiterariDao(getConnection()).selectAll());
 						System.out.println("Genere updated successfully.");
 						LabelPrinter.printInfo(label, "Genere updated successfully.");
@@ -174,8 +172,8 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 				} else {
 					try {
 						new GenereLiterariDao(getConnection()).delete(gen);
-						generes.clear();
-						generes.addAll(
+						getUnits().clear();
+						getUnits().addAll(
 								new GenereLiterariDao(getConnection()).selectAll());
 						LabelPrinter.printInfo(label, "Genere deleted successfully.");
 						getTv().refresh();
@@ -205,17 +203,7 @@ public class GenereLiterariView extends DeclarativeView<GenereLiterari> {
 	}
 
 	@Override
-	public List<GenereLiterari> getEntities() {
-		return generes;
-	}
-
-	@Override
-	public List<GenereLiterari> retrieveEntities() throws SQLException {
+	public List<GenereLiterari> retrieveUnits() throws SQLException {
 		return new GenereLiterariDao(getConnection()).selectAll();
-	}
-
-	@Override
-	public void setEntities(List<GenereLiterari> entities) {
-		generes = entities;
 	}
 }

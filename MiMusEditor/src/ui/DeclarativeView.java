@@ -2,11 +2,8 @@ package ui;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,9 +18,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
-import model.Document;
 import model.Entity;
-import persistence.DocumentDao;
+import model.Unit;
 import util.DBUtils;
 
 /**
@@ -44,14 +40,15 @@ import util.DBUtils;
  *
  * @param <E>
  */
-public abstract class DeclarativeView<E extends Entity> extends ViewPart {
+public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	
 	/* SWT flags grouped together based on use cases of DeclarativeViews */
 	final int LABEL_FLAGS = SWT.VERTICAL;
 	final int TEXT_FLAGS = SWT.SINGLE | SWT.WRAP | SWT.SEARCH;
 	final int COMBO_FLAGS = SWT.DROP_DOWN | SWT.READ_ONLY;
 	final int BUTTON_FLAGS = SWT.PUSH | SWT.CENTER;
-	
+	final int REFERENCE_FLAGS = SWT.MULTI | SWT.WRAP | SWT.VERTICAL;
+
 	/* Texts of state */
 	final String STATE_ADD = "Adding a new entity";
 	final String STATE_EDIT = "Editing an existing entity";
@@ -67,6 +64,7 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	protected Button btnDes;
 	protected Label stateLabel;
 	protected Text annotationsText;
+	private List<U> units;
 	
 	/**
 	 * DeclarativeViews have associated a connection to the DB.
@@ -102,12 +100,12 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					setEntities(retrieveEntities());
+					setUnits(retrieveUnits());
 				} catch(SQLException e1) {
 					e1.printStackTrace();
 				}
 				
-				tv.setInput(getEntities());
+				tv.setInput(getUnits());
 				tv.refresh();
 				setStateAdd(true);
 				setSelectedId(0);
@@ -179,7 +177,7 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 	/**
 	 * Contains listeners with actions related to the buttons.
 	 */
-	public void createTableActions() {
+	public void createDeselectAction() {
 		/* Click deselect button to go back to insert mode */
 		btnDes.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -194,92 +192,48 @@ public abstract class DeclarativeView<E extends Entity> extends ViewPart {
 				}
 			}
 		});
-		
-		/* Select a table row to enter edit mode with the row selected */
-		tv.addSelectionChangedListener(new ISelectionChangedListener() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public void selectionChanged(SelectionChangedEvent e) {
-				/* Unchecked warning because selection is Object type */
-				Object o = tv.getStructuredSelection().getFirstElement();
-				if (o != null) {
-					/* User selected a row from the table, move to Edit mode */
-					setStateAdd(false);
-					setSelectedId(((Entity) o).getSpecificId());	/* Save ID */
-					System.out.println("ID is " + getSelectedId());
-					stateLabel.setText(STATE_EDIT);
-					btnAdd.setText(BUTTON_EDIT);
-					fillFieldsFromSelection((E) o);
-					
-					/* Tell documents where entity is annotated */
-					fillAnnotationsLabel((E) o);
-				} else {
-					/* After an entity is edited, back to add mode */ 
-					setStateAdd(true);
-					setSelectedId(0);
-					stateLabel.setText(STATE_ADD);
-					btnAdd.setText(BUTTON_ADD);
-					
-					/* Empty label for document annotations */
-					annotationsText.setText("");
-				}
-			}
-		});
 	}
 	
+	public abstract void createEditAction();
+	
 	/**
-	 * Given an entity of the type of the view, fills the fields of
+	 * Given a unit of the type of the view, fills the fields of
 	 * the form with the attributes of the entity.
 	 */
-	protected abstract void fillFieldsFromSelection(E ent);
+	protected abstract void fillFieldsFromSelection(U unit);
 	
 	/**
 	 * Draws label that says what documents have annotations of a
-	 * certain entity.
+	 * certain unit.
 	 */
-	private void fillAnnotationsLabel(E entity) {
-		List<Document> docs = new ArrayList<>();
-		try {
-			docs = new DocumentDao(conn)
-					.selectWhereEntity(entity.getId());
-		} catch (SQLException e) {
-			System.out.println("Could not retrieve documents where entity is.");
-			e.printStackTrace();
-		}
-		String ids = "";
-		for (Document doc : docs) {
-			ids += doc.getIdStr() + ", ";
-		}
-		if (ids.length()>2) {
-			ids = ids.substring(0, ids.length()-2);
-			annotationsText.setText("Used in documents: " + ids);
-		} else {
-			annotationsText.setText("Used in 0 documents.");
-		}
+	protected abstract void fillAnnotationsLabel(U unit);
+	
+	/**
+	 * Downloads from DB the list of units declared in this view.
+	 */
+	public abstract List<U> retrieveUnits() throws SQLException;
+	
+	/**
+	 * Returns the list of units declared in this view, which is
+	 * not necessarily updated wrt the DB.
+	 */
+	public List<U> getUnits() {
+		return units;
 	}
 	
 	/**
-	 * Downloads from DB the list of entities declared in this view.
+	 * Updates the list of units declared in this view.
 	 */
-	public abstract List<E> retrieveEntities() throws SQLException;
-	
-	/**
-	 * Returns the list of entities declared in this view, which is
-	 * not necessarily updated wrt the DB.
-	 */
-	public abstract List<E> getEntities();
-	
-	/**
-	 * Updates the list of entities declared in this view.
-	 */
-	public abstract void setEntities(List<E> entities);
+	public void setUnits(List<U> units) {
+		this.units = units;
+	}
 	
 	/**
 	 * Given the table in the view, selects the row corresponding
 	 * to Entity <ent>.
 	 */
 	public void selectEntityInTable(Entity ent) {
-		for (int i=0; i<getEntities().size(); i++) {
+		for (int i=0; i<getUnits().size(); i++) {
 			Entity thisEnt = (Entity) getTv().getElementAt(i);
 			if (thisEnt.getId() == ent.getId()) {
 				getTv().getTable().select(i);

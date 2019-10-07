@@ -103,7 +103,58 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 	}
 
 	@Override
-	public void update(Bibliography unit) throws SQLException, DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Bibliography unit) throws SQLException {
+		String sql = "UPDATE bibliografia "
+				+ "SET autor1=?, "
+				+ "autor2=?, "
+				+ "autor3=?, "
+				+ "autor4=?, "
+				+ "autor_secondari1=?, "
+				+ "autor_secondari2=?, "
+				+ "autor_secondari3=?, "
+				+ "autor_secondari4=?, "
+				+ "autor_secondari5=?, "
+				+ "autor_secondari6=?, "
+				+ "any_=?, "
+				+ "distincio=?, "
+				+ "titol=?, "
+				+ "titol_principal=?, "
+				+ "volum=?, "
+				+ "lloc=?, "
+				+ "editorial=?, "
+				+ "serie=?, "
+				+ "pagines=?, "
+				+ "referencia_curta=? "
+				+ "WHERE id=?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getAuthor(0));
+		stmt.setString(2, unit.getAuthor(1));
+		stmt.setString(3, unit.getAuthor(2));
+		stmt.setString(4, unit.getAuthor(3));
+		stmt.setString(5, unit.getSecondaryAuthor(0));
+		stmt.setString(6, unit.getSecondaryAuthor(1));
+		stmt.setString(7, unit.getSecondaryAuthor(2));
+		stmt.setString(8, unit.getSecondaryAuthor(3));
+		stmt.setString(9, unit.getSecondaryAuthor(4));
+		stmt.setString(10, unit.getSecondaryAuthor(5));
+		stmt.setString(11, unit.getYear());
+		stmt.setString(12, unit.getDistinction());
+		stmt.setString(13, unit.getTitle());
+		stmt.setString(14, unit.getMainTitle());
+		stmt.setString(15, unit.getVolume());
+		stmt.setString(16, unit.getPlace());
+		stmt.setString(17, unit.getEditorial());
+		stmt.setString(18, unit.getSeries());
+		stmt.setString(19, unit.getPages());
+		stmt.setString(20, unit.getShortReference());
+		stmt.setInt(21, unit.getId());
+
+		int result = stmt.executeUpdate();
+		if (result>0) {
+			System.out.println("Update performed successfully.");
+		} else {
+			System.out.println("Could not execute update.");
+		}
 	}
 }
