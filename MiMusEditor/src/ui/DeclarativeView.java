@@ -232,11 +232,13 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 * Given the table in the view, selects the row corresponding
 	 * to Entity <ent>.
 	 */
+	@SuppressWarnings("unchecked")
 	public void selectEntityInTable(Entity ent) {
 		for (int i=0; i<getUnits().size(); i++) {
 			Entity thisEnt = (Entity) getTv().getElementAt(i);
 			if (thisEnt.getId() == ent.getId()) {
 				getTv().getTable().select(i);
+				fillFieldsFromSelection((U) getTv().getElementAt(i));
 				break;
 			}
 		}
