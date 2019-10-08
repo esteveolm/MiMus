@@ -535,7 +535,7 @@ public class Editor extends EditorPart {
 		}
 		Text notesText = new Text(form.getBody(), 
 				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-		notesText.setText(notesStr.substring(0, notesStr.length()-2).trim());
+		notesText.setText(notesStr.trim());
 		GridData notesData = new GridData(GridData.FILL_HORIZONTAL);
 		notesData.widthHint = 10;
 		notesText.setLayoutData(notesData);
