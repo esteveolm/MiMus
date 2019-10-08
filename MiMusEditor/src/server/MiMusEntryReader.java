@@ -186,7 +186,7 @@ public class MiMusEntryReader {
 				regest +=lines.get(i) + "\n";
 			}
 		}
-		entry.setRegestText(regest);
+		entry.setRegestText(regest.trim());
 		
 		String transcription = "";
 		for (int i=transcriptionIdx; i<lines.size(); i++) {
@@ -201,7 +201,7 @@ public class MiMusEntryReader {
 				transcription +=lines.get(i) + "\n";
 			}
 		}
-		entry.setTranscriptionText(transcription);
+		entry.setTranscriptionText(transcription.trim());
 		
 		/* Notes (q, r, s) just as a single note containing all text */
 		if (notesIdx!=-1) {

@@ -96,7 +96,7 @@ public class PromotorView extends EntityView<Promotor> {
 		Label labelGenere = new Label(sectAdd.getParent(), LABEL_FLAGS);
 		labelGenere.setText("Gènere:");
 		comboGenere = new Combo(sectAdd.getParent(), COMBO_FLAGS);
-		comboGenere.setItems("No marcat", "home", "dona");
+		comboGenere.setItems("no marcat", "home", "dona");
 		
 		/* Observacions: text field */
 		Label labelObs = new Label(sectAdd.getParent(), LABEL_FLAGS);

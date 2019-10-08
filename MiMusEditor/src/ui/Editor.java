@@ -268,9 +268,8 @@ public class Editor extends EditorPart {
 		
 		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
+				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
-		regestText.setEditable(true);
 		regestText.setLayoutData(regestData);
 		
 		/* SECTION ENTITIES */
@@ -399,9 +398,8 @@ public class Editor extends EditorPart {
 		
 		/* Transcription text wraps if too long */
 		transcriptionText = new StyledText(form.getBody(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER);
+				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
 		transcriptionText.setText(docEntry.getTranscriptionText());
-		transcriptionText.setEditable(true);
 		transcriptionText.setLayoutData(transcriptionData);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		
@@ -527,13 +525,9 @@ public class Editor extends EditorPart {
 		
 		
 		/* NOTES PART */
-		Section sectNotes = toolkit.createSection(form.getBody(),  
-				ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
-		sectNotes.setText("Notes");
-		Composite compNotes = toolkit.createComposite(sectNotes);
-		compNotes.setLayout(new GridLayout());
-		sectNotes.setClient(compNotes);
-		sectNotes.setExpanded(false);
+		Label titleNotes = new Label(form.getBody(), SWT.VERTICAL);
+		titleNotes.setText("Notes:");
+		titleNotes.setFont(fontTitle);
 		
 		String notesStr = "";
 		for (Note note : docEntry.getNotes()) {
@@ -541,7 +535,7 @@ public class Editor extends EditorPart {
 		}
 		Text notesText = new Text(form.getBody(), 
 				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-		notesText.setText(notesStr.substring(0, notesStr.length()-2));
+		notesText.setText(notesStr.substring(0, notesStr.length()-2).trim());
 		GridData notesData = new GridData(GridData.FILL_HORIZONTAL);
 		notesData.widthHint = 10;
 		notesText.setLayoutData(notesData);
