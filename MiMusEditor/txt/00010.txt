@@ -16,3 +16,6 @@ Pere,{curs} juglar{/curs}, I bestia per LXXV dies et II de anata, CLI solidos II
 […]
 q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom. Per un document de 12 de maig de [1262] consta que a l’infant Pere l’acompanyaven Pere, joglar, i Pere, joglar, de Tunis; tenint en compte les formes d’identificació d’aquest document, identifiquem Pere, joglar, amb el primer, però no es pot descartar que sigui Pere, joglar, de Tunis.
 {ref1} Cf. II doc. 2, 3, 5, 6, 7. A l’hora de marcar [Pere Joglar?] s’ha d’identificar amb Pere Joglar, joglar de Galícia, i amb Pere Joglar, joglar, germà de Centpunys.
+
+
+

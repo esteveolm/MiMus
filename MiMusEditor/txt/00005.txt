@@ -13,3 +13,5 @@ m: parcial Anglès 1935, p. 320.{nbib1}
 p: Per nos et nostros concedimus et damus liberum et plenum posse tibi Petro, ioculatori, hedificandi et faciendi hedificia quecumque volueris et opera de altitudine uni braci in domibus tuis quas habes in Cesaraugusta, iuxta portam de Toledo, inter domos monasterii de Berola et domos Hospitali Iherosolimitano, supra opera et hedificia dictarum domorum que modo ibi sunt, et sic est dictis hedificiis operibus et melioramentis habeatis tu et tui, et que vel quos volueris, dictas domos teneatis et tenetis ad omnes voluntates tuas et tuorum inde libere et perpetuo faciendas. Mandamus çavalmedina, iuratis et aliis officialibus et subditis nostris quod contra hec non veniant nec aliquem venire permitant aliquo iure vel aliqua racione.
 Data Ilerde VI nonas madii anno Domini MºCCºLXº tercio.
 q: {nbib1} Amb error de data.
+
+

@@ -14,3 +14,5 @@ p: […]
 {curs}Item{/curs}, a I juglar de Panplona, {curs}XLIII solidos{/curs}.
 […]
 q: {nbib1}Sense indicació de registre i foli.
+
+

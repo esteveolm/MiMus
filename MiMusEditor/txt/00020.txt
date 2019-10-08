@@ -15,3 +15,5 @@ n: Trenchs 2011, doc. 395.
 p: {curs}Item{/curs}, doné {curs}CC solidos barchinonenses{/curs} a·n Guillem Ramon Rascas, trobador, los quals lo senyor rey li atorgà de gràcia, e los quals li manà donar e pagar per mi ab carta sua, segons que en aquella se contén.
 q: {nota1} Tenim documentat, el 4 de maig de 1291, un Guillem Ramon Rascas {curs}civem Barchinone{/curs} que no sembla que sigui el mateix personatge (ACA, Cancelleria, 83, f. 134r). Gómez Muntané 2001, p. 199, esmenta aquest pagament, però diu senzillament que el trobador es diu Rascas.
 s: {narxiu} El registre no és consultable; el text parteix del de l’edició de referència, adaptat als nostres criteris de transcripció.
+
+

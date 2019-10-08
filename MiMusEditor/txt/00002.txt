@@ -14,3 +14,5 @@ p: Anno MCCXL quinto.
 IX kalendas februarii.
 q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom.
 {ref1} La identificació amb [Pere Joglar?] implica marcar a la BD com si pogués ser: Pere Joglar, joglar (germà de Centpunys i marit d’Elvira) i Pere Joglar, [joglar?] de Galícia.
+
+

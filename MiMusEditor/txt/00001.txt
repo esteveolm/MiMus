@@ -54,3 +54,5 @@ Ferriol, {curs}trompador{/curs}.
 Peregrinus, {curs}trompador{/curs}.
 […]
 q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però cal tenir en compte que podria ser un cognom.
+
+

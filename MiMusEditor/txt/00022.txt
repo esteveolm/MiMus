@@ -15,3 +15,5 @@ Petrus de Solerio mandato domini regis, cui lecta fuit.
 q: {ref1} És fill de Sanç IV i Maria de Molina, germà del rei Ferran IV.
 {ref2} És fill de Sanç IV i Maria de Molina, germà del rei Ferran IV.
 {nota1} És impossible especificar de qui es tracta perquè els noms de joglars al servei del rei i dels infants de Castella són nombrosos i sovint canvien de servei de l’un a l’altre.
+
+

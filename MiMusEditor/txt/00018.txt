@@ -15,3 +15,5 @@ q: {nota1} Podria tractar-se d’un error de l’editor o del copista; en altres
 {ref1} Podria tractar-se d’un error de l’editor o del copista; en altres documents (per ex. IV, doc. 77 i 80) apareix un trompeta de nom Joan de Santesteve.
 {ref2} Trompeta de casa del rei.
 s: {narxiu} El registre no és consultable, per això no se’n pot indicar el foli; el text parteix del de l’edició de referència, adaptat als nostres criteris de transcripció.
+
+

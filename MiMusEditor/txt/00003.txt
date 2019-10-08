@@ -14,3 +14,5 @@ p: Guillem Ramon, juglar, per mantel et cot, II canes {curs}et media{/curs} de b
 {curs}Item{/curs}, per calces, III palms d’anglès negret, que fan {curs}VI solidos{/curs}.
 {curs}Item{/curs}, per penes, {curs}XXIII solidos{/curs}.
 q: {nota1} Al f. 32r hi ha el següent encapçalament que sembla referir-se a aquests comptes: “Anno Domini millesimo ducentesimo quinquagesimo octavo VI id[us] septembris in [domin]ice die, [i]ntravit dominus rex in Montepessulano et mandavit dare vestes domine Eliz[a]bet, fil[ie] [sue]”.
+
+

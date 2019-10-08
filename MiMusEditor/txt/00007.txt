@@ -13,3 +13,5 @@ p: Noverint universi quod cum Raymundetus Millaç inculpatus fuerit de morte Bar
 Data Ilerde IIIº nonas madii anno Domini MºCCºLXXº tercio.
 q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que exercís l’ofici.
 s: {narxiu} El registre presenta unes taques d’humitat que impedeixen llegir gairebé la meitat de les primeres dues ratlles del verso.
+
+

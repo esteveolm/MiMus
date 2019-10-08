@@ -16,3 +16,5 @@ p: Per nos et nostros laudamus, concedimus et confirmamus vobis Garterio de Mora
 Data in Montepessulano Xº kalendas februarii anno Domini millesimo CCºLXº primo.
 q: {nbib1} Burns llegeix {curs}Garrerio{/curs} en lloc de {curs}Garterio{/curs}.
 {ref1} Cf. I, doc. 9, 12, 19, 20, 21, 24.
+
+

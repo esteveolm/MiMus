@@ -15,3 +15,5 @@ Donam a Muntreyal a les massipes qui balaven, {curs}IIII solidos{/curs}.
 {curs}Item{/curs}, a les massipes de Terol qui balaven, {curs}VII solidos{/curs}.
 […]
 q: {nota1} Miret i Sans (1908, p. 209) cita per l’agost de 1269, sense donar-ne el registre, un pagament de 2 sous per a “fembres qui balaven en Darocha”, però no s’ha pogut localitzar.
+
+

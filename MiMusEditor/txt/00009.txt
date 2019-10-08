@@ -18,3 +18,5 @@ Testes sunt: Bernardus Guilelmi de Entença, Berengarius de Podioviridi, Raimund
 Sig+num Simonis de Sancto Felicio qui, mandato domini regis predicti, hoc scribi fecit et clausit loco, die et anno prefixis.
 q: {nbib1} Datat el 1275.
 {nota1} Per context —sembla que resideix a Alzira— i cronologia no podem descartar que sigui el mateix que Pere Joglar, segurament també joglar, de Galícia, que té propietats a Alzira.
+
+

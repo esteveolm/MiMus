@@ -15,3 +15,6 @@ p: {curs}Item{/curs}, doné […] a Ari[es] Pay[e]s e a Johanet, son fill, jugla
 q: {ref1} Supra apareix com a joglar de Ferran IV de Castella.
 {ref2} Joanet cal prendre-ho com un sobrenom de Juan, fill d’Arias Páez, que seria la forma principal.
 s: {narxiu} El registre no és consultable, per això no se’n pot indicar el foli; el text parteix del de l’edició, adaptat als nostres criteris de transcripció.
+
+
+
