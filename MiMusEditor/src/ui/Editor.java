@@ -662,8 +662,14 @@ public class Editor extends EditorPart {
 							"State updated successfully");
 					System.out.println("State updated successfully");
 				} catch (SQLException e1) {
-					e1.printStackTrace();
-					System.out.println("Could not update document in DB.");
+					if (e1.getSQLState().equals("42000")) {
+						System.out.println("Disconnected exception.");
+						LabelPrinter.printError(stateLabel, 
+								"You must be connected to perform changes to the DB.");
+					} else {
+						e1.printStackTrace();
+						System.out.println("Could not update document in DB.");
+					}
 				}
 			}
 		});
@@ -692,8 +698,14 @@ public class Editor extends EditorPart {
 								"Llengua and materies added successfully");
 						System.out.println("Llengua and materies added successfully");
 					} catch (SQLException e1) {
-						e1.printStackTrace();
-						System.out.println("Could not update document in DB.");
+						if (e1.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(metaLabel, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e1.printStackTrace();
+							System.out.println("Could not update document in DB.");
+						}
 					}
 					
 				} else {
@@ -890,8 +902,14 @@ public class Editor extends EditorPart {
 									"Cannot delete Entity Instance in use.");
 							System.out.println("Could not delete: entity in use.");
 						} catch (SQLException e2) {
-							e2.printStackTrace();
-							System.out.println("SQLException: could not delete Instance.");
+							if (e2.getSQLState().equals("42000")) {
+								System.out.println("Disconnected exception.");
+								LabelPrinter.printError(regestLabel, 
+										"You must be connected to perform changes to the DB.");
+							} else {
+								e2.printStackTrace();
+								System.out.println("SQLException: could not delete Instance.");
+							}
 						}
 					} else {
 						/* Entity in use in some relation of the document */
@@ -1069,8 +1087,14 @@ public class Editor extends EditorPart {
 						
 						relationTV.refresh();
 					} catch (SQLException e1) {
-						System.out.println("SQLException: could not delete relation.");
-						e1.printStackTrace();
+						if (e1.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(relationLabel, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							System.out.println("SQLException: could not delete relation.");
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -1171,10 +1195,15 @@ public class Editor extends EditorPart {
 								+ transcriptions.size());
 						LabelPrinter.printInfo(transcriptionLabel, 
 								"Transcription deleted successfully.");
-						
 						transcriptionTV.refresh();
 					} catch (SQLException e1) {
-						System.out.println("SQLException: could not delete trans.");
+						if (e1.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(transcriptionLabel, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							System.out.println("SQLException: could not delete trans.");
+						}
 					}
 				}
 			}
@@ -1221,8 +1250,14 @@ public class Editor extends EditorPart {
 						
 						referenceTV.refresh();
 					} catch (SQLException e1) {
-						System.out.println("SQLException: could not delete ref");
-						e1.printStackTrace();
+						if (e1.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(referenceLabel, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							System.out.println("SQLException: could not delete ref");
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -1291,8 +1326,14 @@ public class Editor extends EditorPart {
 					LabelPrinter.printError(label, 
 							"Cannot add the same entity twice.");
 				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: could not insert Instance.");
+					if (e2.getSQLState().equals("42000")) {
+						System.out.println("Disconnected exception.");
+						LabelPrinter.printError(label, 
+								"You must be connected to perform changes to the DB.");
+					} else {
+						e2.printStackTrace();
+						System.out.println("SQLException: could not insert Instance.");
+					}
 				}
 			} else {
 				/* No entities declared, nothing could be selected */
@@ -1359,8 +1400,14 @@ public class Editor extends EditorPart {
 							System.out.println("DAO: could not insert transcription.");
 						}
 					} catch (SQLException e) {
-						e.printStackTrace();
-						System.out.println("SQLException: could not insert transcription.");
+						if (e.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e.printStackTrace();
+							System.out.println("SQLException: could not insert transcription.");
+						}
 					}
 				} else {
 					/* User pressed OK but selected nothing */
@@ -1444,8 +1491,14 @@ public class Editor extends EditorPart {
 						System.out.println("Error: unknown relation in dialog.");
 					}
 				} catch (SQLException e2) {
-					System.out.println("SQLException: could not add relation.");
-					e2.printStackTrace();
+					if (e2.getSQLState().equals("42000")) {
+						System.out.println("Disconnected exception.");
+						LabelPrinter.printError(label, 
+								"You must be connected to perform changes to the DB.");
+					} else {
+						System.out.println("SQLException: could not add relation.");
+						e2.printStackTrace();
+					}
 				}
 			} else {
 				/* No instances selected by the user */
@@ -1504,7 +1557,13 @@ public class Editor extends EditorPart {
 								"Cannot insert same Reference twice.");
 						System.out.println("Cannot insert same Reference twice.");
 					} catch (SQLException e2) {
-						System.out.println("SQLException: could not insert reference");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							System.out.println("SQLException: could not insert reference");
+						}
 					}
 				}
 			} else {

@@ -134,8 +134,14 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 							System.out.println("DAO: Could not insert Genere into DB.");
 						}
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert Genere into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Genere into DB.");
+						}
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
@@ -153,8 +159,14 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 						LabelPrinter.printInfo(label, "Genere updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not update Genere into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not update Genere into DB.");
+						}
 					} 
 				}
 			}
@@ -181,8 +193,14 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Genere from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Genere from DB.");
+						}
 					}
 				}
 			}

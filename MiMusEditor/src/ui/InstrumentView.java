@@ -162,8 +162,14 @@ public class InstrumentView extends EntityView<Instrument> {
 								System.out.println("DAO: Could not insert Instrument into DB.");
 							}
 						} catch (SQLException e2) {
-							e2.printStackTrace();
-							System.out.println("SQLException: Could not insert Instrument into DB.");
+							if (e2.getSQLState().equals("42000")) {
+								System.out.println("Disconnected exception.");
+								LabelPrinter.printError(label, 
+										"You must be connected to perform changes to the DB.");
+							} else {
+								e2.printStackTrace();
+								System.out.println("SQLException: Could not insert Instrument into DB.");
+							}
 						} catch (DaoNotImplementedException e1) {
 							e1.printStackTrace();
 							System.out.println("Insert operation not implemented, this should never happen.");
@@ -179,8 +185,14 @@ public class InstrumentView extends EntityView<Instrument> {
 							LabelPrinter.printInfo(label, "Instrument updated successfully.");
 							getTv().refresh();
 						} catch (SQLException e2) {
-							e2.printStackTrace();
-							System.out.println("SQLException: Could not insert Instrument into DB.");
+							if (e2.getSQLState().equals("42000")) {
+								System.out.println("Disconnected exception.");
+								LabelPrinter.printError(label, 
+										"You must be connected to perform changes to the DB.");
+							} else {
+								e2.printStackTrace();
+								System.out.println("SQLException: Could not insert Instrument into DB.");
+							}
 						}
 					}
 				}
@@ -205,8 +217,14 @@ public class InstrumentView extends EntityView<Instrument> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Instrument from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Instrument from DB.");
+						}
 					}
 					getTv().refresh();
 					System.out.println("Instrument removed successfully.");

@@ -128,8 +128,14 @@ public class CasaView extends EntityView<Casa> {
 							System.out.println("DAO: Could not insert Casa into DB.");
 						}
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert Casa into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Casa into DB.");
+						}
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
@@ -146,8 +152,14 @@ public class CasaView extends EntityView<Casa> {
 						LabelPrinter.printInfo(label, getViewName() + " updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not update Casa to DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not update Casa to DB.");
+						}
 					}
 				}
 			}
@@ -174,8 +186,14 @@ public class CasaView extends EntityView<Casa> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Casa from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Casa from DB.");
+						}
 					}
 				}
 			}

@@ -118,10 +118,13 @@ public class OficiView extends EntityView<Ofici> {
 						}
 						comboInstrument.setItems(instNames);
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not select Instruments from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not select Instruments from DB.");
+						}
 					}
-					
 					comboInstrument.setEnabled(true);
 					comboInstrument.select(0);
 				} else {
@@ -194,8 +197,14 @@ public class OficiView extends EntityView<Ofici> {
 							System.out.println("DAO: Could not insert Artist into DB.");
 						}					
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not insert Ofici into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not insert Ofici into DB.");
+						}
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
@@ -212,8 +221,14 @@ public class OficiView extends EntityView<Ofici> {
 						LabelPrinter.printInfo(label, "Ofici updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not update Ofici into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not update Ofici into DB.");
+						}
 					}
 				}
 			}
@@ -242,8 +257,14 @@ public class OficiView extends EntityView<Ofici> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Ofici from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Ofici from DB.");
+						}
 					}
 				}
 			}

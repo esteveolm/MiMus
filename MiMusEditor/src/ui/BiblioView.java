@@ -272,8 +272,14 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 							System.out.println("DAO: Could not insert entry into DB.");
 						}
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert entry into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert entry into DB.");
+						}
 					}
 				} else {
 					/* Update values from selected unit */
@@ -289,9 +295,15 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 								"Bibliography updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println(
-								"SQLException: Could not update Bibliography to DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println(
+									"SQLException: Could not update Bibliography to DB.");
+						}
 					}
 				}
 			}
@@ -319,8 +331,14 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e1) {
-						e1.printStackTrace();
-						System.out.println("Could not delete Bibliography from DB.");
+						if (e1.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e1.printStackTrace();
+							System.out.println("Could not delete Bibliography from DB.");
+						}
 					}
 				}
 			}

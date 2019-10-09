@@ -170,8 +170,14 @@ public class PromotorView extends EntityView<Promotor> {
 							System.out.println("DAO: Could not insert Promotor into DB.");
 						}
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert Promotor into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Promotor into DB.");
+						}
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
@@ -188,8 +194,14 @@ public class PromotorView extends EntityView<Promotor> {
 						LabelPrinter.printInfo(label, "Promotor updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("SQLException: Could not insert Promotor into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("SQLException: Could not insert Promotor into DB.");
+						}
 					}
 				}
 			}
@@ -219,8 +231,14 @@ public class PromotorView extends EntityView<Promotor> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Promotor from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Promotor from DB.");
+						}
 					}					
 				}
 			}

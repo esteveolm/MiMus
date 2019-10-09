@@ -149,8 +149,14 @@ public class LlocView extends EntityView<Lloc> {
 							System.out.println("DAO: Could not insert LLoc into DB.");
 						}
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not insert Lloc into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not insert Lloc into DB.");
+						}
 					} catch (DaoNotImplementedException e1) {
 						e1.printStackTrace();
 						System.out.println("Insert operation not implemented, this should never happen.");
@@ -166,8 +172,14 @@ public class LlocView extends EntityView<Lloc> {
 						LabelPrinter.printInfo(label, "Lloc updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not update Lloc into DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not update Lloc into DB.");
+						}
 					}
 				}
 			}
@@ -193,8 +205,14 @@ public class LlocView extends EntityView<Lloc> {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
 						System.out.println("Could not delete: entity in use.");
 					} catch (SQLException e2) {
-						e2.printStackTrace();
-						System.out.println("Could not delete Lloc from DB.");
+						if (e2.getSQLState().equals("42000")) {
+							System.out.println("Disconnected exception.");
+							LabelPrinter.printError(label, 
+									"You must be connected to perform changes to the DB.");
+						} else {
+							e2.printStackTrace();
+							System.out.println("Could not delete Lloc from DB.");
+						}
 					}
 				}
 			}
