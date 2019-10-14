@@ -1,6 +1,7 @@
 package util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -61,10 +62,7 @@ public class DBUtils {
 	 * Returns a Properties object with the login data from config.properties.
 	 */
 	public static Properties readProperties() throws IOException {
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFile file = corpus.getFile("config.properties");
-		String path = file.getLocation().toString();
+		String path = getPath();
 		
 		Properties prop = new Properties();
 		InputStream is = null;
@@ -84,5 +82,13 @@ public class DBUtils {
 		Properties prop = readProperties();
 		prop.setProperty("editor.user", user);
 		prop.setProperty("editor.pass", pass);
+		prop.store(new FileOutputStream(getPath()), null);
+	}
+	
+	private static String getPath() {
+		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
+		IProject corpus = workspace.getProject("MiMusCorpus");
+		IFile file = corpus.getFile("config.properties");
+		return file.getLocation().toString();
 	}
 }

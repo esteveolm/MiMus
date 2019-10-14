@@ -100,6 +100,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
+					/* Reload connection to DB */
+					setConnection(DBUtils.connect());
+					
 					setUnits(retrieveUnits());
 				} catch(SQLException e1) {
 					e1.printStackTrace();
@@ -114,6 +117,8 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				
 				/* Empty label for document annotations */
 				annotationsText.setText("");
+				
+				
 			}
 		});
 	}
