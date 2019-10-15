@@ -16,6 +16,10 @@ import model.Lloc;
  */
 public class LlocDao extends EntityDao<Lloc> {
 
+	public LlocDao() throws SQLException {
+		super();
+	}
+	
 	public LlocDao(Connection conn) {
 		super(conn);
 	}

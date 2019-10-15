@@ -39,7 +39,7 @@ public class InstrumentView extends EntityView<Instrument> {
 		super();
 		
 		try {
-			setUnits(new InstrumentDao(getConnection()).selectAll());
+			setUnits(new InstrumentDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load instruments from DB.");
@@ -152,10 +152,10 @@ public class InstrumentView extends EntityView<Instrument> {
 					if (isStateAdd()) {
 						/* Add new entity */
 						try {
-							int id = new InstrumentDao(getConnection()).insert(inst);
+							int id = new InstrumentDao().insert(inst);
 							if (id>0) {
 								getUnits().clear();
-								getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
+								getUnits().addAll(new InstrumentDao().selectAll());
 								LabelPrinter.printInfo(label, "Instrument added successfully.");
 								getTv().refresh();
 							} else {
@@ -179,9 +179,9 @@ public class InstrumentView extends EntityView<Instrument> {
 						try {
 							/* Recover ID from selection */
 							inst.setSpecificId(getSelectedId());
-							new InstrumentDao(getConnection()).update(inst);
+							new InstrumentDao().update(inst);
 							getUnits().clear();
-							getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
+							getUnits().addAll(new InstrumentDao().selectAll());
 							LabelPrinter.printInfo(label, "Instrument updated successfully.");
 							getTv().refresh();
 						} catch (SQLException e2) {
@@ -209,9 +209,9 @@ public class InstrumentView extends EntityView<Instrument> {
 					LabelPrinter.printError(label, "You must select an Instrument in order to remove it.");
 				} else {
 					try {
-						new InstrumentDao(getConnection()).delete(inst);
+						new InstrumentDao().delete(inst);
 						getUnits().clear();
-						getUnits().addAll(new InstrumentDao(getConnection()).selectAll());
+						getUnits().addAll(new InstrumentDao().selectAll());
 						LabelPrinter.printInfo(label, "Instrument deleted successfully.");
 					} catch (SQLIntegrityConstraintViolationException e1) {
 						LabelPrinter.printError(label, "Cannot delete Entity in use.");
@@ -245,6 +245,6 @@ public class InstrumentView extends EntityView<Instrument> {
 
 	@Override
 	public List<Instrument> retrieveUnits() throws SQLException {
-		return new InstrumentDao(getConnection()).selectAll();
+		return new InstrumentDao().selectAll();
 	}
 }

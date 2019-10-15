@@ -47,8 +47,8 @@ public class OficiView extends EntityView<Ofici> {
 		comboInstrument = null;
 		
 		try {
-			setUnits(new OficiDao(getConnection()).selectAll());
-			insts = new InstrumentDao(getConnection()).selectAll();
+			setUnits(new OficiDao().selectAll());
+			insts = new InstrumentDao().selectAll();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load oficis from DB.");
@@ -111,7 +111,7 @@ public class OficiView extends EntityView<Ofici> {
 								.equals("artesà")) {
 					/* First, update list of instruments */
 					try {
-						insts = new InstrumentDao(getConnection()).selectAll();
+						insts = new InstrumentDao().selectAll();
 						String[] instNames = new String[insts.size()];
 						for (int i=0; i<instNames.length; i++) {
 							instNames[i] = ((Instrument) insts.get(i)).getLemma();
@@ -186,10 +186,10 @@ public class OficiView extends EntityView<Ofici> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new OficiDao(getConnection()).insert(ofici);
+						int id = new OficiDao().insert(ofici);
 						if (id>0) {
 							getUnits().clear();
-							getUnits().addAll(new OficiDao(getConnection()).selectAll());
+							getUnits().addAll(new OficiDao().selectAll());
 							System.out.println("Ofici created successfully.");
 							LabelPrinter.printInfo(label, "Ofici added successfully.");
 							getTv().refresh();
@@ -214,9 +214,9 @@ public class OficiView extends EntityView<Ofici> {
 					try {
 						/* Recover ID from selection */
 						ofici.setSpecificId(getSelectedId());
-						new OficiDao(getConnection()).update(ofici);
+						new OficiDao().update(ofici);
 						getUnits().clear();
-						getUnits().addAll(new OficiDao(getConnection()).selectAll());
+						getUnits().addAll(new OficiDao().selectAll());
 						System.out.println("Ofici updated successfully.");
 						LabelPrinter.printInfo(label, "Ofici updated successfully.");
 						getTv().refresh();
@@ -247,9 +247,9 @@ public class OficiView extends EntityView<Ofici> {
 							+ getViewName() + " in order to remove it.");
 				} else {
 					try {
-						new OficiDao(getConnection()).delete(ofici);
+						new OficiDao().delete(ofici);
 						getUnits().clear();
-						getUnits().addAll(new OficiDao(getConnection()).selectAll());
+						getUnits().addAll(new OficiDao().selectAll());
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, "Ofici deleted successfully.");
@@ -298,6 +298,6 @@ public class OficiView extends EntityView<Ofici> {
 
 	@Override
 	public List<Ofici> retrieveUnits() throws SQLException {
-		return new OficiDao(getConnection()).selectAll();
+		return new OficiDao().selectAll();
 	}
 }

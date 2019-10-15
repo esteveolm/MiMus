@@ -37,7 +37,7 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 	public GenereLiterariView() {
 		super();
 		try {
-			setUnits(new GenereLiterariDao(getConnection()).selectAll());
+			setUnits(new GenereLiterariDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load generes from DB.");
@@ -122,11 +122,11 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new GenereLiterariDao(getConnection()).insert(gen);
+						int id = new GenereLiterariDao().insert(gen);
 						if (id>0) {
 							getUnits().clear();
 							getUnits().addAll(
-									new GenereLiterariDao(getConnection()).selectAll());
+									new GenereLiterariDao().selectAll());
 							System.out.println("Genere created successfully.");
 							LabelPrinter.printInfo(label, "Genere added successfully.");
 							getTv().refresh();
@@ -151,10 +151,10 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 					try {
 						/* Recover ID from selection*/
 						gen.setSpecificId(getSelectedId());
-						new GenereLiterariDao(getConnection()).update(gen);
+						new GenereLiterariDao().update(gen);
 						getUnits().clear();
 						getUnits().addAll(
-								new GenereLiterariDao(getConnection()).selectAll());
+								new GenereLiterariDao().selectAll());
 						System.out.println("Genere updated successfully.");
 						LabelPrinter.printInfo(label, "Genere updated successfully.");
 						getTv().refresh();
@@ -183,10 +183,10 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 					LabelPrinter.printError(label, "You must select an Genere in order to remove it.");
 				} else {
 					try {
-						new GenereLiterariDao(getConnection()).delete(gen);
+						new GenereLiterariDao().delete(gen);
 						getUnits().clear();
 						getUnits().addAll(
-								new GenereLiterariDao(getConnection()).selectAll());
+								new GenereLiterariDao().selectAll());
 						LabelPrinter.printInfo(label, "Genere deleted successfully.");
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -222,6 +222,6 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 
 	@Override
 	public List<GenereLiterari> retrieveUnits() throws SQLException {
-		return new GenereLiterariDao(getConnection()).selectAll();
+		return new GenereLiterariDao().selectAll();
 	}
 }

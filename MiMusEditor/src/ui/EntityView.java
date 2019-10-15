@@ -26,7 +26,7 @@ public abstract class EntityView<E extends Entity> extends DeclarativeView<E> {
 	protected void fillAnnotationsLabel(E unit) {
 		List<Document> docs = new ArrayList<>();
 		try {
-			docs = new DocumentDao(getConnection())
+			docs = new DocumentDao()
 					.selectWhereEntity(unit.getId());
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve documents where entity is.");

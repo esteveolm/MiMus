@@ -17,6 +17,10 @@ import model.Ofici;
  */
 public class OficiDao extends EntityDao<Ofici> {
 
+	public OficiDao() throws SQLException {
+		super();
+	}
+	
 	public OficiDao(Connection conn) {
 		super(conn);
 	}

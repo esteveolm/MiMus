@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Unit;
+import util.DBUtils;
 
 /**
  * Main class of the persistence package. All DAO patterns
@@ -24,6 +25,10 @@ public abstract class UnitDao<U extends Unit> {
 	
 	/* DAO requires a Connection to DB to perform queries and changes */
 	private Connection conn;
+	
+	public UnitDao() throws SQLException {
+		setConnection(DBUtils.connect());
+	}
 	
 	public UnitDao(Connection conn) {
 		setConnection(conn);

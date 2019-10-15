@@ -17,6 +17,10 @@ import model.Bibliography;
  */
 public class BibliographyDao extends UnitDao<Bibliography> {
 
+	public BibliographyDao() throws SQLException {
+		super();
+	}
+	
 	public BibliographyDao(Connection conn) {
 		super(conn);
 	}

@@ -188,10 +188,10 @@ public class ArtistaView extends EntityView<Artista> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new ArtistaDao(getConnection()).insert(art);
+						int id = new ArtistaDao().insert(art);
 						if (id>0) {
 							getUnits().clear();
-							getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
+							getUnits().addAll(new ArtistaDao().selectAll());
 							System.out.println("Artist created successfully.");
 							LabelPrinter.printInfo(label, "Artist added successfully.");
 							getTv().refresh();
@@ -216,9 +216,9 @@ public class ArtistaView extends EntityView<Artista> {
 					try {
 						/* Recover ID from selection */
 						art.setSpecificId(getSelectedId());
-						new ArtistaDao(getConnection()).update(art);
+						new ArtistaDao().update(art);
 						getUnits().clear();
-						getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
+						getUnits().addAll(new ArtistaDao().selectAll());
 						System.out.println("Artist updated successfully.");
 						LabelPrinter.printInfo(label, "Artist updated successfully.");
 						getTv().refresh();
@@ -247,9 +247,9 @@ public class ArtistaView extends EntityView<Artista> {
 					LabelPrinter.printError(label, "You must select an Artist in order to remove it.");
 				} else {
 					try {
-						new ArtistaDao(getConnection()).delete(art);
+						new ArtistaDao().delete(art);
 						getUnits().clear();
-						getUnits().addAll(new ArtistaDao(getConnection()).selectAll());
+						getUnits().addAll(new ArtistaDao().selectAll());
 						LabelPrinter.printInfo(label, "Artist deleted successfully.");
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -286,6 +286,6 @@ public class ArtistaView extends EntityView<Artista> {
 	
 	@Override
 	public List<Artista> retrieveUnits() throws SQLException {
-		return new ArtistaDao(getConnection()).selectAll();
+		return new ArtistaDao().selectAll();
 	}
 }

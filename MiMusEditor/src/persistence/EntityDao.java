@@ -18,6 +18,10 @@ import model.Entity;
  */
 public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 
+	public EntityDao() throws SQLException {
+		super();
+	}
+	
 	public EntityDao(Connection conn) {
 		super(conn);
 	}

@@ -56,7 +56,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	private Text textSeries;
 	private Text textPages;
 	private Text textShort;
-		
+	
 	public BiblioView() {
 		super();
 		try {
@@ -261,11 +261,11 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 				if (isStateAdd()) {
 					/* Add a new entity */
 					try {
-						int id = new BibliographyDao(getConnection()).insert(biblio);
+						int id = new BibliographyDao().insert(biblio);
 						if (id>0) {
 							biblio.setId(id);
 							getUnits().clear();
-							getUnits().addAll(new BibliographyDao(getConnection()).selectAll());
+							getUnits().addAll(new BibliographyDao().selectAll());
 							LabelPrinter.printInfo(label, "Bibliography entry added successfully.");
 							getTv().refresh();
 						} else {
@@ -286,10 +286,10 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 					try {
 						/* Recover ID from selection */
 						biblio.setId(getSelectedId());
-						new BibliographyDao(getConnection()).update(biblio);
+						new BibliographyDao().update(biblio);
 						getUnits().clear();
 						getUnits().addAll(
-								new BibliographyDao(getConnection()).selectAll());
+								new BibliographyDao().selectAll());
 						System.out.println("Bibliography updated successfully.");
 						LabelPrinter.printInfo(label, 
 								"Bibliography updated successfully.");
@@ -320,9 +320,9 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 					LabelPrinter.printError(label, "You cannot delete the default bibliography entry.");
 				} else {
 					try {
-						new BibliographyDao(getConnection()).delete(selectedEntry);
+						new BibliographyDao().delete(selectedEntry);
 						getUnits().clear();
-						getUnits().addAll(new BibliographyDao(getConnection()).selectAll());
+						getUnits().addAll(new BibliographyDao().selectAll());
 						System.out.println("BibEntry removed successfully.");
 						LabelPrinter.printInfo(label, "Bibliography entry deleted successfully.");
 						getTv().refresh();
@@ -372,7 +372,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	protected void fillAnnotationsLabel(Bibliography unit) {
 		List<Document> docs = new ArrayList<>();
 		try {
-			docs = new DocumentDao(getConnection())
+			docs = new DocumentDao()
 					.selectWhereBiblio(unit.getId());
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve documents where bibliography is.");
@@ -394,7 +394,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	public void setFocus() {}
 
 	public List<Bibliography> retrieveUnits() throws SQLException {
-		return new BibliographyDao(getConnection()).selectAll();
+		return new BibliographyDao().selectAll();
 	}
 
 	@Override

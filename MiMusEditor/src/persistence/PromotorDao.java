@@ -16,6 +16,10 @@ import model.Promotor;
  */
 public class PromotorDao extends EntityDao<Promotor> {
 
+	public PromotorDao() throws SQLException {
+		super();
+	}
+	
 	public PromotorDao(Connection conn) {
 		super(conn);
 	}

@@ -36,7 +36,7 @@ public class CasaView extends EntityView<Casa> {
 	public CasaView() {
 		super();
 		try {
-			setUnits(new CasaDao(getConnection()).selectAll());
+			setUnits(new CasaDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load cases from DB.");
@@ -117,10 +117,10 @@ public class CasaView extends EntityView<Casa> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new CasaDao(getConnection()).insert(casa);
+						int id = new CasaDao().insert(casa);
 						if (id>0) {
 							getUnits().clear();
-							getUnits().addAll(new CasaDao(getConnection()).selectAll());
+							getUnits().addAll(new CasaDao().selectAll());
 							System.out.println(getViewName() + " created successfully.");
 							LabelPrinter.printInfo(label, getViewName() + " created successfully.");
 							getTv().refresh();
@@ -145,9 +145,9 @@ public class CasaView extends EntityView<Casa> {
 					try {
 						/* Recover ID from selection */
 						casa.setSpecificId(getSelectedId());
-						new CasaDao(getConnection()).update(casa);
+						new CasaDao().update(casa);
 						getUnits().clear();
-						getUnits().addAll(new CasaDao(getConnection()).selectAll());
+						getUnits().addAll(new CasaDao().selectAll());
 						System.out.println(getViewName() + " updated successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " updated successfully.");
 						getTv().refresh();
@@ -176,9 +176,9 @@ public class CasaView extends EntityView<Casa> {
 					LabelPrinter.printError(label, "You must select a " + getViewName() + " in order to remove it.");
 				} else {
 					try {
-						new CasaDao(getConnection()).delete(casa);
+						new CasaDao().delete(casa);
 						getUnits().clear();
-						getUnits().addAll(new CasaDao(getConnection()).selectAll());
+						getUnits().addAll(new CasaDao().selectAll());
 						getTv().refresh();
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() + " removed successfully.");
@@ -209,6 +209,6 @@ public class CasaView extends EntityView<Casa> {
 
 	@Override
 	public List<Casa> retrieveUnits() throws SQLException {
-		return new CasaDao(getConnection()).selectAll();
+		return new CasaDao().selectAll();
 	}
 }

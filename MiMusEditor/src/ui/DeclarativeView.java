@@ -1,6 +1,5 @@
 package ui;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import model.Entity;
 import model.Unit;
-import util.DBUtils;
 
 /**
  * DeclarativeView is any Eclipse View of MiMus application that allows
@@ -57,7 +55,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	
 	private boolean stateAdd;
 	private int selectedId;
-	private Connection conn;
 	private TableViewer tv;
 	protected Button btnAdd;
 	protected Button btnClr;
@@ -73,13 +70,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		super();
 		setStateAdd(true);
 		setSelectedId(0);
-		
-		try {
-			setConnection(DBUtils.connect());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Could not load entities from DB.");
-		}
 	}
 
 	/**
@@ -99,28 +89,27 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		refreshBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					/* Reload connection to DB */
-					setConnection(DBUtils.connect());
-					
-					setUnits(retrieveUnits());
-				} catch(SQLException e1) {
-					e1.printStackTrace();
-				}
-				
-				tv.setInput(getUnits());
-				tv.refresh();
-				setStateAdd(true);
-				setSelectedId(0);
-				stateLabel.setText(STATE_ADD);
-				btnAdd.setText(BUTTON_ADD);
-				
-				/* Empty label for document annotations */
-				annotationsText.setText("");
-				
-				
+				refreshAction();
 			}
 		});
+	}
+	
+	public void refreshAction() {
+		try {
+			setUnits(retrieveUnits());
+		} catch(SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		tv.setInput(getUnits());
+		tv.refresh();
+		setStateAdd(true);
+		setSelectedId(0);
+		stateLabel.setText(STATE_ADD);
+		btnAdd.setText(BUTTON_ADD);
+		
+		/* Empty label for document annotations */
+		annotationsText.setText("");
 	}
 	
 	/**
@@ -258,12 +247,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	}
 	public void setTv(TableViewer tv) {
 		this.tv = tv;
-	}
-	public Connection getConnection() {
-		return conn;
-	}
-	public void setConnection(Connection conn) {
-		this.conn = conn;
 	}
 	public boolean isStateAdd() {
 		return stateAdd;

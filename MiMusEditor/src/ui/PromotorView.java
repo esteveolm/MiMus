@@ -41,7 +41,7 @@ public class PromotorView extends EntityView<Promotor> {
 		super();
 		
 		try {
-			setUnits(new PromotorDao(getConnection()).selectAll());
+			setUnits(new PromotorDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load promotors from DB.");
@@ -159,10 +159,10 @@ public class PromotorView extends EntityView<Promotor> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new PromotorDao(getConnection()).insert(prom);
+						int id = new PromotorDao().insert(prom);
 						if (id > 0) {
 							getUnits().clear();
-							getUnits().addAll(new PromotorDao(getConnection()).selectAll());
+							getUnits().addAll(new PromotorDao().selectAll());
 							System.out.println("Promotor added successfully.");
 							LabelPrinter.printInfo(label, "Promotor added successfully.");
 							getTv().refresh();
@@ -187,9 +187,9 @@ public class PromotorView extends EntityView<Promotor> {
 					try {
 						/* Recover ID from selection */
 						prom.setSpecificId(getSelectedId());
-						new PromotorDao(getConnection()).update(prom);
+						new PromotorDao().update(prom);
 						getUnits().clear();
-						getUnits().addAll(new PromotorDao(getConnection()).selectAll());
+						getUnits().addAll(new PromotorDao().selectAll());
 						System.out.println("Promotor updated successfully.");
 						LabelPrinter.printInfo(label, "Promotor updated successfully.");
 						getTv().refresh();
@@ -220,9 +220,9 @@ public class PromotorView extends EntityView<Promotor> {
 							+ getViewName() + " in order to remove it.");
 				} else {
 					try {
-						new PromotorDao(getConnection()).delete(prom);
+						new PromotorDao().delete(prom);
 						getUnits().clear();
-						getUnits().addAll(new PromotorDao(getConnection()).selectAll());
+						getUnits().addAll(new PromotorDao().selectAll());
 						System.out.println(getViewName() + " removed successfully.");
 						LabelPrinter.printInfo(label, getViewName() 
 								+ " removed successfully.");
@@ -258,6 +258,6 @@ public class PromotorView extends EntityView<Promotor> {
 
 	@Override
 	public List<Promotor> retrieveUnits() throws SQLException {
-		return new PromotorDao(getConnection()).selectAll();
+		return new PromotorDao().selectAll();
 	}
 }

@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -14,6 +13,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
@@ -28,18 +31,9 @@ import util.LabelPrinter;
  *
  */
 public class LoginView extends ViewPart {
-
-	private Connection connection;
 	
 	public LoginView() {
 		super();
-		
-		try {
-			setConnection(DBUtils.connect());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Could not connect Login to DB.");
-		}
 	}
 	
 	/**
@@ -68,17 +62,8 @@ public class LoginView extends ViewPart {
 		Button btn = toolkit.createButton(form.getBody(), "Connect", 
 				SWT.PUSH | SWT.CENTER);
 		
-		Text infoText = toolkit.createText(form.getBody(), "", 
-				SWT.READ_ONLY | SWT.MULTI);
-		try {
-			Properties prop = DBUtils.readProperties();
-			infoText.setText("Connected as: "+ prop.getProperty("editor.user"));
-		} catch (IOException e) {
-			infoText.setText("Could not identify connected user");
-		}
-		
-		Label resultLabel = toolkit.createLabel(form.getBody(), "");
-		resultLabel.setLayoutData(gd);
+		Label resultText = toolkit.createLabel(form.getBody(), "");
+		resultText.setLayoutData(gd);
 		
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -100,35 +85,56 @@ public class LoginView extends ViewPart {
 						/* If successful, store values in config.properties */
 						DBUtils.writeProperties(user, pass);
 						
+						IWorkbenchPage page = PlatformUI.getWorkbench()
+								.getActiveWorkbenchWindow()
+								.getActivePage();
+							
+						/* Declarative views  refreshed to make sure disconnected */
+						IViewPart view = page.showView("MiMusEditor.biblioView");
+						((BiblioView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.artistaView");
+						((ArtistaView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.casaView");
+						((CasaView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.genereView");
+						((GenereLiterariView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.instrumentView");
+						((InstrumentView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.llocView");
+						((LlocView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.oficiView");
+						((OficiView) view).refreshAction();
+						
+						view = page.showView("MiMusEditor.promotorView");
+						((PromotorView) view).refreshAction();
+						
 						/* Update UI */
-						infoText.setText("Connected as: " + user);
-						LabelPrinter.printInfo(resultLabel, 
-								"Authentication successful");
+						LabelPrinter.printInfo(resultText, 
+								"Authenticated: " + user);
 					} catch (SQLException e1) {
 						/* If failure, rewind to previous login data */
 						DBUtils.writeProperties(oldUser, oldPass);
 						
 						/* Update UI */
-						infoText.setText("Connected as: " + oldUser);
-						LabelPrinter.printError(resultLabel, 
+						LabelPrinter.printError(resultText, 
 								"Authentication failed");
+					} catch (PartInitException e1) {
+						e1.printStackTrace();
 					}
 				} catch (IOException e2) {
-					LabelPrinter.printError(resultLabel, "Unknown error");
+					LabelPrinter.printError(resultText, "Unknown error");
 				}
 			}
 		});
 	}
-
+	
 	@Override
 	public void setFocus() {}
-
-	public Connection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
 
 }

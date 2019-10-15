@@ -16,6 +16,10 @@ import model.Instrument;
  */
 public class InstrumentDao extends EntityDao<Instrument> {
 
+	public InstrumentDao() throws SQLException {
+		super();
+	}
+	
 	public InstrumentDao(Connection conn) {
 		super(conn);
 	}

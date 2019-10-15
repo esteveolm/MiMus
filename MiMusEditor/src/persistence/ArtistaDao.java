@@ -15,6 +15,10 @@ import model.Artista;
  */
 public class ArtistaDao extends EntityDao<Artista> {
 
+	public ArtistaDao() throws SQLException {
+		super();
+	}
+	
 	public ArtistaDao(Connection conn) {
 		super(conn);
 	}

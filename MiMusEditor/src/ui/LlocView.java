@@ -38,7 +38,7 @@ public class LlocView extends EntityView<Lloc> {
 		super();
 		
 		try {
-			setUnits(new LlocDao(getConnection()).selectAll());
+			setUnits(new LlocDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load llocs from DB.");
@@ -139,10 +139,10 @@ public class LlocView extends EntityView<Lloc> {
 				if (isStateAdd()) {
 					/* Add new entity */
 					try {
-						int id = new LlocDao(getConnection()).insert(lloc);
+						int id = new LlocDao().insert(lloc);
 						if (id>0) {
 							getUnits().clear();
-							getUnits().addAll(new LlocDao(getConnection()).selectAll());
+							getUnits().addAll(new LlocDao().selectAll());
 							LabelPrinter.printInfo(label, "Lloc added successfully.");
 							getTv().refresh();
 						} else {
@@ -166,9 +166,9 @@ public class LlocView extends EntityView<Lloc> {
 					try {
 						/* Recover ID from selection */
 						lloc.setSpecificId(getSelectedId());
-						new LlocDao(getConnection()).update(lloc);
+						new LlocDao().update(lloc);
 						getUnits().clear();
-						getUnits().addAll(new LlocDao(getConnection()).selectAll());
+						getUnits().addAll(new LlocDao().selectAll());
 						LabelPrinter.printInfo(label, "Lloc updated successfully.");
 						getTv().refresh();
 					} catch (SQLException e2) {
@@ -196,9 +196,9 @@ public class LlocView extends EntityView<Lloc> {
 					LabelPrinter.printError(label, "You must select a Lloc in order to remove it.");
 				} else {
 					try {
-						new LlocDao(getConnection()).delete(lloc);
+						new LlocDao().delete(lloc);
 						getUnits().clear();
-						getUnits().addAll(new LlocDao(getConnection()).selectAll());
+						getUnits().addAll(new LlocDao().selectAll());
 						LabelPrinter.printInfo(label, "Lloc deleted successfully.");
 						getTv().refresh();
 					} catch (SQLIntegrityConstraintViolationException e1) {
@@ -235,6 +235,6 @@ public class LlocView extends EntityView<Lloc> {
 
 	@Override
 	public List<Lloc> retrieveUnits() throws SQLException {
-		return new LlocDao(getConnection()).selectAll();
+		return new LlocDao().selectAll();
 	}
 }

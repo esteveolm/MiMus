@@ -16,6 +16,10 @@ import model.GenereLiterari;
  */
 public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 
+	public GenereLiterariDao() throws SQLException {
+		super();
+	}
+	
 	public GenereLiterariDao(Connection conn) {
 		super(conn);
 	}

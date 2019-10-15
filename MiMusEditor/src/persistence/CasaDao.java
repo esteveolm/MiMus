@@ -16,6 +16,10 @@ import model.Casa;
  */
 public class CasaDao extends EntityDao<Casa> {
 
+	public CasaDao() throws SQLException {
+		super();
+	}
+	
 	public CasaDao(Connection conn) {
 		super(conn);
 	}

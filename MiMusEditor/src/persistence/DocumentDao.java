@@ -24,6 +24,10 @@ import model.Note;
  */
 public class DocumentDao extends UnitDao<Document> {
 
+	public DocumentDao() throws SQLException {
+		super();
+	}
+	
 	public DocumentDao(Connection conn) {
 		super(conn);
 	}
