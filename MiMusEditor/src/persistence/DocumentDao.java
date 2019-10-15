@@ -30,7 +30,7 @@ public class DocumentDao extends UnitDao<Document> {
 
 	@Override
 	public int insert(Document unit) throws SQLException {
-		String[] insertColumns = {"numeracio", "any1", "any2", "mes1", "mes2",
+		String[] insertColumns = {"id", "numeracio", "any1", "any2", "mes1", "mes2",
 				"dia1", "dia2", "h_any1", "h_any2", "h_mes1", "h_mes2", "h_dia1",
 				"h_dia2","d_any1", "d_any2", "d_mes1", "d_mes2", "d_dia1",
 				"d_dia2", "lloc1", "lloc2","regest", "lib1_arxiu", "lib1_serie", 
@@ -49,49 +49,50 @@ public class DocumentDao extends UnitDao<Document> {
 		}
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
-		stmt.setString(1, unit.getNumbering());
-		stmt.setInt(2, unit.getDate().getYear1());
-		stmt.setInt(3, unit.getDate().getYear2());
-		stmt.setInt(4, unit.getDate().getMonth1());
-		stmt.setInt(5, unit.getDate().getMonth2());
-		stmt.setInt(6, unit.getDate().getDay1());
-		stmt.setInt(7, unit.getDate().getDay2());
-		stmt.setBoolean(8, unit.getDate().ishYear1());
-		stmt.setBoolean(9, unit.getDate().ishYear2());
-		stmt.setBoolean(10, unit.getDate().ishMonth1());
-		stmt.setBoolean(11, unit.getDate().ishMonth2());
-		stmt.setBoolean(12, unit.getDate().ishDay1());
-		stmt.setBoolean(13, unit.getDate().ishDay2());
-		stmt.setBoolean(14, unit.getDate().isuYear1());
-		stmt.setBoolean(15, unit.getDate().isuYear2());
-		stmt.setBoolean(16, unit.getDate().isuMonth1());
-		stmt.setBoolean(17, unit.getDate().isuMonth2());
-		stmt.setBoolean(18, unit.getDate().isuDay1());
-		stmt.setBoolean(19, unit.getDate().isuDay2());
-		stmt.setString(20, unit.getPlace1());
-		stmt.setString(21, unit.getPlace2());
-		stmt.setString(22, unit.getRegestText());
-		stmt.setString(23, unit.getLibrary().getArchive());
-		stmt.setString(24, unit.getLibrary().getSeries());
-		stmt.setString(25, unit.getLibrary().getSubseries1());
-		stmt.setString(26, unit.getLibrary().getSubseries2());
-		stmt.setString(27, unit.getLibrary().getNumber());
-		stmt.setString(28, unit.getLibrary().getPage());
-		stmt.setString(29, unit.getLibrary2().getArchive());
-		stmt.setString(30, unit.getLibrary2().getSeries());
-		stmt.setString(31, unit.getLibrary2().getSubseries1());
-		stmt.setString(32, unit.getLibrary2().getSubseries2());
-		stmt.setString(33, unit.getLibrary2().getNumber());
-		stmt.setString(34, unit.getLibrary2().getPage());
-		stmt.setString(35, unit.getEditions());
-		stmt.setString(36, unit.getRegisters());
-		stmt.setString(37, unit.getCitations());
-		stmt.setString(38, unit.getTranscriptionText());
-		stmt.setInt(39, unit.getLanguage());
-		stmt.setInt(40, unit.getStateAnnotIdx());
-		stmt.setInt(41, unit.getStateRevIdx());
+		stmt.setInt(1, unit.getId());
+		stmt.setString(2, unit.getNumbering());
+		stmt.setInt(3, unit.getDate().getYear1());
+		stmt.setInt(4, unit.getDate().getYear2());
+		stmt.setInt(5, unit.getDate().getMonth1());
+		stmt.setInt(6, unit.getDate().getMonth2());
+		stmt.setInt(7, unit.getDate().getDay1());
+		stmt.setInt(8, unit.getDate().getDay2());
+		stmt.setBoolean(9, unit.getDate().ishYear1());
+		stmt.setBoolean(10, unit.getDate().ishYear2());
+		stmt.setBoolean(11, unit.getDate().ishMonth1());
+		stmt.setBoolean(12, unit.getDate().ishMonth2());
+		stmt.setBoolean(13, unit.getDate().ishDay1());
+		stmt.setBoolean(14, unit.getDate().ishDay2());
+		stmt.setBoolean(15, unit.getDate().isuYear1());
+		stmt.setBoolean(16, unit.getDate().isuYear2());
+		stmt.setBoolean(17, unit.getDate().isuMonth1());
+		stmt.setBoolean(18, unit.getDate().isuMonth2());
+		stmt.setBoolean(19, unit.getDate().isuDay1());
+		stmt.setBoolean(20, unit.getDate().isuDay2());
+		stmt.setString(21, unit.getPlace1());
+		stmt.setString(22, unit.getPlace2());
+		stmt.setString(23, unit.getRegestText());
+		stmt.setString(24, unit.getLibrary().getArchive());
+		stmt.setString(25, unit.getLibrary().getSeries());
+		stmt.setString(26, unit.getLibrary().getSubseries1());
+		stmt.setString(27, unit.getLibrary().getSubseries2());
+		stmt.setString(28, unit.getLibrary().getNumber());
+		stmt.setString(29, unit.getLibrary().getPage());
+		stmt.setString(30, unit.getLibrary2().getArchive());
+		stmt.setString(31, unit.getLibrary2().getSeries());
+		stmt.setString(32, unit.getLibrary2().getSubseries1());
+		stmt.setString(33, unit.getLibrary2().getSubseries2());
+		stmt.setString(34, unit.getLibrary2().getNumber());
+		stmt.setString(35, unit.getLibrary2().getPage());
+		stmt.setString(36, unit.getEditions());
+		stmt.setString(37, unit.getRegisters());
+		stmt.setString(38, unit.getCitations());
+		stmt.setString(39, unit.getTranscriptionText());
+		stmt.setInt(40, unit.getLanguage());
+		stmt.setInt(41, unit.getStateAnnotIdx());
+		stmt.setInt(42, unit.getStateRevIdx());
 		
-		int docResult = executeGetId(stmt);
+		int docResult = stmt.executeUpdate();
 		if (docResult>0) {
 			boolean notesOk = true;
 			for (Note note : unit.getNotes()) {
