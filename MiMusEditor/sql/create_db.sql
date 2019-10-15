@@ -42,21 +42,21 @@ CREATE TABLE document (
 	lloc1 varchar(100) NULL,
 	lloc2 varchar(100) NULL,
 	regest varchar(1024) NULL,
-	lib1_arxiu varchar(100) NULL,
-	lib1_serie varchar(100) NULL,
-	lib1_subserie varchar(100) NULL,
-	lib1_subserie2 varchar(100) NULL,
-	lib1_numero varchar(100) NULL,
-	lib1_pagina varchar(100) NULL,
-	lib2_arxiu varchar(100) NULL,
-	lib2_serie varchar(100) NULL,
-	lib2_subserie varchar(100) NULL,
-	lib2_subserie2 varchar(100) NULL,
-	lib2_numero varchar(100) NULL,
-	lib2_pagina varchar(100) NULL,
-	edicions varchar(100) NULL,
-	registres varchar(100) NULL,
-	citacions varchar(100) NULL,
+	lib1_arxiu varchar(200) NULL,
+	lib1_serie varchar(200) NULL,
+	lib1_subserie varchar(200) NULL,
+	lib1_subserie2 varchar(200) NULL,
+	lib1_numero varchar(200) NULL,
+	lib1_pagina varchar(200) NULL,
+	lib2_arxiu varchar(200) NULL,
+	lib2_serie varchar(200) NULL,
+	lib2_subserie varchar(200) NULL,
+	lib2_subserie2 varchar(200) NULL,
+	lib2_numero varchar(200) NULL,
+	lib2_pagina varchar(200) NULL,
+	edicions varchar(200) NULL,
+	registres varchar(200) NULL,
+	citacions varchar(200) NULL,
 	transcripcio text NULL,
 	llengua_id bigint(20) NULL,
     state_annot int(1) NULL,
@@ -68,7 +68,7 @@ CREATE TABLE document (
 
 CREATE TABLE materia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-    materia_name varchar(100) NOT NULL,
+    materia_name varchar(200) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -115,26 +115,26 @@ CREATE TABLE has_materia (
 
 CREATE TABLE bibliografia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
-	autor1 varchar(100) NULL,
-	autor2 varchar(100) NULL,
-	autor3 varchar(100) NULL,
-	autor4 varchar(100) NULL,
-	autor_secondari1 varchar(100) NULL,
-	autor_secondari2 varchar(100) NULL,
-	autor_secondari3 varchar(100) NULL,
-	autor_secondari4 varchar(100) NULL,
-	autor_secondari5 varchar(100) NULL,
-	autor_secondari6 varchar(100) NULL,
+	autor1 varchar(200) NULL,
+	autor2 varchar(200) NULL,
+	autor3 varchar(200) NULL,
+	autor4 varchar(200) NULL,
+	autor_secondari1 varchar(200) NULL,
+	autor_secondari2 varchar(200) NULL,
+	autor_secondari3 varchar(200) NULL,
+	autor_secondari4 varchar(200) NULL,
+	autor_secondari5 varchar(200) NULL,
+	autor_secondari6 varchar(200) NULL,
 	any_ varchar(100) NULL,
 	distincio varchar(1) NULL,
-	titol varchar(100) NULL,
-	titol_principal varchar(100) NULL,
+	titol varchar(1000) NULL,
+	titol_principal varchar(1000) NULL,
 	volum varchar(100) NULL,
 	lloc varchar(100) NULL,
-	editorial varchar(100) NULL,
+	editorial varchar(500) NULL,
 	serie varchar(100) NULL,
 	pagines varchar(100) NULL,
-	referencia_curta varchar(1024) NULL,
+	referencia_curta varchar(1000) NULL,
 	PRIMARY KEY (id)
 );
 
@@ -144,7 +144,7 @@ CREATE TABLE bibliografia (
 CREATE TABLE referencia (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     ref_type varchar(20) NOT NULL,
-    pages varchar(100) NULL,
+    pages varchar(200) NULL,
 	document_id bigint(20) NOT NULL,
 	bibliografia_id bigint(20) NOT NULL,
     note_id bigint(20) NULL,
@@ -185,16 +185,16 @@ CREATE TABLE entity (
 CREATE TABLE artista (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom_complet varchar(100) NULL,
+	nom_complet varchar(200) NULL,
 	tractament varchar(100) NULL,
 	nom varchar(100) NULL,
 	cognom varchar(100) NULL,
 	sobrenom varchar(100) NULL,
-	distintiu varchar(100) NULL,
+	distintiu varchar(500) NULL,
 	genere int(1) NULL,
 	religio int(1) NULL,
 	origen varchar(100) NULL,
-    observacions varchar(1024) NULL,
+    observacions varchar(1000) NULL,
 	FOREIGN KEY (entity_id)
 		REFERENCES entity(id),
 	PRIMARY KEY (id)
@@ -203,13 +203,13 @@ CREATE TABLE artista (
 CREATE TABLE promotor (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom_complet varchar(100) NULL,
+	nom_complet varchar(200) NULL,
 	nom varchar(100) NULL,
 	cognom varchar(100) NULL,
 	sobrenom varchar(100) NULL,
-	distintiu varchar(100) NULL,
+	distintiu varchar(500) NULL,
 	genere int(1) NULL,
-    observacions varchar(1024) NULL,
+    observacions varchar(1000) NULL,
 	FOREIGN KEY (entity_id)
 		REFERENCES entity(id),
 	PRIMARY KEY (id)
@@ -218,7 +218,7 @@ CREATE TABLE promotor (
 CREATE TABLE instrument (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom varchar(100) NULL,
+	nom varchar(200) NULL,
 	familia int(1) NULL,
 	classe int(1) NULL,
 	part varchar(100) NULL,
@@ -230,7 +230,7 @@ CREATE TABLE instrument (
 CREATE TABLE ofici (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom_complet varchar(100) NULL,
+	nom_complet varchar(200) NULL,
 	terme varchar(100) NULL,
 	especialitat varchar(100) NULL,
 	instrument_id bigint(20) NULL,
@@ -244,7 +244,7 @@ CREATE TABLE ofici (
 CREATE TABLE casa (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom_complet varchar(100) NULL,
+	nom_complet varchar(200) NULL,
 	titol varchar(100) NULL,
 	cort varchar(100) NULL,
 	FOREIGN KEY (entity_id)
@@ -255,7 +255,7 @@ CREATE TABLE casa (
 CREATE TABLE lloc (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_id bigint(20) NOT NULL,
-	nom_complet varchar(100) NULL,
+	nom_complet varchar(200) NULL,
 	regne int(1) NULL,
 	area int(1) NULL,
 	FOREIGN KEY (entity_id)
@@ -266,10 +266,10 @@ CREATE TABLE lloc (
 CREATE TABLE genere_literari (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     entity_id bigint(20) NOT NULL,
-    nom_complet varchar(100) NULL,
-    nom_frances varchar(100) NULL,
-    nom_occita varchar(100) NULL,
-    definicio varchar(100) NULL,
+    nom_complet varchar(200) NULL,
+    nom_frances varchar(200) NULL,
+    nom_occita varchar(200) NULL,
+    definicio varchar(1000) NULL,
     FOREIGN KEY (entity_id)
 		REFERENCES entity(id),
 	PRIMARY KEY (id)
@@ -290,8 +290,8 @@ CREATE TABLE entity_instance (
 CREATE TABLE transcription (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	entity_instance_id bigint(20) NOT NULL,
-    selected_text varchar(200) NOT NULL,
-    form varchar(200) NOT NULL,
+    selected_text varchar(500) NOT NULL,
+    form varchar(500) NOT NULL,
     coords_from int(4) NOT NULL,
     coords_to int(4) NOT NULL,
 	FOREIGN KEY (entity_instance_id)
@@ -431,7 +431,7 @@ CREATE TABLE note (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
     document_id bigint(20) NOT NULL,
     note_type_id bigint(20) NOT NULL,
-    note_text varchar(1024) NOT NULL,
+    note_text varchar(1000) NOT NULL,
     FOREIGN KEY (document_id)
 		REFERENCES document(id),
 	FOREIGN KEY (note_type_id)
