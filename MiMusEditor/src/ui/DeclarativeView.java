@@ -232,7 +232,11 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 			Entity thisEnt = (Entity) getTv().getElementAt(i);
 			if (thisEnt.getId() == ent.getId()) {
 				getTv().getTable().select(i);
-				fillFieldsFromSelection((U) getTv().getElementAt(i));
+				
+				U selection = (U) getTv().getElementAt(i);
+				fillFieldsFromSelection(selection);
+				fillAnnotationsLabel(selection);
+				getTv().reveal(selection);
 				break;
 			}
 		}
