@@ -14,6 +14,7 @@ INSERT INTO llengua (llengua_name) VALUES ("llatí");
 INSERT INTO llengua (llengua_name) VALUES ("català");
 INSERT INTO llengua (llengua_name) VALUES ("castellà");
 INSERT INTO llengua (llengua_name) VALUES ("aragonès/castellà");
+INSERT INTO llengua (llengua_name) VALUES ("altres");
 
 -- Document has dates specified in several fields.
 -- h_any1 and so on are boolean variables for hypothetical date fields.
@@ -86,6 +87,7 @@ INSERT INTO materia (materia_name) VALUES ("enfranquiment");
 INSERT INTO materia (materia_name) VALUES ("escoles");
 INSERT INTO materia (materia_name) VALUES ("família");
 INSERT INTO materia (materia_name) VALUES ("guiatge / salconduit");
+INSERT INTO materia (materia_name) VALUES ("instruments");
 INSERT INTO materia (materia_name) VALUES ("itinerància");
 INSERT INTO materia (materia_name) VALUES ("justícia");
 INSERT INTO materia (materia_name) VALUES ("legislació");
