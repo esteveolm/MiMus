@@ -12,6 +12,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -503,6 +505,14 @@ public class Editor extends EditorPart {
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		materiesTV.setContentProvider(new ArrayContentProvider());
 		materiesTV.setLabelProvider(new MateriesLabelProvider());
+		materiesTV.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				Materia m1 = (Materia) e1;
+				Materia m2 = (Materia) e2;
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
 		
 		/* The checkbox list is filled with the entries from Materies table on DB */
 		allMateries = new ArrayList<>();
