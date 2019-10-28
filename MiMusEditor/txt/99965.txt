@@ -1,0 +1,19 @@
+a: VII.271
+b: 1391
+c: gener
+d: 9
+e: Barcelona
+f: Maria, esposa de Conche de Savolon, ministrer de bombarda, ciutadà de Barcelona, [oriünd de Saulon-la-Rue], davant del perill del seu primer part, fa testament.{nota1}
+g: AHPB
+h: Berenguer Ermengol
+i: Manual de testaments
+j: 1385-1405
+k: 34/21
+l: f. 35v-36v
+p: In nomine Christi, qui pro salute humani generis voluit pati supplicium dire mortis in ligno crucis, et gloriosissime ac beatissime virginis Marie, eius genitricis, et tocius curie celestis et omnium civium supernorum, amen. Ego Maria, uxor Conxes de Savolon, ministrerius de la bombarda domini regis, civis Barchinone, pregnans volensque propter periculum dicti pregnati de bonis meis disponere [...].
+Actum est hoc Barchinone nona die ianuarii anno a Nativitate Domini millesimo trecentesimo nonagesimo primo.
+S(+)num Marie, uxoris dicti Conxes de Savolon, testatricis predicte que hoc meum testamentum quod est ultima voluntas mea laudo, concedo et firmo.
+Testes huius rei seu testamenti sunt: Iohannes de Mordicurt, barberius de domo domini regis, Petrus de Solerio, cirurgicus et barberius, cives, Michael Torcat et Matheus Ermengaudi, scriptores, Barchinone.
+q: {nota1} La futura mare es deia Maria Descortey. Ho deixa tot al fill que ha de néixer; si aquest morís, ho deixa als altres fills naixedors; si tots morissin, aniria tot als pobres i a rescatar esclaus cristians.
+
+

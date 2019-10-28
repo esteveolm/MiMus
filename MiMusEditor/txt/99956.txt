@@ -1,0 +1,18 @@
+a: VII.14
+b: 1387
+c: juny
+d: 23
+e: Barcelona
+f: El rei Joan I envia al rei de Castella [Joan I] Henrí i Hennequí,{ref1} ministrers de xeremia i de bombarda, oriünds de França.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1751
+l: f. 69v
+p: Muy caro hermano, deseantes saber de vuestro estamento buenas nuevas vos rogamos affectuosament que pot  todos vinientes a las partes de acá nos ende querades certificar por vuestras letras, et será cosa de qué nos faredes muy grant plazer. Del nuestro sabet, muy caro hermano, que, merced de Dios, somos bien mellorado de los fuertes accidentes que huviemos, et esperamos en la gracia divinal que aýna saremos restituido a nuestra deseada convalescencia corporal. Muy caro hermano, embiámosvos Henrí et Uenequí, portadores de la present, los quales son los mellores ministreros de la xalamía (et) de bombarda, aprés los nuestros, que gran tiempo ha se an venido acá de Francia, et havémosles mandado que vos siervan quanto a vós plazerá. Muy caro hermano, si algunas cosas vos son plazientes d’estas partes, embiádnoslo a dezir, et complirlo hemos de buena voluntad. E sea Dios guarda vuestra todos tiempos.
+Dada en Barchelona diús nuestro siello secreto a XXIII días de junio en el anyo de la Natividad de Nuestro Senyor MCCCLXXXVII.
+Regi Castelle.
+q: {nota1} Una altra carta igual, sense adreça, però amb el manament a Pere de Beviure al f. 71r. 
+{ref1} Hi havia molts artistes de nom Hennequí a la cort de l’infant, tanmateix podria tractar-se de l’Hennequí que, juntament amb un Enric (Henri Crespin?), va a les escoles el març de 1386 (vg. doc. VI.3/1001), però no d’Hennequí de Courtrai, que és ministrer d’arpa.
+
+

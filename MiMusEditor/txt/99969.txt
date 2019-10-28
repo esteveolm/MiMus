@@ -1,0 +1,19 @@
+a: VII.171
+b: 1389
+c: maig
+d: 18
+e: Montsó 
+f: El rei Joan demana a Pere de Berga que l’informi de quan van marxar els ministrers Hennequí de l’Arpa [Hennequí de Courtrai] cap a Alemanya i Pifet cap a França, i de quants ministrers portaran a la seva tornada; al mateix temps demana que li enviï un llibre on hi hagin motets, balades, rondells i virolais fet pels xantres del papa.
+g: ACA
+h: Cancelleria
+j: reg. 
+k: 1956
+l: f. 73rv
+m: Gómez Muntané 1979, doc. 243; Gómez Muntané 1980, p. 94; Trenchs-Baiges 2000-2002, doc. 169.
+p: Lo rey d’Aragó.
+Vostra letra havem reebuda et grahim-vos los ardits que·ns havets fets saber, et manam-vos que, de tots ardits que sapiats aquí, nos scrivats, e en special d’açò que les companyes faran, on sabrets de cert que servey nos en farets. E fets-nos saber, Anequí de la arpa, que havem tramés en Alamanya per amenar ministrers, quant partí d’aquí, e, a la tornada, scrivits-nos quins són los ministrés que amenarà. E axí matex, havem tramés Perhifet [{curs}sic{/curs}] en Ffrança per la dita rahó. E axí scrivits-nos de tot largament. Semblanment volem que·ns facats fer un libre on sien notats de XV en XX motets, e axí matex /que hi hage\ ballades, rondells et virelays que sien la flor, e fets-lo fer als xandres del papa, car ells saben la flor d’açò. E com sia fet, enviats-lo·ns per persona certa.
+Dada en Monsó sots nostre segell secret a XVIII dies de maig en l’any de la Nativitat de Nostre Senyor MCCCLXXIX.  Rex Iohannes.
+Dominus rex mandavit michi Bernardo de Ionquerio.
+Probata.
+
+Dirigitur Petro de Berga.

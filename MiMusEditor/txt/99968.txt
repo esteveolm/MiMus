@@ -1,0 +1,25 @@
+a: VI/3.470
+b: 1379
+c: agost
+d: 12
+e: Perpinyà 
+f: L’infant Joan demana a Ramon [de Perellós], vescomte de Roda [que en aquest moment es troba a Avinyó{nota1}], que faci portar sis xantres de bona veu per a la seva capella {nota2} i que duguin un llibre amb la música de la missa i un altre que contingui motets, rondells, balades i virolais.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1746
+l: f. 17v
+m: Roca 1929, p. 343; Gómez Muntané 1979, doc. 223; Gómez Muntané 1980, p. 93; Gómez Muntané 2001, p. 233; Baiges 2009, doc. 487.
+o: Mele 1986, p. 75.
+p: Lo primogènit.
+Vescomte, sapiats que nós hauríem gran plaher que aguéssem per a serví de nostra capella de bons xantres, per què volem e us pregam que vós nos en trametats d’aquí VI  bons, et qui sien jóvens, e alcun d’ells no hajen muller, mas, si n’hi ha alcun qui sie prevera, bé·ns plau; en los quals VI sie tot l’orde del cant. E enviats-los-nos tots justats, ab letra e missatge vostre cert. E vós podets-lus dir, de part nostra, que nós los farem donar a cascun per gatges per cascun mes X florins d’or d’Aragó, e cascun any, lo primer jorn d’abril, per lur vestir XV florins; e més, lus darem de gràcia ara, quant vendran, a cascun XX florins, e per vestir d’aquest ayn los dits XV florins. E volem que aporten tot lo cant de la missa notat, e un libre on haje molts motets, e rondells, e ballades e virelays. Però, guardat-vos que no n’hi haja alcun qui haja servit al duch d’Anjou. E fets-nos saber si algun d’ells sab d’esturments e de quins, com nós ne havem de moltes maneres. E en açò vos pregam vullats haver cura e diligència, de manera que nós ne hajam bon recapte.
+Dada en Perpenyà sots nostre segell secret a XII dies d’agost de l’any MCCCLXXIX. Primogenitus.
+Dominus dux mandavit mihi Galcerando de Ortigis.
+Probata.  
+
+Al noble e amat conseller nostre mossèn Ramon, vescomte de Roda.
+q: {nota1} Gómez Muntané 2001, p. 232. 	
+{nota2} Hauria de tractar-se d’Ambròs Porcellet (doc. VI/3.491), Umbert Jolí (doc. VI/3.491), que no se sap si va arribar, i que haurien d’haver vingut per separat, com es dedueix d’aquest document, Vicent Elia (doc. VI/3.520), Pere de Fortspatlle (doc. VI/3.550), Francesc de Lonur (doc. VI/3.551), Jean Bresart (doc. VI/3.552), Jean Bourée (doc. VI/3.553) i Robinet Niotí (doc. VI/3.554), d’altra banda, també més endavant apareixen Jean Martin i Jean Armetis (doc. VI/3.565); en efecte aquest document es parla de sis, més endavant de set (doc. VI/3.508) i finalment de vuit (docs. VI/3.521 i VI/3.562). 
+s: {narxiu} Al f. 17r es troba una altra versió de la carta (ed. Mele 1983).
+
+

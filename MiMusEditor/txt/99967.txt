@@ -1,0 +1,15 @@
+a: IV/2.497
+b: 1373
+c: febrer 
+f: [Per manament de la reina Elionor] Berenguer de Relat, tresorer reial, paga, de gràcia, 3 florins d’or a Jaume Fluvià i Pere de Rius, trobadors de danses.
+g: ACA
+h: Reial Patrimoni
+i: MR
+j: reg. 
+k: 501
+l: f. 65v
+o: Rubió i Lluch 1908-1921, II, p. 221, nota 2; Descalzo 1989-1990, p. 299.
+p: [{curs}Al marge{/curs}:] Albarà de scrivà de ració.
+Item, doné a·n Jacme Fluvià et a·n Pere de Rius, trobadors de dances, ab albarà de scrivà de ració, los quals la senyora reyna lus manà donar graciosament, III florins d’or.
+
+

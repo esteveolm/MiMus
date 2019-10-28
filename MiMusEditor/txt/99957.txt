@@ -1,0 +1,20 @@
+a: VII.15
+b: 1387
+c: juny
+d: 23
+e: Barcelona
+f: El rei Joan I envia al rei de França [Carles VI] dos histrions oriünds de França [Henrí i Hennequí] perquè el serveixin com l’han servit a ell.{nota1} La carta no va ser expedida en aquesta redacció, sinó en una altra registrada després.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 1751
+l: f. 70r
+p: [{curs}Al marge{/curs}:] Non fuit expedita sub hac forma set sub alia inferius registrata.
+Serenissime princeps et consanguinee carissime, cupientes de vestro statu prospero felicia et votiva percipere, serenitatem vestram intime deprecamur quatenus nos velitis inde frequenter reddere cerciores, quoniam vere idcirco noster animus iocundabitur et medullitus consolamen sustinet. Nos autem, princeps serenissime, qui longa fuimus, prout Deus placuit, infirmitate detenti, vitalem resumpsimus spiritum, gracia Salvatoris, et speramus in Eo, in quo salus est et vita eterna, quod ad pristina et desideratam nos restituet convalescenciam corporalem. Ceterum, serenissime princeps et consanguinee carissime, quia percepimus vos in talibus quodammodo delectari, duos, harum latores, vobis mittimus ystriones qui revera post nostros sunt de melioribus qui de Francia diu est venerint ad has partes. Eis igitur qui nobis multum placide servierunt mandavimus ut excellentie vestre serviant donec vestre placuerit voluntati. Dirigat vos in cunctis feliciter Rex celestis.
+
+Data Barchinone sub nostro sigillo secreto XXIIIª dies iunii anno a Nativitate Domini MCCCLXXXVII.
+
+Fuit missa regi.
+q: {nota1} Una carta igual, però sense esment als dos ministrers, és enviada a Lluís II, rei de Nàpols (f. 70rv).
+
+
