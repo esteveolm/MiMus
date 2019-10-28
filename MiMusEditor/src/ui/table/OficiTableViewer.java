@@ -22,8 +22,8 @@ import model.Ofici;
  */
 public class OficiTableViewer extends DeclarativeTableViewer {
 
-	private static final String[] ESPECIALITATS = {"-", "Sense especificar", 
-			"Instrument", "Veu", "Dansa", "Artesà", "Malabars i altres"};
+	private static final String[] ESPECIALITATS = {"-", "sense especificar", 
+			"instrument", "veu", "dansa", "artesà", "malabars i altres"};
 	
 	public OficiTableViewer(Composite parent, List<Ofici> oficis, 
 			List<Instrument> instruments) {
