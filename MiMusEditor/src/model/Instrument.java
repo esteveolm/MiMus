@@ -22,12 +22,14 @@ public class Instrument extends Entity {
 	public static final String[][] CLASSES = {
 			{"-"},	/* - */
 			{		/* Cordofon */
+				"-",
 				"amb mànec",
 				"sense mànec",
 				"d'arc",
 				"de tecla"
 			},
 			{		/* Aerofon */
+				"-",
 				"tipus flauta",
 				"de llengüeta",
 				"de dipòsit d'aire",
