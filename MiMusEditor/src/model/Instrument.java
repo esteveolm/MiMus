@@ -13,12 +13,14 @@ public class Instrument extends Entity {
 	 * They are associated by index of the following arrays.
 	 */
 	public static final String[] FAMILIES = {
+			"-",
 			"cordòfon", 
 			"aeròfon", 
 			"idiòfon/membranòfon",
 			"altres"
 	};
 	public static final String[][] CLASSES = {
+			{"-"},	/* - */
 			{		/* Cordofon */
 				"amb mànec",
 				"sense mànec",
