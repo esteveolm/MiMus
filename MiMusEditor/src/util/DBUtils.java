@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import com.jcraft.jsch.*;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -34,7 +35,8 @@ public class DBUtils {
 			return connect(prop.getProperty("editor.user"), 
 					prop.getProperty("editor.pass"),
 					prop.getProperty("host.name"));
-		} catch(IOException e) {
+		} catch(IOException | JSchException e) {
+			e.printStackTrace();
 			throw new SQLException();
 		}
 	}
@@ -44,7 +46,31 @@ public class DBUtils {
 	 * User and password are passed as parameters.
 	 */
 	public static Connection connect(String user, String pass, String host)
-			throws SQLException {
+			throws SQLException, JSchException {
+//		JSch jsch = new JSch();
+//		Properties prop;
+//		try {
+//			prop = readProperties();
+//			HostKey hk = new HostKey(host, prop.getProperty("host.key").getBytes());
+//			jsch.getHostKeyRepository().add(hk, null);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		Session session = jsch.getSession(user, host);
+//		session.setPassword(pass);
+//		session.connect();
+//		int forwardedPort = session.setPortForwardingL(0, host, 3306);
+//		
+//		
+//		String conn = "jdbc:mysql://localhost:" 
+//				+ forwardedPort
+//				+ "/mimus"
+//				+ "?useUnicode=true&characterEncoding=UTF-8"
+//				+ "&autoReconnect=true"
+//				+ "&failOverReadOnly=false&maxReconnects=10"
+//				+ "&useJDBCCompliantTimezoneShift=true"
+//				+ "&useLegacyDatetimeCode=false"
+//				+ "&serverTimezone=UTC";
 		String conn = "jdbc:mysql://" 
 				+ host
 				+ ":3306/mimus"

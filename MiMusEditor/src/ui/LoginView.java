@@ -21,6 +21,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
+import com.jcraft.jsch.JSchException;
+
 import util.DBUtils;
 import util.LabelPrinter;
 
@@ -117,7 +119,7 @@ public class LoginView extends ViewPart {
 						/* Update UI */
 						LabelPrinter.printInfo(resultText, 
 								"Authenticated: " + user);
-					} catch (SQLException e1) {
+					} catch (SQLException | JSchException e1) {
 						/* If failure, rewind to previous login data */
 						DBUtils.writeProperties(oldUser, oldPass);
 						

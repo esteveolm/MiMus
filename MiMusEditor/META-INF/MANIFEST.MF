@@ -14,4 +14,5 @@ Export-Package: model,
  ui,
  util
 Bundle-ClassPath: lib/mysql-connector-java-8.0.15.jar,
+ lib/jsch-0.1.55.jar,
  .

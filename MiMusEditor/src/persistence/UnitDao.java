@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jcraft.jsch.JSchException;
+
 import model.Unit;
 import util.DBUtils;
 
