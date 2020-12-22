@@ -67,7 +67,10 @@ public abstract class EntityDao<E extends Entity> extends UnitDao<E> {
 		int commonId = insertCommonEntity(entity);
 		System.out.println("Common ID Of gen: " + commonId);
 		if (commonId > 0) {
-			int specId = insertSpecificEntity(entity, commonId);
+			int specId = insertSpecificEntity(entity, commonId);			
+			// update common and specific id in the entity
+			entity.setId(commonId);
+			entity.setSpecificId(specId);
 			int result = updateCommonEntity(commonId, specId);
 			if (result>0) {
 				/* If insert succeeded, commit and leave transactional mode */

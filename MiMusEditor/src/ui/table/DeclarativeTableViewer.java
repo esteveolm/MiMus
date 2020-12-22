@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
 
 import model.Unit;
@@ -66,10 +67,14 @@ public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 		tv.setInput(entities);
 		tv.getTable().setHeaderVisible(true);
 		tv.getTable().setLinesVisible(true);
-		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
-		gd.heightHint = 150;
+		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, true);
 		tv.getTable().setLayoutData(gd);
 		packColumns();
+		
+		// Add a bottom horizontal separator
+	    Label separator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
+	    separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	    
 		return tv;
 	}
 }
