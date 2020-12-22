@@ -1,0 +1,15 @@
+a: I.16
+b: 1269
+c: agost
+d: 17
+e: Barcelona
+f: A precs d’Huguet Joglar, [joglar?] de Cotlliure,{nota1} el rei Jaume I declara legítima Marquesa, filla del primer i de Berenguera, concebuda mentre Huguet era casat amb Trobada.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 16
+l: f. 186v
+p: Cum ad nos Uguetus Juglar, de Quoquolibero, preces humiles perrexisset quod Marchesiam, filiam suam, quam ex adulterino coytu ex Berengaria, filia Arnaldi Magistri, susceperat, matrimonio inter ipsum et Trobatam, filiam Guilelmi Berardi, constante, ex nostra potestatis plenitudine legitimare ipsam, eadem legitimam filiam facere dignaremur, ita quod eidem Marchesie quominus dicto patri suo Ugueto succederet naturalium ob[iectu] non noceret. Nos eiusdem Ugueti precibus de benignitate et gracia speciali annuentes, ex certa sciencia, cum predicta Marchesia duximus pensandum, <eandem> eandem tam ab actus legitimos quam ad successionem predicti Ugueti Juglar, patris sui, /et etiam aliorum penitus legitime ita que ulterius legitimacionis\ titulo nostro benefficio et legitima filia omnino dicti Ugueti et in eius existens potestate censeatur, et ad eius successionem ex testamento et ab intestato admitatur, obiectu naturalium penitus quiescente, non obstante lege illa que natos ex tali coytu omni prorsus paterno benefficio et cetera.
+Data Barchinone XVIº kalendas septembris anno Domini MºCCºLXº nono.
+q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que Huguet exercís aquest ofici.
+

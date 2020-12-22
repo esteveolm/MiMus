@@ -1,0 +1,14 @@
+a: I.22
+b: 1273
+c: febrer 
+d: 28
+e: Girona
+f: El rei Jaume I concedeix a Guillem de Cervera [Cerverí de Girona], joglar, 300 sous de renda sobre els ingressos de la batllia de Caldes [de Malavella], Llagostera i Cassà [de la Selva].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 21
+l: f. 107r
+p: Noverint universi quod nos Iacobus, Dei gracia rex et cetera, per nos et nostros damus et concedimus tibi Guilelmo de Cervaria, ioculatori, diebus omnibus vite tue in beneficium personalem trescentos solidos barchinonenses monete de terno habendos et percipiendos quolibet anno in redditibus et exitibus nostris baiulie Calidarum et Locustarie et Casahrs, videlicet de Sancta Seclina de Lacustaria, ducentos solidos, et in regali de Franchiaco centum solidos. Quos quidem volumus quod habeas et percipias de cetero quolibet anno per manum baiuli nostri Calidarum in redditibus et exitibus supradictis locorum predictorum in festivitatibus Sancti Iohannis Babtiste, et Omnium Sanctorum ac etiam in dominica Carniprivii Quadragesime, in quibus omni redditus et exitus persolvuntur et persolvi consueverunt usque modo. Ita tamen quod, si dictus baiulus non persolverit tibi et cui volueris loco tui dictos trescentos solidos barchinonenses in dictis terminis de predictis redditibus et exitibus, ut est dictum, quod tu possis propria auctoritate amparare tot de ipsis redditibus et exitibus qui sufficiant ad solucionem tuam dictorum trescentorum solidorum, et eos tamdiu habere et percipere donec in ipsis sis integre persolutus de trescentis solidis antedictis. Mandantes et cetera.
+Data in Gerondo pridie kalendis marcii anno Domini MºCCºLXXº secundo.
+

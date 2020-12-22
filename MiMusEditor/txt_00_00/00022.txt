@@ -1,0 +1,15 @@
+a: I.21
+b: 1272
+c: novembre
+d: 10
+e: Montpeller
+f: El rei Jaume I concedeix a Joan de Gaví, de la casa del rei, quatre jovades de terra a les Alcusses (Moixent) que havien estat de Pere Joglar [joglar].{ref1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 21
+l: f. 73r
+p: Per nos et nostros damus et concedimus vobis Iohanni de Gavino, de domo nostra, et tuis im perpetuum per hereditatem propriam quatuor iovatas terre in termino de Alcucis in hereditate que fuit Petri Ioculatoris que quidem quatuor iovatas terre affrontant ex una parte in camino quo itur {ratllat}ad fon{/ratllat} apud fontem de la Figuera, et ex duabus partibus in hereditate Bartholomei Respo, et ex alia in hereditate Iohanni de Montepessulano et cum alia terra que nondum est divisa. Predicta itaque quatuor iovatas terre tibi et tuis damus im perpetuum ad habendum, tenendum, possidendum, expletandum, dandum, vendendum, impignorandum ac alienandum et ad omnes tuas tuorumque voluntates, cui et quibus volueritis, libere faciendas, exceptis militibus, sanctis, clericis et personis religiosis. Predicta tamen quatuor iovatas terre, ut dictum est, tibi damus tali modo quod facias ibi residenciam personalem, et quod eas vendere non possis hinc ad viginti annos primos venturos et continue completos, et quod serviatis inde tu et tui nobis et nostri sicut alii homines eiusdem loci pro suis hereditatis nobis servient.
+Data in Montepessulano IIIIº idus novembris anno Domini MºCCºLXXº secundo.
+q: {ref1} És Pere Joglar, joglar, distintiu: amb propietats a les Alcusses. Cf. doc. I.9, I.12, I.19, I.20, I.21, I.24.
+

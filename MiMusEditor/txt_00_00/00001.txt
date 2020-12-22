@@ -1,0 +1,20 @@
+a: I.1
+b: 1234
+c: juny
+d: 12
+e: Borriana
+f: El rei Jaume I dona a Gascó unes possessions a Borriana, una de les quals confina amb una terra de Martorell, joglar.
+g: ACA
+h: Cancelleria
+i: Pergamins Jaume I
+j: carpeta
+k: 77
+l: perg. 586
+m: Huici - Cabanes 1976, doc. 201.
+o: Miret i Sans 1918, p. 112.
+p: Manifestum sit omnibus quod nos Iacobus, Dei gracia rex Aragonum et regni Maioricarum, comes Barchinone et Urgelli et dominus Montepessulani, cum presenti scripto nostro damus vobis et concedimus Gaschon quendam hereditatem in termino de Burriana, que continetur ex prima parte cum hereditate de Martorel, {curs}juglar{/curs}, ex alia parte Bartolomeo de Calataiu, ex alia parte cum cequia, ex quarta vero parte cum via publica; adhuc damus vobis unum campum circa de mulino de Rui Exemeniç de Taust, ex alia parte in hereditate de fratribus d’Ucles; preterea damus vobis duos casales in {curs}rafal{/curs} de Burriana sicut affrontant de duabus partibus viis publicis, ut de cetero predictam hereditatem et predictos casales, cum omnibus directis suis et pertinenciis quas habent seu habere debent de celo usque in abissum, habeatis, teneatis, possideatis pacifice ad dandum, vendendum, impignorandum, alienandum et ad omnes vestras vestrorumque voluntates perpetuo faciendas, sicut melius dici et intelligi potest vestro vestrorumque salvamentum.
+Data apud Burriana IIº idus iunii era MªCCªLXXª secunda.
+Testes huius rei sunt: Nuno Sancii, Pero Cornelii, Exemeno d’Urrea, Pelegrin de Castellaçolo.
+Sig+num Iacobi, Dei gracia regis Aragonum et regni Maioricarum, comitis Barchinone et Urgelli et domini Montispessulani.
+Sig+num Petri Iohannis, scriptoris, qui mandato domini regis hoc scribi fecit.
+

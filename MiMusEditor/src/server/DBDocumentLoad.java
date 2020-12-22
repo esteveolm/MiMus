@@ -20,9 +20,10 @@ import persistence.DocumentDao;
  * @author Javier Beltrán Jorba
  *
  */
-public class DeployDB {
+public class DBDocumentLoad {
 
 	public static void main(String[] args) {
+		System.out.println("Document Load starts...");
 		try {
 			/* Read DB user-pass from config.properties */
 			Properties prop = new Properties();
@@ -53,14 +54,18 @@ public class DeployDB {
 			Arrays.sort(files);
 			for (File f: files) {
 				String fName = f.getName();
+				System.out.println(fName + "loading...");
 				if (fName.endsWith(".txt")) {
 					try {
 						/* Transform txt to Document, and insert to DB */
 						Document doc = reader.read(f.getAbsolutePath());
-						if (new DocumentDao(conn).insert(doc) > 0) {
-							System.out.println("Inserted " + fName);
+						DocumentDao docDAO = new DocumentDao(conn);
+						int docId = docDAO.insertGetNextId();
+						doc.setId(docId);
+						if (docDAO.insert(doc) > 0) {
+							System.out.println(fName + "loaded");
 						} else {
-							System.out.println("Could not insert " + fName);
+							System.out.println(fName + "could not be loaded");
 						}
 					} catch(NumberFormatException e) {
 						System.out.println("Error: unexpected filename " + fName);
@@ -70,7 +75,13 @@ public class DeployDB {
 				}
 			}
 		} catch (SQLException e1) {
+			System.out.println("Document Load Stopped");
+			System.out.println("SQL Error:");
+            System.out.println("SQLState: " + e1.getSQLState());
+            System.out.println("Error Code: " + e1.getErrorCode());
+            System.out.println("Message: " + e1.getMessage());
 			e1.printStackTrace();
 		}
+		System.out.println("Document Load has finished");
 	}
 }

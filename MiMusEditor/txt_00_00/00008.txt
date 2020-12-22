@@ -1,0 +1,16 @@
+a: I.7
+b: 1249
+c: febrer
+d: 7
+f: En el repartiment de terres al regne de València s’assignen una casa a Morvedre (Sagunt), quatre jovades de terra i quatre fanecades de vinya a Guillem d’Avinyó, joglar, i a la seva esposa Guasqueta.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 6
+l: f. 92r (primera numeració)
+m: Bofarull 1856, p. 499.
+p: Murvedre.
+[…]
+Guilelmo de Avinione, ioculatori, et uxori Guaschete: domos in Muroveteri, franche et libere, et quatuor iovate terre in eodem termino, et quatuor fanecatas vinearum pro X solidibus qualibet iovata.
+VII idus februarii.
+

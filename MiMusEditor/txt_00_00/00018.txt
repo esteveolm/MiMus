@@ -1,0 +1,14 @@
+a: I.17
+b: 1271
+c: març
+d: 26
+e: València
+f: El rei Jaume I reconeix diversos pagaments, entre els quals n’hi ha un de 1.000 sous fet per Guillem Cardona, porter major del rei, als joglars que van actuar a València quan hi va ser el rei de Castella [Alfons X].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 14
+l: f. 112v
+p: Recognosco et confiteor vobis Arnaldo de Romanino, Guilelmo de Peralata et Guilelmo Arnaldi quod ex illis XI mille et sexcentis et nonaginta solidibus et octo denariis regalibus Valencie qui nobis remanebant ad solvendum ex illis C et viginti mille solidibus regalibus, pro quibus monetam presentem regalium Valencie vobis vendidimus, dedistis et persolvis(tis) pro nobis et de mandato nostro […]; et Guilelmo Cardona, portario maiori nostro, loco nostri, ad opus ioculatores quando rex Castelle erat in Valencia, mille solidos […].
+Datum Valencie VII kalendas aprilis anno Domini MºCCºLXX primo.
+

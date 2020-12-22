@@ -1,0 +1,19 @@
+a: I.15
+b: 1269
+c: gener
+d: 27
+e: Xàtiva
+f: El rei Jaume I concedeix a Pere Joglar, [joglar?] de Galícia,{nota1}{ref1} unes cases a Alzira.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 15
+l: f. 134r
+m: Burns 1985-2007, III, doc. 878.
+n: Martínez Ferrando 1934, doc. 839.
+p: Petri Juglar.
+Per nos et nostros damus et concedimus tibi Petro Jucglar, de Gallicia, et tuis im perpetuum per hereditatem propriam, francham et liberam unum solare domorum quod est iuxta reallum nostrum Algezire ad faciendum domos ibidem; et affrontat ex Iª parte in solari Iacobi de Calataiubo et Stephani, fratris eius, et in domibus Petri Stephani et in domibus cuiusdam iudei et in muro. Et sic volumus et concedimus tibi quod tu et tui et quos volueris habeatis dictum solare, quod tibi damus de celo in abbissum, cum introitibus, exitibus ac melioramentis et suis aliis pertinentiis universis, ad dandum, vendendum, impignorandum ac alienandum, et ad omnes tuas et tuorum voluntates inde, cui et quibus volueris, penitus perpetuo faciendas, exceptis militibus et clericis ac locis religiosis, sicut melius et cetera. Mandantes et cetera.
+Data Xative VI kalendas februarii anno Domini MºCCºLXº octavo.
+q: {nota1} Considerem que {curs}Joglar{/curs}, que originàriament indicava l’ofici, ha passat a formar part del nom i, per tant, el tractem com a cognom/sobrenom i assenyalem la possibilitat que Pere exercís aquest ofici. Per context i cronologia no podem descartar que sigui el mateix Pere Joglar, joglar, germà de Centpunys, que també sembla que resideix a Alzira.
+{ref1} Es tracta de Pere Joglar, joglar, distintiu: de Galícia. Cf. I.15; III.8; III.17; III.18; III.19; IV.3; IV.4; IV.11.
+

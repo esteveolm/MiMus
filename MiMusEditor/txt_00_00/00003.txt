@@ -1,0 +1,15 @@
+a: I.3
+b: 1238
+c: juliol
+d: 11
+e: València
+f: En el repartiment de terres al regne de València s’assignen una casa, dues jovades de terra prop de la Boatella i un hort a Peret de Vera, joglar.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 5
+l: f. 29v (primera numeració)
+m: Bofarull 1856, p. 188.
+p: Peret /de Vera\, ioculator: domos de {ratllat}Mahanum Alii Haxam{/ratllat} /Albexit\, et II iovatas terre iuxta Boatellam, et ortus de Alii Açaviel iuxta domum de Iahira Abinageri.
+V idus iulii.
+

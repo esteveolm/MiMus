@@ -1,0 +1,16 @@
+a: I.26
+b: 1275
+c: abril
+d: 23
+e: Lleida
+f: El rei Jaume I confirma la donació vitalícia feta a Maaluix Alcoquí, [joglar] jueu,{ref1} del càrrec de pesador del pes reial de Lleida, perquè Mossè Abinuig, que el requeria, hi ha renunciat en no voler-se sotmetre a una inquisició.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 20
+l: f. 243r
+m: Romano 1984, doc. 3.
+p: Quia nos Iacobus, Dei gracia et cetera, dedisemus Mosse Abinuig, iudeo Ilerde, officium pensatoris pensi nostri Ilerde et postmodum dedimus ipsum officum tibi Mahaluxio Alcoquini, iudeo, in tota vita tua, cum carta nostra, ut in ea continetur, et modo dictus Mosse peterit dictum officium sibi reddi debere; tandem ipse Mosse, cum esset ipsum ad inquisicionem procedere vellemus, voluit magis renunciare dicte donacioni nostre quam subire inquisicionem predictam, quapropter, revocantes cum presenti carta et irritantes dictam donacionem factam Mosse predicto de dicto officio, pro eo quia nos in dicta inquisicione cessamus, per nos et nostros laudamus, concedimus et confirmamus tibi dicto Mahaluxio in tota vita tua dictum officium pensatoris dicti pensi nostri Ilerde, ita videlicet quod tu, vel quem volueris loco tui, sitis pensator dicti pensi et teneatis dictum officium, et percipias inde ea iura pro officio et labore vestro que, secundum cartam nostram donacionis quam inde a nobis habetis, inde recipere debetis, prout in carta ipsa donacionis plenius continetur, non obstante donacione predicta quam inde fecerimus dicto Mosse, ut superius est iam dictum. Mandantes et cetera.
+Data Ilerde IXº kalendas madii anno Domini MºCCºLXXº quinto.
+q: {ref1} Tot i que als documents dels regnats de Jaume I, Pere II i Alfons II no apareix mai que Maaluix sigui un joglar, ha de tractar-se del mateix així assenyalat al regnat de Jaume II, on mai figura el cognom Alcoquí (vg. doc. IV.19), atès que gaudeix de la mateixa donació dels ingressos del pes de Lleida (vg. doc. IV.49) i sobre la carn d’Osca (vg. doc. IV.63); al seguici de l’infant Pere de finals dels anys 1260 sovint apareix un Maaluix.
+

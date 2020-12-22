@@ -1,0 +1,14 @@
+a: I.27
+b: [1275]
+f: En una relació de pagaments del rei Jaume I n’hi ha un de 72 sous a uns trompadors i un altre de 36 sous a Arnau de la Tambor [joglar].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 108r-v
+p: […]
+{curs}Item{/curs}, los trompadors, {curs}LXXII solidos{/curs}.
+[…]
+{curs}Item{/curs}, Arnau de la Tambor, {curs}XXXVI solidos{/curs}.
+[…]
+

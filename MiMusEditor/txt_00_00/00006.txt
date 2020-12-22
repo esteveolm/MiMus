@@ -1,0 +1,17 @@
+a: I.5
+b: 1246
+c: gener
+d: 24
+f: En el repartiment de terres al regne de València s’assignen quatre jovades de terra a Tora (Alzira), una casa i un hort a Pere, joglar [Pere Joglar?],{nota1}{ref1} i a la seva esposa Marquesa.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 6
+l: f. 21v (primera numeració)
+m: Bofarull 1856, p. 362.
+p: Anno MCCXL quinto.
+[…] Petrus, ioculator, et Marquesia, uxor eius: quatuor iovatas in Tora, et domos /de Hamet Avinsargen, et ortus de Hamet Alacon\.
+IX kalendas februarii.
+q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però no es pot descartar que funcioni com a cognom/sobrenom de Pere i, per tant, hem assenyalat aquesta possibilitat. Si {curs}Joglar{/curs} fos el cognom de Pere, és probable que es pugui identificar amb un dels dos Pere Joglar, joglars, coetanis, o amb ambdós, si és que fossin la mateixa persona.
+{ref1} La identificació amb [Pere Joglar?] implica marcar a la BD com si pogués ser: Pere Joglar, joglar (distintiu: germà de Centpunys), i Pere Joglar, joglar (distintiu: de Galícia). Per tant, a més d’un Pere, joglar (amb un únic document, aquest), aquí hi haurem de marcar aquests dos Pere Joglar, joglar (distintius: “de Galícia” i “germà de Centpunys”).
+

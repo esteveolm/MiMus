@@ -56,6 +56,8 @@ public class DocumentDao extends UnitDao<Document> {
 		sql += "?)";
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setInt(1, unit.getId());
+		//stmt.setInt(1, 0);
+		//stmt.setInt(1, insertGetNextId());
 		stmt.setString(2, unit.getNumbering());
 		stmt.setInt(3, unit.getDate().getYear1());
 		stmt.setInt(4, unit.getDate().getYear2());
@@ -113,6 +115,19 @@ public class DocumentDao extends UnitDao<Document> {
 			}
 		}
 		return -1;
+	}
+
+	public int insertGetNextId() throws SQLException {
+		String sql = "SELECT DISTINCT max(document.id) as maxid "
+				+ "FROM document "
+				+ "WHERE document.id < 90000";
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		int newId = 0;
+		while (rs.next()) {
+			newId = rs.getInt("maxid") + 1;
+		}
+		return newId;
 	}
 
 	protected Document make(ResultSet rs) throws SQLException {
@@ -352,4 +367,138 @@ public class DocumentDao extends UnitDao<Document> {
 	public String getTable() {
 		return "document";
 	}
+
+
+	/**
+	 * Deletes Document from the table document by ID and all other entities that depend on it.
+	 */
+	public void deleteWithDependencies(int idDocument) throws SQLException {
+		PreparedStatement stmt;
+		String sql;
+		int stmtResult;
+		
+		
+		/* We use transactional mode because the update happens in stages */
+		getConnection().setAutoCommit(false);
+
+		try {
+	
+			// esborrat de relacions
+	
+			System.out.println("Deleting relacions... ");
+			
+			sql = "DELETE rt FROM te_ofici rt, relation r WHERE rt.id = r.relation_id and r.relation_type_id = 1 and r.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " te_ofici deleted. ");
+			
+			sql = "DELETE rt FROM te_casa rt, relation r WHERE rt.id = r.relation_id and r.relation_type_id = 2 and r.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " te_casa deleted. ");
+			
+			sql = "DELETE rt FROM serveix_a rt, relation r WHERE rt.id = r.relation_id and r.relation_type_id = 3 and r.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " serveix_a deleted. ");
+	
+			sql = "DELETE rt FROM resideix_a rt, relation r WHERE rt.id = r.relation_id and r.relation_type_id = 4 and r.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " resideix_a deleted. ");
+	
+			sql = "DELETE rt FROM moviment rt, relation r WHERE rt.id = r.relation_id and r.relation_type_id = 4 and r.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " moviment deleted. ");
+	
+			sql = "DELETE FROM relation WHERE document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " relation deleted. ");
+	
+			System.out.println("Done.");
+
+			// esborrat de transcripcions d'instàncies d'entitat
+	
+			System.out.println("Deleting transcripcions... ");
+
+			sql = "DELETE t FROM transcription t, entity_instance ei WHERE t.entity_instance_id = ei.id and ei.document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " transcription deleted. ");
+			System.out.println("Done.");
+
+			// esborrat de d'instàncies d'entitats
+	
+			System.out.println("Deleting instancies... ");
+			
+			sql = "DELETE FROM entity_instance WHERE document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " entity_instance deleted. ");	
+			System.out.println("Done.");
+
+			// esborrat de referencies
+	
+			System.out.println("Deleting referencies... ");
+
+			sql = "DELETE FROM referencia WHERE document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " referencia deleted. ");
+			System.out.println("Done.");
+
+			// esborrat de notes
+	
+			System.out.println("Deleting notes... ");
+
+			sql = "DELETE FROM note WHERE document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " note deleted. ");
+			System.out.println("Done.");
+
+			// esborrat de materies
+	
+			System.out.println("Deleting materies... ");
+
+			sql = "DELETE FROM has_materia WHERE document_id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " has_materia deleted. ");
+			System.out.println("Done.");
+
+			// esborrat del document
+			
+			System.out.println("Deleting document... ");
+
+			sql = "DELETE FROM document WHERE id = ?";
+			stmt = getConnection().prepareStatement(sql);
+			stmt.setInt(1, idDocument);
+			stmtResult = stmt.executeUpdate();
+			System.out.println(stmtResult + " document deleted. ");
+			System.out.println("Done.");
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			getConnection().rollback();
+		}
+		
+		getConnection().setAutoCommit(true);
+
+		
+	}
+
 }

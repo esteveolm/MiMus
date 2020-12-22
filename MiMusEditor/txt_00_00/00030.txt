@@ -1,0 +1,16 @@
+a: I.29
+b: [1275]
+c: [juny]
+e: El Voló
+f: En una relació de pagaments del rei Jaume I per ració n’hi ha un de 8 sous a uns trompadors i un altre de 16 sous a Arnau de la Tambor [joglar].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 114v-117v
+p: Esta és carta de ració per VI dies del Volon.
+[…]
+Arnau de la Tambor, I bèstia, {curs}VIII solidos{/curs}.
+Trompadors, II bèsties, {curs}XVI solidos{/curs}.
+[…]
+

@@ -1,0 +1,14 @@
+a: I.13
+b: 1265
+c: juny
+d: 13
+e: Barbastre
+f: El rei Jaume I enfranqueix de certs tributs Guam de Volenters, esposa del difunt Pere Gastaví, mim.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 13
+l: f. 274r
+p: Per nos et nostros infranquimus te Guam de Volenters, uxorem Petri Gastavi, mimmi olim defuncti, toto tempore vite tue, cum omnibus bonis tuis mobilibus et immobilibus ubicumque sint, ab omni peyta, exercitu et cavalgada ac redemcionibus eorundem, et ab omni monedatico et servicio, ac quibusdam aliquas demandas et exaccionibus regalibus, ita videlicet quod in tota vita tua per te vel bonis tuis non teneas dare vel solvere aliquid in predictis, set sis cum omnibus bonis tuis libera, quitia, penitus absoluta de omnibus antedictis dum vita fuerit tibi comes. Mandantes firmiter baiulis, iusticiis, çalmedinis, merinis, portariis et universis aliis officialibus nostris, tam presentibus quam futuris, quod predictum infranquimentum et omnia supradicta in tota vita tua firmam habeant et observent et faciant firmiter observari.
+Data apud Barbastrum Vº idus iunii anno Domini MºCCºLX quinto.
+

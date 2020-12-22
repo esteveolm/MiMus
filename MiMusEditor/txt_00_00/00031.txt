@@ -1,0 +1,16 @@
+a: I.30
+b: [1275]
+c: [juny]
+e: Pontós
+f: En una relació de pagaments del rei Jaume I per quitació n’hi ha un per a uns trompadors i un altre per a Arnau de la Tambor [joglar].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 118r-122r
+p: Esta és la carta de quitacion de V dies de las tiendas denant Pontons.
+[…]
+Arnalt de la Tambor, I bèstia.
+Trompadors, II bèsties.
+[…]
+

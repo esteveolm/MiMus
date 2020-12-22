@@ -1,0 +1,15 @@
+a: I.28
+b: [1275]
+e: [Perpinyà?]
+f: En una relació de pagaments del rei Jaume I per ració n’hi ha un per a uns trompadors i un altre per a Arnau de la Tambor [joglar].
+g: ACA
+h: Cancelleria
+j: reg.
+k: 33
+l: f. 111v-113v
+p: Esta és carta de ració de Perpiynà per II dies complitz et per IIII dies pan et carn.
+[…]
+Trompadors, II bèsties.
+Arnau de la Tambor, I bèstia.
+[…]
+

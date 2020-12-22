@@ -1,0 +1,57 @@
+a: I.4
+b: 1239
+c: abril
+d: 9
+e: València
+f: En el repartiment de la ciutat de València s’assignen diverses cases als joglars Pintiner, Assalt [de Vasats], Pere{ref1} i un anònim, i als trompadors Pere, Bernat, Peregrí i Ferriol.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 7
+l: f. 7v, 20v, 26r, 30r, 31r, 33v, 61v, 62r, 62v, 63r, 63v.
+m: Bofarull 1856, p. 527, 528, 533, 563, 572, 574, 578, 630, 631, 633, 634, 636, 637.
+p: Incipimus ad portam Bovatella.
+[…]
+{curs}Juglar{/curs}: domum Açan Alfarrar.
+[…]
+Pintiner, {curs}juglar{/curs}: domum Mahomat Anprunna.
+[…]
+In partibus Dertuse.
+[…]
+Asalt, {curs}joglar{/curs}: domum <domum> Chat Abençadamon, vendidit.
+[…]
+In vico Rayz Abeçolta.
+[…]
+Petro, {curs}juglar{/curs}: domum Amet Albolochig et camera, vendit.
+[…]
+In vico sarracenorum.
+[…]
+Petro, {curs}trompador{/curs}: domum Çahat Sancte Marini.
+[…]
+Bernardo, {curs}trompador{/curs}: domum Amet Amirleati.
+[…]
+Partita Sancte Marie que vadit usque in partitam de Monblanc et in circuitu {curs}alcàçar{/curs} domini regis.
+[…]
+Peregrinus, {curs}trompador{/curs}: domum Mahomat Aboyale.
+[…]
+In partita de Tirasona.
+[…]
+Petro, {curs}juglar{/curs} II.
+[…]
+In vico Calataiub.
+[…]
+Assalt, {curs}joglar{/curs}.
+[…]
+In vico sarracenorum.
+[…]
+Petro, {curs}trompador{/curs}.
+[…]
+Bernardo, {curs}trompador{/curs}.
+[…]
+De archo ante ecclesiam Beate Marie que vadit usque in vicum de Monblanc.
+Ferriol, {curs}trompador{/curs}.
+[…]
+Peregrinus, {curs}trompador{/curs}.
+[…]
+q: {ref1} Aquest Pere, joglar, només té aquest document assignat.
+

@@ -1,0 +1,16 @@
+a: I.18
+b: 1271
+c: setembre
+d: 8
+e: Saragossa
+f: El rei Jaume I mana a Jafudà [de la Cavalleria, batlle de Saragossa] que pagui 60 sous a Pero Palma, joglar, per vestits.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 18
+l: f. 15v
+m: Miret i Sans 1908, p. 204; Miret i Sans 1918, p. 453.{nbib1}
+o: Anglès 1935, p. 320.
+p: {curs}Anno Domini MºCCºLXX primo VI idus septembris in Cesaraugusta{/curs}, manà donar lo senyor rey a·n Jafudà a Pero Palma, juglar, {curs}LX solidos{/curs} per vestir.
+q: {nbib1} Amb error de foli.
+

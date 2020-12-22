@@ -1,0 +1,16 @@
+a: I.14
+b: 1265
+c: juliol
+d: 2
+f: En els comptes de les rendes de la vila de Gandia de l’any 1264 presentats per Ossó [de la Reina], batlle de la vila, a Mateu Babot hi ha un pagament fet per Arnau, joglar.{nota1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 17
+l: f. 37r-38r
+m: Burns 1985-2007, III, doc. 611.
+n: Martínez Ferrando 1934, doc. 599.
+p: Sexto nonis iulii anno Domini millesimo ducentesimo sexagesimo quinto computav[i]t cum Matheo Baboti [Os]sonus, baiulus de Gandia, de redditibus de Gandia anni millesimi ducentesimi LX quarti.
+Anno Domini MºCCºLXº quarto, in mense ianuarii, redditus domini regis in Gandia: […] item, Arnau, {curs}juglar{/curs}, X solidos.
+q: {nota1} Considerem que {curs}joglar{/curs} fa referència a l’ofici, però no es pot descartar que funcioni com a cognom/sobrenom d’Arnau: Arnau Joglar.
+

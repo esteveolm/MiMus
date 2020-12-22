@@ -1,0 +1,13 @@
+a: I.2
+b: 1235
+c: març
+d: 17
+e: Tarragona
+f: En el marc de la cort general de Tarragona de 1235, el rei Jaume I legisla sobre els joglars i estableix: [7] que ni el rei ni cap home o dona doni res a cap joglar, joglaressa, soldadera o cavaller salvatge, però que tant el rei com qualsevol altre noble pugui prendre amb ell un joglar i donar-li el que desitgi; [9] que cap joglar, joglaressa o soldadera comparteixi la taula o la {curs}gausapa{/curs} (manta) d’un cavaller o de la seva dona, ni mengin ni jeguin amb cap dona de cavaller ni les besin.
+m: Gonzalvo 1994, p. 186-187.
+p: […]
+[VII.] Item, statuimus quod nos, nec aliquis alius homo nec domina, demus aliquid alicui ioculatori vel ioculatrici, sive soldadarie seu milite {curs}salvatge{/curs}, sed nos vel alius nobilis possit eligere et habere ac ducere secum unum ioculatorem, et dare sibi quod voluerit.
+[…]
+[IX.] Item, statuimus quod ioculator, nec ioculatrix, nec soldataria, presentes vel futuri, nec illa que olim fuit soldataria, sedeant ad mensam militis nec domine alicuius, nec ad gausape eorundem, nec comedant nec iaceant cum aliqua dominarum in uno lecto vel in una domo, nec osculentur aliquam earundem.
+[…]
+

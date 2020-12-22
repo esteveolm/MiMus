@@ -1,0 +1,17 @@
+a: I.10
+b: 1263
+c: maig
+d: 2
+e: Lleida
+f: El rei Jaume I concedeix permís a Pere, joglar,{ref1} per alçar un braç les cases que té a Saragossa, prop de la porta de Toledo.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 12
+l: f. 27v
+m: Anglès 1935, p. 320 (ed. parcial).{nbib1}
+p: Per nos et nostros concedimus et damus liberum et plenum posse tibi Petro, ioculatori, hedificandi et faciendi hedificia quecumque volueris et opera de altitudine uni braci in domibus tuis quas habes in Cesaraugusta, iuxta portam de Toledo, inter domos monasterii de Berola et domos Hospitali Iherosolimitano, supra opera et hedificia dictarum domorum que modo ibi sunt, et sic est dictis hedificiis operibus et melioramentis habeatis tu et tui, et que vel quos volueris, dictas domos teneatis et tenetis ad omnes voluntates tuas et tuorum inde libere et perpetuo faciendas. Mandamus çavalmedina, iuratis et aliis officialibus et subditis nostris quod contra hec non veniant nec aliquem venire permitant aliquo iure vel aliqua racione.
+Data Ilerde VI nonas madii anno Domini MºCCºLXº tercio.
+q: {ref1} Aquest Pere, joglar, només té aquest document assignat.
+{nbib1} Amb error de data.
+

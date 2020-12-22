@@ -1,0 +1,17 @@
+a: I.6
+b: 1248
+c: maig
+d: 25
+f: En el repartiment de terres al regne de València s’assignen unes cases a Xàtiva, quatre jovades de terra a l’Ènova i mitja jovada de vinya a Ferran, joglar.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 6
+l: f. 6r i 88r (primera numeració)
+m: Bofarull 1856, p. 337 i 491.
+p: In Enova.
+[…] Ferrando, ioculatori: II iovatas terre in Enova.
+[…]
+Ferrando, ioculatori: domos in Xativa franchas et liberas, et unam domum que contiguatur cum muro, et duas iovatas terre in termino de Yeneva, et mediam iovatam vinearum.
+VIII kalendas iunii.
+

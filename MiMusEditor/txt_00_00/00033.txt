@@ -1,0 +1,13 @@
+a: I.32
+b: 1276
+c: juliol
+d: 21
+e: Alzira
+f: El rei Jaume I reconeix deure 190 sous reials a Arnau de la Tambor, joglar, per quitació.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 22
+l: f. 68r
+p: Item, debet [{curs}scil.{/curs} dominus rex] Arnaldo de la Tambor, ioculatori, CXC solidos regales cum albarano pro eius quitacione.
+[Data Algezire XIIº kalendas augusti anno Domini MºCCºLXXº sexto.]

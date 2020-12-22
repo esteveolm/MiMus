@@ -1,0 +1,15 @@
+a: I.3bis
+b: 1238
+c: setembre
+d: 14
+e: València
+f: En el repartiment de terres al regne de València s’assignen una casa, tres jovades de terra a Benimoraix i un hort de tres faneques a Roteros a Assalt de Vasats, joglar.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 5
+l: f. 46r (primera numeració)
+m: Bofarull 1856, p. 213.
+p: Assaltus de Vasatz, /ioculator\: domos Çaat {ratllat}Axumereci{/ratllat} /cognato\ de Abincorecel, et III iovatas terre in {ratllat}campo{/ratllat} <in> Benimoraix, et ortum III fanecarum in Roteros.
+II idus septembris.
+

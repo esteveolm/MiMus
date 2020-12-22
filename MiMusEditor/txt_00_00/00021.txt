@@ -1,0 +1,15 @@
+a: I.20
+b: 1272
+c: agost
+d: 27
+e: Montpeller
+f: El rei Jaume I concedeix a Joan d’Aguilaniu sis jovades de terra a les Alcusses (Moixent) que havien estat de Pere Joglar [joglar].{ref1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 21
+l: f. 58r
+p: Noverint universi quod nos Iacobus, Dei gracia et cetera, per nos et nostros damus et concedimus vobis Iohanni de Agilaniu et tuis in perpetuum per hereditatem propriam, francham et liberam sex iovatas terre in loco vocato les Alcuces de Beniatas, que fuerunt de hereditate Petri Juglar, que affrontant ex una parte cum hereditate Raimundi de Rochaforte, et ex alia cum hereditate Raimundi Panicer, et ex alia cum hereditate Petri de Maçanet et ex alia (in) via publica. Quas sex iovatas terre, cum introhitibus et exhitibus, melioramentis ac suis pertinenciis universis, habeatis tu et tui ad dandum, vendendum, inpignorandum ac alienandum et ad omnes tuas tuorumque voluntates inde penitus faciendas perpetuo cui et quibus volueritis, sicut melius dici potest vel intelligi ad tuum et tuorum bonum et sincerum intellectum, exceptis militibus, sanctis, clericis et personis religiosis. Retinemus tamen in dicta donacione quod facias inde residenciam personalem, et quod hinc ad decem annos non vendas dictam hereditatem, et quod servatis inde tu et tui nobis et nostri sicut alii homines eiusdem loci pro suis hereditatibus servient.
+Data in Montepessulano VIº kalendas septembris anno Domini MºCCºLXXº secundo.
+q: {ref1} És Pere Joglar, joglar, distintiu: amb propietats a les Alcusses. Cf. doc. I.9, I.12, I.19, I.20, I.21, I.24.
+

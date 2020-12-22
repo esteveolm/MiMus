@@ -1,0 +1,15 @@
+a: I.11
+b: 1263
+c: setembre
+d: 2
+e: Cervera
+f: El rei Jaume I enfranqueix de certs tributs Jordà, joglar, i la seva esposa Maria.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 12
+l: f. 113r
+o: Anglès 1935, p. 320.
+p: Per nos et nostros enfranquimus et franchum et liberum facimus te Iordanem, ioculatorem, et uxorem tuam Mariam in tota vita vestra ab omni questia, exercitu et cavalcata et eorum redempcionibus, et ab omni qualibet exaccione regali, ita quod a predictis omnibus et singulis sitis franchi, liberi et inmunes, cum omnibus bonis vestris habitis et habendis ubique, dum vobis fuerit vita comes. Mandantes baiulis, curiis et universis aliis officialibus et subditis nostris presentibus et futuris quod hanc franquitatem a nobis tibi concessa firmam habeant et observent et faciant ab omnibus inviolabiliter observari.
+Data Cervarie II nonas septembris anno Domini MºCCºLXº tercio.
+

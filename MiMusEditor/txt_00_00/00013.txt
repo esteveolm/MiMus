@@ -1,0 +1,20 @@
+a: I.12
+b: 1265
+c: abril
+d: 9
+e: Barcelona
+f: El rei Jaume I confirma a Pere de Roca, escrivà reial, la venda d’unes alqueries a les Alcusses (Moixent) que li ha fet Pere Joglar [joglar],{ref1} malgrat que aquest les tenia amb la prohibició de vendre-les, empenyorar-les o alienar-les.
+g: ACA
+h: Cancelleria
+j: reg.
+k: 13
+l: f. 264r
+m: Burns 1985-2007, III, doc. 604.{nbib1}
+n: Martínez Ferrando 1934, doc. 594.
+o: Anglès 1935, p. 320.
+p: Petri de Rocha.
+Per nos et nostros, ex certa sciencia, laudamus, approbamus et in omnibus et per omnia confirmamus vobis Petro de Roca, scriptori nostro, et vestris, im perpetuum vendicionem quam Petrus Juglar vobis fecit de alqueriis de Alcuces et de Beniataf, sitis in regno Valencie ultra Xucharum, inter Billenam et Moxenum, prout in carta vendicionis inde vobis facta plenius continetur. Ita scilicet quod volumus et concedimus ut vos et vestri, seu quos vos volueritis sive vestri, habeatis ipsas alquerias cum terminis et pertinenciis omnibus earundem ad habendum, tenendum, possidendum et expletandum, et ad vendendum, dandum et impignorandum et alienandum, et ad vestras voluntates /inde penitus\ faciendas cuilibet, exceptis militibus et clericis et locis religiosis, /non obstante quod in confirmacione a nobis facta //dicto\\ Petro Juglar super predictis alqueriis et aliis hereditatibus et possessionibus suis contineatur quod de ipsis non possit in vita sua vendere aliquid, impignorare seu alienare alicui persone\, salvo tamen nobis et nostris semper quod vos et vestris nobis et nostris pro predictis alqueriis ducentos solidos regalium Valencie nobis {ratllat}pro censu{/ratllat} facere teneamini in festo Natalis Domini annuatim, /quos dictus Petrus Juglar inde nobis facere tenebatur, secundum quod in carta inter nos et ipsum facta plenius continetur\ {ratllat}et salvo nobis et nostris omni alio pleno iure et dominio nostro{/ratllat}. Nos autem promitimus vobis quod faciemus vos et vestros habere, tenere et pacifice possidere dictas alquerias cum terminis suis et pertinenciis universis, vobis et vestris dantibus et solventibus nobis et nostris annuatim predictos ducentos solidos {ratllat}censuales{/ratllat} /annuales\ ut superius continetur.
+Data Barchinone V idus aprilis anno Domini MºCCLX quinto.
+q: {ref1} És Pere Joglar, joglar, distintiu: amb propietats a les Alcusses. Cf. doc. I.9, I.12, I.19, I.20, I.21, I.24.
+{nbib1} Burns (1985-2007, p. 134) hipotitza que es tracti de Peret de Vera, tanmateix sembla difícil.
+

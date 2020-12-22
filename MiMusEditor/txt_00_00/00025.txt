@@ -1,0 +1,15 @@
+a: I.24
+b: 1273
+c: maig
+d: 29
+e: València
+f: El rei Jaume I concedeix a Ferrer Gilabert sis jovades de terra a les Alcusses (Moixent) que havien estat de Pere Joglar [joglar].{ref1}
+g: ACA
+h: Cancelleria
+j: reg.
+k: 21
+l: f. 151r
+p: Noverint universi, et cetera, per nos et nostros damus et concedimus tibi Fferrario Guillaberti et tuis pro hereditatem propriam, francham et liberam sex iovatas terre in loco vocato les Alcuçes de Beniataf que fuerunt de hereditate Petri Juglar, et affrontant cum hereditate Maçaneti, et cum hereditate Iohannis Boteiller, et cum hereditate Raimundi Panicerii et cum hereditate Arnaldi de Boxadors. Quas sex iovatas terre cum introitibus et exitibus, melioramentis ac suis pertinenciis universis habeatis tu et tui ad dandum, vendendum, impignorandum ac alienandum, et ad omnes tuas et tuorum volu[nt]ates inde cui et quibus volueritis penitus perpetuo faciendis, sicut melius et cetera. Retinemus tamen in dicta donacione quod facias ibi residenciam personalem et quod hinc ad XX annos non vendatis predictam hereditatem, et quod faciatis inde tu et tui nobis et nostris servicium sicut alii homines eiusdem loci pro suis hereditatibus nobis facient.
+Data Valencie IIIIº kalendas iunii anno Domini MºCCºLXXº tercio.
+q: {ref1} És Pere Joglar, joglar, distintiu: amb propietats a les Alcusses. Cf. doc. I.9, I.12, I.19, I.20, I.21, I.24.
+
