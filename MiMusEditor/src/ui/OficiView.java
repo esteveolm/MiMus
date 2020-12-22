@@ -36,6 +36,7 @@ public class OficiView extends EntityView<Ofici> {
 	private Text textTerme;
 	private Combo comboEspecialitat;
 	private Combo comboInstrument;
+	private Text textObs;
 	
 	public OficiView() {
 		super();
@@ -104,6 +105,7 @@ public class OficiView extends EntityView<Ofici> {
 				}
 			}
 		});
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);		
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -134,7 +136,8 @@ public class OficiView extends EntityView<Ofici> {
 						textNomComplet.getText(),
 						textTerme.getText(),
 						comboEspecialitat.getSelectionIndex(),
-						inst);
+						inst,
+						textObs.getText());
 				return ofici;
 	}
 	
@@ -157,6 +160,7 @@ public class OficiView extends EntityView<Ofici> {
 			comboInstrument.deselectAll();	/* Clearer if field gets empty */
 			comboInstrument.setEnabled(false);
 		}
+		textObs.setText(ent.getObservacions());
 		
 	}
 
@@ -171,16 +175,14 @@ public class OficiView extends EntityView<Ofici> {
 	@Override
 	public void editAction() {
 		super.editAction();		
-		if (Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()].equals("instrument") ||
-			Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()].equals("artesà")) {
-		} else {
+		if (!Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()].equals("instrument") &&
+			!Ofici.ESPECIALITATS[comboEspecialitat.getSelectionIndex()].equals("artesà")) {
 			comboInstrument.deselectAll();
 			comboInstrument.setEnabled(false);
 		}
 	}
 
-	
-	
+		
 	@Override
 	public void clearControlValues() {
 		super.clearControlValues();
@@ -188,14 +190,6 @@ public class OficiView extends EntityView<Ofici> {
 		comboInstrument.setEnabled(false);
 	}
 
-	@Override
-	public void refreshAction() {
-		super.refreshAction();
-		//comboInstrument.deselectAll();
-	}
-
-	
-	
 	@Override
 	public List<Ofici> retrieveUnits() throws SQLException {
 		return new OficiDao().selectAll();

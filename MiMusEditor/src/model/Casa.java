@@ -12,13 +12,16 @@ public class Casa extends Entity {
 	private String nomComplet;
 	private String titol;
 	private String cort;
+	private String observacions;
 	
-	public Casa(int id, int specId, String nomComplet, String titol, String cort) {
+	
+	public Casa(int id, int specId, String nomComplet, String titol, String cort, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.titol = titol;
 		this.cort = cort;
+		this.observacions = observacions;
 	}
 
 	/**
@@ -53,4 +56,13 @@ public class Casa extends Entity {
 	public void setCort(String cort) {
 		this.cort = cort;
 	}
+
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+	
 }

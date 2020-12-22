@@ -25,6 +25,7 @@ public class CasaView extends EntityView<Casa> {
 	private Text textNomComplet;
 	private Text textTitol;
 	private Text textCort;
+	private Text textObs;
 	
 	public CasaView() {
 		super();
@@ -50,6 +51,7 @@ public class CasaView extends EntityView<Casa> {
 		textNomComplet = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textTitol = addTextControl(sectAdd.getParent(), "Títol:");
 		textCort = addTextControl(sectAdd.getParent(), "Cort:");
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -72,7 +74,8 @@ public class CasaView extends EntityView<Casa> {
 				Casa casa = new Casa(0, 0,
 						textNomComplet.getText(),
 						textTitol.getText(), 
-						textCort.getText());
+						textCort.getText(),
+						textObs.getText());
 				return casa;
 	}
 	
@@ -81,6 +84,7 @@ public class CasaView extends EntityView<Casa> {
 		textNomComplet.setText(ent.getNomComplet());
 		textTitol.setText(ent.getTitol());
 		textCort.setText(ent.getCort());
+		textObs.setText(ent.getObservacions());
 	}
 
 	@Override

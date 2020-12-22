@@ -13,15 +13,17 @@ public class GenereLiterari extends Entity {
 	private String nomFrances;
 	private String nomOccita;
 	private String definicio;
+	private String observacions;
 	
 	public GenereLiterari(int id, int specId, String nomComplet, String nomFrances,
-			String nomOccita, String definicio) {
+			String nomOccita, String definicio, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.nomFrances = nomFrances;
 		this.nomOccita = nomOccita;
 		this.definicio = definicio;
+		this.observacions = observacions;
 	}
 	
 	/**
@@ -68,4 +70,13 @@ public class GenereLiterari extends Entity {
 	public void setDefinicio(String definicio) {
 		this.definicio = definicio;
 	}
+
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+	
 }

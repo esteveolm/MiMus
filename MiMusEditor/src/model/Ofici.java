@@ -24,15 +24,17 @@ public class Ofici extends Entity {
 	private String terme;
 	private int especialitat;
 	private Instrument instrument;
+	private String observacions;
 
 	public Ofici(int id, int specId, String nomComplet, String terme, 
-			int especialitat, Instrument instrument) {
+			int especialitat, Instrument instrument, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.setNomComplet(nomComplet);
 		this.terme = terme;
 		this.especialitat = especialitat;
 		this.instrument = instrument;
+		this.observacions = observacions;
 	}
 
 	/**
@@ -73,4 +75,13 @@ public class Ofici extends Entity {
 	public void setInstrument(Instrument instrument) {
 		this.instrument = instrument;
 	}
+
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+	
 }

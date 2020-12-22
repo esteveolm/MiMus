@@ -30,6 +30,7 @@ public class InstrumentView extends EntityView<Instrument> {
 	private Combo comboFamily;
 	private Combo comboClasse;
 	private Text textPart;
+	private Text textObs;
 		
 	public InstrumentView() {
 		super();
@@ -72,6 +73,7 @@ public class InstrumentView extends EntityView<Instrument> {
 		});
 		
 		textPart = addTextControl(sectAdd.getParent(), "Part:");
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -106,7 +108,8 @@ public class InstrumentView extends EntityView<Instrument> {
 							textNom.getText(),
 							comboFamily.getSelectionIndex(),
 							comboClasse.getSelectionIndex(),
-							textPart.getText());
+							textPart.getText(),
+							textObs.getText());
 					return inst;
 				}
 	}
@@ -119,6 +122,7 @@ public class InstrumentView extends EntityView<Instrument> {
 				Instrument.CLASSES[comboFamily.getSelectionIndex()]);
 		comboClasse.select(ent.getClasse());
 		textPart.setText(ent.getPart());
+		textObs.setText(ent.getObservacions());
 	}
 
 	@Override

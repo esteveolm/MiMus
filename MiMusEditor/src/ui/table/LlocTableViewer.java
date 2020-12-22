@@ -24,7 +24,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 
 	public LlocTableViewer(Composite parent, List<Lloc> llocs) {
 		super(parent, llocs);
-		String[] aux = {"Nom complet", "Àrea", "Regne"};
+		String[] aux = {"Nom complet", "Àrea", "Regne", "Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -34,6 +34,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -60,6 +61,8 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 				return Lloc.AREES[lloc.getArea()];
 			case 2:	// Regne (ComboBox)
 				return Lloc.REGNES[lloc.getArea()][lloc.getRegne()];
+			case 3: 
+				return lloc.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

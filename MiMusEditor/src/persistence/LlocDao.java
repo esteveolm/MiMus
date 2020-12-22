@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Lloc;
 
 /**
@@ -28,7 +26,7 @@ public class LlocDao extends EntityDao<Lloc> {
 
 	@Override
 	public int insertSpecificEntity(Lloc unit, int entId) throws SQLException {
-		String[] insertColumns = {"entity_id", "nom_complet", "regne", "area"};
+		String[] insertColumns = {"entity_id", "nom_complet", "regne", "area", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -43,6 +41,7 @@ public class LlocDao extends EntityDao<Lloc> {
 		stmt.setString(2, unit.getNomComplet());
 		stmt.setInt(3, unit.getRegne());
 		stmt.setInt(4, unit.getArea());
+		stmt.setString(5, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -54,8 +53,9 @@ public class LlocDao extends EntityDao<Lloc> {
 		String nomComplet = rs.getString("nom_complet");
 		int regne = rs.getInt("regne");
 		int area = rs.getInt("area");
+		String observacions = rs.getString("observacions");
 		
-		return new Lloc(id, specId, nomComplet, regne, area);
+		return new Lloc(id, specId, nomComplet, regne, area, observacions);
 	}
 
 	@Override
@@ -68,14 +68,16 @@ public class LlocDao extends EntityDao<Lloc> {
 		String sql = "UPDATE lloc "
 				+ "SET nom_complet=?, "
 				+ "regne=?, "
-				+ "area=? "
+				+ "area=?, "
+				+ "observacions=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, unit.getNomComplet());
 		stmt.setInt(2, unit.getRegne());
 		stmt.setInt(3, unit.getArea());
-		stmt.setInt(4, unit.getSpecificId());
+		stmt.setString(4, unit.getObservacions());
+		stmt.setInt(5, unit.getSpecificId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {

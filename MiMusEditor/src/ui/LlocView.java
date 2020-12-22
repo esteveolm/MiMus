@@ -28,6 +28,7 @@ public class LlocView extends EntityView<Lloc> {
 	private Text textNomComplet;
 	private Combo comboArea;
 	private Combo comboRegne;
+	private Text textObs;
 	
 	public LlocView() {
 		super();
@@ -65,6 +66,7 @@ public class LlocView extends EntityView<Lloc> {
 				comboRegne.select(0);
 			}
 		});
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -95,7 +97,8 @@ public class LlocView extends EntityView<Lloc> {
 						0, 0,
 						textNomComplet.getText(), 
 						comboRegne.getSelectionIndex(), 
-						comboArea.getSelectionIndex());
+						comboArea.getSelectionIndex(),
+						textObs.getText());
 				return lloc;
 	}
 		
@@ -111,6 +114,7 @@ public class LlocView extends EntityView<Lloc> {
 		comboRegne.setItems(
 				Lloc.REGNES[comboArea.getSelectionIndex()]);
 		comboRegne.select(ent.getRegne());
+		textObs.setText(ent.getObservacions());
 	}
 
 	@Override

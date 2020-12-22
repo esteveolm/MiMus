@@ -23,7 +23,7 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 
 	public GenereTableViewer(Composite parent, List<GenereLiterari> generes) {
 		super(parent, generes);
-		String[] aux = {"Nom complet", "Nom francès", "Nom occità", "Definició"};
+		String[] aux = {"Nom complet", "Nom francès", "Nom occità", "Definició","Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -34,6 +34,7 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -63,6 +64,8 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 				return gen.getNomOccita();
 			case 3:	// Definicio (Text)
 				return gen.getDefinicio();
+			case 4:	
+				return gen.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

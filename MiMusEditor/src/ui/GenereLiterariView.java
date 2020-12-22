@@ -26,6 +26,8 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 	private Text textNomFrances;
 	private Text textNomOccita;
 	private Text textDefinicio;
+	private Text textObs;
+	
 	
 	public GenereLiterariView() {
 		super();
@@ -48,6 +50,7 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 		textNomFrances = addTextControl(sectAdd.getParent(), "Nom francès:");
 		textNomOccita = addTextControl(sectAdd.getParent(), "Nom occità:");
 		textDefinicio = addTextControl(sectAdd.getParent(), "Definició:");
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -72,7 +75,8 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 						textNombreCompleto.getText(), 
 						textNomFrances.getText(), 
 						textNomOccita.getText(), 
-						textDefinicio.getText());
+						textDefinicio.getText(),
+						textObs.getText());
 		return gen;
 	}
 		
@@ -87,6 +91,7 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 		textNomFrances.setText(ent.getNomFrances());
 		textNomOccita.setText(ent.getNomOccita());
 		textDefinicio.setText(ent.getDefinicio());
+		textObs.setText(ent.getObservacions());
 	}
 
 	@Override

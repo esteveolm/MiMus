@@ -37,13 +37,15 @@ public class Lloc extends Entity {
 	private String nomComplet;
 	private int regne;
 	private int area;
+	private String observacions;
 	
-	public Lloc(int id, int specId, String nomComplet, int regne, int area) {
+	public Lloc(int id, int specId, String nomComplet, int regne, int area, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nomComplet = nomComplet;
 		this.regne = regne;
 		this.area = area;
+		this.observacions = observacions;
 	}
 
 	/**
@@ -80,4 +82,13 @@ public class Lloc extends Entity {
 	public void setArea(int area) {
 		this.area = area;
 	}
+
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+	
 }

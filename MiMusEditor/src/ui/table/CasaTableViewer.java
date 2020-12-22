@@ -23,7 +23,7 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 
 	public CasaTableViewer(Composite parent, List<Casa> cases) {
 		super(parent, cases);
-		String[] aux = {"Nom complet", "Títol", "Cort"};
+		String[] aux = {"Nom complet", "Títol", "Cort", "Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -33,6 +33,7 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 		editors[0] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -59,6 +60,8 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 				return casa.getTitol();
 			case 2:		// Cort
 				return casa.getCort();
+			case 3:		
+				return casa.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

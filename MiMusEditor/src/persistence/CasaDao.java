@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Casa;
 
 /**
@@ -28,7 +26,7 @@ public class CasaDao extends EntityDao<Casa> {
 
 	@Override
 	public int insertSpecificEntity(Casa unit, int entId) throws SQLException {
-		String[] insertColumns = {"entity_id", "nom_complet", "titol", "cort"};
+		String[] insertColumns = {"entity_id", "nom_complet", "titol", "cort", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -43,6 +41,7 @@ public class CasaDao extends EntityDao<Casa> {
 		stmt.setString(2, unit.getNomComplet());
 		stmt.setString(3, unit.getTitol());
 		stmt.setString(4, unit.getCort());
+		stmt.setString(5, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -54,8 +53,9 @@ public class CasaDao extends EntityDao<Casa> {
 		String nomComplet = rs.getString("nom_complet");
 		String titol = rs.getString("titol");
 		String cort = rs.getString("cort");
+		String observacions = rs.getString("observacions");
 		
-		return new Casa(id, specId, nomComplet, titol, cort);
+		return new Casa(id, specId, nomComplet, titol, cort, observacions);
 	}
 
 	@Override
@@ -68,14 +68,16 @@ public class CasaDao extends EntityDao<Casa> {
 		String sql = "UPDATE casa "
 				+ "SET nom_complet=?, "
 				+ "titol=?, "
-				+ "cort=? "
+				+ "cort=?, "
+				+ "observacions=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
 		stmt.setString(1, unit.getNomComplet());
 		stmt.setString(2, unit.getTitol());
 		stmt.setString(3, unit.getCort());
-		stmt.setInt(4, unit.getSpecificId());
+		stmt.setString(4, unit.getObservacions());
+		stmt.setInt(5, unit.getSpecificId());
 		
 		int result = stmt.executeUpdate();
 		if (result>0) {

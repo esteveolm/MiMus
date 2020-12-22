@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Instrument;
 import model.Ofici;
 
@@ -30,7 +28,7 @@ public class OficiDao extends EntityDao<Ofici> {
 	@Override
 	public int insertSpecificEntity(Ofici unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom_complet", "terme", "especialitat",
-				"instrument_id"};
+				"instrument_id", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -52,6 +50,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		} else {
 			stmt.setNull(5, java.sql.Types.BIGINT);
 		}
+		stmt.setString(6, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -64,6 +63,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		String terme = rs.getString("terme");
 		int especialitat = rs.getInt("especialitat");
 		int instrumentId = rs.getInt("instrument_id");
+		String observacions = rs.getString("observacions");
 		
 		/* 
 		 * Instrument foreign key uses specific key, not generic entity key. 
@@ -73,7 +73,7 @@ public class OficiDao extends EntityDao<Ofici> {
 		if (instrumentId>0) {
 			inst = new InstrumentDao(getConnection()).selectOne(instrumentId, true);
 		}
-		return new Ofici(id, specId, nomComplet, terme, especialitat, inst);
+		return new Ofici(id, specId, nomComplet, terme, especialitat, inst, observacions);
 	}
 
 	@Override
@@ -87,7 +87,8 @@ public class OficiDao extends EntityDao<Ofici> {
 				+ "SET nom_complet=?, "
 				+ "terme=?, "
 				+ "especialitat=?, "
-				+ "instrument_id=? "
+				+ "instrument_id=?, "
+				+ "observacions=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -100,7 +101,8 @@ public class OficiDao extends EntityDao<Ofici> {
 		} else {
 			stmt.setNull(4, java.sql.Types.BIGINT);
 		}
-		stmt.setInt(5, unit.getSpecificId());
+		stmt.setString(5, unit.getObservacions());
+		stmt.setInt(6, unit.getSpecificId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {

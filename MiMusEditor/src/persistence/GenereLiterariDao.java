@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jcraft.jsch.JSchException;
-
 import model.GenereLiterari;
 
 /**
@@ -29,7 +27,7 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 	@Override
 	public int insertSpecificEntity(GenereLiterari unit, int entId) throws SQLException {
 		String[] insertColumns = {"entity_id", "nom_complet", "nom_frances",
-				"nom_occita", "definicio"};
+				"nom_occita", "definicio", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -45,6 +43,7 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 		stmt.setString(3, unit.getNomFrances());
 		stmt.setString(4, unit.getNomOccita());
 		stmt.setString(5, unit.getDefinicio());
+		stmt.setString(6, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -57,9 +56,10 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 		String nomFrances = rs.getString("nom_frances");
 		String nomOccita = rs.getString("nom_occita");
 		String definicio = rs.getString("definicio");
+		String observacions = rs.getString("observacions");
 		
 		return new GenereLiterari(id, specId, nomComplet, nomFrances,
-				nomOccita, definicio);
+				nomOccita, definicio, observacions);
 	}
 
 	@Override
@@ -73,7 +73,8 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 				+ "SET nom_complet=?, "
 				+ "nom_frances=?, "
 				+ "nom_occita=?, "
-				+ "definicio=? "
+				+ "definicio=?, "
+				+ "observacions=?"
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -81,7 +82,8 @@ public class GenereLiterariDao extends EntityDao<GenereLiterari> {
 		stmt.setString(2, unit.getNomFrances());
 		stmt.setString(3, unit.getNomOccita());
 		stmt.setString(4, unit.getDefinicio());
-		stmt.setInt(5, unit.getSpecificId());
+		stmt.setString(5, unit.getObservacions());
+		stmt.setInt(6, unit.getSpecificId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {

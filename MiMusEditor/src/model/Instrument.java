@@ -45,15 +45,17 @@ public class Instrument extends Entity {
 	private int family;
 	private int classe;
 	private String part;
+	private String observacions;
 	
 	public Instrument(int id, int specId, String nom, 
-			int family, int classe, String part) {
+			int family, int classe, String part, String observacions) {
 		this.setId(id);
 		this.setSpecificId(specId);
 		this.nom = nom;
 		this.family = family;
 		this.classe = classe;
 		this.part = part;
+		this.observacions = observacions;
 	}
 	
 	/**
@@ -94,4 +96,13 @@ public class Instrument extends Entity {
 	public void setPart(String part) {
 		this.part = part;
 	}
+
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+	
 }

@@ -23,7 +23,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 
 	public InstrumentTableViewer(Composite parent, List<Instrument> instruments) {
 		super(parent, instruments);
-		String[] aux = {"Nom", "Família", "Classe", "Part"};
+		String[] aux = {"Nom", "Família", "Classe", "Part", "Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -34,6 +34,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -62,6 +63,8 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 				return Instrument.CLASSES[inst.getFamily()][inst.getClasse()];
 			case 3:	// Part (text)
 				return inst.getPart();
+			case 4: 
+				return inst.getObservacions();
 			default:	// This should never happen
 				return "";
 			}

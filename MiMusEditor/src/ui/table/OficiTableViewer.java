@@ -28,7 +28,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 	public OficiTableViewer(Composite parent, List<Ofici> oficis, 
 			List<Instrument> instruments) {
 		super(parent, oficis);
-		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument"};
+		String[] aux = {"Nom complet", "Terme genèric", "Especialitat", "Instrument", "Observacions"};
 		this.columnNames = aux;
 	}
 
@@ -39,6 +39,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 		editors[1] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[2] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		editors[3] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
+		editors[4] = new TextCellEditor(tv.getTable(), SWT.SINGLE);
 		return editors;
 	}
 
@@ -70,6 +71,8 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 				if (inst != null)
 					return inst.getLemma();
 				return "";	/* If no instrument, leave field blank */
+			case 4:
+				return ofici.getObservacions();
 			default:	// Shouldn't reach here
 				return "";
 			}

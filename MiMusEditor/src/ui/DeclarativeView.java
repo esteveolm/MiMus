@@ -82,7 +82,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 */
 	public DeclarativeView() {
 		super();
-		setStateAdd(true);
 		setSelectedId(0);
 	}
 
@@ -119,6 +118,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 */
 	public void addAction() {
 		clearControlValues();
+		isNew = true;
 		wasModified = false;
 		btnAdd.setEnabled(false);
 		btnEdit.setEnabled(false);					
@@ -145,6 +145,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	
 	
 	public void editAction() {
+		isNew = false;
 		wasModified = false;
 		btnAdd.setEnabled(false);
 		btnEdit.setEnabled(false);
@@ -171,7 +172,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		
 		tv.setInput(getUnits());
 		tv.refresh();
-		setStateAdd(true);
 		setSelectedId(0);
 		
 		btnAdd.setEnabled(true);
@@ -351,9 +351,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(wasModified) {
-					boolean success = saveEntity(isStateAdd());
+					boolean success = saveEntity();
 					if(!success) {
-						System.out.println("BBBBBBB"+success);
+						getStatusLabel().setText("Entity not saved");
 						return;
 					}
 				}
@@ -410,7 +410,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		
 	}
 	
-	public final boolean saveEntity(boolean isNew) {
+	public final boolean saveEntity() {
 		U newEntity = getUnitToSave();
 		
 		if(newEntity==null) {			
@@ -564,8 +564,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				/* Unchecked warning because selection is Object type */
 				Object o = getTv().getStructuredSelection().getFirstElement();
 				if (o != null) {
-					/* User selected a row from the table, move to Edit mode */
-					setStateAdd(false);
+					/* User selected a row from the table */
 					if(o instanceof Entity) {
 						setSelectedId(((Entity) o).getSpecificId());	/* Save ID */
 					} else {
@@ -573,8 +572,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 					}
 					
 					System.out.println("ID is " + getSelectedId());
-					//stateLabel.setText(STATE_EDIT);
-					//btnAdd.setText(BUTTON_EDIT);
 					fillFieldsFromSelection((U) o);
 					
 					setControlsEnabled(false);
@@ -584,11 +581,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 					/* Tell documents where entity is annotated */
 					fillAnnotationsLabel((U) o);
 				} else {
-					/* After an entity is edited, back to add mode */ 
-					setStateAdd(true);
+					/* After an entity is edited, no row selected */ 
+					
 					setSelectedId(0);
-					//stateLabel.setText(STATE_ADD);
-					//btnAdd.setText(BUTTON_ADD);
 					clearControlValues();
 					
 					/* Empty label for document annotations */
@@ -682,12 +677,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	}
 	public void setTv(TableViewer tv) {
 		this.tv = tv;
-	}
-	public boolean isStateAdd() {
-		return isNew;
-	}
-	public void setStateAdd(boolean state) {
-		this.isNew = state;
 	}
 	public int getSelectedId() {
 		return selectedId;

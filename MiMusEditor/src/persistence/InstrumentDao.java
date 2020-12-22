@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Instrument;
 
 /**
@@ -28,7 +26,7 @@ public class InstrumentDao extends EntityDao<Instrument> {
 
 	@Override
 	public int insertSpecificEntity(Instrument unit, int entId) throws SQLException {
-		String[] insertColumns = {"entity_id", "nom", "familia", "classe", "part"};
+		String[] insertColumns = {"entity_id", "nom", "familia", "classe", "part","observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -44,6 +42,7 @@ public class InstrumentDao extends EntityDao<Instrument> {
 		stmt.setInt(3, unit.getFamily());
 		stmt.setInt(4, unit.getClasse());
 		stmt.setString(5, unit.getPart());
+		stmt.setString(6, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -56,8 +55,9 @@ public class InstrumentDao extends EntityDao<Instrument> {
 		int familia = rs.getInt("familia");
 		int classe = rs.getInt("classe");
 		String part = rs.getString("part");
+		String observacions = rs.getString("observacions");
 		
-		return new Instrument(id, specId, nom, familia, classe, part);
+		return new Instrument(id, specId, nom, familia, classe, part, observacions);
 	}
 
 	@Override
@@ -71,7 +71,8 @@ public class InstrumentDao extends EntityDao<Instrument> {
 				+ "SET nom=?, "
 				+ "familia=?, "
 				+ "classe=?, "
-				+ "part=? "
+				+ "part=?, "
+				+ "observacions=? "
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -79,7 +80,8 @@ public class InstrumentDao extends EntityDao<Instrument> {
 		stmt.setInt(2, unit.getFamily());
 		stmt.setInt(3, unit.getClasse());
 		stmt.setString(4, unit.getPart());
-		stmt.setInt(5, unit.getSpecificId());
+		stmt.setString(5,  unit.getObservacions());
+		stmt.setInt(6, unit.getSpecificId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {
