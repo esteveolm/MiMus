@@ -2,6 +2,8 @@ package ui;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -11,6 +13,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.Section;
@@ -52,6 +56,8 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	
 	private StyledText fullReference ;
 
+	Section sectAdd;
+	
 	public BiblioView() {
 		super();
 		try {
@@ -64,18 +70,28 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	@Override
 	public void developForm(Form form) {
 		/* Form for introduction of new entries */
-		Section sectAdd = new Section(form.getBody(), 0);
+		sectAdd = new Section(form.getBody(), Section.TWISTIE | Section.TITLE_BAR);
+		
+		sectAdd.setText("Autors:");
+		sectAdd.setExpanded(false);
 		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
+		sectAdd.setLayoutData(grid);
 		
+		Composite autors = new Composite(sectAdd,SWT.NONE);
+		autors.setLayout(new GridLayout(1,true));
+		autors.setLayoutData(grid);
+				
 		textAuthors = new Text[NUM_AUTHORS];
 		for (int i=0; i<NUM_AUTHORS; i++) {
-			textAuthors[i] = addTextControl(sectAdd.getParent(), "Autor " + (i+1) + ":");
+			textAuthors[i] = addTextControl(autors, "Autor " + (i+1) + ":");
 		}
+		
 		textSecondaries = new Text[NUM_SECONDARY];
 		for (int i=0; i<NUM_SECONDARY; i++) {
-			textSecondaries[i] = addTextControl(sectAdd.getParent(), "Autor secundari " + (i+1) + ":");
+			textSecondaries[i] = addTextControl(autors, "Autor secundari " + (i+1) + ":");
 		}
+		sectAdd.setClient(autors);
 		
 		textYear = addTextControl(sectAdd.getParent(), "Any:");
 		textDistinction = addTextControl(sectAdd.getParent(), "Distinció:");		
@@ -92,8 +108,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		addButtons(sectAdd.getParent());
 		
 		/* List of existing entries from DB*/
-		//Section sectList = new Section(form.getBody(), PROP_TITLE);
-		Section sectList = sectAdd;
+		Section sectList =  new Section(form.getBody(), 0);
 
 		
 		BibliographyTableViewer bibliographyHelper =
@@ -222,6 +237,10 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		for (int i=0; i<unit.getSecondaryAuthors().length; i++) {
 			textSecondaries[i].setText(unit.getSecondaryAuthors()[i]);
 		}
+		
+		String autors = Stream.concat(Stream.of(unit.getAuthors()), Stream.of(unit.getSecondaryAuthors())).filter(s -> s != null && !s.isEmpty()).collect(Collectors.joining(","));
+		sectAdd.setText("Autors: "+autors);
+		
 		textYear.setText(unit.getYear());
 		textDistinction.setText(unit.getDistinction());
 		textTitle.setText(unit.getTitle());

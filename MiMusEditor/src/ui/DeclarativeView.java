@@ -257,7 +257,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	private Form initForm(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		Form form = toolkit.createForm(parent);
-		form.setText("Declare " + getViewName() + " Entity");
+		//form.setText("Declare " + getViewName() + " Entity");
 		form.getBody().setLayout(new GridLayout());
 		return form;
 	}
