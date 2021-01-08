@@ -74,7 +74,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	private Button btnSave;
 	private Button btnCancel;
 	private Text annotationsText;
-	protected Label feedbackLabel;
 	private List<U> units;
 	
 	/**
@@ -93,15 +92,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		Form form = initForm(parent);
-		
-		
+				
 		developForm(form);
-		
-		/* Label for user feedback */
-		feedbackLabel = new Label(form.getBody(), LABEL_FLAGS);
-		feedbackLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				
-				
+						
 		setControlsEnabled(false);
 	}
 	
@@ -353,7 +346,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				if(wasModified) {
 					boolean success = saveEntity();
 					if(!success) {
-						getStatusLabel().setText("Entity not saved");
+						System.out.println("Entity not saved");
 						return;
 					}
 				}
@@ -426,7 +419,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 					getUnits().clear();
 					getUnits().addAll(getDao().selectAll());
 					System.out.println(getViewName()+" created successfully.");
-					LabelPrinter.printInfo(getStatusLabel(), getViewName()+" added successfully.");
 					getTv().refresh();
 					wasModified = false;
 					selectEntityInTable((U) newEntity);
@@ -459,7 +451,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				getUnits().clear();
 				getUnits().addAll(getDao().selectAll());
 				System.out.println(getViewName()+" updated successfully.");
-				LabelPrinter.printInfo(getStatusLabel(), getViewName()+" updated successfully.");
 				getTv().refresh();
 				wasModified = false;
 				selectEntityInTable((U) newEntity);
@@ -493,7 +484,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				getDao().delete(art);
 				getUnits().clear();
 				getUnits().addAll(getDao().selectAll());
-				LabelPrinter.printInfo(getStatusLabel(), getViewName()+" deleted successfully.");
+				System.out.println(getViewName()+" deleted successfully.");
 				getTv().refresh();
 				deleted = true;
 			} catch (SQLIntegrityConstraintViolationException e1) {
@@ -512,10 +503,6 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 
 
 	protected abstract UnitDao<U> getDao() throws SQLException;
-
-	protected final Label getStatusLabel() {
-		return feedbackLabel;
-	}
 
 	public void clearControlValues() {
 		for(Control c: controlsList) {
