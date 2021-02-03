@@ -28,6 +28,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
+import model.Bibliography;
 import model.Document;
 import model.Entity;
 import model.HierarchicalUnit;
@@ -233,6 +234,10 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	public void setControlsEnabled(boolean enabled) {
 		for(Control c: controlsList) {
 			c.setEnabled(enabled);
+		}
+		if(!enabled) {
+			btnCancel.setEnabled(false);
+			btnSave.setEnabled(false);
 		}
 	}
 	
@@ -442,6 +447,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 			/* Update values from selected entity */
 			try {
 				/* Recover ID from selection */
+				int currentID = getSelectedId();
 				if(newEntity instanceof HierarchicalUnit) {
 					((HierarchicalUnit) newEntity).setSpecificId(getSelectedId());					
 				} else {
@@ -455,8 +461,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 				wasModified = false;
 				selectEntityInTable((U) newEntity);
 				wasModified = false;
+				this.setSelectedId(currentID);
 			} catch (SQLException e2) {
-				if (e2.getSQLState().equals("42000")) {
+				if (e2.getSQLState()!=null && e2.getSQLState().equals("42000")) {
 					System.out.println("Disconnected exception.");
 					MessageDialog.openError(null, "Save error", "You must be connected to perform changes to the DB.");
 				} else {
@@ -594,8 +601,12 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	protected void fillAnnotationsLabel(U unit) {
 		List<Document> docs = new ArrayList<>();
 		try {
-			docs = new DocumentDao()
-					.selectWhereEntity(unit.getId());
+			if(unit instanceof Bibliography) {
+				docs = new DocumentDao().selectWhereBiblio(unit.getId());
+			} else {
+				docs = new DocumentDao().selectWhereEntity(unit.getId());								
+			}
+			
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve documents where entity "+getViewName()+" is.");
 			e.printStackTrace();
@@ -647,9 +658,18 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 			if (thisEnt.getId() == ent.getId() || ( thisEnt instanceof Entity &&  ent instanceof Entity && ((Entity)thisEnt).getSpecificId() == ((Entity)ent).getSpecificId())) {
 				getTv().getTable().select(i);
 				fillFieldsFromSelection(thisEnt);
+				setControlsEnabled(false);
+				btnEdit.setEnabled(true);
+				btnDel.setEnabled(true);				
 				fillAnnotationsLabel(thisEnt);
 				getTv().reveal(thisEnt);
 				isNew = false;
+				wasModified=false;
+				if(thisEnt instanceof Entity) {
+					setSelectedId(((Entity) thisEnt).getSpecificId());					
+				} else {
+					setSelectedId(thisEnt.getId());
+				}				
 				break;
 			}
 		}
@@ -665,10 +685,10 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	public void setTv(TableViewer tv) {
 		this.tv = tv;
 	}
-	public int getSelectedId() {
+	private int getSelectedId() {
 		return selectedId;
 	}
-	public void setSelectedId(int selectedId) {
+	private void setSelectedId(int selectedId) {
 		this.selectedId = selectedId;
 	}
 }
