@@ -70,9 +70,13 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	@Override
 	public void developForm(Form form) {
 		/* Form for introduction of new entries */
+		
+		textAuthors = new Text[NUM_AUTHORS];
+		textAuthors[0] = addTextControl(form.getBody(), "Autor 1:");
+		
 		sectAdd = new Section(form.getBody(), Section.TWISTIE | Section.TITLE_BAR);
 		
-		sectAdd.setText("Autors:");
+		sectAdd.setText("Altres autors:");
 		sectAdd.setExpanded(false);
 		
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
@@ -82,8 +86,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		autors.setLayout(new GridLayout(1,true));
 		autors.setLayoutData(grid);
 				
-		textAuthors = new Text[NUM_AUTHORS];
-		for (int i=0; i<NUM_AUTHORS; i++) {
+		for (int i=1; i<NUM_AUTHORS; i++) {
 			textAuthors[i] = addTextControl(autors, "Autor " + (i+1) + ":");
 		}
 		
@@ -238,8 +241,8 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 			textSecondaries[i].setText(unit.getSecondaryAuthors()[i]);
 		}
 		
-		String autors = Stream.concat(Stream.of(unit.getAuthors()), Stream.of(unit.getSecondaryAuthors())).filter(s -> s != null && !s.isEmpty()).collect(Collectors.joining(","));
-		sectAdd.setText("Autors: "+autors);
+		String autors = Stream.concat(Stream.of(unit.getAuthors()).skip(1), Stream.of(unit.getSecondaryAuthors())).filter(s -> s != null && !s.isEmpty()).collect(Collectors.joining(", "));
+		sectAdd.setText("Altres autors:    "+autors);
 		
 		textYear.setText(unit.getYear());
 		textDistinction.setText(unit.getDistinction());
@@ -253,6 +256,13 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		textShort.setText(unit.getShortReference());
 	}
 	
+	
+
+	@Override
+	public void clearControlValues() {
+		sectAdd.setText("Other autors: ");
+		super.clearControlValues();
+	}
 
 	@Override
 	protected UnitDao<Bibliography> getDao() throws SQLException {
