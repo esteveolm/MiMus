@@ -33,7 +33,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 				 "autor_secondari1", "autor_secondari2", "autor_secondari3", 
 				 "autor_secondari4", "autor_secondari5", "autor_secondari6", 
 				 "any_", "distincio", "titol", "titol_principal", "volum", 
-				 "lloc", "editorial", "serie", "pagines", "referencia_curta"};
+				 "lloc", "editorial", "serie", "pagines", "referencia_curta", "observacions"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -64,6 +64,7 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 		stmt.setString(18, unit.getSeries());
 		stmt.setString(19, unit.getPages());
 		stmt.setString(20, unit.getShortReference());
+		stmt.setString(21, unit.getObservacions());
 		
 		return executeGetId(stmt);
 	}
@@ -90,13 +91,14 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 		String serie = denullify(rs.getString("serie"));
 		String pagines = denullify(rs.getString("pagines"));
 		String referenciaCurta = denullify(rs.getString("referencia_curta"));
+		String observacions = denullify(rs.getString("observacions"));
 		
 		String[] autors = {autor1, autor2, autor3, autor4};
 		String[] autorsSecondaris = {autorSecondari1, autorSecondari2, 
 				autorSecondari3, autorSecondari4, autorSecondari5, autorSecondari6};
 		return new Bibliography(autors, autorsSecondaris, any, distincio, titol,
 				titolPrincipal, volum, lloc, editorial, serie, pagines,
-				referenciaCurta, id, new ArrayList<Integer>());
+				referenciaCurta, observacions, id, new ArrayList<Integer>());
 	}
 
 	private String denullify(String value) {
@@ -130,7 +132,8 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 				+ "editorial=?, "
 				+ "serie=?, "
 				+ "pagines=?, "
-				+ "referencia_curta=? "
+				+ "referencia_curta=?, "
+				+ "observacions=?"
 				+ "WHERE id=?";
 		
 		PreparedStatement stmt = getConnection().prepareStatement(sql);
@@ -154,7 +157,8 @@ public class BibliographyDao extends UnitDao<Bibliography> {
 		stmt.setString(18, unit.getSeries());
 		stmt.setString(19, unit.getPages());
 		stmt.setString(20, unit.getShortReference());
-		stmt.setInt(21, unit.getId());
+		stmt.setString(21, unit.getObservacions());
+		stmt.setInt(22, unit.getId());
 
 		int result = stmt.executeUpdate();
 		if (result>0) {

@@ -47,6 +47,7 @@ public class Bibliography extends Unit {
 	private String series;
 	private String pages;
 	private String shortReference;
+	private String observacions;
 	
 	public Bibliography() {}
 	
@@ -74,6 +75,7 @@ public class Bibliography extends Unit {
 		series = "";
 		pages = "";
 		shortReference = "";
+		observacions = "";
 		this.setId(id);
 	}
 	
@@ -87,7 +89,7 @@ public class Bibliography extends Unit {
 	public Bibliography(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			String pages, String shortReference, int id, List<Integer> users) {
+			String pages, String shortReference, String observacions, int id, List<Integer> users) {
 		/* Infers activeAuthors values from "" in <authors> */
 		this.authors = authors;
 		this.secondaryAuthors = secondaryAuthors;
@@ -101,15 +103,16 @@ public class Bibliography extends Unit {
 		this.series = series;
 		this.pages = pages;
 		this.shortReference = shortReference;
+		this.observacions = observacions;
 		this.setId(id);
 	}
 	
 	public Bibliography(String[] authors, String[] secondaryAuthors,
 			String year, String distinction, String title, String mainTitle,
 			String volume, String place, String editorial, String series, 
-			String pages, String shortReference, int id) {
+			String pages, String shortReference, String observacions, int id) {
 		this(authors, secondaryAuthors, year, distinction, title, mainTitle,
-				volume, place, editorial, series, pages, shortReference, id,
+				volume, place, editorial, series, pages, shortReference, observacions, id,
 				new ArrayList<>());
 	}
 	
@@ -281,8 +284,16 @@ public class Bibliography extends Unit {
 	}
 	public void setPages(String pages) {
 		this.pages = pages;
-	}
+	}	
 	
+	public String getObservacions() {
+		return observacions;
+	}
+
+	public void setObservacions(String observacions) {
+		this.observacions = observacions;
+	}
+
 	/**
 	 * Generates an abbreviated textual reference of the bibliography entry,
 	 * consisting of:

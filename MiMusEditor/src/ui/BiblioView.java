@@ -53,6 +53,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	private Text textSeries;
 	private Text textPages;
 	private Text textShort;
+	private Text textObs;
 	
 	private StyledText fullReference ;
 
@@ -106,6 +107,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		textSeries = addTextControl(sectAdd.getParent(), "Sèrie:");
 		textPages = addTextControl(sectAdd.getParent(), "Pàgines:");		
 		textShort = addTextControl(sectAdd.getParent(), "Referència abreujada:    (deixar blanc per usar referència per defecte)");
+		textObs = addTextAreaControl(sectAdd.getParent(), "Observacions:",60);
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
@@ -196,6 +198,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 						(textSeries.getText().length()==0) ? "" : textSeries.getText().trim(),
 						(textPages.getText().length()==0) ? "" : textPages.getText().trim(),
 						(textShort.getText().length()==0) ? "" : textShort.getText().trim(),
+						textObs.getText(),
 						0);
 				
 				return biblio;
@@ -254,6 +257,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		textSeries.setText(unit.getSeries());
 		textPages.setText(unit.getPages());
 		textShort.setText(unit.getShortReference());
+		textObs.setText(unit.getObservacions());
 	}
 	
 	
