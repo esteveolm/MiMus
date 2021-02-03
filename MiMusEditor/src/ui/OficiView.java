@@ -8,7 +8,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import model.Instrument;
@@ -57,7 +57,7 @@ public class OficiView extends EntityView<Ofici> {
 	}
 	
 	@Override
-	public void developForm(Form form) {
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
@@ -109,8 +109,8 @@ public class OficiView extends EntityView<Ofici> {
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
-		
-		// TODO: al crear nou ofici el como instrument ha d'estar deshabilitat
+
+		addAnnotationsLabel(sectAdd.getParent(), grid);
 		
 		/* Table for oficis created */
 		Section sectTable = new Section(form.getBody(), 0);
@@ -119,7 +119,6 @@ public class OficiView extends EntityView<Ofici> {
 				new OficiTableViewer(sectTable.getParent(), getUnits(), insts);
 		setTv(oficiHelper.createTableViewer());
 		
-		addAnnotationsLabel(sectAdd.getParent(), grid);
 		createEditAction();
 	}
 	

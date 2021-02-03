@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import model.Casa;
@@ -43,7 +44,7 @@ public class CasaView extends EntityView<Casa> {
 	}
 	
 	@Override
-	public void developForm(Form form) {
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
@@ -55,7 +56,9 @@ public class CasaView extends EntityView<Casa> {
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
-		
+
+		addAnnotationsLabel(sectAdd.getParent(), grid);
+
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);
 		
@@ -63,7 +66,6 @@ public class CasaView extends EntityView<Casa> {
 				new CasaTableViewer(sectTable.getParent(), getUnits());
 		setTv(casaHelper.createTableViewer());
 		
-		addAnnotationsLabel(sectAdd.getParent(), grid);
 		createEditAction();
 		
 	}

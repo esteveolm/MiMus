@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import model.Artista;
@@ -47,7 +47,7 @@ public class ArtistaView extends EntityView<Artista> {
 		return "Artista";
 	}
 	
-	public void developForm(Form form) {		
+	public void developForm(ScrolledForm form) {		
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		
@@ -66,14 +66,15 @@ public class ArtistaView extends EntityView<Artista> {
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
-		
+
+		addAnnotationsLabel(sectAdd.getParent(), grid);
+
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);
 				
 		ArtistaTableViewer artistaHelper = new ArtistaTableViewer(sectTable.getParent(), getUnits());
 		setTv(artistaHelper.createTableViewer());	
 		
-		addAnnotationsLabel(sectTable.getParent(), grid);
 		createEditAction();
 		
 		

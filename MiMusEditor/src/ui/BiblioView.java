@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import model.Bibliography;
@@ -69,7 +70,7 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	}
 	
 	@Override
-	public void developForm(Form form) {
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entries */
 		
 		textAuthors = new Text[NUM_AUTHORS];
@@ -114,19 +115,23 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		
 		/* List of existing entries from DB*/
 		Section sectList =  new Section(form.getBody(), 0);
+		
+		addAnnotationsLabel(sectList.getParent(), grid);
+		/* Text of selected entity and listener that prints selection */
+		fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
+		fullReference.setEditable(false);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.heightHint = 50;
+		fullReference.setLayoutData(gd);
+
 
 		
 		BibliographyTableViewer bibliographyHelper =
 				new BibliographyTableViewer(sectList.getParent(), getUnits());
 		setTv(bibliographyHelper.createTableViewer());
 		
-		addAnnotationsLabel(sectList.getParent(), grid);
 		createEditAction();
 
-		/* Text of selected entity and listener that prints selection */
-		fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
-		fullReference.setEditable(false);
-		fullReference.setLayoutData(grid);
 
 		/* Listener for list */
 		

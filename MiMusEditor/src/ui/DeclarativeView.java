@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
 import model.Bibliography;
@@ -92,7 +93,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		Form form = initForm(parent);
+		ScrolledForm form = initForm(parent);
 				
 		developForm(form);
 						
@@ -252,10 +253,9 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 * Initializes a ScrolledForm object that facilitates view
 	 * creation.
 	 */
-	private Form initForm(Composite parent) {
+	private ScrolledForm initForm(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-		Form form = toolkit.createForm(parent);
-		//form.setText("Declare " + getViewName() + " Entity");
+		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.getBody().setLayout(new GridLayout());
 		return form;
 	}
@@ -264,7 +264,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	 * Implementation of the form for a specific entity must go in
 	 * this method.
 	 */
-	public abstract void developForm(Form form);
+	public abstract void developForm(ScrolledForm form);
 	
 	/**
 	 * Draws annotations label in the declarative views.

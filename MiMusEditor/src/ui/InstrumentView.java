@@ -9,7 +9,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import model.Instrument;
@@ -49,7 +49,7 @@ public class InstrumentView extends EntityView<Instrument> {
 	}
 
 	@Override
-	public void developForm(Form form) {
+	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 
@@ -77,7 +77,9 @@ public class InstrumentView extends EntityView<Instrument> {
 		
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
-		
+
+		addAnnotationsLabel(sectAdd.getParent(), grid);
+
 		/* Table for instruments created */
 		Section sectTable = new Section(form.getBody(), 0);
 		
@@ -85,7 +87,6 @@ public class InstrumentView extends EntityView<Instrument> {
 				new InstrumentTableViewer(sectTable.getParent(), getUnits());
 		setTv(instrumentHelper.createTableViewer());
 		
-		addAnnotationsLabel(sectAdd.getParent(), grid);
 		createEditAction();
 		
 	}
