@@ -64,7 +64,7 @@ public class InstrumentTableViewer extends DeclarativeTableViewer {
 			case 3:	// Part (text)
 				return inst.getPart();
 			case 4: 
-				return inst.getObservacions();
+				return inst.getObservacions().replaceAll("\n", "");
 			default:	// This should never happen
 				return "";
 			}

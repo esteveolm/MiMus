@@ -62,7 +62,7 @@ public class LlocTableViewer extends DeclarativeTableViewer {
 			case 2:	// Regne (ComboBox)
 				return Lloc.REGNES[lloc.getArea()][lloc.getRegne()];
 			case 3: 
-				return lloc.getObservacions();
+				return lloc.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}

@@ -65,7 +65,7 @@ public class GenereTableViewer extends DeclarativeTableViewer {
 			case 3:	// Definicio (Text)
 				return gen.getDefinicio();
 			case 4:	
-				return gen.getObservacions();
+				return gen.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}

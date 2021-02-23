@@ -78,7 +78,7 @@ public class ArtistaTableViewer extends DeclarativeTableViewer {
 			case 8:	// Origen (Text)
 				return art.getOrigen();
 			case 9:	// Observacions (Text)
-				return art.getObservacions();
+				return art.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}

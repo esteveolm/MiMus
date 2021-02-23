@@ -75,7 +75,7 @@ public class PromotorTableViewer extends DeclarativeTableViewer {
 			case 5:		// Genere
 				return GENDERS[prom.getGenere()];
 			case 6:		// Observacions
-				return prom.getObservacions();
+				return prom.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}

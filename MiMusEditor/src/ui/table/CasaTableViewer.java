@@ -61,7 +61,7 @@ public class CasaTableViewer extends DeclarativeTableViewer {
 			case 2:		// Cort
 				return casa.getCort();
 			case 3:		
-				return casa.getObservacions();
+				return casa.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}

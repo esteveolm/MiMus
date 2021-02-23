@@ -72,7 +72,7 @@ public class OficiTableViewer extends DeclarativeTableViewer {
 					return inst.getLemma();
 				return "";	/* If no instrument, leave field blank */
 			case 4:
-				return ofici.getObservacions();
+				return ofici.getObservacions().replaceAll("\n", "");
 			default:	// Shouldn't reach here
 				return "";
 			}
