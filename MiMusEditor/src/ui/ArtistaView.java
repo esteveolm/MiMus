@@ -3,7 +3,6 @@ package ui;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -51,7 +50,6 @@ public class ArtistaView extends EntityView<Artista> {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 		
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
 		textNombreCompleto = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textTratamiento = addTextControl(sectAdd.getParent(), "Tractament:");
@@ -67,7 +65,7 @@ public class ArtistaView extends EntityView<Artista> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);

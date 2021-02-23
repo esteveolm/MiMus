@@ -3,7 +3,6 @@ package ui;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -44,8 +43,6 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		
 		textNombreCompleto = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textNomFrances = addTextControl(sectAdd.getParent(), "Nom francès:");
 		textNomOccita = addTextControl(sectAdd.getParent(), "Nom occità:");
@@ -55,7 +52,7 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 
 		/* Table for generes created */
 		Section sectTable = new Section(form.getBody(), 0);

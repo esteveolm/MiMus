@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -24,7 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
@@ -37,7 +37,6 @@ import model.Unit;
 import persistence.DaoNotImplementedException;
 import persistence.DocumentDao;
 import persistence.UnitDao;
-import util.LabelPrinter;
 
 /**
  * DeclarativeView is any Eclipse View of MiMus application that allows
@@ -202,7 +201,10 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		Label widgetLabel = new Label(parent, LABEL_FLAGS);
 		widgetLabel.setText(label);
 		Text widgetText = new Text(parent, TEXT_FLAGS );
-		widgetText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridDataFactory.swtDefaults().grab(true, false)
+	        .hint(0, SWT.DEFAULT)// width hint prevents text from expanding to full line
+	        .align(SWT.FILL, SWT.CENTER)//
+	        .applyTo(widgetText);
 		getControlsList().add(widgetText);
 		return widgetText;
 	}
@@ -211,7 +213,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		Label widgetLabel = new Label(parent, LABEL_FLAGS);
 		widgetLabel.setText(label);
 		Text widgetText = new Text(parent, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gd.heightHint = height;
 		widgetText.setLayoutData(gd);
 		getControlsList().add(widgetText);
@@ -222,7 +224,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		Label widgetLabel = new Label(parent, LABEL_FLAGS);
 		widgetLabel.setText(label);
 		Combo widgetCombo = new Combo(parent, COMBO_FLAGS);
-		widgetCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		widgetCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 		widgetCombo.setItems(items);
 		getControlsList().add(widgetCombo);
 		return widgetCombo;
@@ -256,7 +258,8 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	private ScrolledForm initForm(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
-		form.getBody().setLayout(new GridLayout());
+		form.setText("Declare " + getViewName() + " Entity");
+		form.getBody().setLayout(new GridLayout(1,false));
 		return form;
 	}
 	
@@ -269,11 +272,16 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 	/**
 	 * Draws annotations label in the declarative views.
 	 */
-	public void addAnnotationsLabel(Composite parent, GridData gd) {
+	public void addAnnotationsLabel(Composite parent) {
 		annotationsText = new Text(parent, 
 				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		annotationsText.setText("");
-		annotationsText.setLayoutData(gd);
+		
+		GridDataFactory.swtDefaults().grab(true, false)
+        .hint(0, SWT.DEFAULT)// width hint prevents text from expanding to full line
+        .align(SWT.FILL, SWT.CENTER)
+        .applyTo(annotationsText);
+		
 	}
 	
 	

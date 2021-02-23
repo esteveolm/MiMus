@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -60,7 +59,6 @@ public class OficiView extends EntityView<Ofici> {
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
 		textNomComplet = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textTerme = addTextControl(sectAdd.getParent(), "Terme:");
@@ -110,7 +108,7 @@ public class OficiView extends EntityView<Ofici> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 		
 		/* Table for oficis created */
 		Section sectTable = new Section(form.getBody(), 0);

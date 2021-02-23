@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -53,8 +52,6 @@ public class InstrumentView extends EntityView<Instrument> {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		
 		textNom = addTextControl(sectAdd.getParent(), "Nom:");
 		comboFamily = addComboControl(sectAdd.getParent(), "Família:", Instrument.FAMILIES);
 		/* Default selection at start lets comboClasse know what to load */
@@ -78,7 +75,7 @@ public class InstrumentView extends EntityView<Instrument> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 
 		/* Table for instruments created */
 		Section sectTable = new Section(form.getBody(), 0);

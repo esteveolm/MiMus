@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -46,8 +45,6 @@ public class LlocView extends EntityView<Lloc> {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		
 		textNomComplet = addTextControl(sectAdd.getParent(), "Nom complet:");
 		comboArea = addComboControl(sectAdd.getParent(), "Àrea:", Lloc.AREES);
 		/* Default selection at start lets comboRegne know what to load */
@@ -71,7 +68,7 @@ public class LlocView extends EntityView<Lloc> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 		
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 		
 		/* Table for Llocs creation */
 		Section sectTable = new Section(form.getBody(), 0);

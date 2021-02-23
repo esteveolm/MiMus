@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -16,7 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -81,12 +81,15 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		sectAdd.setText("Altres autors:");
 		sectAdd.setExpanded(false);
 		
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		sectAdd.setLayoutData(grid);
+		GridDataFactory.swtDefaults().grab(true, false)
+        .hint(300, SWT.DEFAULT)// width hint prevents text from expanding to full line
+        .align(SWT.FILL, SWT.CENTER)
+        .applyTo(sectAdd);
+
 		
 		Composite autors = new Composite(sectAdd,SWT.NONE);
 		autors.setLayout(new GridLayout(1,true));
-		autors.setLayoutData(grid);
+		autors.setLayoutData(new GridData(GridData.FILL_BOTH));
 				
 		for (int i=1; i<NUM_AUTHORS; i++) {
 			textAuthors[i] = addTextControl(autors, "Autor " + (i+1) + ":");
@@ -116,13 +119,16 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 		/* List of existing entries from DB*/
 		Section sectList =  new Section(form.getBody(), 0);
 		
-		addAnnotationsLabel(sectList.getParent(), grid);
+		
+		addAnnotationsLabel(sectList.getParent());
 		/* Text of selected entity and listener that prints selection */
 		fullReference = new StyledText(sectList.getParent(), REFERENCE_FLAGS);
 		fullReference.setEditable(false);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 50;
-		fullReference.setLayoutData(gd);
+		GridDataFactory.swtDefaults().grab(true, false)
+	        .hint(0, SWT.DEFAULT)// width hint prevents text from expanding to full line
+	        .align(SWT.FILL, SWT.CENTER)
+	        .applyTo(fullReference);
+
 
 
 		

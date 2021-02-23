@@ -3,9 +3,7 @@ package ui;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -47,7 +45,6 @@ public class CasaView extends EntityView<Casa> {
 	public void developForm(ScrolledForm form) {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
 		
 		textNomComplet = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textTitol = addTextControl(sectAdd.getParent(), "Títol:");
@@ -57,7 +54,7 @@ public class CasaView extends EntityView<Casa> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 
 		/* Table for artists created */
 		Section sectTable = new Section(form.getBody(), 0);

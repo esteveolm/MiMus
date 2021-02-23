@@ -3,7 +3,6 @@ package ui;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -52,9 +51,6 @@ public class PromotorView extends EntityView<Promotor> {
 		/* Form for introduction of new entities */
 		Section sectAdd = new Section(form.getBody(), 0);
 
-		GridData grid = new GridData(GridData.FILL_HORIZONTAL);
-		
-
 		textNomComplet = addTextControl(sectAdd.getParent(), "Nom complet:");
 		textNom = addTextControl(sectAdd.getParent(), "Nom:");
 		textCognom = addTextControl(sectAdd.getParent(), "Cognom:");		
@@ -66,7 +62,7 @@ public class PromotorView extends EntityView<Promotor> {
 		/* Form buttons */
 		addButtons(sectAdd.getParent());
 
-		addAnnotationsLabel(sectAdd.getParent(), grid);
+		addAnnotationsLabel(sectAdd.getParent());
 
 		/* Table for promotors created */
 		Section sectTable = new Section(form.getBody(), 0);
