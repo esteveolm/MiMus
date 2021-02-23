@@ -67,8 +67,8 @@ public abstract class DeclarativeTableViewer extends MiMusTableViewer {
 		tv.setInput(entities);
 		tv.getTable().setHeaderVisible(true);
 		tv.getTable().setLinesVisible(true);
-		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, true);
-		gd.minimumHeight = 150;
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gd.heightHint = 300;
 		tv.getTable().setLayoutData(gd);
 		packColumns();
 		
