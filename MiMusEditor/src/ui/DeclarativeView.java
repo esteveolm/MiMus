@@ -213,7 +213,7 @@ public abstract class DeclarativeView<U extends Unit> extends ViewPart {
 		Label widgetLabel = new Label(parent, LABEL_FLAGS);
 		widgetLabel.setText(label);
 		Text widgetText = new Text(parent, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = height;
 		widgetText.setLayoutData(gd);
 		getControlsList().add(widgetText);
