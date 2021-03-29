@@ -5,7 +5,13 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -17,6 +23,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -40,16 +48,17 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
+
+import model.Artista;
+import model.Bibliography;
+import model.Casa;
+import model.Document;
 import model.Entity;
 import model.EntityInstance;
 import model.GenereLiterari;
 import model.Instrument;
 import model.Lloc;
 import model.Materia;
-import model.Artista;
-import model.Bibliography;
-import model.Casa;
-import model.Document;
 import model.MiMusReference;
 import model.MiMusText;
 import model.Note;
@@ -126,6 +135,23 @@ public class Editor extends EditorPart {
 	private FormToolkit toolkit;
 	private ScrolledForm form;
 	
+	private boolean editMode = false;
+	private boolean dirty = false;
+	
+	private Button editSaveBtn;
+	private Text numbering, lloc1, lloc2;
+	private MimusDateControl mimusDate;
+	private SignatureControl signatureA, signatureB;
+	
+	private ModifyListener modifyListener = new ModifyListener() {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			dirty=true;
+			editSaveBtn.setEnabled(true);
+			firePropertyChange(PROP_DIRTY);
+		}		
+	};
+	
 	public Editor() {
 		super();
 	}
@@ -136,6 +162,8 @@ public class Editor extends EditorPart {
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		
+		System.out.println("***INIT***");
 		setSite(site);
 		setInput(input);
 		
@@ -188,16 +216,25 @@ public class Editor extends EditorPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
+		System.out.println("***CREATE PART CONTROL***");
 		toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		form.setText("Annotation");
 		
-		/* Composite (the form) needs a layout or components aren't drawn */
-		GridLayout gl = new GridLayout();
-		form.getBody().setLayout(gl);
+		form.getBody().setLayout(new GridLayout());
 		
+		Composite buttons = toolkit.createComposite(form.getBody(), SWT.NONE);
+		buttons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		buttons.setLayout(new GridLayout(6,false));
+				
 		Button refreshBtn = toolkit.createButton(
-				form.getBody(), "Refresh", SWT.PUSH | SWT.CENTER);
+				buttons, (editMode?"Cancel":"Refresh"), SWT.PUSH | SWT.CENTER);
+		editSaveBtn = toolkit.createButton(
+				buttons, (editMode?"Save":"Edit"), SWT.PUSH | SWT.CENTER);
+		
+		editSaveBtn.setEnabled(!editMode);
+				
+
 		
 		/* SECTION STATUS OF THE DOCUMENT */
 		Section sectStatus = toolkit.createSection(form.getBody(), 
@@ -247,11 +284,16 @@ public class Editor extends EditorPart {
 		GridData staticData = new GridData(GridData.FILL_HORIZONTAL);
 		staticData.widthHint = 10;
 		
-		Text readOnlyText = new Text(form.getBody(), 
-				SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		readOnlyText.setText(docEntry.getReadOnlyText());
-		readOnlyText.setEditable(false);
-		readOnlyText.setLayoutData(staticData);
+		
+		if(editMode) {
+			createDocumentForm();
+		} else {
+			Text readOnlyText = new Text(form.getBody(), 
+					SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
+			readOnlyText.setText(docEntry.getReadOnlyText());
+			readOnlyText.setEditable(false);
+			readOnlyText.setLayoutData(staticData);			
+		}
 		
 		
 		/* SECTION REGEST */		
@@ -270,9 +312,13 @@ public class Editor extends EditorPart {
 		
 		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
-				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+				SWT.BORDER | (editMode?0:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP);
 		regestText.setText(docEntry.getRegestText());
 		regestText.setLayoutData(regestData);
+		
+		if(editMode) {
+			regestText.addModifyListener(modifyListener);
+		}
 		
 		/* SECTION ENTITIES */
 		Section sectEnt = toolkit.createSection(form.getBody(), 
@@ -390,6 +436,12 @@ public class Editor extends EditorPart {
 		
 		
 		/* SECTION TRANSCRIPTION */
+		transcriptions = new ArrayList<>();
+		try {
+			transcriptions = new TranscriptionDao(conn).select(docEntry);
+		} catch (SQLException e) {
+			System.out.println("SQLException: could not retrieve transcriptions.");
+		}
 		Label titleTranscription = new Label(form.getBody(), SWT.VERTICAL);
 		titleTranscription.setText("Transcription:");
 		titleTranscription.setFont(fontTitle);
@@ -397,11 +449,17 @@ public class Editor extends EditorPart {
 		/* GridData for Transcription: wrap behaviour like Regest */
 		GridData transcriptionData = new GridData(GridData.FILL_HORIZONTAL);
 		transcriptionData.widthHint = 10;
+
 		
 		/* Transcription text wraps if too long */
+		boolean transcriptionEditable = editMode && transcriptions.size()==0;
+		
 		transcriptionText = new StyledText(form.getBody(), 
-				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-		transcriptionText.setText(docEntry.getTranscriptionText());
+				SWT.BORDER | (transcriptionEditable?0:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP);
+		transcriptionText.setText(docEntry.getTranscriptionText());		
+		if(transcriptionEditable) {
+			transcriptionText.addModifyListener(modifyListener);
+		}
 		transcriptionText.setLayoutData(transcriptionData);
 		TextStyler transcriptionStyler = new TextStyler(transcriptionText);
 		
@@ -415,12 +473,6 @@ public class Editor extends EditorPart {
 		sectForms.setClient(compForms);
 		sectForms.setExpanded(false);
 		
-		transcriptions = new ArrayList<>();
-		try {
-			transcriptions = new TranscriptionDao(conn).select(docEntry);
-		} catch (SQLException e) {
-			System.out.println("SQLException: could not retrieve transcriptions.");
-		}
 		transcriptionHelper = new TranscriptionTableViewer(compForms,
 				transcriptions);
 		TableViewer transcriptionTV = transcriptionHelper.createTableViewer();
@@ -605,56 +657,35 @@ public class Editor extends EditorPart {
 		refreshBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				updateDocument();
-				comboStateAnnot.select(docEntry.getStateAnnotIdx());
-				comboStateRev.select(docEntry.getStateRevIdx());
-				regestText.setText(docEntry.getRegestText());
-				transcriptionText.setText(docEntry.getTranscriptionText());
-				
-				try {
-					entityInstances = new InstanceDao(conn).select(docEntry);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-					System.out.println("SQLException: could not retrieve instances.");
+				if(!isDirty() || MessageDialog.openConfirm(null, "Current document was modified", "Do you want to discard changes?")) {					
+					editMode=false;
+					dirty = false;
+					firePropertyChange(PROP_DIRTY);
+					refreshBtn.setText("Refresh");
+					editSaveBtn.setText("Edit");
+					updateDocument();				
+					Composite parent = form.getParent();
+					form.dispose();
+					createPartControl(parent);
 				}
-				try {
-					relations = new AnyRelationDao(conn).select(docEntry);
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-					System.out.println("SQLException: could not retrieve relations.");
-				}
-				try {
-					transcriptions = new TranscriptionDao(conn).select(docEntry);
-				} catch (SQLException e3) {
-					System.out.println("SQLException: could not retrieve transcriptions.");
-					e3.printStackTrace();
-				}
-				try {
-					references = new ReferenceDao(conn).select(docEntry);
-				} catch (SQLException e4) {
-					System.out.println("SQLException: could not retrieve references.");
-					e4.printStackTrace();
-				}
-				allMateries = new ArrayList<>();
-				try {
-					allMateries = new MateriaDao(conn).selectAll();
-				} catch (SQLException e5) {
-					e5.printStackTrace();
-					System.out.println("Could not query DB to retrieve Materies");
-				}
-				entityTV.setInput(entityInstances);
-				entityTV.refresh();
-				relationTV.setInput(relations);
-				relationTV.refresh();
-				transcriptionTV.setInput(transcriptions);
-				transcriptionTV.refresh();
-				referenceTV.setInput(references);
-				referenceTV.refresh();
-				
-				selectLlengua();
-				checkMateries();
 			}
 		});
+
+		editSaveBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(editMode) { // doSave (and returns no normal mode)
+					doSave(null);
+				} else {  // Activate edit mode
+					editMode = true;
+					Composite parent = form.getParent();
+					form.dispose();
+					createPartControl(parent);
+				}
+			}
+		});
+
+
 		saveState.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1274,6 +1305,44 @@ public class Editor extends EditorPart {
 		});
 	}
 	
+	private void createDocumentForm() {
+		
+		Composite c = toolkit.createComposite(form.getBody());
+		c.setLayout(new GridLayout(2, false));
+		
+		toolkit.createLabel(c, "Doc ID:");
+		toolkit.createLabel(c, docEntry.getIdStr());
+		  
+		toolkit.createLabel(c, "Numeració antiga:");
+		numbering = toolkit.createText(c, docEntry.getNumbering());
+		numbering.setLayoutData(GridDataFactory.swtDefaults().hint(100, SWT.DEFAULT).create());
+		numbering.addModifyListener(modifyListener);
+
+		toolkit.createLabel(c, "Data:");
+		mimusDate = new MimusDateControl(c, toolkit, docEntry.getDate());
+		mimusDate.addModifyListener(modifyListener);
+
+		toolkit.createLabel(c, "Lloc:");
+		Composite llocComposite = toolkit.createComposite(c);
+		llocComposite.setLayout(new GridLayout(4, false));
+		toolkit.createLabel(llocComposite, "de");
+		lloc1 = toolkit.createText(llocComposite, docEntry.getPlace1());
+		lloc1.addModifyListener(modifyListener);
+		lloc1.setMessage("lloc d’emissió del document.");
+		toolkit.createLabel(llocComposite, "a");
+		lloc2 = toolkit.createText(llocComposite, docEntry.getPlace2());
+		lloc2.setMessage("(deixar en blanc si no hi ha data2)");
+		lloc2.addModifyListener(modifyListener);
+
+		toolkit.createLabel(c, "Signatura A:");
+		signatureA = new SignatureControl(c, toolkit, docEntry.getLibrary());
+		signatureA.addModifyListener(modifyListener);
+		toolkit.createLabel(c, "Signatura B:");
+		signatureB = new SignatureControl(c, toolkit, docEntry.getLibrary2());
+		signatureB.addModifyListener(modifyListener);
+				
+	}
+
 	/**
 	 * Given the Document which contains certain Materies, it
 	 * checks all their checkbox entries in the Editor.
@@ -1598,7 +1667,7 @@ public class Editor extends EditorPart {
 	
 	@Override
 	public boolean isDirty() {
-		return false;
+		return dirty;
 	}
 
 	@Override
@@ -1606,8 +1675,30 @@ public class Editor extends EditorPart {
 		form.setFocus();
 	}
 	
+	/**
+	 * Saves some document fields, clears the dirty state, and returns editor to normal mode.
+	 */
 	@Override
-	public void doSave(IProgressMonitor monitor) {}
+	public void doSave(IProgressMonitor monitor) {
+
+		try {
+			new DocumentDao(getConnection()).update(docEntry.getId(), numbering.getText(), mimusDate.getValue(), 
+					("".equals(lloc1.getText())?null:lloc1.getText()), 
+					("".equals(lloc2.getText())?null:lloc2.getText()), 
+					signatureA.getValue(), signatureB.getValue(), regest.getText(), transcriptionText.getText());
+			updateDocument();
+			dirty = false;
+			editSaveBtn.setEnabled(false);
+			firePropertyChange(PROP_DIRTY);
+			editMode=false;
+			Composite parent = form.getParent();
+			form.dispose();
+			createPartControl(parent);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorDialog.openError(null, "Error", "Could not update the document", new Status(IStatus.ERROR,"MiMusEditor", e.getMessage()));
+		}
+	}
 	
 	@Override
 	public void doSaveAs() {}

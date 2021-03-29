@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Document;
 import model.Materia;
 import model.MiMusDate;
@@ -266,6 +264,79 @@ public class DocumentDao extends UnitDao<Document> {
 			return doc;
 		}
 		throw new SQLException();
+	}
+	
+	
+	/** 
+	 * Updates some fields in a Document entity 
+	 * @throws Exception 
+	 */
+	public void update(int id, String numbering, MiMusDate date, String lloc1, String lloc2, MiMusLibraryIdentifier signatureA, MiMusLibraryIdentifier signatureB, String regest, String transcription) throws Exception {
+
+		String sql = "UPDATE document SET ";
+		sql += " numeracio=?, ";
+		sql += " any1=?, mes1=?, dia1=?, h_any1=?, h_mes1=?, h_dia1=?, d_any1=?, d_mes1=?, d_dia1=?, ";
+		sql += " any2=?, mes2=?, dia2=?, h_any2=?, h_mes2=?, h_dia2=?, d_any2=?, d_mes2=?, d_dia2=?, ";
+		sql += " lloc1=?, lloc2=?, ";
+		sql += " lib1_arxiu=?, lib1_serie=?, lib1_subserie=?, lib1_subserie2=?, lib1_numero=?, lib1_pagina=?, ";
+		sql += " lib2_arxiu=?, lib2_serie=?, lib2_subserie=?, lib2_subserie2=?, lib2_numero=?, lib2_pagina=?, ";
+		sql += " regest=?, ";
+		sql += " transcripcio=? ";
+		sql += " WHERE id=? ";
+				
+		PreparedStatement stateStmt = getConnection().prepareStatement(sql);
+		int idx=1;
+		stateStmt.setString(idx++, numbering);
+		
+		stateStmt.setInt(idx++, date.getYear1());
+		stateStmt.setInt(idx++, date.getMonth1());
+		stateStmt.setInt(idx++, date.getDay1());
+		stateStmt.setBoolean(idx++, date.ishYear1());
+		stateStmt.setBoolean(idx++, date.ishMonth1());
+		stateStmt.setBoolean(idx++, date.ishDay1());
+		stateStmt.setBoolean(idx++, date.isuYear1());
+		stateStmt.setBoolean(idx++, date.isuMonth1());
+		stateStmt.setBoolean(idx++, date.isuDay1());
+		
+		stateStmt.setInt(idx++, date.getYear2());
+		stateStmt.setInt(idx++, date.getMonth2());
+		stateStmt.setInt(idx++, date.getDay2());
+		stateStmt.setBoolean(idx++, date.ishYear2());
+		stateStmt.setBoolean(idx++, date.ishMonth2());
+		stateStmt.setBoolean(idx++, date.ishDay2());
+		stateStmt.setBoolean(idx++, date.isuYear2());
+		stateStmt.setBoolean(idx++, date.isuMonth2());
+		stateStmt.setBoolean(idx++, date.isuDay2());
+
+		
+		stateStmt.setString(idx++, lloc1);
+		stateStmt.setString(idx++, lloc2);
+		
+		stateStmt.setString(idx++, signatureA.getArchive());
+		stateStmt.setString(idx++, signatureA.getSeries());
+		stateStmt.setString(idx++, signatureA.getSubseries1());
+		stateStmt.setString(idx++, signatureA.getSubseries2());
+		stateStmt.setString(idx++, signatureA.getNumber());
+		stateStmt.setString(idx++, signatureA.getPage());
+
+		stateStmt.setString(idx++, signatureB.getArchive());
+		stateStmt.setString(idx++, signatureB.getSeries());
+		stateStmt.setString(idx++, signatureB.getSubseries1());
+		stateStmt.setString(idx++, signatureB.getSubseries2());
+		stateStmt.setString(idx++, signatureB.getNumber());
+		stateStmt.setString(idx++, signatureB.getPage());
+
+		stateStmt.setString(idx++, regest);
+		stateStmt.setString(idx++, transcription);
+
+		stateStmt.setInt(idx++, id);
+		int stateRS = stateStmt.executeUpdate();
+		
+		if(stateRS!=1) {
+			throw new Exception("Document to update was not found in Database");
+		}
+
+		
 	}
 	
 	@Override
