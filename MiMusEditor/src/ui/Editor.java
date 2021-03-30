@@ -208,7 +208,9 @@ public class Editor extends EditorPart {
 	@Override
 	public void dispose() {
 		super.dispose();
-		toolkit.dispose();
+		if(toolkit!=null) {
+			toolkit.dispose();
+		}
 	}
 	
 	/**
@@ -234,6 +236,7 @@ public class Editor extends EditorPart {
 		
 		editSaveBtn.setEnabled(!editMode);
 				
+		Button deleteBtn = toolkit.createButton(buttons, "Delete", SWT.PUSH|SWT.CENTER);
 
 		
 		/* SECTION STATUS OF THE DOCUMENT */
@@ -681,6 +684,26 @@ public class Editor extends EditorPart {
 					Composite parent = form.getParent();
 					form.dispose();
 					createPartControl(parent);
+				}
+			}
+		});
+		
+		deleteBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(MessageDialog.openConfirm(null, "Delete document", "Do you want to delete this document?")) {
+					try {					
+						DocumentDao dao = new DocumentDao(conn);
+						dao.deleteWithDependencies(docEntry.getId());
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(Editor.this, false);
+						DocumentsView dw = (DocumentsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("MiMusEditor.documentsView");
+						if(dw!=null) {
+							dw.refresh();
+						}							
+					} catch (SQLException ex) {
+						ex.printStackTrace();
+						ErrorDialog.openError(null, "Error", "Could not delete the document", new Status(IStatus.ERROR,"MiMusEditor", ex.getMessage()));
+					}
 				}
 			}
 		});
@@ -1685,7 +1708,7 @@ public class Editor extends EditorPart {
 			new DocumentDao(getConnection()).update(docEntry.getId(), numbering.getText(), mimusDate.getValue(), 
 					("".equals(lloc1.getText())?null:lloc1.getText()), 
 					("".equals(lloc2.getText())?null:lloc2.getText()), 
-					signatureA.getValue(), signatureB.getValue(), regest.getText(), transcriptionText.getText());
+					signatureA.getValue(), signatureB.getValue(), regestText.getText(), transcriptionText.getText());
 			updateDocument();
 			dirty = false;
 			editSaveBtn.setEnabled(false);

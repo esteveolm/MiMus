@@ -51,22 +51,23 @@ public class Document extends Unit implements IEditorInput {
 	
 	
 	public Document() {
-		this.numbering = null;
-		this.date = null;
+		this.numbering = "";
+		this.date = new MiMusDate();
 		this.setPlace1(null);
 		this.setPlace2(null);
-		this.regest = null;
-		this.library = null;
-		this.library2 = null;
+		this.regest = "";
+		this.library = new MiMusLibraryIdentifier();
+		this.library2 = new MiMusLibraryIdentifier();
 		this.editions = null;
 		this.registers = null;
 		this.citations = null;
-		this.transcription = null;
+		this.transcription = "";
 		this.notes = new ArrayList<>();
 		this.langIdx = -1;
 		this.subjects = new ArrayList<>();
 		this.stateAnnotIdx = -1;
 		this.stateAnnotIdx = -1;
+		setLanguage(Document.LANGS[1]);		
 	}
 	
 	/**

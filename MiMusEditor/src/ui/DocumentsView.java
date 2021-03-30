@@ -4,11 +4,23 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
+
 import model.Document;
 import persistence.DocumentDao;
 import ui.table.DocumentsTableViewer;
@@ -22,11 +34,11 @@ import util.DBUtils;
  *
  */
 public class DocumentsView extends ViewPart {
-	
+
 	private DocumentsTableViewer tv;
 	
 	public DocumentsView() {
-		super();
+		super();		
 		setTv(null);
 	}
 
@@ -36,6 +48,50 @@ public class DocumentsView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
+		
+		Action createDocumentAction = new Action("Add new Document", 
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
+
+			@Override
+			public void run() {
+				try {
+					Connection conn = DBUtils.connect();
+					DocumentDao dao = new DocumentDao(conn);
+					int docId = dao.insertGetNextId();
+					Document doc = new Document();					
+					doc.setId(docId);					
+					dao.insert(doc);
+					refresh();
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					try {
+						IDE.openEditor(page, doc, "MiMusEditor.mimusEditor");
+					} catch (PartInitException e) {
+						e.printStackTrace();
+						System.out.println("Cannot open editor from document.");
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+					ErrorDialog.openError(null, "Error", "Could create the document", new Status(IStatus.ERROR,"MiMusEditor", e.getMessage()));
+				}
+				
+			}
+			
+		};
+		Action refreshDocumentsAction = new Action("Refresh Documents", 
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_UP)) {
+
+			@Override
+			public void run() {
+				refresh();
+			}
+			
+		};
+		IActionBars actionBars = getViewSite().getActionBars();
+		actionBars.getToolBarManager().add(createDocumentAction);
+		actionBars.getToolBarManager().add(refreshDocumentsAction);
+		actionBars.updateActionBars();
+		
+		
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Select a document");
@@ -62,5 +118,15 @@ public class DocumentsView extends ViewPart {
 	}
 	public void setTv(DocumentsTableViewer tv) {
 		this.tv = tv;
+	}
+	
+	public void refresh() {
+		try {
+			Connection conn = DBUtils.connect();
+			DocumentDao dao = new DocumentDao(conn);
+			getTv().setDocuments(dao.selectAll());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
