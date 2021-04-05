@@ -62,6 +62,7 @@ import model.Materia;
 import model.MiMusReference;
 import model.MiMusText;
 import model.Note;
+import model.NoteType;
 import model.Ofici;
 import model.Promotor;
 import model.Relation;
@@ -76,6 +77,7 @@ import persistence.InstanceDao;
 import persistence.InstrumentDao;
 import persistence.LlocDao;
 import persistence.MateriaDao;
+import persistence.NoteDao;
 import persistence.OficiDao;
 import persistence.PromotorDao;
 import persistence.ReferenceDao;
@@ -86,12 +88,14 @@ import persistence.TeCasaDao;
 import persistence.TeOficiDao;
 import persistence.TranscriptionDao;
 import ui.dialog.InstanceDialog;
+import ui.dialog.NoteDialog;
 import ui.dialog.ReferenceDialog;
 import ui.dialog.RelationDialog;
 import ui.dialog.TranscriptionDialog;
 import ui.table.EntityTableViewer;
 import ui.table.ReferenceTableViewer;
 import ui.table.RelationTableViewer;
+import ui.table.TableLabelProvider;
 import ui.table.TranscriptionTableViewer;
 import util.DBUtils;
 import util.LabelPrinter;
@@ -594,16 +598,29 @@ public class Editor extends EditorPart {
 		titleNotes.setText("Notes:");
 		titleNotes.setFont(fontTitle);
 		
-		String notesStr = "";
-		for (Note note : docEntry.getNotes()) {
-			notesStr += note.getText() + "\n\n";
-		}
-		Text notesText = new Text(form.getBody(), 
-				SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-		notesText.setText(notesStr.trim());
 		GridData notesData = new GridData(GridData.FILL_HORIZONTAL);
 		notesData.widthHint = 10;
-		notesText.setLayoutData(notesData);
+		
+		TableViewer notesTable = new TableViewer(form.getBody());
+		notesTable.getTable().setLayoutData(notesData);
+		notesTable.setContentProvider(ArrayContentProvider.getInstance());
+		notesTable.setLabelProvider(new TableLabelProvider("text"));
+		notesTable.setInput(docEntry.getNotes());
+		
+		/* Label of notes */
+		Label notesLabel = toolkit.createLabel(form.getBody(), "");
+		notesLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		/* Buttons to add/remove references */
+		GridData gridNote = new GridData();
+		gridNote.widthHint = 100;
+		Button addNote = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		addNote.setLayoutData(gridNote);
+		addNote.setText("Add");
+		Button removeNote = new Button(form.getBody(), SWT.PUSH | SWT.CENTER);
+		removeNote.setLayoutData(gridNote);
+		removeNote.setText("Delete");
+		
 		
 		/* REFERENCES PART */
 		/* References section */
@@ -1272,6 +1289,45 @@ public class Editor extends EditorPart {
 				}
 			}
 		});
+
+		/* Notes buttons */
+		addNote.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				NoteDao noteDao = new NoteDao(conn);
+				List<NoteType> noteTypes;
+				try {
+					noteTypes = noteDao.getNoteTypes();
+				} catch (SQLException e1) {
+					LabelPrinter.printError(notesLabel, "could not retrieve note types");
+					e1.printStackTrace();
+					return;
+				}
+				NoteDialog dialog = new NoteDialog(parent.getShell(), noteTypes);
+				runNoteDialog(dialog, notesLabel);
+				notesTable.refresh();
+				form.getBody().layout();
+			}
+		});
+		removeNote.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Note ref = (Note) ((IStructuredSelection) notesTable.getSelection()).getFirstElement();
+				if (ref==null) {
+					LabelPrinter.printError(notesLabel, "You must select a note to delete it.");
+				} else {
+					try {
+						new NoteDao(conn).delete(ref);
+						docEntry.getNotes().remove(ref);
+						notesTable.setInput(docEntry.getNotes());						
+						LabelPrinter.printInfo(notesLabel, "Note deleted successfully.");
+					} catch (Exception e1) {
+						LabelPrinter.printInfo(notesLabel, "Error deleting note: "+e1.getMessage());
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		
 		/* Reference buttons */
 		addRef.addSelectionListener(new SelectionAdapter() {
@@ -1617,6 +1673,48 @@ public class Editor extends EditorPart {
 					"Nothing was added.");
 		}
 	}
+	
+	/**
+	 * When a button for adding Note is pressed, a  NoteDialog
+	 * is opened to the user. This method processes its result and
+	 * performs the insertion to the DB when it's the case.
+	 */
+	private void runNoteDialog(NoteDialog dialog, Label label) {
+		if (dialog.open() == Window.OK) {
+			Note note = dialog.getNote();
+			if (note.getText() != null && note.getText().length()>0) {				
+				if (note.getType()==null){
+					LabelPrinter.printError(label, "Must select type of note.");
+				} else {
+					try {
+						note.setDoc(docEntry);
+						int id = new NoteDao(conn).insert(note);
+						if (id>0) {
+							/* OK case */
+							note.setId(id);
+							docEntry.getNotes().add(note);							
+							LabelPrinter.printInfo(label, "Note added successfully.");
+						} else {
+							LabelPrinter.printError(label, "DAO: could not insert note");
+						}
+					} catch (SQLIntegrityConstraintViolationException e1) {
+						LabelPrinter.printError(label, "Cannot insert same Reference twice.");
+					} catch (SQLException e2) {
+						if (e2.getSQLState().equals("42000")) {
+							LabelPrinter.printError(label, "You must be connected to perform changes to the DB.");
+						} else {
+							LabelPrinter.printError(label, "Could not insert note: "+e2.getMessage());
+						}
+					}
+				}
+			} else {
+				LabelPrinter.printError(label, "Note text shoult not be empty.");
+			}
+		} else {
+			LabelPrinter.printInfo(label, "Nothing was added.");
+		}
+	}
+	
 	
 	/**
 	 * When a button for adding references is pressed, a ReferenceDialog

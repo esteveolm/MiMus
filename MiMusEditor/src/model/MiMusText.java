@@ -20,6 +20,9 @@ public class MiMusText {
 	private String[] words;	/* Just <text> separated by whitespaces */
 	
 	public MiMusText(String text) {
+		if(text==null) {
+			text = "";
+		}
 		this.text = text;
 		this.words = text.split(" ");
 	}

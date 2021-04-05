@@ -10,6 +10,7 @@ import java.util.List;
 
 import model.Document;
 import model.Note;
+import model.NoteType;
 
 /**
  * Contains the specific implementation of Note queries and statements to
@@ -58,6 +59,19 @@ public class NoteDao extends UnitDao<Note> {
 		return notes;
 	}
 
+	public List<NoteType> getNoteTypes() throws SQLException {
+		String sql = "SELECT id, note_name FROM note_types";
+		Statement stmt = getConnection().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		List<NoteType> note_types = new ArrayList<>();
+		while (rs.next()) {
+			note_types.add(new NoteType(rs.getInt(1),rs.getString(2)));
+		}
+		return note_types;
+	}
+
+	
 	@Override
 	protected Note make(ResultSet rs) throws SQLException {
 		/* Get type name from ID */
