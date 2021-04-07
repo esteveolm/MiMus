@@ -1404,11 +1404,10 @@ public class Editor extends EditorPart {
 		toolkit.createLabel(c, "Lloc:");
 		Composite llocComposite = toolkit.createComposite(c);
 		llocComposite.setLayout(new GridLayout(4, false));
-		toolkit.createLabel(llocComposite, "de");
 		lloc1 = toolkit.createText(llocComposite, docEntry.getPlace1());
 		lloc1.addModifyListener(modifyListener);
 		lloc1.setMessage("lloc d’emissió del document.");
-		toolkit.createLabel(llocComposite, "a");
+		toolkit.createLabel(llocComposite, "-");
 		lloc2 = toolkit.createText(llocComposite, docEntry.getPlace2());
 		lloc2.setMessage("(deixar en blanc si no hi ha data2)");
 		lloc2.addModifyListener(modifyListener);

@@ -171,12 +171,12 @@ public class MiMusDate {
 		String str = "";
 		
 		/* First, write date1 */
-		if (uDay1) {
+		if (uYear1) {
 			str += "-";
-		} else if (hDay1) {
-			str += "[" + day1 + "]";
+		} else if (hYear1) {
+			str += "[" + year1 + "]";
 		} else {
-			str += day1;
+			str += year1;
 		}
 		str += " / ";
 		if (uMonth1) {
@@ -187,23 +187,23 @@ public class MiMusDate {
 			str += month1;
 		}
 		str += " / ";
-		if (uYear1) {
+		if (uDay1) {
 			str += "-";
-		} else if (hYear1) {
-			str += "[" + year1 + "]";
+		} else if (hDay1) {
+			str += "[" + day1 + "]";
 		} else {
-			str += year1;
+			str += day1;
 		}
 		
 		/* Then, write date2 if interval is true */
 		if (interval) {
 			str += " - ";
-			if (uDay2) {
+			if (uYear2) {
 				str += "-";
-			} else if (hDay2) {
-				str += "[" + day2 + "]";
+			} else if (hYear2) {
+				str += "[" + year2 + "]";
 			} else {
-				str += day2;
+				str += year2;
 			}
 			str += " / ";
 			if (uMonth2) {
@@ -214,12 +214,12 @@ public class MiMusDate {
 				str += month2;
 			}
 			str += " / ";
-			if (uYear2) {
+			if (uDay2) {
 				str += "-";
-			} else if (hYear2) {
-				str += "[" + year2 + "]";
+			} else if (hDay2) {
+				str += "[" + day2 + "]";
 			} else {
-				str += year2;
+				str += day2;
 			}
 		}
 		

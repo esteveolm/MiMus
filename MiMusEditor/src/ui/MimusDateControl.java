@@ -40,12 +40,12 @@ public class MimusDateControl {
 	private void createPartControl(Composite c, FormToolkit toolkit, MiMusDate date) {
 
 		
-		d1 = createInputField(toolkit, c, 2, date.getDay1(), date.isuDay1());
-		d1.setMessage("dd");
-		d1.addVerifyListener(onlyNumbers);
-		hd1 = toolkit.createButton(c, "", SWT.CHECK);
-		hd1.setSelection(date.ishDay1());
-		hd1.setToolTipText("valor hipotètic");
+		y1 = createInputField(toolkit, c, 4, date.getYear1(), date.isuYear1());
+		y1.setMessage("yyyy");
+		y1.addVerifyListener(onlyNumbers);
+		hy1 = toolkit.createButton(c, "", SWT.CHECK);
+		hy1.setSelection(date.ishYear1());
+		hy1.setToolTipText("valor hipotètic");
 
 		toolkit.createLabel(c, "/");
 
@@ -58,21 +58,21 @@ public class MimusDateControl {
 
 		toolkit.createLabel(c, "/");
 		
-		y1 = createInputField(toolkit, c, 4, date.getYear1(), date.isuYear1());
-		y1.setMessage("yyyy");
-		y1.addVerifyListener(onlyNumbers);
-		hy1 = toolkit.createButton(c, "", SWT.CHECK);
-		hy1.setSelection(date.ishYear1());
-		hy1.setToolTipText("valor hipotètic");
+		d1 = createInputField(toolkit, c, 2, date.getDay1(), date.isuDay1());
+		d1.setMessage("dd");
+		d1.addVerifyListener(onlyNumbers);
+		hd1 = toolkit.createButton(c, "", SWT.CHECK);
+		hd1.setSelection(date.ishDay1());
+		hd1.setToolTipText("valor hipotètic");
 				
 		toolkit.createLabel(c, " - ");
 		
-		d2 = createInputField(toolkit, c, 2, date.getDay2(), date.isuDay2());
-		d2.setMessage("dd");
-		d2.addVerifyListener(onlyNumbers);
-		hd2 = toolkit.createButton(c, "", SWT.CHECK);
-		hd2.setSelection(date.ishDay2());
-		hd2.setToolTipText("valor hipotètic");
+		y2 = createInputField(toolkit, c, 4, date.getYear2(), date.isuYear2());
+		y2.setMessage("yyyy");
+		y2.addVerifyListener(onlyNumbers);
+		hy2 = toolkit.createButton(c, "", SWT.CHECK);	
+		hy2.setSelection(date.ishYear2());
+		hy2.setToolTipText("valor hipotètic");
 
 		toolkit.createLabel(c, "/");
 
@@ -85,12 +85,12 @@ public class MimusDateControl {
 		
 		toolkit.createLabel(c, "/");
 		
-		y2 = createInputField(toolkit, c, 4, date.getYear2(), date.isuYear2());
-		y2.setMessage("yyyy");
-		y2.addVerifyListener(onlyNumbers);
-		hy2 = toolkit.createButton(c, "", SWT.CHECK);	
-		hy2.setSelection(date.ishYear2());
-		hy2.setToolTipText("valor hipotètic");
+		d2 = createInputField(toolkit, c, 2, date.getDay2(), date.isuDay2());
+		d2.setMessage("dd");
+		d2.addVerifyListener(onlyNumbers);
+		hd2 = toolkit.createButton(c, "", SWT.CHECK);
+		hd2.setSelection(date.ishDay2());
+		hd2.setToolTipText("valor hipotètic");
 		
 	}
 	
