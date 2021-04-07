@@ -310,7 +310,7 @@ public class Editor extends EditorPart {
 		 * specified widthHint in the GridData, hence we use a small widthHint
 		 * to force the wrap behaviour in any usual window sizes.
 		 */
-		GridData regestData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData regestData = new GridData((editMode?GridData.FILL_BOTH:GridData.FILL_HORIZONTAL));
 		regestData.widthHint = 10;
 		
 		Label titleRegest = new Label(form.getBody(), SWT.VERTICAL);
@@ -319,7 +319,7 @@ public class Editor extends EditorPart {
 		
 		/* Regest text wraps if too long */
 		regestText = new Text(form.getBody(),
-				SWT.BORDER | (editMode?0:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP);
+				SWT.BORDER | (editMode?SWT.V_SCROLL:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP );
 		regestText.setText(docEntry.getRegestText());
 		regestText.setLayoutData(regestData);
 		
@@ -454,7 +454,7 @@ public class Editor extends EditorPart {
 		titleTranscription.setFont(fontTitle);
 		
 		/* GridData for Transcription: wrap behaviour like Regest */
-		GridData transcriptionData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData transcriptionData = new GridData((editMode?GridData.FILL_BOTH:GridData.FILL_HORIZONTAL));
 		transcriptionData.widthHint = 10;
 
 		
@@ -462,7 +462,7 @@ public class Editor extends EditorPart {
 		boolean transcriptionEditable = editMode && transcriptions.size()==0;
 		
 		transcriptionText = new StyledText(form.getBody(), 
-				SWT.BORDER | (transcriptionEditable?0:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP);
+				SWT.BORDER | (transcriptionEditable?SWT.V_SCROLL:SWT.READ_ONLY) | SWT.MULTI | SWT.WRAP);
 		transcriptionText.setText(docEntry.getTranscriptionText());		
 		if(transcriptionEditable) {
 			transcriptionText.addModifyListener(modifyListener);
