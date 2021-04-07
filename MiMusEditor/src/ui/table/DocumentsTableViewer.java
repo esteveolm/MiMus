@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -32,6 +33,7 @@ public class DocumentsTableViewer {
 		tv = new ListViewer(parent);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setInput(documents);
+		tv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Listener that opens the Document in Editor */
 		tv.addSelectionChangedListener(new ISelectionChangedListener() {
