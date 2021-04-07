@@ -65,5 +65,6 @@ public class DocumentsTableViewer {
 	
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
+		tv.setInput(documents);
 	}
 }
