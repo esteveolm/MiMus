@@ -94,8 +94,19 @@ public class NoteDao extends UnitDao<Note> {
 		return "note";
 	}
 
+	/**
+	 * Updates text in note
+	 */
 	@Override
-	public void update(Note unit) throws DaoNotImplementedException {
-		throw new DaoNotImplementedException();
+	public void update(Note unit) throws SQLException {
+		String sql = "UPDATE note SET note_text=? WHERE id = ?";
+		
+		PreparedStatement stmt = getConnection().prepareStatement(sql);
+		stmt.setString(1, unit.getText());
+		stmt.setInt(2,  unit.getId());
+		int n = stmt.executeUpdate();
+		if(n!=1) {
+			throw new SQLException("Note was not updated");
+		}		
 	}
 }

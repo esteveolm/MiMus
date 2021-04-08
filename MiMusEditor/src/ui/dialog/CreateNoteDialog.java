@@ -26,12 +26,12 @@ import model.NoteType;
 /**
  * Implementation of NoteDialog for creating Notes for documents
  */
-public class NoteDialog extends EditorDialog<NoteType> {
+public class CreateNoteDialog extends EditorDialog<NoteType> {
 
 	/* Model attributes */
 	private Note note;
 	
-	public NoteDialog(Shell parentShell, List<NoteType> noteTypes) {
+	public CreateNoteDialog(Shell parentShell, List<NoteType> noteTypes) {
 		super(noteTypes, parentShell);
 		this.note = new Note(0,null,null,null);
 	}

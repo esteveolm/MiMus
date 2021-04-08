@@ -4,19 +4,29 @@ import java.lang.reflect.Method;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.TableColumn;
 
 public class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
     private String[] columnas;
     
     /**
-     * C
+     * Creates columns in the viewer and returns the TableLablelProvider
+     * Must be set to the viewer:
+     *    tableviewer.setLabelProvider(new TableLabelProvider(tableviewer, "col1","col2",... ));
      * @param col
      */
-    public TableLabelProvider(String... col)
+    public TableLabelProvider(TableViewer tableViewer, String... col)
     {
         columnas = col;
+		for(String colName : columnas) {
+			TableColumn column = new TableColumn(tableViewer.getTable(), SWT.NONE );
+			column.setWidth(100);
+			column.setText(colName);
+		}
     }
 
     @Override
@@ -37,4 +47,5 @@ public class TableLabelProvider extends LabelProvider implements ITableLabelProv
 		return null;
 	}
 
+	
 }
