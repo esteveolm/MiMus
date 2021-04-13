@@ -246,8 +246,8 @@ public class Document extends Unit implements IEditorInput {
 			str += "\n";
 		}
 		if (getPlace2() != null) {
-			str += "Lloc: de " + getPlace1() + 
-					" a " + getPlace2() + "\n";
+			str += "Lloc: " + getPlace1() + 
+					" - " + getPlace2() + "\n";
 		} else if (getPlace1() != null) {
 			str += "Lloc: " + getPlace1() + "\n";
 		} else {
