@@ -14,6 +14,7 @@ import model.Lloc;
 import persistence.LlocDao;
 import persistence.UnitDao;
 import ui.table.LlocTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Lloc entities.
@@ -33,7 +34,8 @@ public class LlocView extends EntityView<Lloc> {
 		super();
 		
 		try {
-			setUnits(new LlocDao().selectAll());
+			if(DBUtils.getUser()!=null)
+				setUnits(new LlocDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load llocs from DB.");

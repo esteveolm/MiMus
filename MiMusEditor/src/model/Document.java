@@ -1,11 +1,15 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+
+import util.DBUtils;
 
 /**
  * A Document represents a text document of MiMus corpus. It
@@ -48,6 +52,10 @@ public class Document extends Unit implements IEditorInput {
 	private List<Materia> subjects;
 	private int stateAnnotIdx;
 	private int stateRevIdx;
+	private Timestamp created;
+	private String createdBy;
+	private Timestamp modified;
+	private String modifiedBy;
 	
 	
 	public Document() {
@@ -67,6 +75,8 @@ public class Document extends Unit implements IEditorInput {
 		this.subjects = new ArrayList<>();
 		this.stateAnnotIdx = -1;
 		this.stateAnnotIdx = -1;
+		this.createdBy = DBUtils.getUser();
+		this.created = new Timestamp(new java.util.Date().getTime());
 		setLanguage(Document.LANGS[1]);		
 	}
 	
@@ -222,6 +232,38 @@ public class Document extends Unit implements IEditorInput {
 		this.stateRevIdx = stateRevIdx;
 	}
 	
+	public Timestamp getCreated() {
+		return created;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Timestamp getModified() {
+		return modified;
+	}
+
+	public void setModified(Timestamp modified) {
+		this.modified = modified;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
 	/**
 	 * Returns part of the document with static information,
 	 * in a string presentation.
@@ -296,4 +338,5 @@ public class Document extends Unit implements IEditorInput {
 	public String getToolTipText() {
 		return toString();
 	}
+
 }

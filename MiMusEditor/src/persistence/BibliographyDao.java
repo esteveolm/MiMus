@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.jcraft.jsch.JSchException;
-
 import model.Bibliography;
 
 /**

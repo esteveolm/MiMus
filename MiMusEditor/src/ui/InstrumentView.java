@@ -15,6 +15,7 @@ import model.Instrument;
 import persistence.InstrumentDao;
 import persistence.UnitDao;
 import ui.table.InstrumentTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Instrument entities.
@@ -35,7 +36,8 @@ public class InstrumentView extends EntityView<Instrument> {
 		super();
 		
 		try {
-			setUnits(new InstrumentDao().selectAll());
+			if(DBUtils.getUser()!=null)
+				setUnits(new InstrumentDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load instruments from DB.");

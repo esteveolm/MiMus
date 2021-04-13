@@ -1,6 +1,7 @@
 package ui;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -16,6 +17,7 @@ import persistence.InstrumentDao;
 import persistence.OficiDao;
 import persistence.UnitDao;
 import ui.table.OficiTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Ofici entities.
@@ -28,7 +30,7 @@ public class OficiView extends EntityView<Ofici> {
 	/* 
 	 * List of Instruments needed because are associated with Oficis.
 	 */
-	private List<Instrument> insts;
+	private List<Instrument> insts = new ArrayList<>();
 	
 	/* Form fields */
 	private Text textNomComplet;
@@ -42,8 +44,8 @@ public class OficiView extends EntityView<Ofici> {
 		comboInstrument = null;
 		
 		try {
-			setUnits(new OficiDao().selectAll());
-			insts = new InstrumentDao().selectAll();
+			if(DBUtils.getUser()!=null)
+				setUnits(new OficiDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load oficis from DB.");

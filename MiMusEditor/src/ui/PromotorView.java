@@ -12,6 +12,7 @@ import model.Promotor;
 import persistence.PromotorDao;
 import persistence.UnitDao;
 import ui.table.PromotorTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Promotor entities.
@@ -34,7 +35,8 @@ public class PromotorView extends EntityView<Promotor> {
 		super();
 		
 		try {
-			setUnits(new PromotorDao().selectAll());
+			if(DBUtils.getUser()!=null)
+				setUnits(new PromotorDao().selectAll());			
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load promotors from DB.");

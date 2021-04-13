@@ -25,6 +25,7 @@ import model.Unit;
 import persistence.BibliographyDao;
 import persistence.UnitDao;
 import ui.table.BibliographyTableViewer;
+import util.DBUtils;
 
 /**
  * Eclipse View for declaration of Bibliography units. Though
@@ -63,7 +64,8 @@ public class BiblioView extends DeclarativeView<Bibliography> {
 	public BiblioView() {
 		super();
 		try {
-			setUnits(retrieveUnits());
+			if(DBUtils.getUser()!=null)
+				setUnits(retrieveUnits());
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}

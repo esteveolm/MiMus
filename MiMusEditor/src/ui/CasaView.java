@@ -11,6 +11,7 @@ import model.Casa;
 import persistence.CasaDao;
 import persistence.UnitDao;
 import ui.table.CasaTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Casa entities.
@@ -29,10 +30,10 @@ public class CasaView extends EntityView<Casa> {
 	public CasaView() {
 		super();
 		try {
-			setUnits(new CasaDao().selectAll());
+			if(DBUtils.getUser()!=null)
+				setUnits(new CasaDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			System.out.println("Could not load cases from DB.");
 		}
 	}
 	

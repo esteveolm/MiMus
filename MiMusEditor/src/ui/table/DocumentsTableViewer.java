@@ -49,7 +49,7 @@ public class DocumentsTableViewer {
 			}
 			
 		});
-		tv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tv.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		/* Listener that opens the Document in Editor */
 		tv.addSelectionChangedListener(new ISelectionChangedListener() {

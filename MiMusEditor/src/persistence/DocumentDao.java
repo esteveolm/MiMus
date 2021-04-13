@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -14,6 +15,7 @@ import model.Materia;
 import model.MiMusDate;
 import model.MiMusLibraryIdentifier;
 import model.Note;
+import util.DBUtils;
 
 /**
  * Contains the specific implementation of Document queries and statements to
@@ -42,7 +44,7 @@ public class DocumentDao extends UnitDao<Document> {
 				"lib2_arxiu", "lib2_serie", "lib2_subserie", "lib2_subserie2", 
 				"lib2_numero", "lib2_pagina", "edicions", "registres",
 				"citacions", "transcripcio", "llengua_id", "state_annot", 
-				"state_rev"};
+				"state_rev","created","created_by","modified","modified_by"};
 		String sql = "INSERT INTO " + getTable() + " (";
 		for (int i=0; i<insertColumns.length-1; i++) {
 			sql += insertColumns[i] + ", ";
@@ -97,6 +99,10 @@ public class DocumentDao extends UnitDao<Document> {
 		stmt.setInt(40, unit.getLanguage());
 		stmt.setInt(41, unit.getStateAnnotIdx());
 		stmt.setInt(42, unit.getStateRevIdx());
+		stmt.setTimestamp(43, new java.sql.Timestamp(new java.util.Date().getTime()));
+		stmt.setString(44, DBUtils.getUser());
+		stmt.setTimestamp(45, new java.sql.Timestamp(new java.util.Date().getTime()));
+		stmt.setString(46, DBUtils.getUser());
 		
 		int docResult = stmt.executeUpdate();
 		if (docResult>0) {
@@ -171,6 +177,10 @@ public class DocumentDao extends UnitDao<Document> {
 		int llenguaId = rs.getInt("llengua_id");
 		int stateAnnot = rs.getInt("state_annot");
 		int stateRev = rs.getInt("state_rev");
+		String createdBy = rs.getString("created_by");
+		Timestamp created = rs.getTimestamp("created");
+		String modifiedBy = rs.getString("modified_by");
+		Timestamp modified = rs.getTimestamp("modified");
 		System.out.println("Llengua ID:" + llenguaId);
 		/* Query to Llengua table to get it from ID */
 		String sql = "SELECT llengua_name FROM llengua WHERE id=" + llenguaId;
@@ -260,6 +270,12 @@ public class DocumentDao extends UnitDao<Document> {
 			doc.setSubjects(materies);
 			doc.setStateAnnotIdx(stateAnnot);
 			doc.setStateRevIdx(stateRev);
+			
+			doc.setCreated(created);
+			doc.setModified(modified);
+			doc.setCreatedBy(createdBy);
+			doc.setModifiedBy(modifiedBy);
+			
 			System.out.println("Materies: " + doc.getSubjects().size());
 			return doc;
 		}
@@ -281,7 +297,8 @@ public class DocumentDao extends UnitDao<Document> {
 		sql += " lib1_arxiu=?, lib1_serie=?, lib1_subserie=?, lib1_subserie2=?, lib1_numero=?, lib1_pagina=?, ";
 		sql += " lib2_arxiu=?, lib2_serie=?, lib2_subserie=?, lib2_subserie2=?, lib2_numero=?, lib2_pagina=?, ";
 		sql += " regest=?, ";
-		sql += " transcripcio=? ";
+		sql += " transcripcio=?, ";
+		sql += " modified=?, modified_by=? ";
 		sql += " WHERE id=? ";
 				
 		PreparedStatement stateStmt = getConnection().prepareStatement(sql);
@@ -329,6 +346,9 @@ public class DocumentDao extends UnitDao<Document> {
 		stateStmt.setString(idx++, regest);
 		stateStmt.setString(idx++, transcription);
 
+		stateStmt.setTimestamp(idx++, new java.sql.Timestamp(new java.util.Date().getTime()));
+		stateStmt.setString(idx++, DBUtils.getUser());
+
 		stateStmt.setInt(idx++, id);
 		int stateRS = stateStmt.executeUpdate();
 		
@@ -347,11 +367,13 @@ public class DocumentDao extends UnitDao<Document> {
 		/* First update state */
 		int stateAnnot = unit.getStateAnnotIdx();
 		int stateRev = unit.getStateRevIdx();
-		String sql = "UPDATE document SET state_annot=?, state_rev=? WHERE id=?";
+		String sql = "UPDATE document SET state_annot=?, state_rev=?, modified=?, modified_by=? WHERE id=?";
 		PreparedStatement stateStmt = getConnection().prepareStatement(sql);
 		stateStmt.setInt(1, stateAnnot);
 		stateStmt.setInt(2, stateRev);
-		stateStmt.setInt(3, unit.getId());
+		stateStmt.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
+		stateStmt.setString(4, DBUtils.getUser());		
+		stateStmt.setInt(5, unit.getId());
 		int stateRS = stateStmt.executeUpdate();
 		boolean ok = false;
 		if (stateRS > 0) {

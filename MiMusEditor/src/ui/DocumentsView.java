@@ -117,8 +117,8 @@ public class DocumentsView extends ViewPart {
 		List<Document> documents = new ArrayList<>();
 		
 		try {
-			Connection conn = DBUtils.connect();
-			documents = new DocumentDao(conn).selectAll();
+			if(DBUtils.getUser()!=null) 
+				documents = new DocumentDao().selectAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

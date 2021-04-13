@@ -11,6 +11,7 @@ import model.GenereLiterari;
 import persistence.GenereLiterariDao;
 import persistence.UnitDao;
 import ui.table.GenereTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for GenereLiterari entities.
@@ -31,7 +32,8 @@ public class GenereLiterariView extends EntityView<GenereLiterari> {
 	public GenereLiterariView() {
 		super();
 		try {
-			setUnits(new GenereLiterariDao().selectAll());
+			if(DBUtils.getUser()!=null)
+				setUnits(new GenereLiterariDao().selectAll());
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			System.out.println("Could not load generes from DB.");

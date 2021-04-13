@@ -1,20 +1,14 @@
 package util;
 
-import java.io.IOException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IStartup;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-
-import ui.BiblioView;
-import ui.ArtistaView;
-import ui.CasaView;
-import ui.GenereLiterariView;
-import ui.InstrumentView;
-import ui.LlocView;
-import ui.OficiView;
-import ui.PromotorView;
+import org.eclipse.ui.progress.UIJob;
 
 /**
  * MiMusStartup is code executed at startup of the plugin, and it
@@ -29,48 +23,68 @@ import ui.PromotorView;
  */
 public class MiMusStartup implements IStartup {
 
+	
 	/**
 	 * Startup code of the plugin goes here.
 	 */
 	@Override
 	public void earlyStartup() {
-		try {
-			DBUtils.writeProperties("disconnected", "disconnected");
-			System.out.println("Resetted user properties.");
+		
+		new UIJob(Display.getDefault(), "Login") {
 			
-			IWorkbenchPage page = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow()
-				.getActivePage();
-			
-			/* Force that all views are refreshed to make sure disconnected */
-			IViewPart view = page.showView("MiMusEditor.biblioView");
-			((BiblioView) view).refreshAction();
-
-			view = page.showView("MiMusEditor.artistaView");
-			((ArtistaView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.casaView");
-			((CasaView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.genereView");
-			((GenereLiterariView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.instrumentView");
-			((InstrumentView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.llocView");
-			((LlocView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.oficiView");
-			((OficiView) view).refreshAction();
-			
-			view = page.showView("MiMusEditor.promotorView");
-			((PromotorView) view).refreshAction();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (PartInitException e) {
-			e.printStackTrace();
-		}
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				IWorkbenchPage page = PlatformUI.getWorkbench()
+						.getActiveWorkbenchWindow()
+						.getActivePage();
+				page.closeAllEditors(false);
+				try {
+					page.showView("MiMusEditor.loginView");
+				} catch (PartInitException e) {
+					e.printStackTrace();
+					return Status.CANCEL_STATUS;
+				}
+				return Status.OK_STATUS;
+			}
+		}.schedule(1000);		
+		
+		
+//		try {			
+//			IWorkbenchPage page = PlatformUI.getWorkbench()
+//				.getActiveWorkbenchWindow()
+//				.getActivePage();
+//			
+//			page.closeAllEditors(false);
+//			
+//			
+//			
+//			/* Force that all views are refreshed to make sure disconnected */
+//			IViewPart view = page.showView("MiMusEditor.biblioView");
+//			((BiblioView) view).refreshAction();
+//
+//			view = page.showView("MiMusEditor.artistaView");
+//			((ArtistaView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.casaView");
+//			((CasaView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.genereView");
+//			((GenereLiterariView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.instrumentView");
+//			((InstrumentView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.llocView");
+//			((LlocView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.oficiView");
+//			((OficiView) view).refreshAction();
+//			
+//			view = page.showView("MiMusEditor.promotorView");
+//			((PromotorView) view).refreshAction();
+//		} catch (PartInitException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }

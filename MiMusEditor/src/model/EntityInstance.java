@@ -1,7 +1,5 @@
 package model;
 
-import model.Document;
-
 /**
  * An EntityInstance is an instance of an Entity object in the
  * MiMus corpus. That is, Entities are the concepts and Instances

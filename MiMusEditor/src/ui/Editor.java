@@ -254,7 +254,13 @@ public class Editor extends EditorPart {
 		/* State of annotation and revision: combos */
 		Composite compStatus = toolkit.createComposite(sectStatus);
 		sectStatus.setClient(compStatus);
-		compStatus.setLayout(new GridLayout());
+		compStatus.setLayout(new GridLayout(2, false));
+		
+		toolkit.createLabel(compStatus, "Created by:", SWT.NONE);
+		toolkit.createLabel(compStatus, docEntry.getCreatedBy()!=null?docEntry.getCreatedBy() + " at "+docEntry.getCreated():"" , SWT.NONE);
+		toolkit.createLabel(compStatus, "Modificat per:", SWT.NONE);
+		toolkit.createLabel(compStatus, docEntry.getModifiedBy()!=null?docEntry.getModifiedBy() + " at "+docEntry.getModified():"", SWT.NONE);
+		
 		
 		Label labelStateAnnot = new Label(compStatus, SWT.VERTICAL);
 		labelStateAnnot.setText("Estat de l'anotació:");

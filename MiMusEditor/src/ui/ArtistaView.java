@@ -12,6 +12,7 @@ import model.Artista;
 import persistence.ArtistaDao;
 import persistence.UnitDao;
 import ui.table.ArtistaTableViewer;
+import util.DBUtils;
 
 /**
  * Declarative view for Artista entities.
@@ -36,7 +37,8 @@ public class ArtistaView extends EntityView<Artista> {
 	public ArtistaView() {
 		super();
 		try {
-			setUnits(retrieveUnits());
+			if(DBUtils.getUser()!=null)
+				setUnits(retrieveUnits());
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}

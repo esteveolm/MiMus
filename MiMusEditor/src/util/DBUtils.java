@@ -1,14 +1,13 @@
 package util;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import com.jcraft.jsch.*;
+//import com.jcraft.jsch.*;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -24,20 +23,22 @@ import org.eclipse.core.resources.ResourcesPlugin;
  */
 public class DBUtils {
 	
+	private static String user;
+	private static String password;
+	
 	/**
 	 * Returns an open Connection to the MiMus DB using SQL connector.
-	 * User and password are read from editor.user and editor.pass fields
-	 * in config.properties.
+	 * User and password must already be logged in 
+	 * host.name is in config.properties.
 	 */
 	public static Connection connect() throws SQLException {
 		try {
 			Properties prop = readProperties();
-			return connect(prop.getProperty("editor.user"), 
-					prop.getProperty("editor.pass"),
+			return connect(user, password,
 					prop.getProperty("host.name"));
-		} catch(IOException | JSchException e) {
+		} catch(IOException e) {
 			e.printStackTrace();
-			throw new SQLException();
+			throw new SQLException("Error reading DB properties");
 		}
 	}
 	
@@ -46,7 +47,7 @@ public class DBUtils {
 	 * User and password are passed as parameters.
 	 */
 	public static Connection connect(String user, String pass, String host)
-			throws SQLException, JSchException {
+			throws SQLException {
 //		JSch jsch = new JSch();
 //		Properties prop;
 //		try {
@@ -71,6 +72,13 @@ public class DBUtils {
 //				+ "&useJDBCCompliantTimezoneShift=true"
 //				+ "&useLegacyDatetimeCode=false"
 //				+ "&serverTimezone=UTC";
+		DBUtils.user = user;
+		DBUtils.password = pass;
+		
+		if(user==null || user.length()==0) {
+			throw new SQLException("Not logged in","42000");
+		}
+		
 		String conn = "jdbc:mysql://" 
 				+ host
 				+ ":3306/mimus"
@@ -99,17 +107,6 @@ public class DBUtils {
 		return prop;
 	}
 	
-	/**
-	 * Updates the config.properties file with user and password
-	 * passed as parameters.
-	 */
-	public static void writeProperties(String user, String pass) 
-			throws IOException {
-		Properties prop = readProperties();
-		prop.setProperty("editor.user", user);
-		prop.setProperty("editor.pass", pass);
-		prop.store(new FileOutputStream(getPath()), null);
-	}
 	
 	private static String getPath() {
 		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
@@ -117,4 +114,22 @@ public class DBUtils {
 		IFile file = corpus.getFile("config.properties");
 		return file.getLocation().toString();
 	}
+
+	public static String getUser() {
+		return user;
+	}
+
+	public static void setUser(String user) {
+		DBUtils.user = user;
+	}
+
+	public static String getPassword() {
+		return password;
+	}
+
+	public static void setPassword(String password) {
+		DBUtils.password = password;
+	}
+	
+	
 }
