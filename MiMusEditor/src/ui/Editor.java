@@ -282,7 +282,7 @@ public class Editor extends EditorPart {
 		
 		/* SECTION STATIC DATA */
 		Label titleStatic = new Label(form.getBody(), SWT.VERTICAL);
-		titleStatic.setText("Static:");
+		titleStatic.setText("Identification:");
 		FontData fontDataTitle = titleStatic.getFont().getFontData()[0];
 		Font fontTitle = new Font(titleStatic.getDisplay(), 
 				new FontData(fontDataTitle.getName(), 
