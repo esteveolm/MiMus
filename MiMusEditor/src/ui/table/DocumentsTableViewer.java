@@ -7,6 +7,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -28,11 +30,25 @@ public class DocumentsTableViewer {
 		
 	private ListViewer tv;
 	private List<Document> documents;
+	private String filterText;
 	
 	public DocumentsTableViewer(Composite parent, List<Document> documents) {
 		tv = new ListViewer(parent);
 		tv.setContentProvider(ArrayContentProvider.getInstance());
 		tv.setInput(documents);
+		tv.setFilters(new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (filterText == null || filterText.length() == 0)
+	            {
+	                return true;
+	            } else {
+	            	return element.toString().indexOf(filterText)>=0;
+	            }
+			}
+			
+		});
 		tv.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		/* Listener that opens the Document in Editor */
@@ -68,5 +84,10 @@ public class DocumentsTableViewer {
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
 		tv.setInput(documents);
+	}
+
+	public void setFilterText(String text) {
+		this.filterText = text;
+		tv.refresh();		
 	}
 }

@@ -9,8 +9,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -96,6 +101,18 @@ public class DocumentsView extends ViewPart {
 		ScrolledForm form = toolkit.createScrolledForm(parent);
 		form.setText("Select a document");
 		form.getBody().setLayout(new GridLayout());
+		
+		Text filterText = toolkit.createText(form.getBody(), "", SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+		filterText.setMessage("type something to filter");
+		filterText.setLayoutData(GridDataFactory.fillDefaults().create());
+		filterText.addModifyListener(new ModifyListener() {		
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getTv().setFilterText(filterText.getText());				
+			}
+		});
+		
+		
 		
 		List<Document> documents = new ArrayList<>();
 		

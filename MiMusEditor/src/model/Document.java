@@ -75,7 +75,7 @@ public class Document extends Unit implements IEditorInput {
 	 * its ID.
 	 */
 	public String toString() {
-		return "Document " + getIdStr();
+		return "Document "+getIdStr()+ "   ("+getNumbering()+")";
 	}
 	
 	/* 
