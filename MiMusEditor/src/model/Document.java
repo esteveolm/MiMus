@@ -26,7 +26,7 @@ public class Document extends Unit implements IEditorInput {
 	
 	/* Lists of values Language can take, reflected on langIdx */
 	public final static String[] LANGS = 
-		{"-", "llatí", "català", "castellà", "aragonès/castellà", "altres"};
+		{"-", "llatí", "català", "castellà", "aragonès", "altres"};
 	
 	/* 
 	 * Lists of values for state of annotation and revision, reflected
