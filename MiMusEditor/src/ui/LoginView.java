@@ -69,73 +69,74 @@ public class LoginView extends ViewPart {
 		
 		Label resultText = toolkit.createLabel(form.getBody(), "");
 		resultText.setLayoutData(gd);
-		
+
+		LabelPrinter.printInfo(resultText, "Not logged to "+DBUtils.getHost());
+
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				LabelPrinter.printInfo(resultText, "Connecting...");
 				String user = userText.getText();
 				String pass = passText.getText();
 				
-				/* Save old properties in case a rewind is needed */
+				/* First, try connection */
 				try {
-					Properties oldProp = DBUtils.readProperties();
+					LabelPrinter.printInfo(resultText, "Connecting to "+DBUtils.getHost()+"...");
 					
-					/* First, try connection */
-					try {
-						DBUtils.connect(user, pass, oldProp.getProperty("host.name"));
-												
-						IWorkbenchPage page = PlatformUI.getWorkbench()
-								.getActiveWorkbenchWindow()
-								.getActivePage();
-						
-						page.closeAllEditors(false);
+					DBUtils.connect(user, pass, DBUtils.getHost());
+					
+											
+					IWorkbenchPage page = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow()
+							.getActivePage();
+					
+					page.closeAllEditors(false);
 
-						IViewPart view = page.showView("MiMusEditor.documentsView");
-						((DocumentsView) view).refresh();						
-						
-						/* Declarative views  refreshed to make sure disconnected */
-						view = page.showView("MiMusEditor.biblioView");
-						((BiblioView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.artistaView");
-						((ArtistaView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.casaView");
-						((CasaView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.genereView");
-						((GenereLiterariView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.instrumentView");
-						((InstrumentView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.llocView");
-						((LlocView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.oficiView");
-						((OficiView) view).refreshAction();
-						
-						view = page.showView("MiMusEditor.promotorView");
-						((PromotorView) view).refreshAction();
-												
-						/* Update UI */
-						LabelPrinter.printInfo(resultText, "Authenticated: " + user);
-						
-						new UIJob(Display.getDefault(), "Login OK") {							
-							@Override
-							public IStatus runInUIThread(IProgressMonitor monitor) {
-								page.hideView(LoginView.this);
-								return Status.OK_STATUS;
-							}
-						}.schedule(500);								
-						
-					} catch (SQLException e1) {
-						LabelPrinter.printError(resultText, "Authentication failed");
-					} catch (PartInitException e1) {
-						e1.printStackTrace();
-					}
-				} catch (IOException e2) {
-					LabelPrinter.printError(resultText, "Unknown error");
+					IViewPart view = page.showView("MiMusEditor.documentsView");
+					((DocumentsView) view).refresh();						
+					
+					/* Declarative views  refreshed to make sure disconnected */
+					view = page.showView("MiMusEditor.biblioView");
+					((BiblioView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.artistaView");
+					((ArtistaView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.casaView");
+					((CasaView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.genereView");
+					((GenereLiterariView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.instrumentView");
+					((InstrumentView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.llocView");
+					((LlocView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.oficiView");
+					((OficiView) view).refreshAction();
+					
+					view = page.showView("MiMusEditor.promotorView");
+					((PromotorView) view).refreshAction();
+											
+					/* Update UI */
+					LabelPrinter.printInfo(resultText, "Authenticated: " + user);
+					
+					new UIJob(Display.getDefault(), "Login OK") {							
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							page.hideView(LoginView.this);
+							return Status.OK_STATUS;
+						}
+					}.schedule(500);								
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					LabelPrinter.printError(resultText, "Authentication failed");
+				} catch (PartInitException e1) {
+					LabelPrinter.printError(resultText, e1.getMessage());
+					e1.printStackTrace();
 				}
 			}
 		});

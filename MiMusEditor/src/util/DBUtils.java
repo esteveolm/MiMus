@@ -33,12 +33,10 @@ public class DBUtils {
 	 */
 	public static Connection connect() throws SQLException {
 		try {
-			Properties prop = readProperties();
-			return connect(user, password,
-					prop.getProperty("host.name"));
-		} catch(IOException e) {
+			return connect(user, password, getHost());
+		} catch(Exception e) {
 			e.printStackTrace();
-			throw new SQLException("Error reading DB properties");
+			throw new SQLException("Error connecting to DB");
 		}
 	}
 	
@@ -91,28 +89,10 @@ public class DBUtils {
 		return DriverManager.getConnection(
 				conn, user, pass);
 	}
-	
-	/**
-	 * Returns a Properties object with the login data from config.properties.
-	 */
-	public static Properties readProperties() throws IOException {
-		String path = getPath();
 		
-		Properties prop = new Properties();
-		InputStream is = null;
-		
-		is = new FileInputStream(path);
-		prop.load(is);
-		
-		return prop;
-	}
 	
-	
-	private static String getPath() {
-		IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-		IProject corpus = workspace.getProject("MiMusCorpus");
-		IFile file = corpus.getFile("config.properties");
-		return file.getLocation().toString();
+	public static String getHost() {
+		return System.getProperties().getProperty("mimusdb.host","<undefined>");
 	}
 
 	public static String getUser() {
